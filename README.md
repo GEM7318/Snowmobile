@@ -1,6 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/snowmobile.svg)](https://badge.fury.io/py/snowmobile)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/GEM7318/Snowmobile/blob/master/LICENSE.txt)
 [![Documentation Status](https://readthedocs.org/projects/snowmobile/badge/?version=latest)](https://snowmobile.readthedocs.io/en/latest/?badge=latest#)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # snowmobile
 
@@ -11,8 +12,8 @@ map Python objects to tabular Snowflake counterparts.
 
 A quick overview of simplified usage is outlined below.
 
----
-## Basic usage
+
+## Basic Usage
 #### 1. Installation
 `pip install snowmobile`
 
@@ -23,7 +24,7 @@ with as many sets of credentials as needed
 ```json
 {
 "Connection1": {
-    "username":	"",
+    "user":	"",
     "password":	"",
     "role": "",
     "account": "",
@@ -32,7 +33,7 @@ with as many sets of credentials as needed
     "schema": "schema #1"
   },
 "SANDBOX": {
-    "username":	"",
+    "user":	"",
     "password":	"",
     "role": "",
     "account": "",
@@ -51,13 +52,13 @@ The first time a connection is instantiated, `snowcreds` will find the file and 
 
 ```python
 # Bundled authentication & statement-execution module  
-from snowmobile import snowquery
+from snowmobile.core import connector
   
-# Instantiate an instance of a connection
-sandbox_conn = snowquery.Connector(conn_name='SANDBOX')
+# Instantiate an instance of a connector
+sandbox_conn = connector.Connector(conn_name='SANDBOX')
   
-# Execute statements on that connection 
-sample_df = sandbox_conn.execute_query('select * from sample_table')
+# Execute statements on that connector 
+sample_df = sandbox_conn.query('select * from sample_table')
 ```
 
 ##### `snowloader`    
@@ -68,11 +69,11 @@ from snowmobile import snowloader
 # Manipulate local DataFrame
 transposed_df = sample_df.transpose() 
 
-# Instantiate a different connection for load destination
+# Instantiate a different connector for load destination
 user_conn = snowquery.Connector(conn_name='user_schema')
 
 # Load into table
-snowloader.df_to_snowflake(df=transposed_df, table_name='LATEST_SAMPLE', 
+snowloader.df_load(df=transposed_df, table_name='LATEST_SAMPLE', 
                            connector=user_conn, force_recreate=True)
 ```
 
@@ -85,7 +86,7 @@ from snowmobile import snowscripter
 import os
 paths_to_sql = [os.path.join(file, path) for file in os.listdir(path)]
 
-# Instantiate script objects for a given connection
+# Instantiate script objects for a given connector
 script_objs = [snowscripter.Script(path, connector=user_conn) for path in paths_to_sql]
 
 # Run all scripts sequentially
@@ -99,8 +100,8 @@ for script in script_objs:
 All the below sub-modules are included in the build, although the majority of use-cases will run on the front-end modules that make use of the others along the way.
 
 #### Front-end / primary utilities 
-- `snowquery` instantiates a connection and provides an `execute_query()` method for executing statements against and querying data from the warehouse
-- `snowloader` flexibly loads data from a local DataFrame into a table within the warehouse in the form of a `df_to_snowflake()` function, bundling a variety of utilities that standardize column names pre-loading, check DataFrame's structure compared to the table to be loaded into, and executes 
+- `snowquery` instantiates a connection and provides an `query()` method for executing statements against and querying data from the warehouse
+- `snowloader` flexibly loads data from a local DataFrame into a table within the warehouse in the form of a `df_load()` function, bundling a variety of utilities that standardize column names pre-loading, check DataFrame's structure compared to the table to be loaded into, and executes 
 DDL in absence of a pre-existing table 
 - `snowscripter` parses and instantiates components of raw .sql scripts into Python objects for much easier interaction, particularly as it relates to single-statement execution and rendering statements as markdown when executed in IPython environments as well as easy execution of full .sql files
 
@@ -114,7 +115,7 @@ A more in-depth description of of each module and its usage outlined below.
 ---
 # snowquery
 
-`snowquery` simplifies the execution of sql statements against the database via an `execute_query()` 
+`snowquery` simplifies the execution of sql statements against the database via an `query()` 
 method, using [pandas'](https://pandas.pydata.org/) `pd.read_sql` function to execute the SQL and  returning results from the DataBase as a [dataframe](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) by default.
 
 **please note**: `snowquery` is intended to streamline execution of sql that is typed *within* a Python script
@@ -129,10 +130,10 @@ In[1]:
 from snowmobile import snowquery
 
 # Establishes snowquery.Connector() object with which statements can be excuted 
-sf = snowquery.Connector(conn_name='SANDBOX')
+obj = snowquery.Connector(conn_name='SANDBOX')
 
 # Executing a simple sql string
-sample = sf.execute_query('select * from sample_sandbox_table')
+sample = obj.query('select * from sample_sandbox_table')
 
 # Verifying returned object
 type(sample)
@@ -213,11 +214,11 @@ from snowmobile import snowloader, snowquery
 df = pd.DataFrame({f"col{i}": 
                    np.random.normal(0, 1, 1000) for i in range(0, 10)}).reset_index()
 
-# Instantiating instance of a specified connection to run on for demo 
+# Instantiating instance of a specified connector to run on for demo 
 demo_conn = snowquery.Connector('demo')
 
 # Loading into a table called SAMPLE_TABLE
-snowloader.df_to_snowflake(df, table_name='SAMPLE_TABLE', force_recreate=True, connector=demo_conn)
+snowloader.df_load(df, table_name='SAMPLE_TABLE', force_recreate=True, connector=demo_conn)
 ```
 
 
@@ -325,7 +326,7 @@ is defined with the following arguments allowing for this flexibility.
 ```python
     def execute(self, results: bool = True, render: bool = False,
                 describe: bool = False) -> object:
-        """Executes sql with option to return results / render sql as Markdown.
+        """Executes sql with option to return results / render sql as Doc.
 
         Args:
             results: Boolean indicating whether or not to
@@ -334,7 +335,7 @@ is defined with the following arguments allowing for this flexibility.
             raw sql as markdown
             describe: Boolean indicating whether or not to
             print output of a pandas df.describe() on returned results (mostly
-            useful for QA queries that are expected to return null-sets)
+            useful for QA sql that are expected to return null-sets)
         """
 ```
 
@@ -350,7 +351,7 @@ Resulting in the following functionality within **IPython/Jupyter** environments
 ---
 # snowloader
 `snowloader` streamlines the bulk-loading protocol outlined in the [Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-load-overview.html)
-in the form of a `df_to_snowflake()` function and is intended to be a one-stop solution for the quick loading of data.
+in the form of a `df_load()` function and is intended to be a one-stop solution for the quick loading of data.
 
 Its main features are:
 - Standardizing of DataFrame's columns prior to loading into the warehouse
@@ -369,11 +370,11 @@ import numpy as np
 import pandas as pd
 from snowmobile import snowloader, snowquery
 
-# Instantiating instance of a specified connection to run on for demo 
+# Instantiating instance of a specified connector to run on for demo 
 demo_conn = snowquery.Connector('demo')
 
 # Selecting all value from dummy table created in 'snowscripter' usage
-df = demo_conn.execute_query('select * from sample_table')
+df = demo_conn.query('select * from sample_table')
 
 # Converting all numeric values to floats (index dropping/adding to handle
 # the index along the way/not change the structure of the final table)
@@ -382,21 +383,21 @@ df = df.drop(columns=[col for col in df.columns if 'index' in
 df = df.applymap(float).reset_index()
 
 # Option 1 
-snowloader.df_to_snowflake(df=df, table_name='SAMPLE_TABLE', force_recreate=True,
+snowloader.df_load(df=df, table_name='SAMPLE_TABLE', force_recreate=True,
                             snowflake=demo_conn)
 
 # Option 2 
-snowloader.df_to_snowflake(df=df, table_name='SAMPLE_TABLE', force_recreate=True)
+snowloader.df_load(df=df, table_name='SAMPLE_TABLE', force_recreate=True)
 ```
 
 In the above,
 - *Option 1* will load the data back into Snowflake on the same connection that was established in the
-  `sf = snowquery.Snowflake(conn_name='SANDBOX')` statement by use of the `snowflake=sf` parameter
+  `obj = snowquery.Snowflake(conn_name='SANDBOX')` statement by use of the `snowflake=obj` parameter
 - In *Option 2* this argument is omitted and the function will instantiate a new connection based on the first set of credentials in **snowflake_credentials.json**
 
 
 In general and particularly when iteratively loaded multiple files into the database, it will be faster to instantiate a single instance of `snowquery`
-that's passed into the `df_to_snowflake()` function so that it does not need to find, read-in and parse the credentials file each time its called.
+that's passed into the `df_load()` function so that it does not need to find, read-in and parse the credentials file each time its called.
 
 ---
 # snowcreds
@@ -413,7 +414,7 @@ def __init__(self, config_file: str = 'snowflake_credentials.json',
         Args:
             config_file: Name of .json configuration file following the
             format of connection_credentials_SAMPLE.json.
-            conn_name: Name of connection within json file to use, will
+            conn_name: Name of connector within json file to use, will
             use first set of credentials in the file if no argument is passed.
         """
         self.config_file = config_file
@@ -462,8 +463,8 @@ The below codes instantiate an instance of Connection used in higher-level modul
 
 ```python
 In[1]:
-from snowmobile import snowconn
-creds = snowconn.Connection().get_conn()
+from snowmobile.core import connector
+creds = connector.Connection().get_conn()
 type(creds)
 ```
 ```
@@ -512,7 +513,7 @@ Out[1]:
 	<class 'str'>
 <a6> script_txt:
 	<class 'str'>
-<a7> list_of_statements:
+<a7> raw_statements:
 	<class 'list'>
 <a8> statement:
 	<class 'str'>
@@ -522,7 +523,7 @@ Out[1]:
 	<class 'dict'>
 <a11> spans:
 	<class 'dict'>
-<a12> ordered_statements:
+<a12> stripped_statements:
 	<class 'list'>
 <a13> header_statements:
 	<class 'list'>

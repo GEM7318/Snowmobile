@@ -1,0 +1,228 @@
+"""
+Module handles:
+    * Exporting an initial configuration file
+    * Locating a populated configuration file
+    * Caching of this location
+    * Parsing/instantiating the full configuration object
+"""
+from __future__ import annotations
+
+import shutil
+from pathlib import Path
+from typing import Dict, Union
+
+import sqlparse
+import toml
+from fcache.cache import FileCache
+
+from ._stdout import Configuration as Stdout
+from .schema import Snowmobile
+
+# ====================================
+# Mapping to package data directory
+HERE = Path(__file__)
+MODULE_DIR = HERE.parent.parent
+PACKAGE_DATA = MODULE_DIR / "pkg_data"
+
+# Defaults paths for DDL and backend extension
+SPEC_BACKEND = PACKAGE_DATA / "snowmobile_backend.toml"
+DDL = PACKAGE_DATA / "DDL.sql"
+# ====================================
+
+
+class Cache(FileCache):
+    """Handles caching of paths to configuration files."""
+
+    def __init__(self, application: str = "snowmobile"):
+
+        application: str = application
+        flag: str = "cs"
+        super().__init__(appname=application, flag=flag)
+
+    @property
+    def contents(self):
+        return vars(self)
+
+    def save(self, item_name: str, item_value):
+        self[item_name] = str(item_value)
+        return self
+
+    def as_path(self, to_get: str):
+        item = self.get(to_get)
+        if item:
+            return Path(item)
+        else:
+            return None
+
+
+class Configuration(Snowmobile):
+
+    _stdout = Stdout()
+
+    # -- Statement components to be considered for scope.
+    SCOPE_ATTRIBUTES = [
+        "kw",
+        "obj",
+        "desc",
+        "anchor",
+        "nm",
+    ]
+    SCOPE_TYPES = [
+        "incl",
+        "excl",
+    ]
+
+    # -- e.g. populates associated parts of 'insert into-unknown~statement #2'
+    DEF_OBJ = "unknown"
+    DEF_DESC = "statement"
+
+    # -- Anchors to associate with QA statements.
+    QA_ANCHORS = {
+        "qa-diff",
+        "qa-empty",
+    }
+
+    # -- Package data directory
+    PKG_DATA = MODULE_DIR / "pkg_data"
+
+    def __init__(
+        self,
+        config_file_nm: str = None,
+        creds: str = None,
+        from_config: Path = None,
+        export_dir: Path = None,
+    ):
+        """Instantiates instances of the needed params to locate creds file.
+
+        Args:
+            config_file_nm (str):
+                Name of .toml configuration file following the format of
+                ``snowmobile_SAMPLE.toml`` (defaults to `snowmobile.toml`).
+            creds (str):
+                Name of connection within [credentials] section of .toml file
+                to use, defaults to the first set of credentials if creds
+                isn't explicitly passed.
+            from_config (Union[str, Path]):
+                Optionally pass in a full pathlib.Path object to a specific
+                `.toml` configuration file matching the format of
+                `snowmobile_SAMPLE.toml`.
+
+        """
+        self.file_nm = config_file_nm or "snowmobile.toml"
+
+        if export_dir:
+            self._stdout.exporting(file_name=self.file_nm)
+            export_dir = export_dir or Path.cwd()
+            export_path = export_dir / self.file_nm
+            template_path = PACKAGE_DATA / "snowmobile_TEMPLATE.toml"
+            shutil.copy(template_path, export_path)
+            self._stdout.exported(file_path=export_path)
+
+        else:
+            self.cache = Cache()
+
+            self.location: Path = (
+                Path(str(from_config))
+                if from_config
+                else Path(str(self.cache.get(self.file_nm)))
+            )
+
+            self.creds = creds.lower() if creds else ""
+
+            try:
+                path_to_config = self._get_path(is_provided=bool(from_config))
+                with open(path_to_config, "r") as r:
+                    cfg = toml.load(r)
+
+                if self.creds:
+                    cfg["connection"]["default-creds"] = self.creds
+
+                if not cfg["external-file-locations"].get("ddl"):
+                    cfg["external-file-locations"]["ddl"] = DDL
+                if not cfg["external-file-locations"].get("backend-ext"):
+                    cfg["external-file-locations"]["backend-ext"] = SPEC_BACKEND
+
+                super().__init__(**cfg)
+
+            except IOError as e:
+                raise IOError(e)
+
+    def _get_path(self, is_provided: bool = False):
+        """Checks for cache existence and validates - traverses OS if not.
+
+        Args:
+            is_provided (bool):
+                Indicates whether or not ``from_config`` is populated or if
+                configuration file is intended to come from cache or from
+                a bottom-up traversal of the file system if not yet cached.
+        """
+        self._stdout.locating(is_provided)
+        if self.location.is_file():
+            self._stdout.found(file_path=self.location, is_provided=is_provided)
+            return self.location
+        else:
+            self._stdout.not_found(creds_file_nm=self.file_nm)
+            return self._find_creds()
+
+    def _find_creds(self) -> Path:
+        """Traverses file system from ground up looking for creds file."""
+
+        found = None
+        try:
+            rents = [p for p in Path.cwd().parents]
+            rents.insert(0, Path.cwd())
+            for rent in rents:
+                if list(rent.rglob(self.file_nm)):
+                    found = list(rent.rglob(self.file_nm))[0]
+                    break
+            if found.is_file():
+                self.location = found
+                self.cache.save(item_name=self.file_nm, item_value=self.location)
+                self._stdout.file_located(file_path=self.location)
+                return self.location
+
+        except IOError as e:
+            self._stdout.cannot_find(self.file_nm)
+            raise IOError(e)
+
+    # RENAME: Change name to something more semantic
+    @staticmethod
+    def clean_parse(sql: Union[sqlparse.sql.Statement, str]) -> sqlparse.sql.Statement:
+        """Safely accepts a string or a parsed statement and returns a parsed statement.
+
+        Args:
+            sql (Union[sqlparse.sql.Statement, str]):
+                Either a string of sql or an already parsed
+                sqlparse.sql.Statement object.
+
+        Returns (sqlparse.sql.Statement):
+            A parsed sql statement.
+
+        """
+        if isinstance(sql, sqlparse.sql.Statement):
+            return sql
+
+        parsed = [s for s in sqlparse.parsestream(stream=sql) if not s.value.isspace()]
+        assert (
+            parsed
+        ), f'sqlparse.parsestream("""\n{sql}"""\n) returned an empty statement.'
+        return parsed[0]
+
+    # TODO: Stick somewhere that makes sense
+    @property
+    def scopes(self):
+        """All combinations of scope type and scope attribute."""
+        return {
+            f"{typ}_{attr}": set()
+            for typ in self.SCOPE_TYPES
+            for attr in self.SCOPE_ATTRIBUTES
+        }
+
+    def scopes_from_kwargs(self, **kwargs) -> Dict:
+        """Accepts a dict of keyword arguments and returns a full dictionary of
+        scopes, including empty sets for those not included in kwargs."""
+        scopes = {}
+        for attr in self.scopes:
+            attr_value = kwargs.get(attr) or set()
+            scopes[attr] = attr_value
+        return scopes

@@ -1,0 +1,56 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires=[
+    "flit_core >=2,<4",
+    'azure-common<2.0.0',
+    'azure-storage-blob<12.0.0',
+    'boto3>=1.4.4,<1.11.0',
+    'botocore>=1.5.0,<1.14.0',
+    'requests<2.24.0',
+    'urllib3<1.25.0',
+    'certifi',
+    'future',
+    'six',
+    'pytz',
+    'pycryptodomex>=3.2,!=3.5.0',
+    'pyOpenSSL>=16.2.0',
+    'cffi>=1.9',
+    'cryptography>=1.8.2',
+    'ijson',
+    'pyjwt',
+    'idna',
+    'oscrypto<2.0.0',
+    'asn1crypto>0.24.0,<2.0.0',
+    'pyasn1>=0.4.0,<0.5.0;python_version<"3.0"',
+    'pyasn1-modules>=0.2.0,<0.3.0;python_version<"3.0"',
+    'enum34;python_version<"3.4"',
+    "sqlparse;python_version>=0.3.1",
+    "tabulate;python_version>=0.8.7",
+]
+
+[tool.flit.metadata]
+module = "snowmobile"
+author = "Grant Murray"
+author-email = "gmurray203@gmail.com"
+classifiers = ["License :: OSI Approved :: MIT License"]
+description-file = "README.md"
+requires-python = ">=3.7"
+keywords = "snowflake database,snowflake python"
+
+[tool.flit.metadata.urls]
+home-page = "https://github.com/GEM7318/Snowmobile"
+documentation = "https://snowmobile.readthedocs.io/en/latest/index.html"
+
+[tool.flit.sdist]
+include = ["snowmobile/.*"]
+
+#[tool.flit.scripts]
+
+[tool.flit.metadata.requires-extra]
+test = [
+    "pytest >= 5.0.0"
+]
+
+[tool.isort]
+profile = "black"
+src_paths = ["snowmobile", "tests"]

@@ -20,7 +20,6 @@ __pycache__/*
 .pydevproject
 .settings
 .idea
-tags
 
 # Package files
 *.egg
@@ -46,15 +45,22 @@ docs/_build/*
 cover/*
 MANIFEST
 
+# Environment variables
+.env
+
 # Per-project virtualenvs
 .venv*/
 
-# GEM user-added components
-scratch.py
-index_OG_COPY.rst
-Scratch.md
-Capture.PNG
-samples.ipynb
-samples.md
-Samples-checkpoint.ipynb
+# snowmobile-specific ---------------------------------------------------------
+
+# sandbox directories
 _excluded/*
+_runner/*
+_sandbox/*
+csv/*
+
+# CREDENTIALS
+snowmobile.toml
+snowmobile_testing.toml
+snowmobile.json
+snowflake_credentials.json

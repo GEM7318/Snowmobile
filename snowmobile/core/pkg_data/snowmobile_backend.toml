@@ -1,0 +1,41 @@
+# =============================================================================
+# ../snowmobile_backend.toml
+#   DO NOT DELETE UNLESS INTENTIONALLY SPECIFYING ALTERNATE BACKEND EXTENSION
+#   LOCATION IN snowmobile.toml.
+# =============================================================================
+
+# -- Type mapping of how attribute values should be parsed based attr name ----
+[tag-to-type-xref]
+    string = [
+        'name', 'partition-on', 'end-index-at', 'description'
+    ]
+    list = [
+        'compare-patterns', 'ignore-patterns'
+    ]
+    float = [
+        'absolute-tolerance', 'relative-tolerance'
+    ]
+    bool = [
+        'results', 'sql'
+    ]
+
+# -- Named object, generic anchors, and keyword-exceptions for sql parsing ----
+[sql]
+    named-objects = [
+        "temp table",
+        "transient table",
+        "table",
+        "view",
+        "schema",
+        "warehouse",
+        "file format",
+    ]
+
+    [sql.generic-anchors]
+        "select" = "select-data"
+        "set" = "set-param"
+        "unset" = "unset-param"
+        "insert" = "insert-into"
+
+    [sql.keyword-exceptions]
+        "with" = "select"

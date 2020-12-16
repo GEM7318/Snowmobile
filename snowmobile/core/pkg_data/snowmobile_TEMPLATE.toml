@@ -1,0 +1,152 @@
+
+[connection]
+    default-creds = ''
+
+    [connection.credentials.credentials1]
+        user = ''
+        password = ''
+        role = ''
+        account = ''
+        warehouse = ''
+        database = ''
+        schema = ''
+
+    [connection.credentials.credentials2]
+        user = ''
+        password = ''
+        role = ''
+        account = ''
+        warehouse = ''
+        database = ''
+        schema = ''
+
+    [connection.default-settings]
+        autocommit = true
+        authenticator = 'snowflake'
+        timezone = 'America/Chicago'
+
+
+[loading-defaults]
+    default-file-format = 'snowmobile_default_psv'
+
+    [loading-defaults.put]
+        auto_compress = true
+
+    [loading-defaults.copy-into]
+        on_error = 'continue'
+
+    [loading-defaults.export-options]
+        [loading-defaults.export-options."snowmobile_default_csv"]
+            index = false
+            header = false
+            quotechar = '"'
+            sep = ","
+        [loading-defaults.export-options."snowmobile_default_psv"]
+            index = false
+            header = false
+            quotechar = '"'
+            sep = "|"
+
+    [loading-defaults.other]
+        include-loaded-timestamp = true
+        keep-local-file-after-load = false
+
+[script]
+    export-dir-name = '.snowmobile'
+
+    [script.patterns]
+
+        [script.patterns.core]
+            open-tag = '/*-'
+            close-tag = '-*/'
+            keyword-delimiter = '-'
+            description-delimiter = '~'
+
+        [script.patterns.wildcards]
+            wildcard-character = '*'
+            wildcard-delimiter = '_'
+            denotes-paragraph = '*'
+            denotes-no-reformat = '**'
+            denotes-omit-name-in-output = '***'
+
+    [script.qa]
+        partition-on = 'src_description'
+        compare-patterns = ['.*_diff']
+        ignore-patterns = ['.*_tmstmp']
+        end-index-at = 'end_index'
+
+        [script.qa.default-tolerance]
+            relative = 0.0
+            absolute = 0.0
+
+    [script.markdown]
+        default-marker-header = 'h1'
+        default-statement-header = 'h2'
+        default-bullet-character = '*'
+        wrap-attribute-names-with = '**'
+        wrap-attribute-values-with = '_'
+        include-statement-index-in-header = true
+        limit-query-results-to = 20
+
+    [script.markdown.attributes]
+
+        [script.markdown.attributes.markers]
+            [script.markdown.attributes.markers."__script__"]
+                as-group = 'Author Information'
+                # ====/ start-attributes /====
+                team = 'Sample Team Name'
+                author-name = 'First Last'
+                email = 'first.last@domain.com'
+
+            [script.markdown.attributes.markers."__appendix__"]
+                as-group = ''
+                # ====/ marker-attributes /====
+
+        [script.markdown.attributes.reserved.rendered-sql]
+            include-by-default = true
+            attribute-name = 'sql'
+            default-to = 'SQL***'  # 'SQL*_**'
+
+        [script.markdown.attributes.reserved.query-results]
+            include-by-default = false
+            attribute-name = 'results'
+            default-to = 'results*'
+            format = 'markdown'
+
+        [script.markdown.attributes.from-namespace]
+            execution_time_txt = 'Execution Time'
+            outcome_txt = 'Last Outcome'
+
+        [script.markdown.attributes.groups]
+            "Execution-Information**" = [
+                'execution_time_txt',
+                'outcome_txt'
+            ]
+            "QA-Specifications**" = [
+                'partition-on',
+                'end-index-at',
+                'compare-patterns',
+                'ignore-patterns',
+                'absolute-tolerance',
+                'relative-tolerance',
+            ]
+
+        [script.markdown.attributes.order]
+            attribute-order = [
+                'authored-date',
+                'author-information',
+                'execution-information',
+                'qa-specifications',
+                'outcome_txt',
+                'execution_time_txt',
+                'description',
+                'sql',
+                'results'
+            ]
+
+[external-file-locations]
+    ddl = ''
+    backend-ext = ''
+
+[query]
+    result-limit = -1
