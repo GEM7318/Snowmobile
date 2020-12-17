@@ -12,7 +12,7 @@ from pydantic import Field
 from .base import Base
 from .connection import Connection
 from .loading import Loading
-from .script import Script, Type
+from .script import Script
 
 
 class Location(Base):
@@ -40,34 +40,20 @@ class SQL(Base):
     # fmt: on
 
 
-class Snowmobile(Base):
+class Snowmobile:
     """Full configuration object.
 
     Represents the parsed **snowmobile.toml** file.
 
     """
-
-    # fmt: off
-    connection: Connection = Field(
-        default_factory=Connection, alias='connection'
-    )
-    loading: Loading = Field(
-        default_factory=Loading, alias="loading-defaults"
-    )
-    script: Script = Field(
-        default_factory=Script, alias='script'
-    )
-    sql: SQL = Field(
-        default_factory=SQL, alias="sql"
-    )
-    ext_locations: Location = Field(
-        default_factory=Location, alias='external-file-locations'
-    )
-    # fmt: on
-
-    def __init__(self, **data):
-
-        super().__init__(**data)
+    def __init__(self, **kwargs,):
+        # fmt: off
+        self.connection = Connection(**kwargs.get('connection', {}))
+        self.loading = Loading(**kwargs.get('loading-defaults', {}))
+        self.script = Script(**kwargs.get('script', {}))
+        self.sql = SQL(**kwargs.get('sql', {}))
+        self.ext_locations = Location(**kwargs.get('external-file-locations', {}))
+        # fmt: on
 
         with open(self.ext_locations.backend, "r") as r:
             backend = toml.load(r)

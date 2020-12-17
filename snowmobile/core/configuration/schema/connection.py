@@ -32,6 +32,9 @@ class Credentials(Base):
     """
 
     # fmt: off
+    alias: str = Field(
+        default_factory=str, alias="alias"
+    )
     user: str = Field(
         default_factory=str, alias='user',
     )
@@ -60,6 +63,17 @@ class Credentials(Base):
         default_factory=str, alias='schema',
     )
     # fmt: on
+
+    def __str__(self):
+        """Altering inherited str method to mask credentials detail."""
+        attrs = '\n'.join(
+            f"\t\t{k}='{'*' * len(v) if k != 'alias' else v}'"
+            for k, v in vars(self).items()
+        )
+        return f"Credentials(\n{attrs}\n)"
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Connection(Base):
@@ -108,7 +122,7 @@ class Connection(Base):
         super().__init__(**data)
 
         for k, v in data["credentials"].items():
-            self.credentials[k] = Credentials(**v)
+            self.credentials[k] = Credentials(**v, alias=k)
 
         if not self.default_alias:
             self.default_alias = list(self.credentials)[0]

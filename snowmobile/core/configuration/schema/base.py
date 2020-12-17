@@ -81,10 +81,14 @@ class Base(BaseModel, Config):
         other = type(self)(**args)
         return self.from_relative(obj=other)
 
+    def as_serializable(self, by_alias: bool = False):
+        """Returns a dictionary in serializable form."""
+        return self.serialize(as_dict=self.dict(by_alias=by_alias))
+
     def json(self, by_alias: bool = False, **kwargs) -> str:
         """Custom serialization to handle sets and pathlib objects."""
         return json.dumps(
-            obj=self.serialize(as_dict=self.dict(by_alias=by_alias)),
+            obj=self.as_serializable(by_alias=by_alias),
             default=pydantic_encoder,
             **kwargs,
         )

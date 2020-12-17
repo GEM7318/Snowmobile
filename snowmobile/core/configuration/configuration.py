@@ -8,15 +8,17 @@ Module handles:
 from __future__ import annotations
 
 import shutil
+import json
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Union, List, Type
 
 import sqlparse
 import toml
 from fcache.cache import FileCache
+from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Snowmobile
+from .schema import Snowmobile, Base
 
 # ====================================
 # Mapping to package data directory
@@ -109,6 +111,7 @@ class Configuration(Snowmobile):
 
         """
         self.file_nm = config_file_nm or "snowmobile.toml"
+        self.cache = Cache()
 
         if export_dir:
             self._stdout.exporting(file_name=self.file_nm)
@@ -119,8 +122,6 @@ class Configuration(Snowmobile):
             self._stdout.exported(file_path=export_path)
 
         else:
-            self.cache = Cache()
-
             self.location: Path = (
                 Path(str(from_config))
                 if from_config
@@ -226,3 +227,25 @@ class Configuration(Snowmobile):
             attr_value = kwargs.get(attr) or set()
             scopes[attr] = attr_value
         return scopes
+
+    def __str__(self):
+        return f"snowmobile.Configuration('{self.file_nm}')"
+
+    def __repr__(self):
+        return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"
+
+    def __json__(self, by_alias: bool = False, **kwargs):
+        return self.json(by_alias=by_alias, **kwargs)
+
+    def json(self, by_alias: bool = False, **kwargs):
+        """Combined serialization method for pydantic attributes."""
+        total = {}
+        for k, v in vars(self).items():
+            if issubclass(type(v), Base):
+                total = {**total, **v.as_serializable(by_alias=by_alias)}
+        return json.dumps(
+            obj=total,
+            default=pydantic_encoder,
+            **kwargs
+        )
+
