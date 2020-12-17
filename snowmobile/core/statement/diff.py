@@ -221,26 +221,8 @@ class Diff(Statement):
             containing its results (will be empty if the check passes).
 
         """
-        if self:
-            try:
-                self.start()
-                self.results = self.sn.query(self.sql, results=True)
-
-            except ProgrammingError as e:
-                # This is where we would mark self._passed = False
-                self.set_outcome(success=False)
-                raise e
-
-            finally:
-                self.end()
-                self.process()
-                self.set_outcome(success=self.diff)
-
-        else:
-            self.set_outcome()
-
-        if kwargs.get("render"):
-            self.render()
+        with self._run(**kwargs) as r:
+            r._outcome = r.process()
 
         silence = kwargs.get("silence_qa")
         if self and not silence:
@@ -248,7 +230,7 @@ class Diff(Statement):
 
         return self
 
-    def process(self) -> None:
+    def process(self) -> bool:
         try:
             self.split_cols()
             self.drop_ignored()
@@ -256,7 +238,7 @@ class Diff(Statement):
             self.partitions = self.results.snowmobile.partitions(
                 on=self.partition_on
             )
-            self.diff = self.partitions_are_equal(
+            return self.partitions_are_equal(
                 partitions=self.partitions,
                 abs_tol=self.absolute_tolerance,
                 rel_tol=self.relative_tolerance,

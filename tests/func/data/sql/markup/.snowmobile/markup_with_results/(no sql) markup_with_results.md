@@ -36,7 +36,7 @@ Results
 
 ## (3) qa-empty~an expected success
 * Execution-Information
-	* **Last Outcome**: _passed_
+	* **Last Outcome**: _failed_
 
 ```sql
 select

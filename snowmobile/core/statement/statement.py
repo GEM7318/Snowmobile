@@ -555,6 +555,7 @@ class Statement:
 
     # fmt: off
     _OUTCOME_MAPPING: Dict[Any, Tuple] = {
+        -2: ("-", "error"),
         -1: ("-", "skipped"),
         0: ("-", ""),
         1: ("warning", "failed"),
@@ -563,7 +564,7 @@ class Statement:
     }
     # fmt: on
 
-    # noinspection PyTypeChecker
+    # noinspection PyTypeChecker,PydanticTypeChecker
     def __init__(
         self,
         sn: Connector,
@@ -581,6 +582,7 @@ class Statement:
         self.patterns: config.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
+        self._outcome: int = int()
         self.outcome: int = int()
         self.outcome_txt: str = self._OUTCOME_MAPPING[self.outcome][1]
         self.outcome_html: str = str()
@@ -771,62 +773,11 @@ class Statement:
         self.tag.is_included = True
         return self
 
-    # @contextmanager
-    # def _run(
-    #     self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
-    # ) -> ContextManager[Statement]:
-    #     """Generic portion of sql statements; used by generic case and derived classes.
-    #
-    #     note:
-    #         *   Will only execute sql if the :class:`Statement` object's boolean
-    #             representation (determined by its current scope) evaluates to `True`
-    #         *   If `results=True`, the results returned are stored within the
-    #             :attr:`results` attribute, not returned directly from this method.
-    #
-    #     Args:
-    #         results (bool):
-    #             Whether or not to return results; default is `True`.
-    #         lower (bool):
-    #             Whether or not to lower-case the columns on the returned
-    #             :class:`pandas.DataFrame` if `results=True`.
-    #         render (bool):
-    #             Whether or not to render the sql being executed; useful in
-    #             notebooks when wanting to render the syntax-highlighted sql
-    #             while executing a statement.
-    #         **kwargs:
-    #             Included for compatibility purposes with derived classes.
-    #
-    #     Returns (Statement):
-    #         The :class:`Statement` object itself post-executing or skipping
-    #         execution of the sql based on its current scope.
-    #
-    #     """
-    #     if self:
-    #         try:
-    #             self.start()
-    #             self.results = self.sn.query(self.sql, results=results, lower=lower)
-    #             yield
-    #
-    #         except ProgrammingError as e:
-    #             self.set_outcome(success=False)
-    #             print(f"Error {e.errno} ({e.sqlstate}): " f"{e.msg} (" f"{e.sfqid})")
-    #
-    #         finally:
-    #             self.end()
-    #
-    #     else:
-    #         # self.outcome = -1
-    #         self.set_outcome()
-    #
-    #     if render:
-    #         self.render()
-    #
-    #     return self
-
-    def run(
+    @contextmanager
+    def _run(
         self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
-    ) -> Statement:
-        """Execute the statement's sql.
+    ) -> ContextManager[Statement]:
+        """Generic portion of sql statements; used by generic case and derived classes.
 
         note:
             *   Will only execute sql if the :class:`Statement` object's boolean
@@ -852,52 +803,40 @@ class Statement:
             execution of the sql based on its current scope.
 
         """
-        # with self._run() as r:
-        #     r.
-        if self:
-            try:
+        try:
+            if self:
                 self.start()
                 self.results = self.sn.query(self.sql, results=results, lower=lower)
-                self.set_outcome(success=True)
-
-            except ProgrammingError as e:
-                self.set_outcome(success=False)
-                raise e
-                # print(f"Error {e.errno} ({e.sqlstate}): " f"{e.msg} (" f"{e.sfqid})")
-
-            finally:
                 self.end()
+            else:
+                self.outcome = -1
 
-        else:
-            # self.outcome = -1
-            self.set_outcome()
+            yield
 
-        if render:
-            self.render()
+        except ProgrammingError as e:
+            self.outcome = -2
+            raise e
 
-        return self
+        finally:
+            if self and render:
+                self.render()
 
-    def set_outcome(self, success: bool = False) -> None:
-        """Updates the :class:`Statement`'s outcome based on what occurs during execution.
+            self.update()
+            return self
 
-        Args:
-            success (bool):
-                Whether or not the intended operations were execution without
-                error for `generic` statements; for ``qa`` statements, this
-                will be a boolean value indicating if the check ran produced
-                the required results for a passing test.
-        """
-        # if skipped:
-        if not self:
-            self.outcome = -1
-        elif not success:
-            self.outcome = 1
-        else:
-            self.outcome = 3 if self.is_derived else 2
-        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
-        self.outcome_html = self._outcome_html(self._alert, self.outcome_txt)
+    def run(
+        self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
+    ) -> Statement:
+        with self._run(results=results, lower=lower, render=render, **kwargs) as r:
+            return r
 
     def update(self):
+        if not self:
+            pass
+        elif not self.is_derived and not self.outcome:
+            self.outcome = 2
+        elif not self.outcome:
+            self.outcome = 3 if self._outcome else 1
         self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
         self.outcome_html = self._outcome_html(self._alert, self.outcome_txt)
 
@@ -913,11 +852,6 @@ class Statement:
     def _alert(self) -> str:
         """Utility property to return the 'alert' text from the latest outcome."""
         return self._OUTCOME_MAPPING[self.outcome][0]
-
-    @property
-    def _outcome(self) -> bool:
-        """Boolean indicator of if the statement ran or qa check passed."""
-        return self.outcome != 1
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):

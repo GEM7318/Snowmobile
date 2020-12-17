@@ -54,7 +54,7 @@ MANIFEST
 # snowmobile-specific ---------------------------------------------------------
 
 # sandbox directories
-_excluded/*
+_sandbox/*
 _runner/*
 _sandbox/*
 csv/*

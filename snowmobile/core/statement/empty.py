@@ -17,30 +17,10 @@ class Empty(Statement):
     def __init__(self, sn: Connector, **kwargs):
         super().__init__(sn=sn, **kwargs)
 
-    def _run(self):
-        self.start()
-        self.results = self.sn.query(self.sql, results=True)
-        self.outcome = self.results.empty
-        self.has_run = True
-
     def run(self, **kwargs):
-        if self:
-            try:
-                self._run()
 
-            except ProgrammingError as e:
-                self.set_outcome(success=False)
-                print(f"Error {e.errno} ({e.sqlstate}): " f"{e.msg} (" f"{e.sfqid})")
-
-            finally:
-                self.end()
-                self.set_outcome(success=self.outcome)
-
-        else:
-            self.set_outcome()
-
-        if kwargs.get("render"):
-            self.render()
+        with self._run(**kwargs) as r:
+            r._outcome = r.results.empty
 
         silence = kwargs.get("silence_qa")
         if self and not silence:
@@ -48,5 +28,3 @@ class Empty(Statement):
 
         return self
 
-    def summary(self):
-        return self.results.head()
