@@ -28,3 +28,6 @@ class Empty(Statement):
 
         return self
 
+    def process(self):
+        self._outcome = self.results.empty
+

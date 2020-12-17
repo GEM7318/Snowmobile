@@ -238,6 +238,11 @@ class Diff(Statement):
             self.partitions = self.results.snowmobile.partitions(
                 on=self.partition_on
             )
+            self._outcome = self.partitions_are_equal(
+                partitions=self.partitions,
+                abs_tol=self.absolute_tolerance,
+                rel_tol=self.relative_tolerance,
+            )
             return self.partitions_are_equal(
                 partitions=self.partitions,
                 abs_tol=self.absolute_tolerance,

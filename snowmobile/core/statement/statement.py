@@ -582,7 +582,7 @@ class Statement:
         self.patterns: config.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
-        self._outcome: int = int()
+        self._outcome: bool = bool()
         self.outcome: int = int()
         self.outcome_txt: str = self._OUTCOME_MAPPING[self.outcome][1]
         self.outcome_html: str = str()
@@ -811,7 +811,7 @@ class Statement:
             else:
                 self.outcome = -1
 
-            yield
+            yield self
 
         except ProgrammingError as e:
             self.outcome = -2
@@ -821,7 +821,7 @@ class Statement:
             if self and render:
                 self.render()
 
-            self.update()
+            self.update(**kwargs)
             return self
 
     def run(
@@ -830,28 +830,29 @@ class Statement:
         with self._run(results=results, lower=lower, render=render, **kwargs) as r:
             return r
 
-    def update(self):
+    def process(self):
+        return self._outcome
+
+    def update(self, **kwargs):
         if not self:
             pass
-        elif not self.is_derived and not self.outcome:
+        elif not self.is_derived and not self.outcome:  # generic completed
             self.outcome = 2
-        elif not self.outcome:
+        elif not self.outcome:  # setting outcome for QA statements
             self.outcome = 3 if self._outcome else 1
-        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
-        self.outcome_html = self._outcome_html(self._alert, self.outcome_txt)
 
-    @staticmethod
-    def _outcome_html(alert: str, outcome_txt: str):
+        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
+        self.outcome_html = self._outcome_html(self.outcome_txt)
+
+        # self._validate_qa(**kwargs)
+
+    def _outcome_html(self, outcome_txt: str):
         """Utility to generation admonition html."""
+        alert = self._OUTCOME_MAPPING[self.outcome][0]
         return f"""
 <div class="alert-{alert}">
 <center><b>====/ {outcome_txt} /====</b></center>
 </div>""".strip()
-
-    @property
-    def _alert(self) -> str:
-        """Utility property to return the 'alert' text from the latest outcome."""
-        return self._OUTCOME_MAPPING[self.outcome][0]
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):
@@ -862,6 +863,10 @@ class Statement:
             f"arguments;\n attributes found are: {','.join(list(attrs_parsed))}",
         )
         return condition, msg
+
+    def _validate_qa(self, **kwargs):
+        if self.is_derived and not kwargs.get('silence_qa') and self:
+            assert self._outcome, f"'{self.tag}' did not pass its QA check."
 
     def __bool__(self):
         """Determined by the value of :attr:`Tag.is_included`."""
