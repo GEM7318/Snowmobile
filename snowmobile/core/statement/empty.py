@@ -17,17 +17,6 @@ class Empty(Statement):
     def __init__(self, sn: Connector, **kwargs):
         super().__init__(sn=sn, **kwargs)
 
-    def run(self, **kwargs):
-
-        with self._run(**kwargs) as r:
-            r._outcome = r.results.empty
-
-        silence = kwargs.get("silence_qa")
-        if self and not silence:
-            assert self._outcome, f"'{self.tag}' did not pass its QA check."
-
-        return self
-
     def process(self):
         self._outcome = self.results.empty
-
+        return self

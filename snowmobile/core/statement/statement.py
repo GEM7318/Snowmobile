@@ -123,10 +123,6 @@ class Scope:
             for p in self.check_against_args[arg]
         )
         return any([escaped, unescaped])
-        # return any(
-        #     re.findall(pattern=re.escape(self.base), string=p)
-        #     for p in self.check_against_args[arg]
-        # )
 
     def eval(self, **kwargs) -> bool:
         """Evaluates filter arguments and updates context accordingly.
@@ -808,8 +804,6 @@ class Statement:
                 self.start()
                 self.results = self.sn.query(self.sql, results=results, lower=lower)
                 self.end()
-            else:
-                self.outcome = -1
 
             yield self
 
@@ -824,18 +818,39 @@ class Statement:
             self.update(**kwargs)
             return self
 
+    def process(self):
+        return self
+
     def run(
         self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
     ) -> Statement:
         with self._run(results=results, lower=lower, render=render, **kwargs) as r:
-            return r
-
-    def process(self):
-        return self._outcome
+            return r.process()
 
     def update(self, **kwargs):
-        if not self:
-            pass
+        """Updates outcome attributes and runs QA validation for derived classes.
+
+        In total, updates are made to:
+            *   :attr:`outcome`, assuming statement is within current scope.
+            *   :attr:`outcome_txt', plain text form of outcome.
+            *   :attr:`outcome_html`, outcome as an html admonition banner.
+
+        Intended to be called directly after :meth:`process()`, which in the
+        generic case will return the unmodified object but in derived classes,
+        :meth:`process()` will perform validation on the results returned by
+        the statement and alter the value of :attr:`_outcome`.
+
+        ..note:
+            *   The default value of :attr:`outcome` is 0.
+            *   The first set of conditionals below will only modify its value
+                if it's current value is still the default; if the statement
+                encounters an error during execution, the value of :attr`outcome`
+                will be changed to `-2` before exiting the context of
+                :meth:`_run()` and the below codes will leave it as is.
+
+        """
+        if not self:  # statement is not included within the current context
+            self.outcome = -1
         elif not self.is_derived and not self.outcome:  # generic completed
             self.outcome = 2
         elif not self.outcome:  # setting outcome for QA statements
@@ -844,15 +859,12 @@ class Statement:
         self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
         self.outcome_html = self._outcome_html(self.outcome_txt)
 
-        # self._validate_qa(**kwargs)
+        self._validate_qa(**kwargs)
 
-    def _outcome_html(self, outcome_txt: str):
-        """Utility to generation admonition html."""
-        alert = self._OUTCOME_MAPPING[self.outcome][0]
-        return f"""
-<div class="alert-{alert}">
-<center><b>====/ {outcome_txt} /====</b></center>
-</div>""".strip()
+    def _validate_qa(self, **kwargs):
+        """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""
+        if self.is_derived and not kwargs.get("silence_qa") and self:
+            assert self._outcome, f"'{self.tag}' did not pass its QA check."
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):
@@ -864,9 +876,13 @@ class Statement:
         )
         return condition, msg
 
-    def _validate_qa(self, **kwargs):
-        if self.is_derived and not kwargs.get('silence_qa') and self:
-            assert self._outcome, f"'{self.tag}' did not pass its QA check."
+    def _outcome_html(self, outcome_txt: str):
+        """Utility to generation admonition html."""
+        alert = self._OUTCOME_MAPPING[self.outcome][0]
+        return f"""
+<div class="alert-{alert}">
+<center><b>====/ {outcome_txt} /====</b></center>
+</div>""".strip()
 
     def __bool__(self):
         """Determined by the value of :attr:`Tag.is_included`."""

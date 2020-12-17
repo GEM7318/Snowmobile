@@ -194,62 +194,20 @@ class Diff(Statement):
         """
         return set(self.results[self.partition_on])
 
-    def summary(self) -> pd.DataFrame:
-        """Returns summary results DataFrame."""
-        return self.results.head()
-
-    def run(self, **kwargs) -> Diff:
-        """Executes the :attr:`sql` associated with the :class:`Diff`.
-
-        Method is not intended to be called directly by the user and will be
-        by called by :meth:`Script.run()`, which will pass in the
-        :class:`snowmobile.Connector` object for the statement to execute
-        with by default.
-
-        Args:
-            kwargs.skip_qa (bool):
-                Option to move forward in the parent script without executing
-                this statement; defaults to `False`.
-            kwargs.silence_qa (bool):
-                Option to run the ``qa-diff` check but continue execution of
-                parent script even if the check fails - outcome of the check
-                will still be piped to stdout and/or a local markdown file
-                if specified; defaults to `False`.
-
-        Returns (:class:`snowmobile.core.statement.Diff`):
-            ``qa-diff`` object including the outcome and a DataFrame
-            containing its results (will be empty if the check passes).
-
-        """
-        with self._run(**kwargs) as r:
-            r._outcome = r.process()
-
-        silence = kwargs.get("silence_qa")
-        if self and not silence:
-            assert self._outcome, f"'{self.tag}' did not pass its QA check."
-
-        return self
-
-    def process(self) -> bool:
+    def process(self) -> Diff:
         try:
             self.split_cols()
             self.drop_ignored()
             self.set_index()
-            self.partitions = self.results.snowmobile.partitions(
-                on=self.partition_on
-            )
+            self.partitions = self.results.snowmobile.partitions(on=self.partition_on)
             self._outcome = self.partitions_are_equal(
                 partitions=self.partitions,
                 abs_tol=self.absolute_tolerance,
                 rel_tol=self.relative_tolerance,
             )
-            return self.partitions_are_equal(
-                partitions=self.partitions,
-                abs_tol=self.absolute_tolerance,
-                rel_tol=self.relative_tolerance,
-            )
-        except Exception:
-            raise
+            return self
+        except Exception as e:
+            raise e
 
     @staticmethod
     def partitions_are_equal(
@@ -278,9 +236,7 @@ class Diff(Statement):
         }
         checks_for_equality: List[bool] = [
             partitions_by_index[i].snowmobile.df_diff(
-                df2=partitions_by_index[i + 1],
-                rel_tol=rel_tol,
-                abs_tol=abs_tol
+                df2=partitions_by_index[i + 1], rel_tol=rel_tol, abs_tol=abs_tol
             )
             for i in range(1, len(partitions_by_index))
         ]
