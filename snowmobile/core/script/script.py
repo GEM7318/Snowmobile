@@ -224,7 +224,6 @@ class Script:
             m
             for m in blocks.values()
             if self.sn.cfg.script.is_marker(m)
-            # if p.is_marker(m)
         ]
         self.all_marker_hashmap = {hash(v): v for v in marker_blocks}
 

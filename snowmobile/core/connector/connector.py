@@ -62,7 +62,6 @@ class Connector:
     def connect(self):
         """Creates new connection to Snowflake with the same set of credentials."""
         try:
-            self._is_delayed = False
             self.conn = connect(
                 user=self.cfg.connection.current.user,
                 password=self.cfg.connection.current.password,
@@ -73,8 +72,9 @@ class Connector:
                 schema=self.cfg.connection.current.schema_name,
                 **self.cfg.connection.defaults,
             )
-            self.sql = sql.SQL(sn=self)
             print(self)
+            self.sql = sql.SQL(sn=self)
+            self._is_delayed = False
             return self
         except ProgrammingError as e:
             raise ProgrammingError(e)
@@ -90,7 +90,7 @@ class Connector:
     @property
     def alive(self) -> bool:
         """Check if the connection is still alive."""
-        return False if self._is_delayed else not self.conn.cursor().is_closed()
+        return False if self._is_delayed else not self.cursor.is_closed()
 
     @property
     def cursor(self) -> SnowflakeCursor:
@@ -136,7 +136,6 @@ class Connector:
         try:
             if not results:
                 return self.cursor.execute(sql)
-
             df = pd.read_sql(sql, con=self.conn)
             return df.snowmobile.lower_cols() if lower else df
 

@@ -356,7 +356,6 @@ class Tag:
             found; will return an empty dictionary of no matches are found.
 
         """
-        # numbered_terms = {i: t for i, t in enumerate(self.patt.named_obj)}
         numbered_terms = {i: t for i, t in enumerate(self.cfg.sql.named_objects)}
         matches = {
             i: re.findall(f"\\b{term}\\b", self.first_line)
@@ -569,16 +568,16 @@ class Statement:
         attrs_raw: str = None,
         **kwargs,
     ):
+        self._index: int = index
+        self._exclude_attrs = []
+        self._outcome: bool = bool()
 
         self.sn = sn
         self.statement: sqlparse.sql.Statement = sn.cfg.clean_parse(sql=statement)
         self.index: int = index or int()
-        self._index: int = index
-        self._exclude_attrs = []
         self.patterns: config.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
-        self._outcome: bool = bool()
         self.outcome: int = int()
         self.outcome_txt: str = self._OUTCOME_MAPPING[self.outcome][1]
         self.outcome_html: str = str()
@@ -597,6 +596,10 @@ class Statement:
 
         self.tag: Tag = None
         self.attrs_parsed = self.parse()
+
+    # @property
+    # def index(self):
+    #     return self.tag.index
 
     def parse(self) -> Dict:
         """Parses a statement tag into a valid dictionary.
@@ -712,7 +715,7 @@ class Statement:
     @property
     def executed(self) -> bool:
         """Indicates whether the statement has been executed or not."""
-        return self.outcome >= 1
+        return self.outcome >= 1 or self.outcome == -2
 
     @property
     def is_derived(self):
@@ -769,15 +772,61 @@ class Statement:
         self.tag.is_included = True
         return self
 
+    @property
+    def _outcome_latest(self):
+        """Returns the numeric :attr:`outcome` value based on current context.
+
+
+        ..note:
+            *   The default value of :attr:`outcome` is 0.
+            *   The first set of conditionals below will only modify its value
+                if it's current value is still the default; if the statement
+                encounters an error during execution, the value of :attr`outcome`
+                will be changed to `-2` before exiting the context of
+                :meth:`_run()` and the below codes will leave it as is.
+
+        """
+        if not self:  # statement is not included within the current context
+            return -1
+        elif not self.is_derived and not self.outcome:  # generic completed
+            return 2
+        elif not self.outcome:  # setting outcome for QA statements
+            return 3 if self._outcome else 1
+        else:  # keeping value of '-2' (i.e. error encountered)
+            return self.outcome
+
+    def update(self, **kwargs):
+        """Updates outcome attributes and runs QA validation for derived classes.
+
+        In total, updates are made to:
+            *   :attr:`outcome`, assuming statement is within current scope.
+            *   :attr:`outcome_txt', plain text form of outcome.
+            *   :attr:`outcome_html`, outcome as an html admonition banner.
+
+        Intended to be called directly after :meth:`process()`, which in the
+        generic case will return the unmodified object but in derived classes,
+        :meth:`process()` will perform validation on the results returned by
+        the statement and alter the value of :attr:`_outcome`.
+
+        """
+        self.outcome = self._outcome_latest
+        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
+        self.outcome_html = self._outcome_html(self.outcome_txt)
+        self._validate_qa(**kwargs)
+
+    def process(self):
+        """Used by derived classes for validation logic of the returned results."""
+        return self
+
     @contextmanager
     def _run(
         self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
     ) -> ContextManager[Statement]:
-        """Generic portion of sql statements; used by generic case and derived classes.
+        """Executes statement; used by generic case and derived classes.
 
         note:
             *   Will only execute sql if the :class:`Statement` object's boolean
-                representation (determined by its current scope) evaluates to `True`
+                representation (determined by its current scope) evaluates to `True`.
             *   If `results=True`, the results returned are stored within the
                 :attr:`results` attribute, not returned directly from this method.
 
@@ -804,7 +853,6 @@ class Statement:
                 self.start()
                 self.results = self.sn.query(self.sql, results=results, lower=lower)
                 self.end()
-
             yield self
 
         except ProgrammingError as e:
@@ -814,52 +862,14 @@ class Statement:
         finally:
             if self and render:
                 self.render()
-
             self.update(**kwargs)
             return self
-
-    def process(self):
-        return self
 
     def run(
         self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
     ) -> Statement:
         with self._run(results=results, lower=lower, render=render, **kwargs) as r:
             return r.process()
-
-    def update(self, **kwargs):
-        """Updates outcome attributes and runs QA validation for derived classes.
-
-        In total, updates are made to:
-            *   :attr:`outcome`, assuming statement is within current scope.
-            *   :attr:`outcome_txt', plain text form of outcome.
-            *   :attr:`outcome_html`, outcome as an html admonition banner.
-
-        Intended to be called directly after :meth:`process()`, which in the
-        generic case will return the unmodified object but in derived classes,
-        :meth:`process()` will perform validation on the results returned by
-        the statement and alter the value of :attr:`_outcome`.
-
-        ..note:
-            *   The default value of :attr:`outcome` is 0.
-            *   The first set of conditionals below will only modify its value
-                if it's current value is still the default; if the statement
-                encounters an error during execution, the value of :attr`outcome`
-                will be changed to `-2` before exiting the context of
-                :meth:`_run()` and the below codes will leave it as is.
-
-        """
-        if not self:  # statement is not included within the current context
-            self.outcome = -1
-        elif not self.is_derived and not self.outcome:  # generic completed
-            self.outcome = 2
-        elif not self.outcome:  # setting outcome for QA statements
-            self.outcome = 3 if self._outcome else 1
-
-        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
-        self.outcome_html = self._outcome_html(self.outcome_txt)
-
-        self._validate_qa(**kwargs)
 
     def _validate_qa(self, **kwargs):
         """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""

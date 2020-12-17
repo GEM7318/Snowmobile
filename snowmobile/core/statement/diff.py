@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import Dict, List, Any, Set
 
 import pandas as pd
-from snowflake.connector.errors import ProgrammingError
 
 from snowmobile.core import Connector
 from snowmobile.core.configuration import schema as cfg
@@ -194,21 +193,6 @@ class Diff(Statement):
         """
         return set(self.results[self.partition_on])
 
-    def process(self) -> Diff:
-        try:
-            self.split_cols()
-            self.drop_ignored()
-            self.set_index()
-            self.partitions = self.results.snowmobile.partitions(on=self.partition_on)
-            self._outcome = self.partitions_are_equal(
-                partitions=self.partitions,
-                abs_tol=self.absolute_tolerance,
-                rel_tol=self.relative_tolerance,
-            )
-            return self
-        except Exception as e:
-            raise e
-
     @staticmethod
     def partitions_are_equal(
         partitions: Dict[str, pd.DataFrame], abs_tol: float, rel_tol: float
@@ -241,6 +225,21 @@ class Diff(Statement):
             for i in range(1, len(partitions_by_index))
         ]
         return all(checks_for_equality)
+
+    def process(self) -> Diff:
+        try:
+            self.split_cols()
+            self.drop_ignored()
+            self.set_index()
+            self.partitions = self.results.snowmobile.partitions(on=self.partition_on)
+            self._outcome = self.partitions_are_equal(
+                partitions=self.partitions,
+                abs_tol=self.absolute_tolerance,
+                rel_tol=self.relative_tolerance,
+            )
+            return self
+        except Exception as e:
+            raise e
 
     def __getitem__(self, item):
         return vars(self)[item]
