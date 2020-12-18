@@ -1,4 +1,5 @@
 """Tests for script __markers__."""
+from typing import Tuple, List, Any
 import pytest
 
 import snowmobile
@@ -32,11 +33,20 @@ def test_marker_number_duplicates(sn_delayed, sql_paths):
 #   objects.
 
 
-def _get_test_cases_for_combined_marker_and_statement_indices():
-    """Get expected values for contents by index."""
+@pytest.mark.markers
+def test_combined_marker_and_statement_indices(sn_delayed, sql_paths):
+    """Test that the combined marker and statement order is correct."""
     from snowmobile.core import Statement
     from snowmobile.core.configuration.schema import Marker
-    return [
+
+    script = snowmobile.Script(
+        path=sql_paths['markers_standard.sql'],
+        sn=sn_delayed
+    )
+    script_contents_expected: List[
+        Tuple[int, Any[Marker, Statement], str]
+    ] = [
+        # (index, BaseClass, 'tag.nm')
         (1, Marker, 'markers_standard.sql'),
         (2, Statement, 'create-table~sample_table'),
         (3, Marker, 'marker2'),
@@ -45,23 +55,19 @@ def _get_test_cases_for_combined_marker_and_statement_indices():
         (6, Marker, 'trailing_marker'),
     ]
 
-
-@pytest.mark.markers
-def test_combined_marker_and_statement_indices(sn_delayed, sql_paths):
-    """Test that the combined marker and statement order is correct."""
-    # given
-    script = snowmobile.Script(
-        path=sql_paths['markers_standard.sql'],
-        sn=sn_delayed
-    )
-    contents_under_test = script.contents(
+    script_contents_under_test = script.contents(
         by_index=True,
         markers=True
     )
-    expected_contents = _get_test_cases_for_combined_marker_and_statement_indices()
-    # then
-    for exp, (i, c) in zip(expected_contents, contents_under_test.items()):
-        exp_index, exp_base_class, exp_name = exp
-        assert exp_index == i
-        assert exp_name == c.name
-        assert isinstance(c, exp_base_class)
+
+    for expected, (i, c) in zip(
+        script_contents_expected, script_contents_under_test.items()
+    ):
+        expected_index, expected_base_class, expected_name = expected
+        assert all(
+             [
+                 expected_index == i,
+                 expected_name == c.name,
+                 isinstance(c, expected_base_class),
+             ]
+        )

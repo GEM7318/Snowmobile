@@ -36,12 +36,12 @@ def _export_all_markup_test_cases():
             validation set.
 
     The data structures below mirror those that the validation instances were
-    created with - context on their contents are as follows:
+    created with, their contents are as follows:
 
         script_dtl (List[Tuple[str, bool, Dict]]):
             A list of tuples containing:
-                1.  The script name from
-                        *   From which a path is found/script object is created
+                1.  The script name under test
+                        *   Used to locate the file path from `/tests/data`
                 2.  A boolean indicator of whether or not to run the script
                         *   This is based on whether or not the script object
                             from which the validation files were exported was

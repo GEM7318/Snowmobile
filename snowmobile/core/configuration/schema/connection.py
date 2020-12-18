@@ -32,8 +32,8 @@ class Credentials(Base):
     """
 
     # fmt: off
-    alias: str = Field(
-        default_factory=str, alias="alias"
+    _alias: str = Field(
+        default_factory=str, alias="_alias"
     )
     user: str = Field(
         default_factory=str, alias='user',
@@ -63,6 +63,18 @@ class Credentials(Base):
         default_factory=str, alias='schema',
     )
     # fmt: on
+
+    def as_nm(self, n: str):
+        """Sets the credentials alias."""
+        self._alias = n
+        return self
+
+    @property
+    def credentials(self):
+        """Returns namespace as a dictionary, excluding its alias/name."""
+        return {
+            k: v for k, v in self.dict(by_alias=True).items() if k != '_alias'
+        }
 
     def __str__(self):
         """Altering inherited str method to mask credentials detail."""
@@ -122,7 +134,7 @@ class Connection(Base):
         super().__init__(**data)
 
         for k, v in data["credentials"].items():
-            self.credentials[k] = Credentials(**v, alias=k)
+            self.credentials[k] = Credentials(**v).as_nm(n=k)
 
         if not self.default_alias:
             self.default_alias = list(self.credentials)[0]

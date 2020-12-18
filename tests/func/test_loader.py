@@ -8,11 +8,11 @@ def test_loader():
     import snowmobile
     table_name = 'test_snowmobile_upload'
     sn1 = snowmobile.Connector(creds='snowmobile_testing')
-    df = sn1.query('select * 1 as sample_column')
+    df = sn1.query('select 1 as sample_column')
     table = snowmobile.Loader(
         df=df,
         table=table_name,
         sn=sn1,
     )
-    loaded = table.load()
+    loaded = table.load(if_exists='replace')
     assert loaded

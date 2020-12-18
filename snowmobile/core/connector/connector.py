@@ -2,6 +2,7 @@
 ``snowmobile.Connector`` class; bundles together configuration object and
 SnowflakeConnection for query/statement execution.
 """
+from __future__ import annotations
 from pathlib import Path
 from typing import Union
 
@@ -28,11 +29,12 @@ class Connector:
 
     def __init__(
         self,
-        config_file_nm: str = None,
         creds: str = None,
+        config_file_nm: str = None,
         from_config: Union[str, Path] = None,
         ensure_alive: bool = True,
         delay: bool = False,
+        **kwargs,
     ):
         """
 
@@ -48,49 +50,56 @@ class Connector:
                 Optionally specify a full path to the configuration file;
                 primarily included for usage within containers/deployment
                 with specific file-system configurations.
+
         """
         self.cfg: Configuration = Configuration(
             config_file_nm=config_file_nm, creds=creds, from_config=from_config
         )
         self.ensure_alive = ensure_alive
-        self._is_delayed = delay
+        self._delayed = delay
         self.conn: SnowflakeConnection = None
         self.sql: sql.SQL = sql.SQL(sn=self)
         if not delay:
-            self.connect()
+            self.connect(**kwargs)
 
-    def connect(self):
-        """Creates new connection to Snowflake with the same set of credentials."""
+    # DOCSTRING
+    def connect(self, **kwargs) -> Connector:
+        """Creates new connection to Snowflake with the same set of credentials.
+            kwargs:
+                Optional keyword arguments to pass to
+                snowflake.connector.connect(); arguments passed here will
+                over-ride ``connection.default-settings`` specified in
+                ``snowmobile.toml``.
+        """
+        print(kwargs)
         try:
             self.conn = connect(
-                user=self.cfg.connection.current.user,
-                password=self.cfg.connection.current.password,
-                role=self.cfg.connection.current.role,
-                account=self.cfg.connection.current.account,
-                warehouse=self.cfg.connection.current.warehouse,
-                database=self.cfg.connection.current.database,
-                schema=self.cfg.connection.current.schema_name,
-                **self.cfg.connection.defaults,
+                **{
+                    **self.cfg.connection.current.credentials,
+                    **self.cfg.connection.defaults,
+                    **kwargs
+                },
             )
-            print(self)
+
+            self._delayed = False
             self.sql = sql.SQL(sn=self)
-            self._is_delayed = False
+
+            print(self)
             return self
+
         except ProgrammingError as e:
             raise ProgrammingError(e)
 
-    def disconnect(self) -> None:
+    def disconnect(self) -> Connector:
         """Disconnect from connection with which Connect() was instantiated."""
         self.conn.close()
-
-    def commit(self) -> None:
-        """Manually commit changes to database if `autocommit=False`."""
-        self.conn.commit()
+        self._delayed = True
+        return self
 
     @property
     def alive(self) -> bool:
         """Check if the connection is still alive."""
-        return False if self._is_delayed else not self.cursor.is_closed()
+        return False if self._delayed else not self.cursor.is_closed()
 
     @property
     def cursor(self) -> SnowflakeCursor:
@@ -131,11 +140,11 @@ class Connector:
             :class:`SnowflakeCursor` object if `Results=False`.
 
         """
-        if self._is_delayed or (self.ensure_alive and not self.alive):
+        if self._delayed or (self.ensure_alive and not self.alive):
             self.connect()
         try:
             if not results:
-                return self.cursor.execute(sql)
+                return self.ex(sql)
             df = pd.read_sql(sql, con=self.conn)
             return df.snowmobile.lower_cols() if lower else df
 

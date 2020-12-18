@@ -1,17 +1,95 @@
-"""Test connector."""
-
+"""Tests for snowmobile.Connector()."""
 import pytest
+
+import snowmobile
+
+from tests import (
+    CONFIG_FILE_NM,
+    CREDS,
+)
 
 
 @pytest.mark.connector
-def test_connector(sn):
+def test_query(sn):
     """Verify a standard connector object connects to the DB."""
     df = sn.query("select 1")
-    assert not df.empty
+    assert not df.empty, "expected df.empty=False"
+
+
+@pytest.mark.connector
+def test_ex(sn):
+    """Verify a standard connector object connects to the DB."""
+    cur = sn.ex("select 1")
+    assert cur.fetchone()[0] == 1
+
+
+@pytest.mark.connector
+def test_alt_query(sn):
+    """Verify a standard connector object connects to the DB."""
+    cur = sn.query("select 1", results=False)
+    assert cur.fetchone()[0] == 1
 
 
 @pytest.mark.connector
 def test_delayed_connection(sn_delayed):
     """Verify a delayed connector object does not connect to the DB."""
-    assert not sn_delayed.alive
+    assert not sn_delayed.alive, "expected sn_delayed.alive=False"
 
+
+@pytest.mark.connector
+def test_disconnect(sn):
+    """Verifies connector.disconnect() closes session."""
+    assert not sn.disconnect().alive, "expected sn_delayed.alive=False post-disconnect"
+
+
+# noinspection PyUnresolvedReferences
+@pytest.mark.connector
+def test_alternate_kwarg_takes_precedent_over_configuration_file():
+    """Tests over-riding configuration file with alternate connection kwargs."""
+    sn_as_from_config = snowmobile.Connector(
+        creds=CREDS,
+        config_file_nm=CONFIG_FILE_NM
+    )
+    sn_with_a_conflicting_parameter = snowmobile.Connector(
+        creds=CREDS,
+        config_file_nm=CONFIG_FILE_NM,
+        autocommit=False  # <-- behavior under test
+    )
+
+    assert (
+        # verify `config.autocommit=True`
+        sn_as_from_config.conn._autocommit
+        # verify passing `autocommit=False` took precedent over config value
+        and not sn_with_a_conflicting_parameter.conn._autocommit
+    )
+
+
+@pytest.mark.connector
+def test_invalid_credentials_raises_exception(sn):
+    """Verify an invalid set of credentials raises appropriate exception."""
+    from snowflake.connector.errors import DatabaseError
+
+    with pytest.raises(DatabaseError):
+        snowmobile.Connector(
+            creds=CREDS,
+            config_file_nm=CONFIG_FILE_NM,
+            user='invalid@invalid.com'  # <-- behavior under test
+        )
+
+
+# noinspection SqlResolve
+@pytest.mark.connector
+def test_invalid_query_raises_exception(sn):
+    """Tests that invalid sql passed to connector.query() raises DatabaseError."""
+    from pandas.io.sql import DatabaseError
+    with pytest.raises(DatabaseError):
+        sn.query('select * from *')  # an invalid sql statement
+
+
+# noinspection SqlResolve
+@pytest.mark.connector
+def test_invalid_ex_raises_exception(sn):
+    """Tests that invalid sql passed to connector.ex() raises ProgrammingError."""
+    from snowflake.connector.errors import ProgrammingError
+    with pytest.raises(ProgrammingError):
+        sn.ex('select * from *')  # an invalid sql statement

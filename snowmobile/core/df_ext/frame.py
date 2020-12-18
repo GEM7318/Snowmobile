@@ -205,14 +205,11 @@ class Frame:
 
         """
         partitioned_by = set(self._obj[on])
-
         assert (
             len(partitioned_by) >= 2
         ), f"""
             DataFrame has {len(partitioned_by)} distinct values within
             '{on}' column; at least 2 required.
             """
-
         base_partitions = {p: self._obj[self._obj[on] == p] for p in partitioned_by}
-
         return {p: df.drop(columns=[on]) for p, df in base_partitions.items()}

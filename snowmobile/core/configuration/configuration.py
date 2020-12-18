@@ -41,12 +41,13 @@ class Cache(FileCache):
         flag: str = "cs"
         super().__init__(appname=application, flag=flag)
 
-    @property
-    def contents(self):
-        return vars(self)
-
     def save(self, item_name: str, item_value):
         self[item_name] = str(item_value)
+        return self
+
+    def delete(self, item_name: str) -> Cache:
+        if self.get(item_name):
+            self.pop(item_name)
         return self
 
     def as_path(self, to_get: str):

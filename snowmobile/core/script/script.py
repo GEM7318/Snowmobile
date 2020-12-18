@@ -354,15 +354,17 @@ class Script:
             )
             self.filtered = True
             yield self
+
         except ValueError:
             raise
+
         finally:
             self.filtered = False
             self.reset()
             return self
 
     def _depth(self, full: bool = False) -> int:
-        return len(self.statements) if not full else len(self._adjusted_contents)
+        return len(self._adjusted_contents) if full else len(self.statements)
 
     @property
     def depth(self) -> int:
@@ -377,7 +379,7 @@ class Script:
     def _id(self, _id: Union[int, str]) -> int:
         """Returns index position of a statement given its index or tag name."""
         if isinstance(_id, int):
-            return _id if _id > 0 else self.depth + _id + 1
+            return _id if _id > 0 else (self.depth + _id + 1)
         try:
             s = (
                 self.contents(by_index=False)
