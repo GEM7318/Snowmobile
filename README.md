@@ -61,7 +61,8 @@ sandbox_conn = connector.Connector(conn_name='SANDBOX')
 sample_df = sandbox_conn.query('select * from sample_table')
 ```
 
-##### `snowloader`    
+##### `snowloader`
+
 ```python
 # Flexible data loading solution
 from snowmobile import snowloader

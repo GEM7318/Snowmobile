@@ -98,7 +98,7 @@ class Connection(Base):
     Attributes:
         default_alias (str):
             The set of credentials that is used if :attr:`creds` is not
-            explicitly passed to :class:`snowmobile.Connector` on
+            explicitly passed to :class:`snowmobile.Connect` on
             instantiation.
         creds (str):
             The name given to the set of credentials within the

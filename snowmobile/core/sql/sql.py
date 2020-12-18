@@ -35,7 +35,7 @@ from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO
 class SQL:
     """SQL class for generation & execution of common sql commands.
 
-    Intended to be interacted with as an attribute of :class:`snowmobile.Connector`.
+    Intended to be interacted with as an attribute of :class:`snowmobile.Connect`.
 
     note:
         *   All arguments except for :attr:`sn` are optional.
@@ -44,8 +44,8 @@ class SQL:
             when generating a variety of statements around the same object.
 
     Attributes:
-        sn (snowmobile.Connector):
-            :class:`snowmobile.Connector` for sql execution and connection information.
+        sn (snowmobile.Connect):
+            :class:`snowmobile.Connect` for sql execution and connection information.
         obj_name (str):
             Object name to use in generated sql (e.g. 'some_table_name')
         obj_type (str):

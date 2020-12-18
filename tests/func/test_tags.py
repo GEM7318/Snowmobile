@@ -39,7 +39,7 @@ ids, test_cases = _setup_for_test_tag_from_stripped_line()
 @pytest.mark.parametrize(
     "tags", test_cases, ids=ids,
 )
-def test_tag_from_stripped_line(sn: snowmobile.Connector, tags):
+def test_tag_from_stripped_line(sn: snowmobile.Connect, tags):
     """Testing tag generation from sql statements in no_tags.sql."""
     tag_generated, tag_expected = tags
     assert tag_generated == tag_expected

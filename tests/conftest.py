@@ -17,7 +17,7 @@ TESTS_DIR = Path(__file__).absolute().parent
 def sn():
     """Returns a standard `Connector` object."""
     import snowmobile
-    return snowmobile.Connector(
+    return snowmobile.Connect(
         creds=CREDS, config_file_nm=CONFIG_FILE_NM
     )
 
@@ -26,7 +26,7 @@ def sn():
 def sn_delayed():
     """Returns a delayed `Connector` object."""
     import snowmobile
-    return snowmobile.Connector(
+    return snowmobile.Connect(
         creds=CREDS, config_file_nm=CONFIG_FILE_NM, delay=True
     )
 

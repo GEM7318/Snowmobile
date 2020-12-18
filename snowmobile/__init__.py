@@ -5,6 +5,7 @@ interaction with the Snowflake database.
 __version__ = "0.1.14"
 __all__ = [
     "Connector",
+    "Connect",
     "SQL",
     "Loader",
     "Configuration",
@@ -14,6 +15,7 @@ from .core import (
     SQL,
     Configuration,
     Connector,
+    Connect,
     Loader,
     Script,
     Section,

@@ -5,7 +5,7 @@ Alter default behavior of SQL.auto_run=True
 import snowmobile
 
 # connector, omitting unnecessary connection for example
-sn = snowmobile.Connector(delay=True)
+sn = snowmobile.Connect(delay=True)
 
 # default requires `run=False` to store sql without executing
 sql1 = sn.sql.use_schema(nm='other_schema', run=False)

@@ -16,7 +16,7 @@ def get_script(script_name: str) -> snowmobile.Script:
     path_to_script = script_paths[script_name]
     return snowmobile.Script(
         path=path_to_script,
-        sn=snowmobile.Connector(
+        sn=snowmobile.Connect(
             delay=True,
             config_file_nm='snowmobile_testing.toml'
         )

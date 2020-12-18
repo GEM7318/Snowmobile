@@ -492,8 +492,8 @@ class Statement:
     objects, generic or QA.
 
     Attributes:
-        sn (snowmobile.Connector):
-            :class:`snowmobile.Connector` object.
+        sn (snowmobile.Connect):
+            :class:`snowmobile.Connect` object.
         statement (Union[sqlparse.sql.Statement, str]):
             A :class:`sqlparse.sql.Statement` object.
         index (int):

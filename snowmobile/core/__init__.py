@@ -6,6 +6,7 @@ recommendations when interacting with ``snowmobile`` objects.
 __all__ = [
     "Configuration",
     "Connector",
+    "Connect",
     "Loader",
     "Script",
     "SQL",
@@ -15,7 +16,7 @@ __all__ = [
     "utils",
 ]
 from .configuration import Configuration
-from .connector import Connector
+from .connector import Connector, Connect
 from .document import Doc, Section
 from .sql import SQL
 from .statement import Statement

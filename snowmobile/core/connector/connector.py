@@ -1,5 +1,5 @@
 """
-``snowmobile.Connector`` class; bundles together configuration object and
+``snowmobile.Connect`` class; bundles together configuration object and
 SnowflakeConnection for query/statement execution.
 """
 from __future__ import annotations
@@ -71,7 +71,6 @@ class Connector:
                 over-ride ``connection.default-settings`` specified in
                 ``snowmobile.toml``.
         """
-        print(kwargs)
         try:
             self.conn = connect(
                 **{
@@ -91,7 +90,7 @@ class Connector:
             raise ProgrammingError(e)
 
     def disconnect(self) -> Connector:
-        """Disconnect from connection with which Connect() was instantiated."""
+        """Disconnect from connection with which Connector() was instantiated."""
         self.conn.close()
         self._delayed = True
         return self
@@ -103,7 +102,7 @@ class Connector:
 
     @property
     def cursor(self) -> SnowflakeCursor:
-        """:class:`SnowflakeCursor` accessor off :class:`snowmobile.Connector`."""
+        """:class:`SnowflakeCursor` accessor off :class:`snowmobile.Connect`."""
         return self.conn.cursor()
 
     def ex(self, sql: str, **kwargs) -> SnowflakeCursor:
@@ -152,7 +151,7 @@ class Connector:
             raise ProgrammingError(f"ProgrammingError: {e}")
 
     def __str__(self) -> str:
-        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Connect(creds='{self.cfg.connection.creds}')"
 
     def __repr__(self) -> str:
-        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Connect(creds='{self.cfg.connection.creds}')"
