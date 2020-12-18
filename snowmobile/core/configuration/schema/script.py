@@ -197,8 +197,8 @@ class Attributes(Base):
             args = {"attribute-name": attr_nm}
             self.reserved[attr_nm] = Reserved(**{**args, **defaults})
 
-        markers = data.get("markers")
-        for marker, marker_attrs in markers.items():
+        # markers = data.get("markers")
+        for marker, marker_attrs in data["markers"].items():
             self.markers[marker] = Marker(**marker_attrs).set_name(name=marker)
 
     def get_marker(self, name: str):
@@ -217,10 +217,9 @@ class Attributes(Base):
         ordered = [w.lower() for w in self.order]
         if attr not in ordered:
             return int()
-        else:
-            for i, ordered_attr in enumerate(ordered, start=1):
-                if attr == ordered_attr:
-                    return i
+        for i, ordered_attr in enumerate(ordered, start=1):
+            if attr == ordered_attr:
+                return i
 
     def include(self, attr: str) -> bool:
         return attr not in self.exclude
@@ -370,20 +369,16 @@ class Script(Base):
     # fmt: on
 
     @staticmethod
-    def arg_to_list(arg_as_str: str) -> List[str]:
-        """Converts a list as a string into a list."""
-        strip_whitespace = arg_as_str.strip()
-        strip_brackets = strip_whitespace.strip("[]").strip()
-        csv = [v.strip() for v in strip_brackets.split(",")]
-        strip_single_quotes = [v.strip().strip("'") for v in csv]
-        return [v.strip().strip('"') for v in strip_single_quotes]
-
-    @staticmethod
     def arg_to_string(arg_as_str: str) -> str:
         """Strips an argument as a string down to its elemental form."""
-        strip_single_quotes = arg_as_str.strip().strip("'")
-        strip_double_quotes = strip_single_quotes.strip().strip('"')
-        return strip_double_quotes.strip()
+        return arg_as_str.strip().strip('"').strip().strip("'").strip()
+
+    def arg_to_list(self, arg_as_str: str) -> List[str]:
+        """Converts a list as a string into a list."""
+        return [
+            self.arg_to_string(arg_as_str=v)
+            for v in arg_as_str.strip().strip("[]").strip().split(",")
+        ]
 
     def arg_to_float(self, arg_as_str: str) -> float:
         """Strips a string down to its elemental form and converts to a float."""
@@ -495,7 +490,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0] : span[1]]
+                i: sql[span[0]: span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:
@@ -553,7 +548,7 @@ class Script(Base):
         if not s_sql:
             return str()
         first_keyword_idx = s.token_index(s_sql)
-        sql = "".join([c.value for c in s[first_keyword_idx:]])
+        sql = "".join(c.value for c in s[first_keyword_idx:])
         return sql.strip().strip(";")
 
     def split_sub_blocks(self, s: sqlparse.sql.Statement) -> Tuple[List, str]:

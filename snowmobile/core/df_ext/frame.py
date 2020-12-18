@@ -105,10 +105,8 @@ class Frame:
 
     def shared_cols(self, df2: pd.DataFrame) -> List[Tuple[pd.Series, pd.Series]]:
         """Returns list of tuples containing column pairs that are common between two DataFrames."""
-        return [
-            (self._obj[col], df2[col])
-            for col in (set(self._obj.columns) & set(df2.columns))
-        ]
+        for col in (set(self._obj.columns) & set(df2.columns)):
+            yield self._obj[col], df2[col]
 
     @staticmethod
     def series_max_diff_abs(col1: pd.Series, col2: pd.Series, tolerance: float) -> bool:
@@ -135,7 +133,11 @@ class Frame:
 
         """
         return all(
-            self.series_max_diff_abs(col1=c[0], col2=c[1], tolerance=tolerance)
+            self.series_max_diff_abs(
+                col1=c[0],
+                col2=c[1],
+                tolerance=tolerance
+            )
             for c in self.shared_cols(df2=df2)
         )
 
@@ -145,7 +147,11 @@ class Frame:
 
         """
         return all(
-            self.series_max_diff_rel(col1=c[0], col2=c[1], tolerance=tolerance)
+            self.series_max_diff_rel(
+                col1=c[0],
+                col2=c[1],
+                tolerance=tolerance
+            )
             for c in self.shared_cols(df2=df2)
         )
 

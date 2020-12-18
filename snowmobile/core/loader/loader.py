@@ -187,13 +187,13 @@ class Loader:
     # fmt: on
 
     def _load_prep_sql(self, from_script: Path) -> str:
-        """Generates table DDL or truncate_table statement where applicable."""
+        """Generates table DDL or truncate statement where applicable."""
         if self._requires_sql == "ddl" and not from_script:
             return self.df.snowmobile.ddl(table=self.name)
         elif self._requires_sql == "ddl":
             return Script(path=from_script, sn=self.sn).statement(_id=self.name).sql
         else:
-            return self.sql.truncate_table(table=self.name, run=False)
+            return self.sql.truncate(table=self.name, run=False)
 
     def load_statements(self, from_script: Path):
         """Generates exhaustive list of the statements to execute for a given
@@ -264,7 +264,7 @@ class Loader:
         elif if_exists == "fail":
             msg = (
                 f"`{self.name}` already exists and if_exists='fail' was "
-                f"provided; please provide 'replace', 'append', or 'truncate_table' "
+                f"provided; please provide 'replace', 'append', or 'truncate' "
                 f"to continue loading with a pre-existing table."
             )
             continue_load, requires_sql, raise_error = False, "", True
@@ -283,12 +283,12 @@ class Loader:
             )
             continue_load, requires_sql, raise_error = True, "ddl", False
 
-        elif self.cols_match and if_exists == "truncate_table":
+        elif self.cols_match and if_exists == "truncate":
             msg = (
                 f"`{self.name}` exists with matching columns to local "
                 f"DataFrame; if_exists='{if_exists}'"
             )
-            continue_load, requires_sql, raise_error = True, "truncate_table", False
+            continue_load, requires_sql, raise_error = True, "truncate", False
 
         elif not self.cols_match and if_exists != "replace":
             msg = (
@@ -333,10 +333,10 @@ class Loader:
         if_exists = if_exists or "append"
 
         # validate value provided for `if_exists`
-        if if_exists not in ("fail", "replace", "append", "truncate_table"):
+        if if_exists not in ("fail", "replace", "append", "truncate"):
             raise ValueError(
                 f"Value passed to `if_exists` is not a valid argument;\n"
-                f"Accepted values are: 'fail', 'replace', 'append', 'truncate_table'"
+                f"Accepted values are: 'fail', 'replace', 'append', 'truncate'"
             )
 
         # check for table existence; validate if so, all respecting `if_exists`

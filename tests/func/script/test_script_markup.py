@@ -24,11 +24,11 @@ def _export_all_markup_test_cases():
             to :meth:`get_validation_file()` to retrieve the path to the file
             it is supposed to be validated against.
         *   The pair of paths is then passed to :meth:`contents_are_identical()`,
-            the return value (bool) of which is used for the assertion under test.
+            the return value of which (bool) is used for the assertion under test.
 
     ..warning:
         *   In the body of the below method, a private attribute of each
-            statement within the script is modified
+            statement within the script is modified.
         *   The modification made is adding the `execution_time_txt` to
             a list of attributes that will be excluded from any exports; this
             is done so that small changes in the execution time across test

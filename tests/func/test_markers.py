@@ -54,7 +54,10 @@ def test_combined_marker_and_statement_indices(sn_delayed, sql_paths):
         path=sql_paths['markers_standard.sql'],
         sn=sn_delayed
     )
-    contents_under_test = script.contents(by_index=True, markers=True)
+    contents_under_test = script.contents(
+        by_index=True,
+        markers=True
+    )
     expected_contents = _get_test_cases_for_combined_marker_and_statement_indices()
     # then
     for exp, (i, c) in zip(expected_contents, contents_under_test.items()):

@@ -91,21 +91,15 @@ class Script:
                 Full path to a sql object.
 
         """
-        path = Path(str(path)) if path else self.path
-        # fmt: off
-        if not path.exists():
-            raise IOError(
-                f"{path} does not exist; `path` must be a valid file path."
-            )
-        if not path.is_file():
-            raise IOError(
-                f"`path` argument must map to a file, not a directory."
-            )
-        # fmt: on
-        self.path: Path = Path(str(path))
-        with open(self.path, "r") as r:
-            self.source = r.read()
-        return self._post_source__init__()
+        try:
+            self.path: Path = Path(str(path)) if path else self.path
+            with open(self.path, "r") as r:
+                self.source = r.read()
+
+            return self._post_source__init__()
+
+        except IOError as e:
+            raise e
 
     def from_str(self, sql: str, name: str, directory: Path = Path.cwd()) -> Script:
         """Instantiates a raw string of sql as a script."""
@@ -115,8 +109,8 @@ class Script:
                 f"`name` must end in .sql; '{name}' provided."
             )
         # fmt: on
-        self.path: Path = Path(str(directory)) / name
         self.source = sql
+        self.path: Path = Path(str(directory)) / name
         return self._post_source__init__(from_str=True)
 
     @property
@@ -219,13 +213,12 @@ class Script:
 
     def _parse_markers(self):
         """Parses all markers into a hashmap to the raw text within the marker."""
-        blocks = self.sn.cfg.script.find_tags(sql=self.source)
-        marker_blocks = [
-            m
-            for m in blocks.values()
-            if self.sn.cfg.script.is_marker(m)
-        ]
-        self.all_marker_hashmap = {hash(v): v for v in marker_blocks}
+        cfg = self.sn.cfg.script
+        self.all_marker_hashmap = {
+            hash(m): m
+            for m in cfg.find_tags(sql=self.source).values()
+            if cfg.is_marker(m)
+        }
 
     def _parse(self):
         """Parses statements and markers within :attr:`source`."""
@@ -540,7 +533,7 @@ class Script:
         }
 
     @property
-    def _trailing_statement_markers(self):
+    def _trailing_statement_markers(self) -> Dict[float, str]:
         """All markers (raw text) after the last statement by index position."""
         markers_r_unadjusted = {
             m
@@ -548,13 +541,13 @@ class Script:
             if not self.intra_statement_marker_hashmap_idx.get(h)
         }
         return {
-            (self.depth + 1 + (i / 10)): b
-            for i, b in enumerate(markers_r_unadjusted, start=1)
+            (self.depth + 1 + (i / 10)): m
+            for i, m in enumerate(markers_r_unadjusted, start=1)
         }
 
     @property
-    def _ordered_markers(self):
-        """All markers (raw text), ordered by index position."""
+    def _ordered_markers(self) -> Dict[int, str]:
+        """All markers as raw text, ordered by index position."""
         all_markers = {
             **self._intra_statement_markers,
             **self._trailing_statement_markers,
@@ -590,10 +583,6 @@ class Script:
             else sum(1 for k in self.markers.keys() if k < idx)
         )
         return index if not as_int else round(index)
-        # index = idx + (
-        #     sum([v for k, v in counter.items() if k <= idx]) if not is_marker
-        #     else sum([1 for k in self.markers.keys() if k < idx])
-        # )
 
     def _adjusted_statements(self, counter: Counter):
         """Statements by adjusted index position."""

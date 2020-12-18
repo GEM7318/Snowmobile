@@ -4,35 +4,25 @@ Setting attributes on a SQL object.
 """
 import snowmobile
 
-# establish a connection, create a temp table
-sn = snowmobile.Connector()
-sn.query("""
-create or replace temp table snowmobile_sample as
-select 1 as sample_column;
-""")
+sn = snowmobile.Connector(creds='sandbox')  # establish a connection
+sn.sql.auto_run = False  # turn off sql.auto_run
+sn.query(
+    'create temp table demo_table as select 1 as sample_column;'  # demo table
+)
+# /end setup/
 
-# query last altered timestamp explicitly providing 'table' argument
-query1 = sn.sql.table_last_altered(table='snowmobile_sample', run=False)
-
-# attempt without explicitly providing a 'table' argument
 try:
-    query2 = sn.sql.table_last_altered()
+    sql = sn.sql.drop()  # requires table='demo_table'
 except ValueError as e:
-    print(e)
-"""
-The value provided for 'table' is not valid, nor is its fallback attribute 'obj_name'.
-Please provide a valid value for 'table' or set the 'obj_name' attribute before calling the method.
-"""
+    raise
+# > ValueError: Value provided for 'table' is not valid..
 
-# set 'obj_name' attribute of SQL object.
-sn.sql.obj_name = 'snowmobile_sample'
-
-# method called without providing a 'table' argument
 try:
-    query2_v2 = sn.sql.table_last_altered(run=False)
+    sn.sql.obj_name = 'demo_table'  # set 'obj_name' attribute of SQL object
+    sql = sn.sql.drop()             # will now fallback to attribute if omitted
+    print(sql)
 except ValueError as e:
-    print(e)
-"""
-"""
+    raise
+# stdout> 'drop table sandbox.DEMO_TABLE'
 
 # --/ stand-alone example; should run 'as is' /--

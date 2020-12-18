@@ -285,8 +285,8 @@ class SQL:
     def drop(
         self,
         obj_type: str = None,
-        obj_schema: str = None,
         obj_name: str = None,
+        obj_schema: str = None,
         run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Drop a ``Snowflake`` object.
@@ -624,7 +624,7 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def truncate_table(
+    def truncate(
         self,
         schema: str = None,
         table: str = None,
@@ -659,7 +659,7 @@ limit {n or 1}
         except ValueError as e:
             raise e
         # fmt: on
-        _sql = f"truncate_table table {up(schema)}.{up(name)}"
+        _sql = f"truncate table {up(schema)}.{up(name)}"
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
@@ -991,7 +991,7 @@ from information_schema.{info_schema_loc}
                 else f" or set the '{attr_nm}' attribute before calling the method."
             )
             raise ValueError(
-                f"\nThe value provided for '{nm}' is not valid{closing1}\n"
+                f"\nValue provided for '{nm}' is not valid{closing1}\n"
                 f"Please provide a valid value for '{nm}'{closing2}"
             )
         return val
