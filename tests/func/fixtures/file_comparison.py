@@ -14,18 +14,7 @@ def get_validation_file(path1: Path, sub_dir: str = 'expected_outcomes') -> Path
 
 
 def contents_are_identical(path1: Path, path2: Path) -> bool:
-    """Reads in two paths as text files and confirms their contents are identical.
-
-    Args:
-        path1 (Path):
-            1st file path.
-        path2 (Path):
-            2nd file path.
-
-    Returns (bool):
-        Boolean indication of the files being identical.
-
-    """
+    """Reads in two paths as text files and confirms their contents are identical."""
     with open(path1, 'r') as r1:
         f1 = r1.read()
     with open(path2, 'r') as r2:

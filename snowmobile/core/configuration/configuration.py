@@ -10,7 +10,7 @@ from __future__ import annotations
 import shutil
 import json
 from pathlib import Path
-from typing import Dict, Union, List, Type
+from typing import Dict, Union
 
 import sqlparse
 import toml
@@ -22,7 +22,7 @@ from .schema import Snowmobile, Base
 
 # ====================================
 # Mapping to package data directory
-HERE = Path(__file__)
+HERE = Path(__file__).absolute()
 MODULE_DIR = HERE.parent.parent
 PACKAGE_DATA = MODULE_DIR / "pkg_data"
 
@@ -138,6 +138,7 @@ class Configuration(Snowmobile):
                 if self.creds:
                     cfg["connection"]["default-creds"] = self.creds
 
+                # TODO: Add sql export disclaimer to this as well
                 if not cfg["external-file-locations"].get("ddl"):
                     cfg["external-file-locations"]["ddl"] = DDL
                 if not cfg["external-file-locations"].get("backend-ext"):
@@ -248,4 +249,3 @@ class Configuration(Snowmobile):
             default=pydantic_encoder,
             **kwargs
         )
-

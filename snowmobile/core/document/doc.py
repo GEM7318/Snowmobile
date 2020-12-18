@@ -95,6 +95,7 @@ class Doc:
         self.incl_markers: bool = incl_markers
         self.incl_sql = incl_sql
         self.exported: List[Path] = list()
+        self.created: List[Path] = list()
 
     def config(self, **kwargs) -> Doc:
         """Batch setattr function for all keywords matching Doc's attributes."""
@@ -167,7 +168,7 @@ class Doc:
         """Full markdown file as a string."""
         included = self.included
         return "\n\n".join(
-            [s.section for i, s in self.sections.items() if i in included]
+            s.section for i, s in self.sections.items() if i in included
         )
 
     @property
@@ -222,8 +223,9 @@ class Doc:
         """Ensures directory scaffolding exists before attempting export."""
         if not self.script_dir.exists():
             self.script_dir.mkdir(parents=True)
-        if not self.script_dir.exists():
-            self.script_dir.mkdir(parents=True)
+            self.created.append(self.script_dir)
+        # if not self.script_dir.exists():
+        #     self.script_dir.mkdir(parents=True)
 
     def _export_sql(self) -> None:
         """Exports sql file."""
@@ -241,15 +243,19 @@ class Doc:
     def _export_md(self):
         """Exports markdown file."""
         self._scaffolding()
-        with open(self.path_md, "w") as f:
-            f.write(self.markdown)
-            self.exported.append(self.path_md)
-            self._stdout.offset_path(
-                file_path=self.path_md,
-                root_dir_nm=self.path.parent.name,
-                indent="\t",
-                output=True,
-            )
+        try:
+            md = self.markdown
+            with open(self.path_md, "w") as f:
+                f.write(md)
+                self.exported.append(self.path_md)
+                self._stdout.offset_path(
+                    file_path=self.path_md,
+                    root_dir_nm=self.path.parent.name,
+                    indent="\t",
+                    output=True,
+                )
+        except IOError as e:
+            raise e
 
     def export(self, md_only: bool = False, sql_only: bool = False) -> None:
         """Export files.
