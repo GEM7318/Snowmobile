@@ -17,7 +17,7 @@ def test_basic_query(sn):
 
 
 @pytest.mark.connector
-def test_execution_via_ex(sn):
+def test_basic_query_via_ex(sn):
     """Verify a standard connector object connects to the DB."""
     cur = sn.ex("select 1")
     assert cur.fetchone()[0] == 1
