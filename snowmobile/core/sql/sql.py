@@ -24,11 +24,11 @@ note:
 
 """
 from pathlib import Path
-from typing import List, Union, Optional, Dict, Tuple
+from typing import List, Union, Optional, Dict
 
 import pandas as pd
 
-from snowmobile.core.utils.parsing import up, strip
+from snowmobile.core.utils.parsing import up, strip, p
 from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO
 
 
@@ -68,7 +68,7 @@ class SQL:
     ):
         """Initializes a :class:`snowmobile.SQL` object."""
         self.sn = sn
-        schema, nm = self._p(nm=nm)
+        schema, nm = p(nm=nm)
         self.nm: str = nm
         self.schema = schema or sn.cfg.connection.current.schema_name
         self.obj: str = obj or "table"
@@ -86,6 +86,9 @@ class SQL:
         """Query ``information_schema.tables`` for a given table or view.
 
         Args:
+            nm (str):
+                Table name, including schema if creating a stage outside of the
+                current schema.
             fields (List[str]):
                 List of fields to include in returned results (e.g.
                 ['table_name', 'table_type', 'last_altered'])
@@ -109,7 +112,7 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         # fmt: off
         try:
             table = self._validate(
@@ -125,7 +128,7 @@ class SQL:
             'lower(table_name)': f"'{table.lower()}'",
         }
         if not all_schemas:
-            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'",
+            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'"
         restrictions = {
             **base_restrictions,
             **(restrictions or dict())
@@ -150,11 +153,9 @@ class SQL:
         """Query ``information_schema.columns`` for a given table or view.
 
         Args:
-            table (str):
-                Table or view name.
-            schema (str):
-                Table or view schema; defaults to the schema with which the
-                :attr:`SQL.sn` is connected to at the time the method is called.
+            nm (str):
+                Table name, including schema if creating a stage outside of the
+                current schema.
             fields (List[str]):
                 List of fields to include in returned results (e.g.
                 ['ordinal_position', 'column_name', 'data_type'])
@@ -176,7 +177,7 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         # fmt: off
         try:
             table = self._validate(
@@ -189,7 +190,7 @@ class SQL:
             raise e
         # fmt: off
         base_restrictions = {
-            'lower(table_name)': f"'{table.lower()}'",
+            'lower(table_name)': f"{table.lower()}",
         }
         if not all_schemas:
             base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'",
@@ -213,6 +214,9 @@ class SQL:
         """Last altered timestamp for a table or view.
 
         Args:
+            nm (str):
+                Table name, including schema if creating a stage outside of the
+                current schema.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -235,15 +239,17 @@ class SQL:
             raise e
 
     def create_stage(
-        self, nm_stage: str, nm_format: str, run: bool = None, replace: bool = False
+        self, nm_stage: str, nm_format: str, replace: bool = False, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Create a staging table.
 
         Args:
-            stage_name (str):
-                Name of stage to create.
-            file_format (str):
-                Name of file format to specify for stage.
+            nm_stage (str):
+                Name of stage to create, including schema if creating a stage
+                outside of the current schema.
+            nm_format (str):
+                Name of file format to specify for the stage, including schema
+                if using a format from outside of the current schema.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -272,9 +278,8 @@ class SQL:
 
         Args:
             nm (str):
-                Name of object to drop; default behavior will prefix the object
-                name with the schema of the current connection but an alternate
-                schema can directly prefixed to the object name provided here.
+                Name of the object to drop, including schema if creating a stage
+                outside of the current schema.
             obj (str):
                 Type of object to drop (e.g. 'table', 'schema', etc)
             run (bool):
@@ -288,7 +293,7 @@ class SQL:
 
         """
         # fmt: off
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         try:
             obj_schema = self._validate(
                 val=(schema or self.schema), nm='obj_schema', attr_nm='schema'
@@ -322,22 +327,37 @@ class SQL:
                 for restrictions and considerations when cloning objects.
 
         Note:
-            *   **At least one of the** ``target_name`` **or**
-                ``target_schema`` **arguments must be provided**.
+            *   In this specific method, the value provided to ``nm`` and ``to``
+                can be a single object name, a single schema, or both in the
+                form of `obj_schema.obj_name` depending on the desired outcome.
+            *   Additionally, **at least one of the** ``nm`` **or** ``to``
+                **arguments must be provided**.
             *   The defaults for the target object are constructed such that
                 users can **either**:
                     1.  Clone objects to *other* schemas that inherit the
-                        source object's *name* without specifying a
-                        ``target_name``, **or**
-                    2.  Clone objects in the *current* schema that inherit the
-                        source object's *schema* without specifying a
-                        ``target_schema``.
+                        source object's *name* without specifying so in the
+                        ``to`` argument, **or**
+                    2.  Clone objects within the *current* schema that inherit
+                        the source object's *schema* without specifying so in
+                        the ``to`` argument.
+            *   If providing a schema without a name to either argument, prefix
+                the value provided with `__` to signify it's a schema and not
+                a lower-level object to be cloned.
+                    *   e.g. providing `nm='sample_table'` and
+                        `to='__sandbox'` will clone `sample_table` from the
+                        current schema to `sandbox.sample_table`.
             *   An assertion error will be raised raised if neither argument
                 is specified as *this would result in a command to clone an
                 object and store it in an object that has the same name &
                 schema as the object being cloned*.
 
         Args:
+            nm (str):
+                Name of the object to clone, including schema if cloning an
+                object outside of the current schema.
+            to (str):
+                Target name for cloned object, including schema if cloning an
+                object outside of the current schema.
             obj (str):
                 Type of object to clone (e.g. 'table', 'view', 'file-format');
                 defaults to `table`.
@@ -354,8 +374,8 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
-        to_schema, to = self._p(nm=to)
+        schema, nm = p(nm)
+        to_schema, to = p(nm=to)
         # fmt: off
         try:
             obj = self._validate(
@@ -393,8 +413,8 @@ class SQL:
 
     def put_file_from_stage(
         self,
-        file_location: Union[Path, str],
-        stage_name: str,
+        path: Union[Path, str],
+        nm_stage: str,
         run: bool = None,
         options: Dict = None,
         ignore_defaults: bool = False,
@@ -402,9 +422,9 @@ class SQL:
         """Generates a 'put' command into a staging table from a local file.
 
         Args:
-            file_location (Union[Path, str]):
+            path (Union[Path, str]):
                 Path to local data file as a :class:`pathlib.Path` or string.
-            stage_name (str):
+            nm_stage (str):
                 Name of the staging table to load into.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
@@ -424,8 +444,8 @@ class SQL:
 
         """
         # fmt: off
-        file_location = Path(str(file_location))
-        statement = [f"put file://{file_location.as_posix()} @{stage_name}"]
+        path = Path(str(path))
+        statement = [f"put file://{path.as_posix()} @{nm_stage}"]
 
         defaults = (
             self.sn.cfg.loading.put.dict(by_alias=False) if not ignore_defaults
@@ -445,15 +465,20 @@ class SQL:
         # fmt: off
 
     def copy_into_table_from_stage(
-        self, table: str, stage_name: str, run: bool = None,
-        options: Dict = None, ignore_defaults: bool = False
+        self,
+        nm: str,
+        nm_stage: str,
+        options: Dict = None,
+        ignore_defaults: bool = False,
+        run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Generates a command to copy data into a table from a staging table.
 
         Args:
-            table (str):
-                Name of the table to load into.
-            stage_name (str):
+            nm (str):
+                Name of the object to drop, including schema if creating a stage
+                outside of the current schema.
+            nm_stage (str):
                 Name of the staging table to load from.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
@@ -472,7 +497,7 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        statement = [f"copy into {table} from @{stage_name}"]
+        statement = [f"copy into {nm} from @{nm_stage}"]
         defaults = (
             self.sn.cfg.loading.copy_into.dict(by_alias=False) if not ignore_defaults
             else dict()
@@ -513,10 +538,11 @@ class SQL:
         """Query the DDL for an in-warehouse object.
 
         Args:
+            nm (str):
+                Name of the object to get DDL for, including schema if object
+                is outside of the current schema.
             obj (str):
-                Type of object to clone (e.g. 'table', 'view', 'file-format');
-                defaults to `table` or the current value of :attr:`SQL.obj`
-                if other than default.
+                Type of object to get DDL for (e.g. 'table', 'view', 'file-format').
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -527,7 +553,7 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         try:
             obj = self._validate(
                 val=(obj or self.obj), nm='obj', attr_nm='obj'
@@ -553,6 +579,9 @@ class SQL:
         """Select `n` sample records from a table.
 
         Args:
+            nm (str):
+                Name of table or view to sample, including schema if the table
+                or view is outside of the current schema.
             n (int):
                 Number of records to return, implemented as a 'limit' clause
                 in the query; defaults to 1.
@@ -566,7 +595,7 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         # fmt: off
         try:
             schema = self._validate(
@@ -595,6 +624,9 @@ limit {n or 1}
         """Truncate a table.
 
         Args:
+            nm (str):
+                Name of table, including schema if the table is outside of the
+                current schema.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -605,7 +637,7 @@ limit {n or 1}
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = self._p(nm)
+        schema, nm = p(nm)
         # fmt: off
         try:
             schema = self._validate(
@@ -661,14 +693,14 @@ limit {n or 1}
         """Select the current role."""
         return self.current(obj="role", run=run)
 
-    def use(self, obj: str, nm: str, run: bool = None):
+    def use(self, nm: str, obj: str, run: bool = None):
         """Generic implementation of 'use' command for in-warehouse objects.
 
         Args:
-            obj (str):
-                Type of object to use (schema, warehouse, role, ..).
             nm (str):
                 Name of object to use (schema name, warehouse name, role name, ..).
+            obj (str):
+                Type of object to use (schema, warehouse, role, ..).
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -679,7 +711,15 @@ limit {n or 1}
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        _sql = f"use {obj} {up(nm)}"
+        # fmt: off
+        try:
+            name = self._validate(
+                val=(nm or self.nm), nm='nm', attr_nm='nm'
+            )
+        except ValueError as e:
+            raise e
+        # fmt: on
+        _sql = f"use {obj} {up(name)}"
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
@@ -721,6 +761,9 @@ limit {n or 1}
             *   This can be changed by passing `from_info_schema=False`.
 
         Args:
+            nm (str):
+                Name of table or view, including schema if the table or view is
+                outside of the current schema.
             from_info_schema (bool):
                 Indicates whether to retrieve columns via the
                 ``information_schema.columns`` or by selecting a sample record
@@ -745,6 +788,9 @@ limit {n or 1}
         """Checks the existence of a table or view.
 
         Args:
+            nm (str):
+                Name of table or view, including schema if the table or view is
+                outside of the current schema.
 
         Returns (bool):
             Boolean indication of whether or not the table or view exists.
@@ -760,10 +806,9 @@ limit {n or 1}
         """Retrieves list of columns for a table or view **from information schema**.
 
         Args:
-            table (str):
-                Table or view name; defaults to :attr:`SQL.obj_name`.
-            schema (str):
-                Schema of table; defaults to the :attr:`SQL.obj_schema`.
+            nm (str):
+                Name of table or view, including schema if the table or view is
+                outside of the current schema.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -792,6 +837,9 @@ limit {n or 1}
         """Retrieves a list of columns for a table or view from **sampling table**.
 
         Args:
+            nm (str):
+                Name of table or view, including schema if the table or view is
+                outside of the current schema.
             run (bool):
                 Indicates whether to execute generated sql or return as string;
                 default is `True`.
@@ -849,6 +897,11 @@ limit {n or 1}
         order_by: List = None,
     ) -> str:
         """Generic case of selecting from information schema tables/columns.
+
+        Queries different parts of the information schema based on an ``obj``
+        and the mapping of object type to information schema defined in
+        `snowmobile.core.sql._map_information_schema.py`.
+
         """
         # fmt: off
         if obj in INFO.values():
@@ -865,20 +918,19 @@ limit {n or 1}
         where = self.where(restrictions=restrictions)
         order_by = self.order_by(order_by=order_by)
 
-        sql = (
-            f"""
+        sql = f"""
 select 
     {fields}
 from information_schema.{info_schema_loc}
 {where}
-{order_by}""".strip('\n').strip()
-        )
-        return strip(sql)
+{order_by}
+"""
+        return strip(sql, trailing=False, blanks=True)
         # fmt: on
 
     @staticmethod
     def order_by(order_by: List[Union[int, str]]) -> str:
-        """Utility to generate 'order by' clause."""
+        """Generates 'order by' clause from a list of fields or field ordinal positions."""
         if order_by:
             order_by_fields = ','.join(str(v) for v in order_by)
             return f"order by {order_by_fields}"
@@ -887,7 +939,18 @@ from information_schema.{info_schema_loc}
 
     @staticmethod
     def where(restrictions: Dict) -> str:
-        """Utility to generate 'where' clause."""
+        """Generates a 'where' clause based on a dictionary of restrictions.
+
+        Args:
+            restrictions (dict):
+                A dictionary of conditionals where each key/value pair
+                respectively represents the left/right side of a condition
+                within a 'where' clause.
+
+        Returns (str):
+            Formatted where clause.
+
+        """
         if restrictions:
             args = [
                 f"{str(where_this)} = {str(equals_this)}"
@@ -905,17 +968,25 @@ from information_schema.{info_schema_loc}
 
     @staticmethod
     def _validate(val: Union[str, int], nm: str, attr_nm: str = None) -> str:
-        """Utility to validate the in-method value of an argument, including
-        instances in which an unspecified argument falls back to an attribute
-        value.
+        """Validates the value of an argument passed to a method.
+
+        This method is built to validate method arguments in instances where an
+        unspecified argument can fall back to an attribute if it has been set.
+
+        Each of the 'closing' variables below represents a different ending to
+        a sentence within the exception message depending on the value provided
+        from the method and if the attribute the argument falls back to has been
+        set at the time the method is called.
 
         Args:
             val (Union[str, int]:
                 Value to validate.
             nm (str):
-                Name of argument in method.
+                Name of argument in the method being called.
             attr_nm (str):
-                Name of fallback attribute if applicable.
+                Name of attribute to fall back to if the boolean representation
+                of ``val`` is `False`.
+
         """
         if not val:
             closing1 = (
@@ -932,20 +1003,10 @@ from information_schema.{info_schema_loc}
             )
         return val
 
-    @staticmethod
-    def _p(nm: str) -> Tuple[str, str]:
-        """Utility parser to extract schema from dot-prefixed object if applicable."""
-        nm = nm or str()
-        partitions = [p for p in nm.partition('.') if p]
-        if len(partitions) == 3:
-            schema, _, name = partitions
-        elif nm.strip().startswith('__'):
-            schema, name = nm.strip()[2:], str()
-        else:
-            schema, name = str(), nm.strip()
-        return schema, name
-
     def __getitem__(self, item):
+        return vars(self)[item]
+
+    def __getattr__(self, item):
         return vars(self)[item]
 
     def __setitem__(self, key, value):

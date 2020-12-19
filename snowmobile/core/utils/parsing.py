@@ -81,3 +81,16 @@ def dict_flatten(
     recurse(attrs)
 
     return flattened
+
+
+def p(nm: str) -> Tuple[str, str]:
+    """Utility to parse schema from dot-prefixed object if included."""
+    nm = nm or str()
+    partitions = [p for p in nm.partition('.') if p]
+    if len(partitions) == 3:
+        schema, _, name = partitions
+    elif nm.strip().startswith('__'):
+        schema, name = nm.strip()[2:], str()
+    else:
+        schema, name = str(), nm.strip()
+    return schema, name

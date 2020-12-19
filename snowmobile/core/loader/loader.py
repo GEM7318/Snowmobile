@@ -173,13 +173,13 @@ class Loader:
                 run=False,
             ),
             self.sql.put_file_from_stage(
-                file_location=self.output_location,
-                stage_name=f"{self.name}_stage",
+                path=self.output_location,
+                nm_stage=f"{self.name}_stage",
                 run=False,
             ),
             self.sql.copy_into_table_from_stage(
-                table=self.name,
-                stage_name=f"{self.name}_stage",
+                nm=self.name,
+                nm_stage=f"{self.name}_stage",
                 run=False
             ),
         ]
