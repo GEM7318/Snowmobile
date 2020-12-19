@@ -7,4 +7,4 @@ fail_under = 20
 show_missing = True
 omit = tests/*
 exclude_lines =
-    def __.*__(
+    def __repr__

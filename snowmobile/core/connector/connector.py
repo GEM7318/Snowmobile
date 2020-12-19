@@ -90,9 +90,9 @@ class Connector:
         try:
             self.conn = connect(
                 **{
-                    **self.cfg.connection.current.credentials,  # credentials
-                    **self.cfg.connection.defaults,             # defaults
-                    **kwargs                                    # over-rides/additional
+                    **self.cfg.connection.current.credentials,  # credentials (from .toml)
+                    **self.cfg.connection.defaults,             # defaults (from .toml)
+                    **kwargs                                    # .toml over-rides/additional
                 },
             )
             self.sql = sql.SQL(sn=self)
@@ -102,8 +102,6 @@ class Connector:
 
         except DatabaseError as e:
             raise e
-        # except ProgrammingError as e:
-        #     raise ProgrammingError(e)
 
     def disconnect(self) -> Connector:
         """Disconnect from connection with which Connector() was instantiated."""
@@ -177,7 +175,7 @@ class Connector:
             df = pd.read_sql(sql, con=self.conn)
             return df.snowmobile.lower_cols() if lower else df
 
-        except pdDataBaseError as e:
+        except (pdDataBaseError, DatabaseError) as e:
             self._error = e
             raise e
 

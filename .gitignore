@@ -51,6 +51,9 @@ MANIFEST
 # Per-project virtualenvs
 .venv*/
 
+# run configurations
+.run
+
 # snowmobile-specific ---------------------------------------------------------
 
 # sandbox directories

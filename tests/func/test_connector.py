@@ -60,14 +60,14 @@ def test_alternate_kwarg_takes_precedent_over_configuration_file():
     sn_with_a_conflicting_parameter = snowmobile.Connect(
         creds=CREDS,
         config_file_nm=CONFIG_FILE_NM,
-        autocommit=False  # <-- behavior under test
+        autocommit=False  # <-- explicit kwarg that also exists in snowmobile.toml
     )
 
     assert (
         # verify `config.autocommit=True`
         sn_as_from_config.conn._autocommit
 
-        # verify passing `autocommit=False` took precedent over `config.autocommit=True`
+        # verify `autocommit=False` kwarg took precedent over config
         and not sn_with_a_conflicting_parameter.conn._autocommit
     )
 
@@ -80,7 +80,7 @@ def test_providing_invalid_credentials_raises_exception(sn):
         snowmobile.Connect(
             creds=CREDS,
             config_file_nm=CONFIG_FILE_NM,
-            user='invalid@invalid.com'  # <-- behavior under test
+            user='invalid@invalid.com'  # <-- a set of invalid credentials
         )
 
 
@@ -90,7 +90,7 @@ def test_invalid_sql_passed_to_query_raises_exception(sn):
     """Tests that invalid sql passed to connector.query() raises DatabaseError."""
     from pandas.io.sql import DatabaseError
     with pytest.raises(DatabaseError):
-        sn.query('select * from *')  # an invalid sql statement
+        sn.query('select * from *')  # <-- an invalid sql statement
 
 
 # noinspection SqlResolve
@@ -99,7 +99,7 @@ def test_invalid_sql_passed_to_ex_raises_exception(sn):
     """Tests that invalid sql passed to connector.ex() raises ProgrammingError."""
     from snowflake.connector.errors import ProgrammingError
     with pytest.raises(ProgrammingError):
-        sn.ex('select * from *')  # an invalid sql statement
+        sn.ex('select * from *')  # <-- an invalid sql statement
 
 
 @pytest.mark.connector
