@@ -19,7 +19,7 @@ from typing import Any, ContextManager, Dict, List, Optional, Set, Tuple, Union
 
 import sqlparse
 
-from snowmobile.core import Connector, Doc, configuration
+from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.statement import Diff, Empty, Statement
 from ._stdout import Script as Stdout
@@ -512,9 +512,9 @@ class Script:
         incl_markers: Optional[bool] = True,
         incl_sql: Optional[bool] = True,
         sql_incl_export_disclaimer: Optional[bool] = True,
-    ) -> Doc:
-        """Doc object based on current context."""
-        return Doc(
+    ) -> Markup:
+        """Markup object based on current context."""
+        return Markup(
             sn=self.sn,
             path=self.path,
             contents=self._adjusted_contents,

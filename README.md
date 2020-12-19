@@ -327,7 +327,7 @@ is defined with the following arguments allowing for this flexibility.
 ```python
     def execute(self, results: bool = True, render: bool = False,
                 describe: bool = False) -> object:
-        """Executes sql with option to return results / render sql as Doc.
+        """Executes sql with option to return results / render sql as Markup.
 
         Args:
             results: Boolean indicating whether or not to

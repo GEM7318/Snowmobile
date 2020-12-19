@@ -11,13 +11,13 @@ __all__ = [
     "Script",
     "SQL",
     "Section",
-    "Doc",
+    "Markup",
     "Statement",
     "utils",
 ]
 from .configuration import Configuration
 from .connector import Connector, Connect
-from .document import Doc, Section
+from .markup import Markup, Section
 from .sql import SQL
 from .statement import Statement
 

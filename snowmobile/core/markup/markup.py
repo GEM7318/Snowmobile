@@ -58,7 +58,7 @@ from snowmobile.core.utils import Console
 from .section import Section
 
 
-class Doc:
+class Markup:
     def __init__(
         self,
         sn: Connector,
@@ -97,8 +97,8 @@ class Doc:
         self.exported: List[Path] = list()
         self.created: List[Path] = list()
 
-    def config(self, **kwargs) -> Doc:
-        """Batch setattr function for all keywords matching Doc's attributes."""
+    def config(self, **kwargs) -> Markup:
+        """Batch setattr function for all keywords matching Markup's attributes."""
         for k, v in kwargs.items():
             if k in vars(self):
                 setattr(self, k, v)
@@ -224,36 +224,34 @@ class Doc:
         if not self.script_dir.exists():
             self.script_dir.mkdir(parents=True)
             self.created.append(self.script_dir)
-        # if not self.script_dir.exists():
-        #     self.script_dir.mkdir(parents=True)
 
-    def _export_sql(self) -> None:
-        """Exports sql file."""
-        self._scaffolding()
-        with open(self.path_sql, "w") as f:
-            f.write(self.sql)
-            self.exported.append(self.path_md)
-            self._stdout.offset_path(
-                file_path=self.path_sql,
-                root_dir_nm=self.path.parent.name,
-                indent="\t",
-                output=True,
-            )
-
-    def _export_md(self):
-        """Exports markdown file."""
-        self._scaffolding()
+    def _export(self, path: Path, val: str):
+        """Ensure directory scaffolding exists and writes a string to a path (.sql or .md)."""
         try:
-            md = self.markdown
-            with open(self.path_md, "w") as f:
-                f.write(md)
-                self.exported.append(self.path_md)
+            self._scaffolding()
+            with open(path, "w") as f:
+                f.write(val)
+                self.exported.append(path)
                 self._stdout.offset_path(
-                    file_path=self.path_md,
-                    root_dir_nm=self.path.parent.name,
+                    file_path=path,
+                    root_dir_nm=path.parent.name,
                     indent="\t",
                     output=True,
                 )
+        except IOError as e:
+            raise e
+
+    def _export_md(self):
+        """Exports markdown file."""
+        try:
+            self._export(path=self.path_md, val=self.markdown)
+        except IOError as e:
+            raise e
+
+    def _export_sql(self) -> None:
+        """Exports sql file."""
+        try:
+            self._export(path=self.path_sql, val=self.sql)
         except IOError as e:
             raise e
 
@@ -287,7 +285,7 @@ class Doc:
         vars(self)[key] = value
 
     def __str__(self) -> str:
-        return f"script.Doc('{self.file_nm_sql}')"
+        return f"script.Markup('{self.file_nm_sql}')"
 
     def __repr__(self) -> str:
-        return f"script.Doc('{self.file_nm_sql}')"
+        return f"script.Markup('{self.file_nm_sql}')"

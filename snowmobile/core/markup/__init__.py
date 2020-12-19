@@ -1,2 +1,2 @@
-from .doc import Doc
+from .markup import Markup
 from .section import Section

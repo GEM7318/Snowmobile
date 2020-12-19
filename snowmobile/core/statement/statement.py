@@ -16,7 +16,7 @@ from snowflake.connector.errors import ProgrammingError
 from snowmobile.core.configuration import configuration as cfg
 from snowmobile.core.configuration import schema as config
 from snowmobile.core.connector import Connector
-from snowmobile.core.document.section import Section
+from snowmobile.core.markup.section import Section
 
 
 class Scope:

@@ -1,6 +1,6 @@
 """
 Module contains parsing utilities used by :class:`Script`, :class:`Statement`,
-:class:`Doc`, and :class:`Section`.
+:class:`Markup`, and :class:`Section`.
 """
 from typing import List, Tuple
 
