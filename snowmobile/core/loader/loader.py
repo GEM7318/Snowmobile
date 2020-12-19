@@ -43,7 +43,7 @@ class Loader:
         self.df = df.snowmobile.upper_cols() if upper_case_cols else df
         self.name: str = table
         self.sn: Connector = sn
-        self.sql: SQL = SQL(sn=sn, obj_name=table)
+        self.sql: SQL = SQL(sn=sn, nm=table)
         self.format_ddl_src = format_ddl_src or self.sn.cfg.PKG_DATA / "DDL.sql"
 
         self.keep_local = keep_local or sn.cfg.loading.other.keep_local
@@ -83,11 +83,10 @@ class Loader:
         file_formats = {}
         for _, dtl in self.sql.show_file_formats().to_dict(orient="index").items():
             args = {
-                "obj_name": dtl["name"],
-                "obj_schema": dtl["schema_name"],
-                "obj_type": "file_format",
+                "nm": dtl["name"],
+                "obj": "file_format",
             }
-            if args["obj_name"].lower() == self.file_format.lower():
+            if args["obj"].lower() == self.file_format.lower():
                 format_nm_incl_schema = f"{dtl['schema_name']}.{dtl['name']}".lower()
                 file_formats[format_nm_incl_schema] = self.sql.ddl(**args)
         return file_formats
@@ -137,7 +136,7 @@ class Loader:
         ), "Loader._compare_fields() called prior to verifying table exists."
         # fmt: off
         match_dtl = {}
-        table_cols = self.sql.columns(table=self.name)
+        table_cols = self.sql.columns(nm=self.name)
         df_cols = list(self.df.columns)
         safe_idx = max(len(table_cols), len(df_cols))
         for i in range(safe_idx):
@@ -169,8 +168,8 @@ class Loader:
         # fmt: off
         return [
             self.sql.create_stage(
-                stage_name=f"{self.name}_stage",
-                file_format=self.file_format,
+                nm_stage=f"{self.name}_stage",
+                nm_format=self.file_format,
                 run=False,
             ),
             self.sql.put_file_from_stage(
@@ -193,7 +192,7 @@ class Loader:
         elif self._requires_sql == "ddl":
             return Script(path=from_script, sn=self.sn).statement(_id=self.name).sql
         else:
-            return self.sql.truncate(table=self.name, run=False)
+            return self.sql.truncate(nm=self.name, run=False)
 
     def load_statements(self, from_script: Path):
         """Generates exhaustive list of the statements to execute for a given
@@ -245,7 +244,7 @@ class Loader:
     def validate(self, if_exists: str, validate: bool = True) -> None:
 
         if validate:
-            self._exists = self.sql.exists(table=self.name)
+            self._exists = self.sql.exists(nm=self.name)
             self.diff_cols(table_exists=self._exists)
         else:
             (
@@ -369,7 +368,7 @@ class Loader:
             # set end-time; drop stage; remove local file if specified
             self.end_time = time.time()
 
-            self.sql.drop(obj_type="stage", obj_name=f"{self.name}_stage")
+            self.sql.drop(nm=f"{self.name}_stage", obj="stage")
 
             if not self.keep_local:
                 os.remove(str(self.output_location))
