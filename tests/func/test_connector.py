@@ -24,16 +24,23 @@ def test_basic_query_via_ex(sn):
 
 
 @pytest.mark.connector
-def test_providing_results_equal_false_returns_cursor_not_df(sn):
-    """Verify a standard connector object connects to the DB."""
+def test_providing_results_equal_false_returns_cursor_not_a_df(sn):
+    """Verifies passing `results=False` to connector.query() returns a cursor."""
+    from snowflake.connector.connection import SnowflakeCursor
     cur = sn.query("select 1", results=False)
-    assert cur.fetchone()[0] == 1
+    assert isinstance(cur, SnowflakeCursor)
 
 
 @pytest.mark.connector
 def test_alive_evaluates_to_false_on_delayed_connection(sn_delayed):
     """Verify a delayed connector object does not connect to the DB."""
-    assert not sn_delayed.alive, "expected sn_delayed.alive=False"
+    assert not sn_delayed.alive
+
+
+@pytest.mark.connector
+def test_cursor_is_accessible_from_delayed_connection(sn_delayed):
+    """Verify a delayed connector object does not connect to the DB."""
+    assert not sn_delayed.cursor.is_closed()
 
 
 @pytest.mark.connector
@@ -69,7 +76,6 @@ def test_alternate_kwarg_takes_precedent_over_configuration_file():
 def test_providing_invalid_credentials_raises_exception(sn):
     """Verify an invalid set of credentials raises DatabaseError."""
     from snowflake.connector.errors import DatabaseError
-
     with pytest.raises(DatabaseError):
         snowmobile.Connect(
             creds=CREDS,
@@ -94,3 +100,8 @@ def test_invalid_sql_passed_to_ex_raises_exception(sn):
     from snowflake.connector.errors import ProgrammingError
     with pytest.raises(ProgrammingError):
         sn.ex('select * from *')  # an invalid sql statement
+
+
+@pytest.mark.connector
+def test_dunder_repr_is_valid(sn):
+    assert sn.__repr__()

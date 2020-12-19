@@ -45,6 +45,7 @@ class Cache(FileCache):
         self[item_name] = str(item_value)
         return self
 
+    # noinspection PyMethodOverriding
     def delete(self, item_name: str) -> Cache:
         if self.get(item_name):
             self.pop(item_name)

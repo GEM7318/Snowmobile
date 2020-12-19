@@ -4,15 +4,14 @@ SnowflakeConnection for query/statement execution.
 """
 from __future__ import annotations
 from pathlib import Path
-from typing import Union, ContextManager
-from contextlib import contextmanager
+from typing import Union
 
 import pandas as pd
-from pandas.io.sql import DatabaseError
+from pandas.io.sql import DatabaseError as pdDataBaseError
 
 from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
-from snowflake.connector.errors import ProgrammingError
+from snowflake.connector.errors import ProgrammingError, DatabaseError
 
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration
@@ -64,21 +63,29 @@ class Connector:
             from_config=from_config
         )
         self.ensure_alive = ensure_alive
-        # self.delayed = delay
         self.conn: SnowflakeConnection = None
         self.sql: sql.SQL = sql.SQL(sn=self)
         self.mode = mode or 'e'
+
         if not delay:
             self.connect(**kwargs)
 
-    # DOCSTRING
     def connect(self, **kwargs) -> Connector:
-        """Creates new connection to Snowflake with the same set of credentials.
+        """Establishes connection to Snowflake.
+
+        Re-implements :func:`snowflake.connector.connect()` with connection
+        arguments sourced from snowmobile's object model, specifically:
+            *   Credentials from ``snowmobile.toml``.
+            *   Default connection arguments from ``snowmobile.toml``.
+            *   Optional keyword arguments either passed to
+                :class:`snowmobile.Connect` or directly to this method.
+
             kwargs:
                 Optional keyword arguments to pass to
                 snowflake.connector.connect(); arguments passed here will
                 over-ride ``connection.default-settings`` specified in
                 ``snowmobile.toml``.
+
         """
         try:
             self.conn = connect(
@@ -88,19 +95,19 @@ class Connector:
                     **kwargs                                    # over-rides/additional
                 },
             )
-            # self.delayed = False
             self.sql = sql.SQL(sn=self)
 
             print(str(self))
             return self
 
-        except ProgrammingError as e:
-            raise ProgrammingError(e)
+        except DatabaseError as e:
+            raise e
+        # except ProgrammingError as e:
+        #     raise ProgrammingError(e)
 
     def disconnect(self) -> Connector:
         """Disconnect from connection with which Connector() was instantiated."""
         self.conn.close()
-        # self.delayed = True
         self.conn = None
         return self
 
@@ -140,7 +147,11 @@ class Connector:
     def query(
         self, sql: str, results: bool = True, lower: bool = True,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
-        """Executes a command and returns results as a :class:`DataFrame`.
+        """Execute a query and return results.
+
+         Default behavior of `results=True` will return results as a
+         :class:`pandas.DataFrame`, otherwise will execute the sql provided
+         with a :class:`SnowflakeCursor` and return the cursor object.
 
         Args:
             sql (str):
@@ -153,30 +164,24 @@ class Connector:
 
         Returns (Union[pd.DataFrame, SnowflakeCursor]):
             Results from ``sql`` as a :class:`DataFrame` by default or the
-            :class:`SnowflakeCursor` object if `Results=False`.
+            :class:`SnowflakeCursor` object if `results=False`.
 
         """
         if not results:
             return self.ex(sql=sql)
 
         try:
-            self._connect()
+            if not self.alive and self.ensure_alive:
+                self.connect()
+
             df = pd.read_sql(sql, con=self.conn)
             return df.snowmobile.lower_cols() if lower else df
-        except DatabaseError as e:
+
+        except pdDataBaseError as e:
             self._error = e
             raise e
 
-    def _connect(self):
-        """Connects to db if not connected and a connection is implicitly invoked."""
-        if not self.alive and self.ensure_alive:
-            self.connect()
-        return self
-
     def __setattr__(self, key, value):
-        vars(self)[key] = value
-
-    def __setitem__(self, key, value):
         vars(self)[key] = value
 
     def __str__(self) -> str:
