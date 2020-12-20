@@ -47,4 +47,5 @@ class BaseTest(BaseModel):
 # noinspection SpellCheckingInspection
 def idfn(val: BaseTest):
     """Retrieves :attr:`pytest_id` from derived instances of `BaseTest`."""
+    assert hasattr(val, 'pytest_id'), f"No 'pytest_id' for class {type(val)}"
     return val.pytest_id
