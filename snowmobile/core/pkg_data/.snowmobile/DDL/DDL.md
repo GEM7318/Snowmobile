@@ -1,17 +1,13 @@
-
 # DDL.sql
 * Author Information
-	* **Team**: _Pizza Hut U.S. Data Science_
-	* **Full Name**: _Grant Murray_
-	* **Internal ID**: gem7318
-	* **Email**: _grant.murray@yum.com_
+	* **Team**: _Sample Team Name_
+	* **Email**: _first.last@domain.com_
 
 This script stores the default DDL statements utilized by Snowmobile.
 - The statement tags include all components (keyword, object, and description) in order to be
 able to add additional statements as time progresses without worrying about creating duplicate tag names
 	- For clarity, this is why the first statement below is titled _create-file format~snowmobile_default_psv_ as
 opposed to just _snowmobile_default_psv_)
-
 
 ## (1) create-file format~snowmobile_default_psv
 
@@ -35,8 +31,6 @@ create or replace file format snowmobile_default_psv
 	null_if = ('null', 'null', 'nan', 'NaN', 'None', '\"', '', 'nat');
 ```
 
-
-
 ## (2) create-file format~snowmobile_default_csv
 
 ```sql
@@ -52,8 +46,6 @@ create or replace file format snowmobile_default_csv
 	empty_field_as_null = true
 	null_if = ('null', 'null', 'nan', 'NaN', 'None', '\"', '', 'nat');
 ```
-
-
 
 # Appendix
 

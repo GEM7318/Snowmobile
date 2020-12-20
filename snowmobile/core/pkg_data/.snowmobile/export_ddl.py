@@ -12,7 +12,7 @@ ddl_location = Path(__file__).absolute().parent.parent / "DDL.sql"
 # ddl_location = Path(r'C:\Users\GEM7318\Documents\Github\Snowmobile\snowmobile\core\pkg_data\DDL.sql')
 
 # connector object, connection omitted
-sn = snowmobile.Connect(delay=True)
+sn = snowmobile.Connect(delay=True, config_file_nm='snowmobile_testing.toml')
 
 # script object from DDL.sql
 script = snowmobile.Script(path=ddl_location, sn=sn)
