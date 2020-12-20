@@ -167,9 +167,7 @@ class Markup:
     def markdown(self) -> str:
         """Full markdown file as a string."""
         included = self.included
-        return "\n\n".join(
-            s.section for i, s in self.sections.items() if i in included
-        )
+        return "\n\n".join(s.section for i, s in self.sections.items() if i in included)
 
     @property
     def _export_disclaimer(self) -> str:

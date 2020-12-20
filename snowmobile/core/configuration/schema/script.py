@@ -490,7 +490,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0]: span[1]]
+                i: sql[span[0] : span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:

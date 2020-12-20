@@ -105,6 +105,9 @@ class SQLMethodTester(BaseModel):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
 
+    def __repr__(self):
+        pass
+
     def __setitem__(self, key, value):
         vars(self)[key] = value
 

@@ -72,13 +72,11 @@ class Credentials(Base):
     @property
     def credentials(self):
         """Returns namespace as a dictionary, excluding its alias/name."""
-        return {
-            k: v for k, v in self.dict(by_alias=True).items() if k != '_alias'
-        }
+        return {k: v for k, v in self.dict(by_alias=True).items() if k != "_alias"}
 
     def __str__(self):
         """Altering inherited str method to mask credentials detail."""
-        attrs = '\n'.join(
+        attrs = "\n".join(
             f"\t\t{k}='{'*' * len(v) if k != 'alias' else v}'"
             for k, v in vars(self).items()
         )

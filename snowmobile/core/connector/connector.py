@@ -58,14 +58,12 @@ class Connector:
         self._error: bool = bool()
 
         self.cfg: Configuration = Configuration(
-            creds=creds,
-            config_file_nm=config_file_nm,
-            from_config=from_config
+            creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
         self.ensure_alive = ensure_alive
         self.conn: SnowflakeConnection = None
         self.sql: sql.SQL = sql.SQL(sn=self)
-        self.mode = mode or 'e'
+        self.mode = mode or "e"
 
         if not delay:
             self.connect(**kwargs)
@@ -91,8 +89,8 @@ class Connector:
             self.conn = connect(
                 **{
                     **self.cfg.connection.current.credentials,  # credentials (from .toml)
-                    **self.cfg.connection.defaults,             # defaults (from .toml)
-                    **kwargs                                    # .toml over-rides/additional
+                    **self.cfg.connection.defaults,  # defaults (from .toml)
+                    **kwargs,  # .toml over-rides/additional
                 },
             )
             self.sql = sql.SQL(sn=self)

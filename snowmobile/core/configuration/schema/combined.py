@@ -46,7 +46,10 @@ class Snowmobile:
     Represents the parsed **snowmobile.toml** file.
 
     """
-    def __init__(self, **kwargs,):
+
+    def __init__(
+        self, **kwargs,
+    ):
         # fmt: off
         self.connection = Connection(**kwargs.get('connection', {}))
         self.loading = Loading(**kwargs.get('loading-defaults', {}))

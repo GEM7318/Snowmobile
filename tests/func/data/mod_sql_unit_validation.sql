@@ -1,6 +1,7 @@
+-- noinspection SqlResolveForFile
 
 /*-1-*/
-select 
+select
 	*
 from information_schema.tables
 where
@@ -8,7 +9,7 @@ where
 	and lower(table_schema) = 'testing_snowmobile';
 
 /*-2-*/
-select 
+select
 	*
 from information_schema.columns
 where
@@ -16,7 +17,7 @@ where
 	and lower(table_schema) = 'testing_snowmobile';
 
 /*-3-*/
-select 
+select
 	table_name
 	,table_schema
 	,last_altered
@@ -26,7 +27,7 @@ where
 	and lower(table_schema) = 'testing_snowmobile';
 
 /*-4-*/
-select 
+select
 	*
 from information_schema.tables
 where
@@ -34,7 +35,7 @@ where
 	and lower(table_schema) = 'other_schema';
 
 /*-5-*/
-select 
+select
 	*
 from information_schema.columns
 where
@@ -42,7 +43,7 @@ where
 	and lower(table_schema) = 'other_schema';
 
 /*-6-*/
-select 
+select
 	table_name
 	,table_schema
 	,last_altered
@@ -130,7 +131,7 @@ from TESTING_SNOWMOBILE.SAMPLE_TABLE
 limit 1;
 
 /*-32-*/
-select 
+select
 	ordinal_position
 	,column_name
 from information_schema.columns

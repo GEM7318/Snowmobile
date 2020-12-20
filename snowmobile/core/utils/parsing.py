@@ -10,7 +10,9 @@ def up(nm: str):
     return nm.upper() if nm else nm
 
 
-def strip(val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False,) -> str:
+def strip(
+    val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False,
+) -> str:
     """Utility to strip a variety whitespace from a string."""
     splitter = val.split("\n")
     if trailing:
@@ -89,10 +91,10 @@ def dict_flatten(
 def p(nm: str) -> Tuple[str, str]:
     """Utility to parse schema from dot-prefixed object if included."""
     nm = nm or str()
-    partitions = [p for p in nm.partition('.') if p]
+    partitions = [p for p in nm.partition(".") if p]
     if len(partitions) == 3:
         schema, _, name = partitions
-    elif nm.strip().startswith('__'):
+    elif nm.strip().startswith("__"):
         schema, name = nm.strip()[2:], str()
     else:
         schema, name = str(), nm.strip()

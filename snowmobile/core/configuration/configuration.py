@@ -246,8 +246,4 @@ class Configuration(Snowmobile):
         for k, v in vars(self).items():
             if issubclass(type(v), Base):
                 total = {**total, **v.as_serializable(by_alias=by_alias)}
-        return json.dumps(
-            obj=total,
-            default=pydantic_encoder,
-            **kwargs
-        )
+        return json.dumps(obj=total, default=pydantic_encoder, **kwargs)

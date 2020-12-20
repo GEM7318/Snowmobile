@@ -23,6 +23,7 @@ note:
 
 
 """
+from __future__ import annotations
 from pathlib import Path
 from typing import List, Union, Optional, Dict
 
@@ -177,9 +178,9 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = p(nm)
         # fmt: off
         try:
+            schema, nm = p(nm)
             table = self._validate(
                 val=(nm or self.nm), nm='nm', attr_nm='nm'
             )
@@ -189,21 +190,23 @@ class SQL:
         except ValueError as e:
             raise e
         # fmt: off
-        base_restrictions = {
-            'lower(table_name)': f"'{table.lower()}'",
-        }
-        if not all_schemas:
-            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'"
         restrictions = {
-            **base_restrictions,
-            **(restrictions or dict())
+            **(restrictions or dict()),
+            **{
+                'lower(table_name)': f"'{table.lower()}'",
+                'lower(table_schema)': f"'{schema.lower()}'",
+            },
         }
+        if all_schemas:
+            restrictions.pop('lower(table_schema)')
+
         sql = self._info_schema_generic(
             obj="column",
             fields=fields,
             restrictions=restrictions,
             order_by=order_by,
         )
+
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def table_last_altered(
@@ -267,10 +270,7 @@ class SQL:
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def drop(
-        self,
-        nm: str = None,
-        obj: str = None,
-        run: bool = None,
+        self, nm: str = None, obj: str = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Drop a ``Snowflake`` object.
 
@@ -1011,6 +1011,22 @@ from information_schema.{info_schema_loc}
         self.schema = self.sn.cfg.connection.current.schema_name
         self.nm = None
         self.obj = 'table'
+        return self
+
+    def __copy__(self) -> SQL:
+        return type(self)(
+            sn=self.sn,
+            nm=f"{self.schema}.{self.nm}",
+            obj=self.obj,
+        )
+
+    def copy(self) -> SQL:
+        return self.__copy__()
+
+    def __call__(self, *args, **kwargs) -> SQL:
+        for k, v in kwargs.items():
+            if k in vars(self):
+                setattr(self, k, v)
         return self
 
     def __getitem__(self, item):
