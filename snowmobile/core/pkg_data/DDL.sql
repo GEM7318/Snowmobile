@@ -6,7 +6,7 @@ This script stores the default DDL statements utilized by Snowmobile.
 - The statement tags include all components (keyword, object, and description) in order to be
 able to add additional statements as time progresses without worrying about creating duplicate tag names
 	- For clarity, this is why the first statement below is titled _create-file format~snowmobile_default_psv_ as
-opposed to just _snowmobile_default_psv_)
+opposed to just _snowmobile_default_psv_.
 -*/
 
 /*-
