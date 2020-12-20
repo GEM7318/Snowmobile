@@ -67,3 +67,6 @@ snowmobile.toml
 snowmobile_testing.toml
 snowmobile.json
 snowflake_credentials.json
+
+
+**/.snowmobile/*
