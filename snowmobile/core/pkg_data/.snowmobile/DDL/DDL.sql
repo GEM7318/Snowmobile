@@ -8,8 +8,7 @@
 --------------------------------------------------------------------------- :*/
 
 /*-
-__script__
-__name: DDL.sql
+__DDL.sql__
 __description***:
 This script stores the default DDL statements utilized by Snowmobile.
 - The statement tags include all components (keyword, object, and description) in order to be

@@ -1,7 +1,4 @@
 # DDL.sql
-* Author Information
-	* **Team**: _Sample Team Name_
-	* **Email**: _first.last@domain.com_
 
 This script stores the default DDL statements utilized by Snowmobile.
 - The statement tags include all components (keyword, object, and description) in order to be
