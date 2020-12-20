@@ -1,16 +1,17 @@
 """Unit tests for snowmobile.SQL."""
 import pytest
+from typing import Dict, Any
 
 from pydantic import Field
-from typing import Dict, Any
 
 from tests import (
     CONFIG_FILE_NM,
     CREDS,
+    FILES,
     BaseTest,
     idfn,
+    script
 )
-from .fixtures import path, script
 
 from snowmobile.core import Configuration
 
@@ -92,7 +93,7 @@ def setup_for_sql_module_unit_tests():
 
     # importing test inputs from .json and validation for outputs from .sql
     try:
-        with open(path(file_nm=INPUT_JSON), 'r') as r:
+        with open(FILES[INPUT_JSON], 'r') as r:
             statement_test_cases_as_dict = {
                 int(k): v for k, v in json.load(r).items()
             }

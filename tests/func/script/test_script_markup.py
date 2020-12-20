@@ -6,10 +6,10 @@ directory structure/approach to this part of the testing.
 """
 import pytest
 
-from tests.func.fixtures import (
+from tests import (
     script as get_script,
+    contents_are_identical,
     get_validation_file,
-    contents_are_identical
 )
 
 

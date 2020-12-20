@@ -4,13 +4,15 @@ import pytest
 
 import snowmobile
 
+from tests import FILES
+
 
 @pytest.mark.markers
-def test_marker_number_standard(sn_delayed, sql_paths):
+def test_marker_number_standard(sn_delayed):
     """Test that 4 distinct markers are identified in `markers_standard.sql`"""
     # given
     script = snowmobile.Script(
-        path=sql_paths['markers_standard.sql'],
+        path=FILES['markers_standard.sql'],
         sn=sn_delayed
     )
     # then
@@ -18,12 +20,12 @@ def test_marker_number_standard(sn_delayed, sql_paths):
 
 
 @pytest.mark.markers
-def test_marker_number_duplicates(sn_delayed, sql_paths):
+def test_marker_number_duplicates(sn_delayed):
     """Test that two distinct markers were identified amongst 3 total in
     `markers_duplicates.sql`."""
     # given
     script = snowmobile.Script(
-        path=sql_paths['markers_duplicates.sql'],
+        path=FILES['markers_duplicates.sql'],
         sn=sn_delayed
     )
     # then
@@ -34,13 +36,13 @@ def test_marker_number_duplicates(sn_delayed, sql_paths):
 
 
 @pytest.mark.markers
-def test_combined_marker_and_statement_indices(sn_delayed, sql_paths):
+def test_combined_marker_and_statement_indices(sn_delayed):
     """Test that the combined marker and statement order is correct."""
     from snowmobile.core import Statement
     from snowmobile.core.configuration.schema import Marker
 
     script = snowmobile.Script(
-        path=sql_paths['markers_standard.sql'],
+        path=FILES['markers_standard.sql'],
         sn=sn_delayed
     )
     script_contents_expected: List[

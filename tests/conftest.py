@@ -10,8 +10,6 @@ from tests import (
     CREDS,
 )
 
-TESTS_DIR = Path(__file__).absolute().parent
-
 
 @pytest.fixture(scope='session')
 def sn():
@@ -29,19 +27,6 @@ def sn_delayed():
     return snowmobile.Connect(
         creds=CREDS, config_file_nm=CONFIG_FILE_NM, delay=True
     )
-
-
-@pytest.fixture(scope='session')
-def sql_paths():
-    """Returns a dictionary of all sql file names to associated Path(s)."""
-    sql_dir = (
-        TESTS_DIR
-        / "func"
-        / "data"
-        / "sql"
-    )
-    scripts = [p for p in sql_dir.rglob('*.sql')]
-    return {p.name: p for p in scripts}
 
 
 @pytest.fixture(scope='session')

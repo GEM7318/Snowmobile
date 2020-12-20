@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Dict, Union, Any, Callable
 from types import MethodType
 
-import sqlparse
 import toml
 from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder

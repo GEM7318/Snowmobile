@@ -3,13 +3,15 @@ import pytest
 
 import snowmobile
 
+from tests import FILES
+
 
 @pytest.mark.script
-def test_script_depth(sql_paths, sn_delayed):
+def test_script_depth(sn_delayed):
     """Tests the standard depth of a script."""
     # given
     script = snowmobile.Script(
-        path=sql_paths['generic_script.sql'],
+        path=FILES['generic_script.sql'],
         sn=sn_delayed
     )
     # then

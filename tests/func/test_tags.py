@@ -3,8 +3,7 @@ Tests for tag parsing.
 """
 import pytest
 
-import snowmobile
-from tests.func.fixtures import script as get_script
+from tests import script as get_script
 
 
 # noinspection PyProtectedMember
@@ -39,7 +38,7 @@ ids, test_cases = _setup_for_test_tag_from_stripped_line()
 @pytest.mark.parametrize(
     "tags", test_cases, ids=ids,
 )
-def test_tag_from_stripped_line(sn: snowmobile.Connect, tags):
+def test_tag_from_stripped_line(sn, tags):
     """Testing tag generation from sql statements in no_tags.sql."""
     tag_generated, tag_expected = tags
     assert tag_generated == tag_expected

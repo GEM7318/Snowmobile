@@ -1,7 +1,7 @@
 """Tests for :class:`snowmobile.Script` functionality."""
 import pytest
 
-from tests.func.fixtures import script as get_script
+from tests import script as get_script
 
 # fmt: off
 _OUTCOME_MAPPING = {
