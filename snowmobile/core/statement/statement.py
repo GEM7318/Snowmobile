@@ -573,7 +573,8 @@ class Statement:
         self._outcome: bool = bool()
 
         self.sn = sn
-        self.statement: sqlparse.sql.Statement = sn.cfg.clean_parse(sql=statement)
+        # self.statement: sqlparse.sql.Statement = sn.cfg.clean_parse(sql=statement)
+        self.statement: sqlparse.sql.Statement = statement
         self.index: int = index or int()
         self.patterns: config.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()

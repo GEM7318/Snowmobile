@@ -1,9 +1,8 @@
 """Unit tests for snowmobile.SQL."""
 import pytest
-import re
 
 from pydantic import BaseModel, Extra, Field
-from typing import Dict, Callable, Any
+from typing import Dict, Any
 
 from tests import (
     CONFIG_FILE_NM,
@@ -11,147 +10,134 @@ from tests import (
 )
 from .fixtures import path, script
 
-# -- file names
+from snowmobile.core import Configuration
+
 INPUT_JSON = 'mod_sql_unit_input.json'
 VALIDATION_SQL = 'mod_sql_unit_validation.sql'
 
 
-class SQLMethodTester(BaseModel):
+class SQLUnit(BaseModel):
     """Base object for all unit tests against the methods of :class:`SQL`.
     """
-    instantiated_class_containing_method_to_be_tested: Any = Field(default=None)
-    literal_name_of_class_for_namespace_parsing_purposes: str = Field(default=None)
-    attrs_to_set_on_the_class_before_running_test: Dict = Field(default_factory=dict)
-    name_of_method_under_test: str = Field(default=None)
-    method_under_test: Callable = Field(default=None)
-    kwargs_for_method_under_test: Dict = Field(default_factory=dict)
-    return_value_from_test_method_actual: str = Field(default_factory=str)
-    return_value_from_test_method_expected: str = Field(default_factory=str)
 
-    def __init__(self, **data):
-        super().__init__(**data)
-        if self.instantiated_class_containing_method_to_be_tested:
-            self.__post__init()
+    # -- START: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -----------------------
+    base: Any = Field(
+        description='An instantiated instance of the SQL class.',
+    )
+    base_attrs: Dict = Field(
+        description='A dictionary of attributes to set on the SQL instance before running test.',
+    )
+    method: str = Field(
+        description="The literal name of the method under test.",
+        alias="method",
+    )
+    method_args: Dict = Field(
+        description="A dict of keyword arguments to path to the method under test.",
+        alias="method_kwargs",
+    )
+    value_returned: str = Field(
+        description="The value returned by the method under test.",
+        default_factory=str,
+    )
+    value_expected: str = Field(
+        description="The value to validate the returned value against."
+    )
+    value_expected_id: int = Field(
+        description="The integer ID within VALIDATION_SQL of the validation statement."
+    )
+    # -- END: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -------------------------
+
+    cfg: Configuration = Field(
+        description="snowmobile.Configuration object for use of static methods."
+    )
 
     # noinspection PyProtectedMember
-    def __post__init(self):
-        self.instantiated_class_containing_method_to_be_tested._reset()
+    def __init__(self, **data):
+        super().__init__(**data)
 
-        self.batch_set_attrs(
-            obj=self.instantiated_class_containing_method_to_be_tested,
-            attrs=self.attrs_to_set_on_the_class_before_running_test,
-        )
+        # set the state on the SQL class for this test
+        self.base = \
+            self.cfg.batch_set_attrs(obj=self.base, attrs=self.base_attrs)
 
-        self.method_under_test = self.methods_from_obj(
-            obj=self.instantiated_class_containing_method_to_be_tested,
-            obj_nm=self.literal_name_of_class_for_namespace_parsing_purposes
-        )[self.name_of_method_under_test]
+        # get the method as a callable from its namespace
+        method_to_run = self.cfg.methods_from_obj(obj=self.base)[self.method]
 
-        self.return_value_from_test_method_actual = self.method_under_test(
-            **self.kwargs_for_method_under_test
-        )
-
-    @staticmethod
-    def methods_from_obj(obj, obj_nm: str) -> Dict[str, Callable]:
-        callables = [
-            getattr(obj, m) for m in dir(obj)
-            if isinstance(getattr(obj, m), Callable)
-        ]
-
-        pattern = re.compile(f'{obj_nm}\.(\\w+)\\s')
-        # pattern = re.compile(re.escape(f'{obj_nm}.(\w+)\s'))
-        dict_of_callables = {}
-        for c in callables:
-            as_str = str(c)
-            matches = [m for m in re.finditer(pattern=pattern, string=as_str) if m]
-            if matches and not as_str.startswith('__'):
-                dict_of_callables[matches[0].group(1)] = c
-        return dict_of_callables
-
-    # TODO: Add to configuration
-    @staticmethod
-    def batch_set_attrs(obj, attrs: dict, to_none: bool = False):
-        for k, v in attrs.items():
-            if k in vars(obj):
-                setattr(obj, k, (None if to_none else v))
+        # call the method with the specified arguments and store results
+        self.value_returned = method_to_run(**self.method_args)
 
     @property
-    def id_str(self) -> str:
-        nm = self.name_of_method_under_test
-        kwargs = self.kwargs_for_method_under_test
-        attrs = self.attrs_to_set_on_the_class_before_running_test
-        return f"method='{nm}', kwargs={kwargs}, in-state={attrs}"
+    def pytest_id(self) -> str:
+        """Using __repr__ as ID for pytest console output."""
+        return self.__repr__()
 
-    def set(
-        self,
-        base: Any,
-        base_name: str,
-        attrs: Dict = None,
-        method_to_test: str = None,
-        with_kwargs: Dict = None,
-        expected_return_value: str = None,
-    ):
-        self.instantiated_class_containing_method_to_be_tested = base
-        self.literal_name_of_class_for_namespace_parsing_purposes = base_name
-        self.attrs_to_set_on_the_class_before_running_test = attrs
-        self.name_of_method_under_test = method_to_test
-        self.kwargs_for_method_under_test = with_kwargs
-        self.return_value_from_test_method_expected = expected_return_value
-        self.__post__init()
-        return self
+    def __repr__(self) -> str:
+        """Full __repr__ string to reproduce the object under test."""
+        init_args = (
+            ', '.join(f"{k}='{v}'" for k, v in self.base_attrs.items())
+            if self.base_attrs else ''
+        )
+        method_args = (
+            ', '.join(f"{k}='{v}'" for k, v in self.method_args.items())
+            if self.method_args else ''
+        )
+        return f"sql({init_args}).{self.method}({method_args})  # {self.value_expected_id}"
 
     class Config:
-        extra = Extra.allow
-        allow_population_by_field_name = True
         arbitrary_types_allowed = True
 
-    def __repr__(self):
-        pass
 
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
-
-
+# noinspection PyProtectedMember
 def setup_for_sql_module_unit_tests():
+    """Set up parameter and parameter IDs for sql module unit tests."""
     import json
     import snowmobile
 
-    sql = snowmobile.SQL(
-        sn=snowmobile.Connect(
-            creds=CREDS,
-            config_file_nm=CONFIG_FILE_NM,
-            delay=True
-        ),
-        auto_run=False,
-    )
-    script_storing_valid_test_outcomes = script(script_name='mod_sql_unit_validation.sql')
-    path_to_test_cases_stored_as_json = path(file_nm='mod_sql_unit_input.json')
+    # importing test inputs from .json and validation for outputs from .sql
+    try:
+        with open(path(file_nm=INPUT_JSON), 'r') as r:
+            statement_test_cases_as_dict = {
+                int(k): v for k, v in json.load(r).items()
+            }
 
-    with open(path_to_test_cases_stored_as_json, 'r') as r:
-        test_cases_as_dict = json.load(r)
+        statements_to_validate_against: Dict[int, snowmobile.Statement] = (
+            script(script_name=VALIDATION_SQL).statements
+        )
+    except (IOError, TypeError) as e:
+        raise e
+
+    # only run tests for ids (int) that exist in input and validation
+    shared_unit_test_ids = set(statements_to_validate_against).intersection(
+        set(statement_test_cases_as_dict)
+    )
+
+    # instantiate a connector object, connection omitted
+    sn = snowmobile.Connect(
+        creds=CREDS,
+        config_file_nm=CONFIG_FILE_NM,
+        delay=True
+    )
+    sn.sql.auto_run = False
 
     tests = []
-    for arg_idx, args in test_cases_as_dict.items():
-        sql_expected = script_storing_valid_test_outcomes.statement(int(arg_idx)).sql
+    for test_idx in shared_unit_test_ids:
+
+        str_of_sql_to_validate_test_with = statements_to_validate_against[test_idx].sql
+        arguments_to_instantiate_test_case_with = statement_test_cases_as_dict[test_idx]
+
         tests.append(
-            SQLMethodTester().set(
-                base=sql,
-                expected_return_value=sql_expected,
-                **args
+            SQLUnit(
+                base=sn.sql._reset(),
+                cfg=sn.cfg,
+                value_expected=str_of_sql_to_validate_test_with,
+                value_expected_id=test_idx,
+                **arguments_to_instantiate_test_case_with
             )
         )
 
     test_outcomes_to_expected_outcomes = [
-        (
-            a.return_value_from_test_method_actual,
-            a.return_value_from_test_method_expected
-        )
-        for a in tests
+        (a.value_returned, a.value_expected) for a in tests
     ]
-    ids = [a.id_str for a in tests]
+    ids = [a.pytest_id for a in tests]
 
     return ids, test_outcomes_to_expected_outcomes
 
@@ -159,12 +145,13 @@ def setup_for_sql_module_unit_tests():
 test_ids, list_of_test_outcomes_to_expected_outcomes = setup_for_sql_module_unit_tests()
 
 
-@pytest.mark.sql
 @pytest.mark.parametrize(
     "tests", list_of_test_outcomes_to_expected_outcomes, ids=test_ids
 )
+@pytest.mark.sql
 def test_parsing_is_as_expected(tests):
     from snowmobile.core.utils.parsing import strip
+    # TODO: Refactor this such that the stripping isn't necessary
     value_under_test, value_expected = [
         strip(
             test,

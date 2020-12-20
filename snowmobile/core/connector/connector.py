@@ -88,8 +88,8 @@ class Connector:
         try:
             self.conn = connect(
                 **{
-                    **self.cfg.connection.current.credentials,  # credentials (from .toml)
                     **self.cfg.connection.defaults,  # defaults (from .toml)
+                    **self.cfg.connection.current.credentials,  # credentials (from .toml)
                     **kwargs,  # .toml over-rides/additional
                 },
             )

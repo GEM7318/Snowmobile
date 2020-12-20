@@ -1,292 +1,292 @@
 {
   "1": {
-    "method_to_test": "info_schema_tables",
-    "with_kwargs": {
+    "method": "info_schema_tables",
+    "method_kwargs": {
       "nm": "sample_table"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "2": {
-    "method_to_test": "info_schema_columns",
-    "with_kwargs": {
+    "method": "info_schema_columns",
+    "method_kwargs": {
       "nm": "sample_table"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "3": {
-    "method_to_test": "table_last_altered",
-    "with_kwargs": {
+    "method": "table_last_altered",
+    "method_kwargs": {
       "nm": "sample_table"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "4": {
-    "method_to_test": "info_schema_tables",
-    "with_kwargs": {
+    "method": "info_schema_tables",
+    "method_kwargs": {
       "nm": "__other_schema"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "sample_table"
     }
   },
   "5": {
-    "method_to_test": "info_schema_columns",
-    "with_kwargs": {
+    "method": "info_schema_columns",
+    "method_kwargs": {
       "nm": "__other_schema"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "sample_table"
     }
   },
   "6": {
-    "method_to_test": "table_last_altered",
-    "with_kwargs": {
+    "method": "table_last_altered",
+    "method_kwargs": {
       "nm": "__other_schema"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "sample_table"
     }
   },
   "7": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_table"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "8": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_view"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "9": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_schema"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "10": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_warehouse"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "11": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_database"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "12": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_table",
       "obj": "table"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table"
     }
   },
   "13": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_view",
       "obj": "view"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_view"
     }
   },
   "14": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_schema",
       "obj": "schema"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_schema"
     }
   },
   "15": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_warehouse",
       "obj": "warehouse"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_warehouse"
     }
   },
   "16": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "sample_database",
       "obj": "database"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_database"
     }
   },
   "17": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "other_schema.other_table"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_database",
       "schema": "default_schema"
     }
   },
   "18": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "other_table"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table",
       "schema": "default_schema"
     }
   },
   "19": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "other_schema.other_table"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table",
       "schema": "default_schema"
     }
   },
   "20": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "__other_schema"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table",
       "schema": "default_schema"
     }
   },
   "21": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "other_view",
       "obj": "view"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table",
       "schema": "default_schema"
     }
   },
   "22": {
-    "method_to_test": "drop",
-    "with_kwargs": {
+    "method": "drop",
+    "method_kwargs": {
       "nm": "other_schema.other_view",
       "obj": "view"
     },
     "base_name": "SQL",
-    "attrs": {
+    "base_attrs": {
       "nm": "default_table",
       "schema": "default_schema"
     }
   },
   "23": {
-    "method_to_test": "current_schema",
-    "with_kwargs": {},
+    "method": "current_schema",
+    "method_kwargs": {},
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "24": {
-    "method_to_test": "current_database",
-    "with_kwargs": {},
+    "method": "current_database",
+    "method_kwargs": {},
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "25": {
-    "method_to_test": "current_warehouse",
-    "with_kwargs": {},
+    "method": "current_warehouse",
+    "method_kwargs": {},
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "26": {
-    "method_to_test": "current_role",
-    "with_kwargs": {},
+    "method": "current_role",
+    "method_kwargs": {},
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "27": {
-    "method_to_test": "use_schema",
-    "with_kwargs": {
+    "method": "use_schema",
+    "method_kwargs": {
       "nm": "example_schema"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "28": {
-    "method_to_test": "use_database",
-    "with_kwargs": {
+    "method": "use_database",
+    "method_kwargs": {
       "nm": "example_database"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "29": {
-    "method_to_test": "use_warehouse",
-    "with_kwargs": {
+    "method": "use_warehouse",
+    "method_kwargs": {
       "nm": "example_warehouse"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "30": {
-    "method_to_test": "use_role",
-    "with_kwargs": {
+    "method": "use_role",
+    "method_kwargs": {
       "nm": "example_role"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "31": {
-    "method_to_test": "columns",
-    "with_kwargs": {
+    "method": "columns",
+    "method_kwargs": {
       "nm": "sample_table"
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   },
   "32": {
-    "method_to_test": "columns",
-    "with_kwargs": {
+    "method": "columns",
+    "method_kwargs": {
       "nm": "sample_table",
       "from_info_schema": true
     },
     "base_name": "SQL",
-    "attrs": {}
+    "base_attrs": {}
   }
 }

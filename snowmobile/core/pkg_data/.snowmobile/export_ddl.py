@@ -18,6 +18,3 @@ script = snowmobile.Script(path=ddl_location, sn=sn)
 
 # accessing as a markup and exporting markdown file only
 script.doc().export()
-# doc = script.doc()
-# doc.export(sql_only=True)
-# doc.exported

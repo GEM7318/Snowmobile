@@ -10,7 +10,8 @@ from __future__ import annotations
 import shutil
 import json
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Union, Any, Callable
+from types import MethodType
 
 import sqlparse
 import toml
@@ -42,21 +43,20 @@ class Cache(FileCache):
         super().__init__(appname=application, flag=flag)
 
     def save(self, item_name: str, item_value):
+        """Caches `item_value` to be retrieved by `item_name`."""
         self[item_name] = str(item_value)
         return self
 
     # noinspection PyMethodOverriding
     def delete(self, item_name: str) -> Cache:
+        """Deletes `item_name` from cache."""
         if self.get(item_name):
             self.pop(item_name)
         return self
 
-    def as_path(self, to_get: str):
-        item = self.get(to_get)
-        if item:
-            return Path(item)
-        else:
-            return None
+    def as_path(self, item_name: str):
+        """Utility to return `item_name` as a :class:`Path` object."""
+        return Path(self.get(item_name)) if self.get(item_name) else None
 
 
 class Configuration(Snowmobile):
@@ -189,28 +189,44 @@ class Configuration(Snowmobile):
             self._stdout.cannot_find(self.file_nm)
             raise IOError(e)
 
-    # RENAME: Change name to something more semantic
     @staticmethod
-    def clean_parse(sql: Union[sqlparse.sql.Statement, str]) -> sqlparse.sql.Statement:
-        """Safely accepts a string or a parsed statement and returns a parsed statement.
+    def batch_set_attrs(obj: Any, attrs: dict, to_none: bool = False):
+        """Batch sets attributes on an object from a dictionary.
 
         Args:
-            sql (Union[sqlparse.sql.Statement, str]):
-                Either a string of sql or an already parsed
-                sqlparse.sql.Statement object.
+            obj (Any):
+                Object to set attributes on.
+            attrs (dict):
+                Dictionary containing attributes.
+            to_none (bool):
+                Set all of the object's attributes batching a key in ``attrs``
+                to `None`; defaults ot `False`.
 
-        Returns (sqlparse.sql.Statement):
-            A parsed sql statement.
+        Returns (Any):
+            Object post-setting attributes.
 
         """
-        if isinstance(sql, sqlparse.sql.Statement):
-            return sql
+        for k in set(vars(obj)).intersection(attrs):
+            setattr(obj, k, None if to_none else attrs[k])
+        return obj
 
-        parsed = [s for s in sqlparse.parsestream(stream=sql) if not s.value.isspace()]
-        assert (
-            parsed
-        ), f'sqlparse.parsestream("""\n{sql}"""\n) returned an empty statement.'
-        return parsed[0]
+    @staticmethod
+    def methods_from_obj(obj: Any) -> Dict[str, MethodType]:
+        """Utility to return methods from an object as a dictionary."""
+        return {
+            str(m): getattr(obj, m)
+            for m in dir(obj)
+            if isinstance(getattr(obj, m), MethodType)
+        }
+
+    @staticmethod
+    def attrs_from_obj(obj: Any) -> Dict[str, MethodType]:
+        """Utility to return attributes/properties from an object as a dictionary."""
+        return {
+            str(m): getattr(obj, m)
+            for m in dir(obj)
+            if not isinstance(getattr(obj, m), Callable)
+        }
 
     # TODO: Stick somewhere that makes sense
     @property

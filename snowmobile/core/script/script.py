@@ -75,6 +75,7 @@ class Script:
         """Sets final attributes and parses source once provided."""
         self.name = self.path.name
         self._is_from_str = from_str
+
         try:
             self._parse()
         except Exception as e:
@@ -146,7 +147,7 @@ class Script:
 
         """
         index = index or self.depth + 1
-        s: sqlparse.sql.Statement = self.sn.cfg.clean_parse(sql=s)
+        s: sqlparse.sql.Statement = self.sn.cfg.script.ensure_sqlparse(sql=s)
 
         markers, attrs_raw = self.sn.cfg.script.split_sub_blocks(s=s)
         self._log_markers(idx=index, markers=markers)
@@ -182,6 +183,8 @@ class Script:
             self._statements_all[index] = self._derive_qa_from_generic(
                 s=s, generic=statement
             )
+
+        # method invoked by user post-instantiation; adds new statement .source
         if self._is_post_init:
             self.source = f"{self.source}\n{self._statements_all[index].trim()}"
 
@@ -489,10 +492,12 @@ class Script:
         for i, s in dtl.items():
             print(f"{str(i).rjust(len(str(depth)), ' ')}: {s}")
 
+    @property
     def first_s(self):
         """First statement by index position."""
         return self.statements[min(self.statements)]
 
+    @property
     def last_s(self):
         """Last statement by index position"""
         return self.statements[max(self.statements)]
@@ -501,13 +506,13 @@ class Script:
     def first(self) -> Union[Statement, Empty, Diff]:
         """First statement executed."""
         by_start = {v.start_time: v for v in self.executed.values()}
-        return by_start[min(by_start)]
+        return by_start[min(by_start)] if by_start else None
 
     @property
     def last(self) -> Union[Statement, Empty, Diff]:
         """Last statement executed."""
         by_start = {v.start_time: v for v in self.executed.values()}
-        return by_start[max(by_start)]
+        return by_start[max(by_start)] if by_start else None
 
     def doc(
         self,

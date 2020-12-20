@@ -63,10 +63,3 @@ class Snowmobile:
 
         self.script.types = self.script.types.from_dict(backend["tag-to-type-xref"])
         self.sql.from_dict(backend["sql"])
-
-    # TODO: Stick somewhere that makes sense
-    def sqlparse_stream(self, stream: str) -> sqlparse.sql.Statement:
-        """Parses source sql into individual statements."""
-        for s in sqlparse.parsestream(stream=stream):
-            if self.script.is_valid_sql(s=s):
-                yield s

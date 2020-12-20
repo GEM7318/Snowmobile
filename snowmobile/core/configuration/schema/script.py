@@ -490,7 +490,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0] : span[1]]
+                i: sql[span[0]: span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:
@@ -627,3 +627,31 @@ class Script(Base):
         )
         parsed["raw-text"] = attrs_raw
         return parsed
+
+    @staticmethod
+    def ensure_sqlparse(sql: Union[sqlparse.sql.Statement, str]) -> sqlparse.sql.Statement:
+        """Accepts a string or a sqlparse.sql.Statement and returns a sqlparse.sql.Statement.
+
+        Necessary in order to accommodate the dynamic addition of statements as
+        strings to an existing :class:`Script` object which will instantiate
+        the new :class`Statement` objects from raw strings as opposed to from
+        :class:`sqlparse.sql.Statement` objects as is the case when read from
+        a source file.
+
+        Args:
+            sql (Union[sqlparse.sql.Statement, str]):
+                Either a string of sql or an already parsed
+                sqlparse.sql.Statement object.
+
+        Returns (sqlparse.sql.Statement):
+            A parsed sql statement.
+
+        """
+        if isinstance(sql, sqlparse.sql.Statement):
+            return sql
+
+        parsed = [s for s in sqlparse.parsestream(stream=sql) if not s.value.isspace()]
+        assert (
+            parsed
+        ), f'sqlparse.parsestream("""\n{sql}"""\n) returned an empty statement.'
+        return parsed[0]

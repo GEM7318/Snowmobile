@@ -1,6 +1,7 @@
 """
-Configuration and custom base class from which all objects in
-:mod:`snowmobile.core.configuration` are derived.
+Configuration and Base classes from which all objects in snowmobile's
+configuration model are derived (i.e. ``snowmobile.toml`` and
+``snowmobile_backend.toml``.)
 """
 from __future__ import annotations
 import json
@@ -27,12 +28,11 @@ class Config:
     }
 
     def apply_map_by_type(self, attrs: Dict, typ: Any, func: Callable):
-        """Recursively apply a function to all keys and values of a dictionary
-        that match a specific type.
+        """Recursively apply function to all items of a dictionary of type 'typ'.
 
         Args:
             attrs (dict):
-                Dictionary to apply function to.
+                Dictionary to traverse.
             typ (Type):
                 Type of object to apply function to.
             func (Callable):
@@ -40,7 +40,7 @@ class Config:
 
         Returns:
             Altered dictionary with function applied to all keys and values
-            matching `typ`..
+            matching `typ`.
 
         """
         if isinstance(attrs, Mapping):
@@ -71,21 +71,24 @@ class Base(BaseModel, Config):
     def from_relative(self, obj: Any):
         """Updates current object's attributes with those from a different
         instance of the same class."""
-        for k, v in vars(obj).items():
-            vars(self)[k] = v
+        for k in set(vars(obj)).intersection(set(vars(self))):
+            vars(self)[k] = vars(obj)[k]
         return self
 
     def from_dict(self, args: Dict):
         """Accept a dictionary of arguments and updates the current object as if
         it were instantiated with those arguments."""
-        other = type(self)(**args)
-        return self.from_relative(obj=other)
+        return self.from_relative(obj=type(self)(**args))
 
     def as_serializable(self, by_alias: bool = False):
         """Returns a dictionary in serializable form."""
         return self.serialize(as_dict=self.dict(by_alias=by_alias))
 
     def json(self, by_alias: bool = False, **kwargs) -> str:
+        """API-facing json serialization method."""
+        return self.__json__(by_alias=by_alias, **kwargs)
+
+    def __json__(self, by_alias: bool = False, **kwargs) -> str:
         """Custom serialization to handle sets and pathlib objects."""
         return json.dumps(
             obj=self.as_serializable(by_alias=by_alias),
