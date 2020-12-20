@@ -21,8 +21,7 @@ VALIDATION_SQL = 'mod_sql_unit_validation.sql'
 
 # noinspection PyProtectedMember
 class SQLUnit(BaseTest):
-    """Base object for all unit tests against the methods of :class:`SQL`.
-    """
+    """Represents a unit test instance for a method of :class:`snowmobile.SQL`."""
 
     # -- START: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -----------------------
     base: Any = Field(
@@ -40,14 +39,14 @@ class SQLUnit(BaseTest):
         alias="method_kwargs",
     )
     value_returned: str = Field(
-        description="The value returned by the method under test.",
+        description="The actual value returned by the method under test.",
         default_factory=str,
     )
     value_expected: str = Field(
-        description="The value to validate the returned value against."
+        description="The expected value to be returned by the method under test."
     )
     value_expected_id: int = Field(
-        description="The integer ID within VALIDATION_SQL of the validation statement."
+        description="The integer ID within VALIDATION_SQL of the expected return value."
     )
     # -- END: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -------------------------
 
@@ -87,24 +86,24 @@ class SQLUnit(BaseTest):
 
 # noinspection PyProtectedMember
 def setup_for_sql_module_unit_tests():
-    """Set up parameter and parameter IDs for sql module unit tests."""
+    """Setup for sql module unit tests."""
     import json
     import snowmobile
 
-    # importing test inputs from .json and validation for outputs from .sql
     try:
+        # importing test inputs from .json
         with open(FILES[INPUT_JSON], 'r') as r:
             statement_test_cases_as_dict = {
                 int(k): v for k, v in json.load(r).items()
             }
-
+        # import expected outputs from .sql
         statements_to_validate_against: Dict[int, snowmobile.Statement] = (
             script(script_name=VALIDATION_SQL).statements
         )
     except (IOError, TypeError) as e:
         raise e
 
-    # only run tests for ids (int) that exist in input and validation
+    # only run tests for ids (int) that exist in both input and output files
     shared_unit_test_ids = set(statements_to_validate_against).intersection(
         set(statement_test_cases_as_dict)
     )
@@ -115,12 +114,14 @@ def setup_for_sql_module_unit_tests():
         config_file_nm=CONFIG_FILE_NM,
         delay=True
     )
-    sn.sql.auto_run = False
+    sn.sql.auto_run = False  # turning off so `run=False` is imposed for test
 
     for test_idx in shared_unit_test_ids:
 
-        str_of_sql_to_validate_test_with = statements_to_validate_against[test_idx].sql
-        arguments_to_instantiate_test_case_with = statement_test_cases_as_dict[test_idx]
+        arguments_to_instantiate_test_case_with = \
+            statement_test_cases_as_dict[test_idx]        # to instantiate test with
+        str_of_sql_to_validate_test_with = \
+            statements_to_validate_against[test_idx].sql  # required value for test to pass
 
         yield SQLUnit(
             base=sn.sql._reset(),
@@ -137,7 +138,7 @@ def setup_for_sql_module_unit_tests():
     setup_for_sql_module_unit_tests(),
     ids=idfn
 )
-def test_parsing_is_as_expected(sql_unit_test):
+def test_sql_module_unit_tests(sql_unit_test):
     # TODO: Refactor this such that the stripping isn't necessary
     from snowmobile.core.utils.parsing import strip
 

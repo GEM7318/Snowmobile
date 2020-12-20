@@ -1,21 +1,27 @@
 """
-This file stores utility functions and constant variables accessed by all
-``snowmobile`` tests.
+The intent of this file is to store objects accessed by the entire test suite
+within the scope of:
+    *   Constant variables
+    *   A base test class and an associated `idfn` for pytest IDs
+    *   Static utility functions
+
+See README.md within the `tests/` directory for more information.
 """
 from pathlib import Path
 
 from pydantic import BaseModel
 
-# ===========================================
-CREDS = 'snowmobile_testing'                  # credentials to use for tests
-CONFIG_FILE_NM = 'snowmobile_testing.toml'    # configuration file to use for tests
+# -- CONSTANT VARIABLES -------------------------------------------------------
+
+CREDS = 'snowmobile_testing'
+CONFIG_FILE_NM = 'snowmobile_testing.toml'
 
 TESTS_ROOT = Path(__file__).absolute().parent
 FILES = {p.name: p for p in TESTS_ROOT.rglob('*') if p.is_file()}
-# ==========================================
 
 
-# noinspection PyProtectedMember
+# -- BASE TEST CLASS ----------------------------------------------------------
+
 class BaseTest(BaseModel):
     """Base object for snowmobile test classes.
 
@@ -35,25 +41,25 @@ class BaseTest(BaseModel):
 
     @property
     def pytest_id(self) -> str:
-        """Test ID for pytest output; defaults to value of __repr__()."""
+        """Pytest ID for console feedback during tests runs."""
         return self.__repr__()
 
     def __repr__(self) -> str:
-        """Full __repr__ string to reproduce the object under test."""
+        """Valid __repr__ string to fully reproduce the object under test."""
         pass
 
     class Config:
+        """Enabling so that arbitrary types can be set on derived instances."""
         arbitrary_types_allowed = True
 
 
-# noinspection SpellCheckingInspection
 def idfn(val: BaseTest):
     """Retrieves :attr:`pytest_id` from derived instances of `BaseTest`."""
     assert hasattr(val, 'pytest_id'), f"No 'pytest_id' for class {type(val)}"
     return val.pytest_id
 
 
-# --/ ONLY TEST HELPER FUNCTIONS BELOW /---------------------------------------
+# -- UTILITY FUNCTIONS --------------------------------------------------------
 
 
 def get_validation_file(path1: Path, sub_dir: str = 'expected_outcomes') -> Path:
