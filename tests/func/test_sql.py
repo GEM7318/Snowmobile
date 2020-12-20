@@ -1,12 +1,14 @@
 """Unit tests for snowmobile.SQL."""
 import pytest
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Field
 from typing import Dict, Any
 
 from tests import (
     CONFIG_FILE_NM,
     CREDS,
+    BaseTest,
+    idfn,
 )
 from .fixtures import path, script
 
@@ -16,7 +18,8 @@ INPUT_JSON = 'mod_sql_unit_input.json'
 VALIDATION_SQL = 'mod_sql_unit_validation.sql'
 
 
-class SQLUnit(BaseModel):
+# noinspection PyProtectedMember
+class SQLUnit(BaseTest):
     """Base object for all unit tests against the methods of :class:`SQL`.
     """
 
@@ -64,11 +67,6 @@ class SQLUnit(BaseModel):
 
         # call the method with the specified arguments and store results
         self.value_returned = method_to_run(**self.method_args)
-
-    @property
-    def pytest_id(self) -> str:
-        """Using __repr__ as ID for pytest console output."""
-        return self.__repr__()
 
     def __repr__(self) -> str:
         """Full __repr__ string to reproduce the object under test."""
@@ -118,40 +116,30 @@ def setup_for_sql_module_unit_tests():
     )
     sn.sql.auto_run = False
 
-    tests = []
     for test_idx in shared_unit_test_ids:
 
         str_of_sql_to_validate_test_with = statements_to_validate_against[test_idx].sql
         arguments_to_instantiate_test_case_with = statement_test_cases_as_dict[test_idx]
 
-        tests.append(
-            SQLUnit(
-                base=sn.sql._reset(),
-                cfg=sn.cfg,
-                value_expected=str_of_sql_to_validate_test_with,
-                value_expected_id=test_idx,
-                **arguments_to_instantiate_test_case_with
-            )
+        yield SQLUnit(
+            base=sn.sql._reset(),
+            cfg=sn.cfg,
+            value_expected=str_of_sql_to_validate_test_with,
+            value_expected_id=test_idx,
+            **arguments_to_instantiate_test_case_with
         )
 
-    test_outcomes_to_expected_outcomes = [
-        (a.value_returned, a.value_expected) for a in tests
-    ]
-    ids = [a.pytest_id for a in tests]
 
-    return ids, test_outcomes_to_expected_outcomes
-
-
-test_ids, list_of_test_outcomes_to_expected_outcomes = setup_for_sql_module_unit_tests()
-
-
-@pytest.mark.parametrize(
-    "tests", list_of_test_outcomes_to_expected_outcomes, ids=test_ids
-)
 @pytest.mark.sql
-def test_parsing_is_as_expected(tests):
-    from snowmobile.core.utils.parsing import strip
+@pytest.mark.parametrize(
+    "sql_unit_test",
+    setup_for_sql_module_unit_tests(),
+    ids=idfn
+)
+def test_parsing_is_as_expected(sql_unit_test):
     # TODO: Refactor this such that the stripping isn't necessary
+    from snowmobile.core.utils.parsing import strip
+
     value_under_test, value_expected = [
         strip(
             test,
@@ -159,8 +147,12 @@ def test_parsing_is_as_expected(tests):
             whitespace=True,
             blanks=True
         )
-        for test in tests
+        for test in [
+            sql_unit_test.value_returned,
+            sql_unit_test.value_expected
+        ]
     ]
+
     assert value_under_test == value_expected
 
 
