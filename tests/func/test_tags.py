@@ -4,7 +4,7 @@ Tests for tag parsing.
 import pytest
 
 import snowmobile
-from tests.func.fixtures import get_script
+from tests.func.fixtures import script as get_script
 
 
 # noinspection PyProtectedMember

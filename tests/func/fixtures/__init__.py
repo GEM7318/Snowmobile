@@ -1,7 +1,8 @@
 __all__ = [
-	'get_script',
 	'contents_are_identical',
-	'get_validation_file'
+	'get_validation_file',
+	'path',
+	'script',
 ]
-from .fetch_sql_script import get_script
+from .get import script, path
 from .file_comparison import contents_are_identical, get_validation_file

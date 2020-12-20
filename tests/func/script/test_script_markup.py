@@ -7,7 +7,7 @@ directory structure/approach to this part of the testing.
 import pytest
 
 from tests.func.fixtures import (
-    get_script,
+    script as get_script,
     get_validation_file,
     contents_are_identical
 )

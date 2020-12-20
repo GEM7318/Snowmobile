@@ -36,11 +36,12 @@ class Script:
     def __init__(
         self, sn: Connector, path: Union[Path, str] = None, as_generic: bool = False
     ):
-        self._is_from_str: bool = bool()
+        self._is_from_str: bool = None
         self._statements_parsed: Dict[int, sqlparse.sql.Statement] = dict()
         self._statements_all: Dict[int, Statement] = dict()
         self._open = sn.cfg.script.patterns.core.to_open
         self._close = sn.cfg.script.patterns.core.to_close
+        self._is_post_init: bool = False
 
         self.sn: Connector = sn
         self.patterns: configuration.schema.Pattern = sn.cfg.script.patterns
@@ -78,6 +79,8 @@ class Script:
             self._parse()
         except Exception as e:
             raise e
+
+        self._is_post_init = True
         return self
 
     def read(self, path: Path = None) -> Script:
@@ -179,6 +182,8 @@ class Script:
             self._statements_all[index] = self._derive_qa_from_generic(
                 s=s, generic=statement
             )
+        if self._is_post_init:
+            self.source = f"{self.source}\n{self._statements_all[index].trim()}"
 
     def _log_markers(self, idx: int, markers: List[str]) -> None:
         """Stores intra-statement markers.

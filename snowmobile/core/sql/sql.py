@@ -190,10 +190,10 @@ class SQL:
             raise e
         # fmt: off
         base_restrictions = {
-            'lower(table_name)': f"{table.lower()}",
+            'lower(table_name)': f"'{table.lower()}'",
         }
         if not all_schemas:
-            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'",
+            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'"
         restrictions = {
             **base_restrictions,
             **(restrictions or dict())
@@ -228,12 +228,10 @@ class SQL:
 
         """
         try:
-            _sql = self.info_schema_tables(
+            sql = self.info_schema_tables(
                 nm=nm,
                 fields=["table_name", "table_schema", "last_altered"],
             )
-            _sql = strip(_sql)
-            sql = strip(_sql)
             return self.sn.query(sql=sql) if self._run(run) else sql
         except AssertionError as e:
             raise e
@@ -307,7 +305,11 @@ class SQL:
         except ValueError as e:
             raise e
         # fmt: on
-        _sql = f"drop {obj} if exists {up(obj_schema)}.{up(obj_name)}"
+        _sql = (
+            f"drop {obj} if exists {up(obj_schema)}.{up(obj_name)}"
+            if obj.lower() in ['table', 'view', 'file_format']
+            else f"drop {obj} if exists {up(obj_name)}"
+        )
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
@@ -390,9 +392,9 @@ class SQL:
 
             to_schema = to_schema or schema
             to = to or nm
-            if not to_schema or to:
+            if not to_schema and not to:
                 raise ValueError(
-                    "At least one of '__schema' or 'name` must be provided"
+                    "At least one of '__schema' or 'name` must be provided "
                     "in the 'to' argument of sql.clone()."
                 )
             if nm == to and schema == to_schema:
@@ -415,9 +417,9 @@ class SQL:
         self,
         path: Union[Path, str],
         nm_stage: str,
-        run: bool = None,
         options: Dict = None,
         ignore_defaults: bool = False,
+        run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Generates a 'put' command into a staging table from a local file.
 
@@ -456,7 +458,7 @@ class SQL:
             **(options or dict()),
         }
         for k, v in options.items():
-            statement.append(f"\t{k} = {v}")
+            statement.append(f"\t{k} = {str(v).lower() if isinstance(v, bool) else v}")
 
         _sql = "\n".join(statement)
         sql = strip(_sql)
@@ -820,16 +822,15 @@ limit {n or 1}
                     :class:`str` of sql.
 
         """
-        _sql = self.info_schema_columns(
+        sql = self.info_schema_columns(
             nm=nm,
             fields=["ordinal_position", "column_name"],
             order_by=[1],
             run=False,
         )
-        sql = strip(_sql)
         return (
             self.sn.query(sql).snowmobile.to_list(col_nm="column_name")
-            if not run
+            if run
             else sql
         )
 
@@ -916,11 +917,11 @@ limit {n or 1}
         info_schema_loc = INFO[obj]
         fields = self.fields(fields=fields)
         where = self.where(restrictions=restrictions)
-        order_by = self.order_by(order_by=order_by)
+        order_by = self.order(by=order_by)
 
         sql = f"""
 select 
-    {fields}
+{fields}
 from information_schema.{info_schema_loc}
 {where}
 {order_by}
@@ -929,10 +930,10 @@ from information_schema.{info_schema_loc}
         # fmt: on
 
     @staticmethod
-    def order_by(order_by: List[Union[int, str]]) -> str:
+    def order(by: List[Union[int, str]]) -> str:
         """Generates 'order by' clause from a list of fields or field ordinal positions."""
-        if order_by:
-            order_by_fields = ','.join(str(v) for v in order_by)
+        if by:
+            order_by_fields = ','.join(str(v) for v in by)
             return f"order by {order_by_fields}"
         else:
             return str()
@@ -964,7 +965,10 @@ from information_schema.{info_schema_loc}
     @staticmethod
     def fields(fields: List) -> str:
         """Utility to generate fields within a 'select' statement."""
-        return '\n\t,'.join(fields or ['*'])
+        return '\n'.join(
+            f'\t{"," if i > 1 else ""}{f}'
+            for i, f in enumerate(fields or ['*'], start=1)
+        )
 
     @staticmethod
     def _validate(val: Union[str, int], nm: str, attr_nm: str = None) -> str:
@@ -1002,6 +1006,12 @@ from information_schema.{info_schema_loc}
                 f"Please provide a valid value for '{nm}'{closing2}"
             )
         return val
+
+    def _reset(self):
+        self.schema = self.sn.cfg.connection.current.schema_name
+        self.nm = None
+        self.obj = 'table'
+        return self
 
     def __getitem__(self, item):
         return vars(self)[item]

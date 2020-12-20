@@ -42,3 +42,13 @@ def sql_paths():
     )
     scripts = [p for p in sql_dir.rglob('*.sql')]
     return {p.name: p for p in scripts}
+
+
+@pytest.fixture(scope='session')
+def sql(sn_delayed):
+    """Returns a sql object; connection omitted."""
+    from snowmobile import SQL
+    return SQL(
+        sn=sn_delayed,
+        auto_run=True
+    )

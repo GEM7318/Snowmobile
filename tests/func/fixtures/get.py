@@ -7,13 +7,21 @@ from pathlib import Path
 
 import snowmobile
 
-SQL_DIR = Path(__file__).absolute().parent.parent / 'data' / 'sql'
-script_paths = {k.name: k for k in SQL_DIR.rglob('*.sql')}
+SQL_DIR = Path(__file__).absolute().parent.parent / 'data'
+total_paths = {
+    **{k.name: k for k in SQL_DIR.rglob('*.sql')},
+    **{k.name: k for k in SQL_DIR.rglob('*.json')}
+}
 
 
-def get_script(script_name: str) -> snowmobile.Script:
+def path(file_nm: str) -> Path:
+    """Get a full Path to a file given its name."""
+    return total_paths[file_nm]
+
+
+def script(script_name: str) -> snowmobile.Script:
     """Get a script object from its script name."""
-    path_to_script = script_paths[script_name]
+    path_to_script = path(file_nm=script_name)
     return snowmobile.Script(
         path=path_to_script,
         sn=snowmobile.Connect(

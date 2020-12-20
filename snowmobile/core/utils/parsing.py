@@ -10,13 +10,15 @@ def up(nm: str):
     return nm.upper() if nm else nm
 
 
-def strip(val: str, trailing: bool = True, blanks: bool = True) -> str:
+def strip(val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False,) -> str:
     """Utility to strip a variety whitespace from a string."""
     splitter = val.split("\n")
     if trailing:
         splitter = [v.strip() for v in splitter]
     if blanks:
         splitter = [v for v in splitter if v and not v.isspace()]
+    if whitespace:
+        splitter = [v for v in splitter if not v.isspace()]
     return "\n".join(splitter)
 
 
@@ -35,12 +37,13 @@ def strip(val: str, trailing: bool = True, blanks: bool = True) -> str:
 def dict_flatten(
     attrs: dict, delim: str = None, indent_char: str = None, bullet_char: str = None
 ) -> List[Tuple[str, str, str]]:
-    """Flattens a dictionary to its atomic state and performs parsing operations.
+    """Recursively flattens dictionary to its atomic elements.
 
-    Recursively flattens dictionary to its atomic elements, separating each
-    child key with a `delim` relative to its parent key. This flattening
-    enables the parsing of a dictionary into a valid set of nested markdown
-    bullets with indents mirroring its hierarchy.
+    Flattens a dictionary to its atomic state and performs parsing operations,
+    separating each child key with a `delim` relative to its parent key.
+
+    This flattening enables the parsing of a nested dictionary into a valid
+    string of markdown containing correspondingly nested bullets.
 
     Args:
         attrs (dict):

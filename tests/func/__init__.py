@@ -1,1 +1,4 @@
-from .fixtures.fetch_sql_script import get_script
+__all__ = [
+	'fixtures'
+]
+from tests.func import fixtures
