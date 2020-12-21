@@ -10,9 +10,8 @@ import pandas as pd
 
 from snowmobile.core import Connector
 from snowmobile.core.configuration import schema as cfg
-from snowmobile.core.df_ext.frame import Frame
-
 from .statement import Statement
+from snowmobile.core.df_ext.frame import Frame
 
 
 class Diff(Statement):

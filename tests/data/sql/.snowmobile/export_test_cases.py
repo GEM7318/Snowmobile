@@ -26,7 +26,7 @@ def export_markups(script_dtl: List[Tuple[str, bool, Dict]], args: List[Dict]):
 		if run:
 			script.run(**run_kwargs)
 		for arg in args:
-			doc = script.doc().config(**arg['config'])
+			doc = script.doc()(**arg['config'])
 			doc.export(**arg['export'])
 
 

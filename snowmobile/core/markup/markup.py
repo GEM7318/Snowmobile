@@ -75,17 +75,6 @@ class Markup:
     ):
         self._stdout = Console()
         self.pkg_data_dir = DIR_PKG_DATA
-
-        if path:
-            self.path = Path(str(path))
-        elif directory and file_nm:
-            condition, msg = self._validate_directory(directory=directory)
-            if not condition:
-                raise ValueError(msg)
-            self.path = directory / file_nm
-        else:
-            self.path: Path = Path()
-
         self.contents = contents
         self.cfg: Configuration = sn.cfg
         self.alt_file_nm: str = alt_file_nm or str()
@@ -97,12 +86,17 @@ class Markup:
         self.exported: List[Path] = list()
         self.created: List[Path] = list()
 
-    def config(self, **kwargs) -> Markup:
-        """Batch setattr function for all keywords matching Markup's attributes."""
-        for k, v in kwargs.items():
-            if k in vars(self):
-                setattr(self, k, v)
-        return self
+        if path:
+            self.path = Path(str(path))
+        elif directory and file_nm:
+            if not directory.is_dir():
+                raise ValueError(
+                    f"`directory` argument must be a valid directory path.\n"
+                    f"Value provided was: '{directory}'"
+                )
+            self.path = directory / file_nm
+        else:
+            self.path: Path = Path()
 
     @property
     def doc_root(self) -> Path:
@@ -154,13 +148,15 @@ class Markup:
 
     @property
     def sections(self) -> Dict[int, Section]:
-        """All header sections of markdown file as a dictionary."""
+        """All header sections of markdown file as a dictionary.
+        """
         sections = {}
         for i, s in self.contents.items():
             if self._is_statement(s=s):
                 sections[i] = s.as_section()
             else:
                 sections[i] = Section(config=self.cfg, **s.as_args())
+
         return {i: sections[i] for i in sorted(sections)}
 
     @property
@@ -272,6 +268,10 @@ class Markup:
                 self._export_sql()
         except IOError as e:
             raise IOError(e)
+
+    def __call__(self, **kwargs):
+        """Batch setattr function for all keywords matching Markup's attributes."""
+        return self.cfg.batch_set_attrs(obj=self, attrs=kwargs)
 
     def __getitem__(self, item):
         return vars(self)[item]

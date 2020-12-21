@@ -11,7 +11,7 @@ import json
 import shutil
 from pathlib import Path
 from types import MethodType
-from typing import Any, Callable, Dict, Union
+from typing import Any, Callable, Dict, Union, List
 
 import toml
 from fcache.cache import FileCache
@@ -45,16 +45,35 @@ class Cache(FileCache):
         self[item_name] = str(item_value)
         return self
 
-    # noinspection PyMethodOverriding
-    def delete(self, item_name: str) -> Cache:
-        """Deletes `item_name` from cache."""
-        if self.get(item_name):
-            self.pop(item_name)
-        return self
+    def save_all(self, items: Dict):
+        """Caches a dictionary of items"""
+        for k, v in items.items():
+            self[k] = str(v)
 
     def as_path(self, item_name: str) -> Path:
         """Utility to return `item_name` as a :class:`Path` object."""
         return Path(self.get(item_name)) if self.get(item_name) else None
+
+    def clear(self, item: Union[List, str] = None):
+        """Clears an item or a list of items from the cache by name."""
+        if isinstance(item, str):
+            item = [item]
+        to_clear = (
+            list(self) if not item
+            else set(self.contents).intersection(set(item))
+        )
+        for k in to_clear:
+            self.pop(k)
+
+    def contains(self, item: Union[List, str] = None) -> bool:
+        if isinstance(item, str):
+            return bool(self.get(item))
+        return all(i in self.contents for i in item)
+
+    @property
+    def contents(self) -> Dict:
+        """Explicit property to get cached contents as a dictionary."""
+        return {k: v for k, v in self.items()}
 
 
 class Configuration(Snowmobile):
@@ -253,8 +272,8 @@ class Configuration(Snowmobile):
     def __json__(self, by_alias: bool = False, **kwargs):
         return self.json(by_alias=by_alias, **kwargs)
 
-    def __str__(self):
+    def __str__(self):  # pragma exclude
         return f"snowmobile.Configuration('{self.file_nm}')"
 
-    def __repr__(self):
+    def __repr__(self):  # pragma exclude
         return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"

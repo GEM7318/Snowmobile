@@ -54,7 +54,7 @@ def _export_all_markup_test_cases():
                             won't be raised when intentional failures are hit.
         args (List[Dict]):
             A list of dictionaries containing:
-                1.  A set of kwargs for markup.config()
+                1.  A set of kwargs for markup()
                         *   Most often alternate file prefixes.
                 2.  A set of kwargs from markup.export()
                         *   Most often `markdown_only=True` or `sql_only=True`.
@@ -101,7 +101,7 @@ def _export_all_markup_test_cases():
                     st._exclude_attrs.append('execution_time_txt')
 
             for arg in args:
-                doc = script.doc().config(**arg['config'])
+                doc = script.doc()(**arg['config'])
                 doc.export(**arg['export'])
 
                 for p in doc.exported:

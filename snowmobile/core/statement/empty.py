@@ -1,15 +1,15 @@
-from contextlib import contextmanager
-
-from IPython.core.display import Markdown, display
-from snowflake.connector.errors import ProgrammingError
-
-from snowmobile.core.connector import Connector
-from snowmobile.core.statement.statement import Statement
+"""
+`qa-empty` statement object.
+"""
+from snowmobile.core import Connector
+from .statement import Statement
 
 
 class Empty(Statement):
     """QA class for results expected to be empty."""
 
+    # TODO: Give each QA statement a default error message that can be passed
+    #   be passed explicitly as a statement argument.
     _note: str = """
 **Note**: This will only return results if the test has failed.
 """
