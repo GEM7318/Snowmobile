@@ -61,7 +61,6 @@ def idfn(val: BaseTest):
 
 # -- UTILITY FUNCTIONS --------------------------------------------------------
 
-
 def get_validation_file(path1: Path, sub_dir: str = 'expected_outcomes') -> Path:
     """Returns a path for the validation file given a test file path."""
     export_dir = path1.parent.parent  # expected: '.snowmobile.

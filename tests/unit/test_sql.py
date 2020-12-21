@@ -35,7 +35,7 @@ class SQLUnit(BaseTest):
         alias="method",
     )
     method_args: Dict = Field(
-        description="A dict of keyword arguments to path to the method under test.",
+        description="A dict of keyword arguments to pass to the method under test.",
         alias="method_kwargs",
     )
     value_returned: str = Field(
