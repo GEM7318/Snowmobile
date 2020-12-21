@@ -45,7 +45,7 @@ class Script:
         )
 
     def console_outcome(self, s: statements.Statement) -> str:
-        return f"<{s.outcome_txt.lower()}>".ljust(self.max_width_outcome, " ")
+        return f"<{s.outcome_txt().lower()}>".ljust(self.max_width_outcome, " ")
 
     def status(
         self, s: statements.Statement, return_val: bool = False

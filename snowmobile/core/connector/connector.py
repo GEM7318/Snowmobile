@@ -55,8 +55,7 @@ class Connector:
                 with specific file-system configurations.
 
         """
-        self.error: bool = bool()
-
+        self.error: Exception = Exception()
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
@@ -99,6 +98,7 @@ class Connector:
             return self
 
         except DatabaseError as e:
+            self.error = e
             raise e
 
     def disconnect(self) -> Connector:

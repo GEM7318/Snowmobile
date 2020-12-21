@@ -254,13 +254,22 @@ class Configuration(Snowmobile):
         }
 
     def scopes_from_kwargs(self, **kwargs) -> Dict:
-        """Accepts a dict of keyword arguments and returns a full dictionary of
-        scopes, including empty sets for those not included in kwargs."""
+        """Turns filter arguments into a valid set of kwargs for :class:`Scope`.
+
+        Returns dictionary of all combinations of 'arg' ("kw", "obj", "desc",
+        "anchor" and "nm"), including empty sets for any 'arg' not included
+        in the keyword arguments provided.
+
+        """
         scopes = {}
         for attr in self.scopes:
             attr_value = kwargs.get(attr) or set()
             scopes[attr] = attr_value
         return scopes
+
+    def scopes_from_tag(self, t: Any):
+        """Generates list of keyword arguments to instantiate all scopes for a tag."""
+        return [{'base': vars(t)[k], 'arg': k} for k in self.SCOPE_ATTRIBUTES]
 
     def json(self, by_alias: bool = False, **kwargs):
         """Combined serialization method for pydantic attributes."""

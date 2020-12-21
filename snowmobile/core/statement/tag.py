@@ -129,6 +129,8 @@ class Tag:
         self.is_included: bool = True
         self.incl_idx_in_desc: bool = True
 
+        # ---------------------------------------------------------------------
+
         self.part_keyword = self.nm_pr.partition(self.patt.core.sep_keyword)
         self.is_struct_anchor = len(self.part_keyword) == 3
 
@@ -143,21 +145,26 @@ class Tag:
         self.anchor_pr = f"{self.kw_pr}{self.patt.core.sep_keyword}{self.obj_pr}"
 
         # ---------------------------------------------------------------------
+
         self.first_line = (sql or str()).strip('\n').split("\n")[0].lower().strip()
         self.incl_if_exists = "if exists" in self.first_line
         self.first_keyword = first_keyword or str()
         self.first_line_remainder = self.first_line_sans_keyword(
-            self.first_line, self.first_keyword
+            first_line=self.first_line, first_keyword=self.first_keyword
         )
 
         # ---------------------------------------------------------------------
+
         self.kw = self.kw_pr or self.kw_ge
         self.nm = self.nm_pr or self.nm_ge
         self.obj = self.obj_pr or self.obj_ge
         self.desc = self.desc_pr or self.desc_ge
         self.anchor = self.anchor_pr or self.anchor_ge
 
-        self.scopes: Set[Scope] = {Scope(**kwargs) for kwargs in self.scope_defaults}
+        self.scopes: Set[Scope] = {
+            Scope(**kwargs)
+            for kwargs in self.cfg.scopes_from_tag(t=self)
+        }
 
     def scope(self, **kwargs) -> bool:
         """Evaluates all component's of a tag's scope against a set of filter args.
@@ -316,13 +323,6 @@ class Tag:
     def nm_ge(self):
         """Generated `name`/full statement tag for statement."""
         return f"{self.anchor_ge}{self.patt.core.sep_desc}{self.desc_ge}"
-
-    @property
-    def scope_defaults(self) -> List[Dict]:
-        """Values of scope arguments from :class:`snowmobile.Configuration`
-        that match attribute names from :class:`Tag`'s namespace.
-        """
-        return [{"base": vars(self)[k], "arg": k} for k in self.cfg.SCOPE_ATTRIBUTES]
 
     def __setitem__(self, key, value):
         vars(self)[key] = value

@@ -1,13 +1,6 @@
 """Tests for snowmobile.Statement."""
 import pytest
 
-import snowmobile
-
-from tests import (
-    CONFIG_FILE_NM,
-    CREDS,
-)
-
 
 # noinspection SqlResolve
 @pytest.fixture()

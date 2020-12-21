@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Any, ContextManager, Dict, Tuple, Union
+from typing import Any, ContextManager, Dict, Tuple, Union, Callable
 
 import pandas as pd
 import sqlparse
@@ -86,7 +86,8 @@ class Statement:
 
     # fmt: off
     _OUTCOME_MAPPING: Dict[Any, Tuple] = {
-        -2: ("-", "error"),
+        -3: ("-", "error (qa-processing)"),
+        -2: ("-", "error (execution)"),
         -1: ("-", "skipped"),
         0: ("-", ""),
         1: ("warning", "failed"),
@@ -104,19 +105,19 @@ class Statement:
         attrs_raw: str = None,
         **kwargs,
     ):
+        self.errors: Dict[str, Dict[int, Exception]] = dict()
         self._index: int = index
         self._exclude_attrs = []
         self._outcome: bool = bool()
 
         self.sn = sn
-        self.statement: sqlparse.sql.Statement = statement
+        self.statement: sqlparse.sql.Statement = \
+            sn.cfg.script.ensure_sqlparse(statement)
         self.index: int = index or int()
         self.patterns: Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
         self.outcome: int = int()
-        self.outcome_txt: str = self._OUTCOME_MAPPING[self.outcome][1]
-        self.outcome_html: str = str()
 
         self.start_time: int = int()
         self.end_time: int = int()
@@ -125,7 +126,6 @@ class Statement:
 
         self.attrs_raw = attrs_raw or str()
         self.is_tagged: bool = bool(self.attrs_raw)
-        # self.is_multiline: bool = "\n" in self.attrs_raw
 
         self.first_keyword = self.statement.token_first(skip_ws=True, skip_cm=True)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
@@ -223,11 +223,27 @@ class Statement:
             in **snowmobile.toml**.
 
         """
+
+        config_namespace = self.sn.cfg.script.markdown.attrs.from_namespace
+        current_namespace = {
+            **self.sn.cfg.attrs_from_obj(obj=self),
+            **self.sn.cfg.methods_from_obj(obj=self)
+        }
+        attrs_to_dump = \
+            set(
+                current_namespace
+            ).intersection(
+                config_namespace
+            ).difference(
+                self._exclude_attrs
+            )
+
         attrs = self.attrs_parsed
-        for k, v in self.sn.cfg.script.markdown.attrs.from_namespace.items():
-            attr = vars(self).get(k)
-            if attr and k not in self._exclude_attrs:
-                attrs[k] = attr
+        for k in attrs_to_dump:
+            attr = current_namespace[k]
+            attr_value = attr() if isinstance(attr, Callable) else attr
+            if attr_value:
+                attrs[k] = attr_value
         return attrs
 
     def trim(self) -> str:
@@ -312,6 +328,7 @@ class Statement:
         self.tag.is_included = True
         return self
 
+    # TODO: This should just become 'outcome'
     @property
     def _outcome_latest(self):
         """Returns the numeric :attr:`outcome` value based on current context.
@@ -335,6 +352,20 @@ class Statement:
         else:  # keeping value of '-2' (i.e. error encountered)
             return self.outcome
 
+    def _validate_qa(self, **kwargs):
+        """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""
+        if (
+            self
+            and self.is_derived
+            and not kwargs.get("silence_qa")
+            and not self._outcome
+        ):
+            self._log_exception(
+                e=AssertionError(f"'{self.tag}' did not pass its QA check."),
+                _id=1,
+                _raise=True
+            )
+
     def update(self, **kwargs):
         """Updates outcome attributes and runs QA validation for derived classes.
 
@@ -350,8 +381,6 @@ class Statement:
 
         """
         self.outcome = self._outcome_latest
-        self.outcome_txt = self._OUTCOME_MAPPING[self.outcome][1]
-        self.outcome_html = self._outcome_html(self.outcome_txt)
         self._validate_qa(**kwargs)
 
     def process(self):
@@ -395,7 +424,7 @@ class Statement:
                 self.end()
             yield self
 
-        except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
+        except (ProgrammingError, pdDataBaseError, DatabaseError):
             self.outcome = -2
 
         finally:
@@ -403,7 +432,11 @@ class Statement:
             self.update(**kwargs)
 
             if self.outcome == -2:
-                raise self.sn.error
+                self._log_exception(
+                    e=self.sn.error,
+                    _id=-2,
+                    _raise=True
+                )
 
             if self and render:
                 self.render()
@@ -432,12 +465,10 @@ class Statement:
 
         """
         with self._run(results=results, lower=lower, render=render, **kwargs) as r:
-            return r.process()
-
-    def _validate_qa(self, **kwargs):
-        """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""
-        if self.is_derived and not kwargs.get("silence_qa") and self:
-            assert self._outcome, f"'{self.tag}' did not pass its QA check."
+            try:
+                return r.process()
+            except Exception as e:
+                raise e
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):
@@ -449,12 +480,23 @@ class Statement:
         )
         return condition, msg
 
-    def _outcome_html(self, outcome_txt: str):
-        """Utility to generation admonition html."""
+    def _log_exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
+        desc = self.outcome_txt(_id=_id)
+        self.errors.get(desc, dict())[int(time.time())] = e
+        if _raise:
+            raise e
+
+    def outcome_txt(self, _id: int = None) -> str:
+        """Outcome as a string."""
+        return self._OUTCOME_MAPPING[_id or self.outcome][1]
+
+    @property
+    def outcome_html(self) -> str:
+        """Outcome as an html admonition banner."""
         alert = self._OUTCOME_MAPPING[self.outcome][0]
         return f"""
 <div class="alert-{alert}">
-<center><b>====/ {outcome_txt} /====</b></center>
+<center><b>====/ {self.outcome_txt()} /====</b></center>
 </div>""".strip()
 
     def __bool__(self):

@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Set
 import pandas as pd
 
 from snowmobile.core import Connector
-from snowmobile.core.configuration import schema as cfg
 from .statement import Statement
 from snowmobile.core.df_ext.frame import Frame
 
@@ -87,30 +86,7 @@ class Diff(Statement):
         """
         super().__init__(sn=sn, **kwargs)
         # fmt: off
-        qa_cfg: cfg.QA = sn.cfg.script.qa
-
-        parsed = self.attrs_parsed
-
-        self.partition_on: str = (
-            parsed.get("partition-on", qa_cfg.partition_on)
-        )
-        self.end_index_at: str = (
-            parsed.get("end-index-at", qa_cfg.end_index_at)
-        )
-        self.compare_patterns: List = (
-            parsed.get("compare-patterns", qa_cfg.compare_patterns)
-        )
-        self.ignore_patterns: List = (
-            parsed.get("ignore-patterns", qa_cfg.ignore_patterns)
-        )
-        self.relative_tolerance = (
-            parsed.get('relative-tolerance', qa_cfg.tolerance.relative)
-        )
-        self.absolute_tolerance = (
-            parsed.get('absolute-tolerance', qa_cfg.tolerance.absolute)
-            if not self.relative_tolerance else 0
-        )
-
+        self._post_parse_init()
         self.compare_cols: List[str] = list()
         self.drop_cols: List[str] = list()
         self.idx_cols: List[str] = list()
@@ -118,15 +94,48 @@ class Diff(Statement):
         self.diff: bool = bool()
         # fmt: on
 
+    def _post_parse_init(self) -> None:
+        """Instantiates :class:`Diff` specific attributes.
+
+        Combines arguments declared for the statement within the sql script
+        and combines with defaults from ``snowmobile.toml``.
+
+        """
+        qa_cfg = self.sn.cfg.script.qa
+
+        self.partition_on: str = (
+            self.attrs_parsed.get("partition-on", qa_cfg.partition_on)
+        )
+        self.end_index_at: str = (
+            self.attrs_parsed.get("end-index-at", qa_cfg.end_index_at)
+        )
+        self.compare_patterns: List = (
+            self.attrs_parsed.get("compare-patterns", qa_cfg.compare_patterns)
+        )
+        self.ignore_patterns: List = (
+            self.attrs_parsed.get("ignore-patterns", qa_cfg.ignore_patterns)
+        )
+        self.relative_tolerance = (
+            self.attrs_parsed.get('relative-tolerance', qa_cfg.tolerance.relative)
+        )
+        self.absolute_tolerance = (
+            self.attrs_parsed.get('absolute-tolerance', qa_cfg.tolerance.absolute)
+            if not self.relative_tolerance else 0
+        )
+
     def _idx(self) -> None:
         """Isolates columns to use as indices."""
         self.idx_cols = self.results.snowmobile.cols_ending_at(
             self.end_index_at, ignore_patterns=[self.partition_on]
         )
         if not self.idx_cols:
-            raise Exception(
-                f"Arguments provided don't result in any index columns to join"
-                f" DataFrame's partitions back together on."
+            self._log_exception(
+                e=Exception(
+                    f"Arguments provided don't result in any index columns to join"
+                    f" DataFrame's partitions back together on."
+                ),
+                _id=-3,
+                _raise=True,
             )
 
     def _drop(self) -> None:
@@ -142,8 +151,12 @@ class Diff(Statement):
             ignore_patterns=[self.partition_on, self.idx_cols, self.drop_cols],
         )
         if not self.compare_cols:
-            raise Exception(
-                f"Arguments provided don't result in any comparison columns."
+            self._log_exception(
+                e=Exception(
+                    f"Arguments provided don't result in any comparison columns."
+                ),
+                _id=-3,
+                _raise=True,
             )
 
     def split_cols(self) -> Diff:
@@ -166,8 +179,12 @@ class Diff(Statement):
             raise
         # fmt: off
         if self.partition_on not in list(self.results.columns):
-            raise Exception(
-                f"Column `{self.partition_on}` not found in DataFrames columns."
+            self._log_exception(
+                e=Exception(
+                    f"Column `{self.partition_on}` not found in DataFrames columns."
+                ),
+                _id=-3,
+                _raise=True,
             )
         # fmt: on
 
