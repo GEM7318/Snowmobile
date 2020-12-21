@@ -10,7 +10,9 @@ from typing import Any, ContextManager, Dict, Tuple, Union
 import pandas as pd
 import sqlparse
 from IPython.core.display import Markdown, display
-from snowflake.connector.errors import ProgrammingError
+
+from snowflake.connector.errors import ProgrammingError, DatabaseError
+from pandas.io.sql import DatabaseError as pdDataBaseError
 
 
 from snowmobile.core.configuration import Pattern
@@ -121,9 +123,9 @@ class Statement:
         self.execution_time: int = int()
         self.execution_time_txt: str = str()
 
-        self.attrs_raw = attrs_raw
+        self.attrs_raw = attrs_raw or str()
         self.is_tagged: bool = bool(self.attrs_raw)
-        self.is_multiline: bool = "\n" in self.attrs_raw
+        # self.is_multiline: bool = "\n" in self.attrs_raw
 
         self.first_keyword = self.statement.token_first(skip_ws=True, skip_cm=True)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
@@ -134,6 +136,11 @@ class Statement:
     # @property
     # def index(self):
     #     return self.tag.index
+
+    @property
+    def is_multiline(self) -> bool:
+        """Indicates if provided statement tag is a multiline tag."""
+        return '\n' in self.attrs_raw
 
     def parse(self) -> Dict:
         """Parses a statement tag into a valid dictionary.
@@ -238,8 +245,7 @@ class Statement:
 
     def render(self) -> None:
         """Renders the statement's sql as markdown in Notebook/IPython environments."""
-        sql_md = f"```sql\n{self.as_section().sql_md}\n```\n"
-        display((Markdown(sql_md),))
+        display((Markdown(self.as_section().sql_md),))
 
     @property
     def name(self):
@@ -320,9 +326,9 @@ class Statement:
                 :meth:`_run()` and the below codes will leave it as is.
 
         """
-        if not self:  # statement is not included within the current context
-            return -1
-        elif not self.is_derived and not self.outcome:  # generic completed
+        # if not self:  # statement is not included within the current context
+        #     return -1
+        if not self.is_derived and not self.outcome:  # generic completed
             return 2
         elif not self.outcome:  # setting outcome for QA statements
             return 3 if self._outcome else 1
@@ -389,19 +395,42 @@ class Statement:
                 self.end()
             yield self
 
-        except ProgrammingError as e:
+        except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             self.outcome = -2
-            raise e
 
         finally:
+
+            self.update(**kwargs)
+
+            if self.outcome == -2:
+                raise self.sn.error
+
             if self and render:
                 self.render()
-            self.update(**kwargs)
+
             return self
 
     def run(
         self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
     ) -> Statement:
+        """Run method for all statement objects.
+
+        Args:
+            results (bool):
+                Store results of query in :attr:`results`.
+            lower (bool):
+                Lower case column names in :attr:`results` DataFrame if
+                `results=True`.
+            render (bool):
+                Render the sql executed as markdown.
+            **kwargs:
+                Keyword arguments for :meth:`update()` and compatibility with
+                derived classes.
+
+        Returns (Statement):
+            Statement object post-executing query.
+
+        """
         with self._run(results=results, lower=lower, render=render, **kwargs) as r:
             return r.process()
 

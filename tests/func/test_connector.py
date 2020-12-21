@@ -1,4 +1,4 @@
-"""Tests for snowmobile.Connect()."""
+"""Tests for snowmobile.Connector."""
 import pytest
 
 import snowmobile

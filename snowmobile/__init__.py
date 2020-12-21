@@ -10,6 +10,7 @@ __all__ = [
     "Loader",
     "Configuration",
     "Script",
+    "Statement",
 ]
 from .core import (
     SQL,

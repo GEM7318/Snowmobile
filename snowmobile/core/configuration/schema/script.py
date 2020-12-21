@@ -647,7 +647,10 @@ class Script(Base):
         if isinstance(sql, sqlparse.sql.Statement):
             return sql
 
-        parsed = [s for s in sqlparse.parsestream(stream=sql) if not s.value.isspace()]
+        parsed = [
+            s for s in sqlparse.parsestream(stream=sql.strip().strip(';'))
+            if not s.value.isspace()
+        ]
         assert (
             parsed
         ), f'sqlparse.parsestream("""\n{sql}"""\n) returned an empty statement.'

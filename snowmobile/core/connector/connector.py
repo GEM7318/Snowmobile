@@ -5,7 +5,7 @@ SnowflakeConnection for query/statement execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Union
+from typing import Union, List
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -55,7 +55,7 @@ class Connector:
                 with specific file-system configurations.
 
         """
-        self._error: bool = bool()
+        self.error: bool = bool()
 
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
@@ -137,8 +137,16 @@ class Connector:
         try:
             return self.cursor.execute(command=sql, **kwargs)
         except ProgrammingError as e:
-            self._error = e
+            self.error = e
             raise ProgrammingError(f"ProgrammingError: {e}")
+
+    # def ex(self, sql: Union[str, List[str]], **kwargs):
+    #     if not isinstance(sql, List):
+    #         return self._ex(sql=sql, **kwargs)
+    #
+    #     cur = self.cursor
+    #     for s in sql:
+    #         self._ex(sql=s, **kwargs)
 
     def query(
         self, sql: str, results: bool = True, lower: bool = True,
@@ -174,7 +182,7 @@ class Connector:
             return df.snowmobile.lower_cols() if lower else df
 
         except (pdDataBaseError, DatabaseError) as e:
-            self._error = e
+            self.error = e
             raise e
 
     def __setattr__(self, key, value):
