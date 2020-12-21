@@ -15,7 +15,7 @@ union
 ```
 * last-execution
 	* **outcome**: _completed_
-	* **time**: _0s_
+	* **time**: _2s_
 
 # intra-statement-marker
 * **Description**: _This is a sample intra statement marker._
@@ -63,6 +63,12 @@ having count(*) <> 1;
 * last-execution
 	* **outcome**: _failed_
 	* **time**: _0s_
+
+Results
+|   dummy_dim |   count(a.*) |
+|------------:|-------------:|
+|           1 |            2 |
+|           2 |            2 |
 
 # Appendix
 
