@@ -6,9 +6,9 @@ This script stores the test cases for `snowmobile.Markup`.
 
 - **Notes**
 	- This is just a sample table for the other test statements to run on.
-* last-execution
+* Last-Execution
 	* **outcome**: _completed_
-	* **time**: _2s_
+	* **time**: _1s_
 
 ```sql
 create or replace temp table sample_table as
@@ -21,7 +21,7 @@ union
 * **Description**: _This is a sample intra statement marker._
 
 ## (2) select-data~sample select statement
-* last-execution
+* Last-Execution
 	* **outcome**: _completed_
 	* **time**: _0s_
 * **Description**: _This is a sample select statement, including results_
@@ -37,7 +37,7 @@ Results
 |           2 |               1 |           1 |
 
 ## (3) qa-empty~an expected success
-* last-execution
+* Last-Execution
 	* **outcome**: _passed_
 	* **time**: _0s_
 
@@ -51,7 +51,7 @@ having count(*) <> 1;
 ```
 
 ## (4) qa-empty~an expected failure
-* last-execution
+* Last-Execution
 	* **outcome**: _failed_
 	* **time**: _0s_
 
