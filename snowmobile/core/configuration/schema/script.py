@@ -319,11 +319,6 @@ class QA(Base):
     )
     # fmt: on
 
-    # def __init__(self, **data):
-    #     super().__init__(**data)
-    #     for k, v in vars(self).items():
-    #         self[k] = self.escape_attr(v)
-
     @staticmethod
     def escape_attr(attr: Union[str, List]) -> Union[str, List, Tolerance]:
         if isinstance(attr, str):

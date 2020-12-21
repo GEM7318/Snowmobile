@@ -115,9 +115,9 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        schema, nm = p(nm)
         # fmt: off
         try:
+            schema, nm = p(nm)
             table = self._validate(
                 val=(nm or self.nm), nm='nm', attr_nm='nm'
             )
@@ -126,22 +126,25 @@ class SQL:
             )
         except ValueError as e:
             raise e
-        # fmt: off
-        base_restrictions = {
-            'lower(table_name)': f"'{table.lower()}'",
-        }
-        if not all_schemas:
-            base_restrictions['lower(table_schema)'] = f"'{schema.lower()}'"
+        # fmt: on
+
         restrictions = {
-            **base_restrictions,
-            **(restrictions or dict())
+            **(restrictions or dict()),
+            **{
+                'lower(table_name)': f"'{table.lower()}'",
+                'lower(table_schema)': f"'{schema.lower()}'",
+            },
         }
+        if all_schemas:
+            _ = restrictions.pop('lower(table_schema)')
+
         sql = self._info_schema_generic(
             obj="table",
             fields=fields,
             restrictions=restrictions,
             order_by=order_by,
         )
+
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def info_schema_columns(

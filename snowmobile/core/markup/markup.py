@@ -49,7 +49,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-from snowmobile.core.configuration import Configuration
+from snowmobile.core.configuration import Configuration, DIR_PKG_DATA
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.connector import Connector
 from snowmobile.core.statement import Diff, Empty, Statement
@@ -74,7 +74,7 @@ class Markup:
         sql_incl_export_disclaimer: bool = True,
     ):
         self._stdout = Console()
-        self.pkg_data_dir = sn.cfg.PKG_DATA
+        self.pkg_data_dir = DIR_PKG_DATA
 
         if path:
             self.path = Path(str(path))

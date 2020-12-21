@@ -10,10 +10,13 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 import pandas as pd
-from snowflake.connector.errors import DatabaseError
 
-from snowmobile.core import Connector, Script
-from snowmobile.core.sql import SQL
+from snowmobile.core import (
+    Connector,
+    Script,
+    SQL,
+)
+from snowmobile.core.configuration import DDL_DEFAULT_PATH
 
 
 class Loader:
@@ -44,7 +47,7 @@ class Loader:
         self.name: str = table
         self.sn: Connector = sn
         self.sql: SQL = SQL(sn=sn, nm=table)
-        self.format_ddl_src = format_ddl_src or self.sn.cfg.PKG_DATA / "DDL.sql"
+        self.format_ddl_src = format_ddl_src or DDL_DEFAULT_PATH
 
         self.keep_local = keep_local or sn.cfg.loading.other.keep_local
         self.output_location = output_location or Path.cwd() / f"{table}.csv"

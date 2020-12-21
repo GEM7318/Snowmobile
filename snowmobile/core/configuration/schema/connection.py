@@ -73,7 +73,7 @@ class Credentials(Base):
 
     @property
     def credentials(self):
-        """Returns namespace as a dictionary, excluding its alias/name."""
+        """Returns namespace as a dictionary, excluding :attr:`_alias`."""
         return {k: v for k, v in self.dict(by_alias=True).items() if k != "_alias"}
 
     def __str__(self):
@@ -151,10 +151,15 @@ class Connection(Base):
 
         """
         self.creds = creds or self.default_alias
-        return self.__getitem__(self.creds)
+        try:
+            return self.credentials[self.creds]
+        except KeyError as e:
+            raise KeyError(e)
+        # return self.__getitem__(self.creds)
 
     @property
     def current(self):
+        """Returns current credentials."""
         return self.get(self.creds)
 
     def __getitem__(self, item):

@@ -30,12 +30,12 @@ from .loader import Loader  # isort:skip
 # -- across `snowmobile.core`.      --
 # ====================================
 
-from pathlib import Path
-
-# -- directories
-_DIR_MODULES = Path(__file__).absolute().parent
-_DIR_PKG_DATA = _DIR_MODULES / 'pkg_data'
-
-# -- files
-_PATH_EXTENSIONS_DEFAULT = _DIR_PKG_DATA / 'snowmobile_backend.toml'
-_PATH_DDL_DEFAULT = _DIR_PKG_DATA / 'DDL.sql'
+# from pathlib import Path
+#
+# # -- directories
+# _DIR_MODULES = Path(__file__).absolute().parent
+# _DIR_PKG_DATA = _DIR_MODULES / 'pkg_data'
+#
+# # -- files
+# _PATH_EXTENSIONS_DEFAULT = _DIR_PKG_DATA / 'snowmobile_backend.toml'
+# _PATH_DDL_DEFAULT = _DIR_PKG_DATA / 'DDL.sql'

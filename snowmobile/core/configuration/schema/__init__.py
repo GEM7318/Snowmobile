@@ -1,12 +1,12 @@
+"""
+Full configuration object model; represents a parsed ``snowmobile.toml`` file.
+"""
 __all__ = [
-    # fmt: off
-	'Base',  # base
-	'Credentials', 'Connection',  # connection
-	'Script', 'Pattern', 'Marker', 'Markdown', 'QA', # script
-	'Loading',  # loading
-	'Snowmobile',
-    # combined
-    # fmt: on
+    'Base',
+    'Credentials', 'Connection',
+    'Script', 'Pattern', 'Marker', 'Markdown', 'QA',
+    'Loading',
+    'Snowmobile',
 ]
 from .base import Base
 from .combined import Snowmobile

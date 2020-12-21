@@ -50,8 +50,10 @@ from typing import Dict, List, Union
 
 import pandas as pd
 
-from snowmobile.core.configuration import Configuration
-from snowmobile.core.configuration import schema as cfg
+from snowmobile.core.configuration import (
+    Configuration,
+    Markdown
+)
 from snowmobile.core.utils import parsing as p
 
 
@@ -141,7 +143,7 @@ class Item(Name):
         cfg_md = config.script.markdown
         self.is_first: bool = bool()
 
-        self.cfg_md: cfg.Markdown = cfg_md
+        self.cfg_md: Markdown = cfg_md
         self.index = index
         self.indent, nested, in_script_value = flattened_attrs
 
@@ -174,7 +176,7 @@ class Item(Name):
         return self
 
     @staticmethod
-    def as_results(results: pd.DataFrame, cfg_md: cfg.Markdown):
+    def as_results(results: pd.DataFrame, cfg_md: Markdown):
         results_cfg = cfg_md.attrs.reserved["query-results"]
 
         display_record_limit = (
@@ -287,7 +289,7 @@ class Section:
 
         """
         cfg_md = config.script.markdown
-        self.cfg_md: cfg.Markdown = cfg_md
+        self.cfg_md: Markdown = cfg_md
         self.is_marker = is_marker or bool()
         self.sql: str = sql
         self.results = results
@@ -304,7 +306,7 @@ class Section:
     def _add_reserved_attr(
         self,
         attrs: Dict[str, Union[str, Dict, bool]],
-        cfg_md: cfg.Markdown,
+        cfg_md: Markdown,
         reserved_attr: str,
     ) -> Dict:
         """Adds reserved attributes based on configuration (i.e. SQL and Results).

@@ -20,16 +20,14 @@ from pydantic.json import pydantic_encoder
 from ._stdout import Configuration as Stdout
 from .schema import Base, Snowmobile
 
-# TODO: Add to snowmobile.core __init__.py
-# ====================================
-# Mapping to package data directory
-HERE = Path(__file__).absolute()
-MODULE_DIR = HERE.parent.parent
-PACKAGE_DATA = MODULE_DIR / "pkg_data"
 
-# Defaults paths for DDL and backend extension
-SPEC_BACKEND = PACKAGE_DATA / "snowmobile_backend.toml"
-DDL = PACKAGE_DATA / "DDL.sql"
+# ====================================
+HERE = Path(__file__).absolute()
+DIR_MODULES = HERE.parent.parent
+DIR_PKG_DATA = DIR_MODULES / "pkg_data"
+
+EXTENSIONS_DEFAULT_PATH = DIR_PKG_DATA / "snowmobile_backend.toml"
+DDL_DEFAULT_PATH = DIR_PKG_DATA / "DDL.sql"
 # ====================================
 
 
@@ -86,9 +84,6 @@ class Configuration(Snowmobile):
         "qa-empty",
     }
 
-    # -- Package data directory
-    PKG_DATA = MODULE_DIR / "pkg_data"
-
     def __init__(
         self,
         config_file_nm: str = None,
@@ -119,7 +114,7 @@ class Configuration(Snowmobile):
             self._stdout.exporting(file_name=self.file_nm)
             export_dir = export_dir or Path.cwd()
             export_path = export_dir / self.file_nm
-            template_path = PACKAGE_DATA / "snowmobile_TEMPLATE.toml"
+            template_path = DIR_PKG_DATA / "snowmobile_TEMPLATE.toml"
             shutil.copy(template_path, export_path)
             self._stdout.exported(file_path=export_path)
 
@@ -142,9 +137,9 @@ class Configuration(Snowmobile):
 
                 # TODO: Add sql export disclaimer to this as well
                 if not cfg["external-file-locations"].get("ddl"):
-                    cfg["external-file-locations"]["ddl"] = DDL
+                    cfg["external-file-locations"]["ddl"] = DDL_DEFAULT_PATH
                 if not cfg["external-file-locations"].get("backend-ext"):
-                    cfg["external-file-locations"]["backend-ext"] = SPEC_BACKEND
+                    cfg["external-file-locations"]["backend-ext"] = EXTENSIONS_DEFAULT_PATH
 
                 super().__init__(**cfg)
 
@@ -164,9 +159,9 @@ class Configuration(Snowmobile):
         if self.location.is_file():
             self._stdout.found(file_path=self.location, is_provided=is_provided)
             return self.location
-        else:
-            self._stdout.not_found(creds_file_nm=self.file_nm)
-            return self._find_creds()
+        # else:
+        self._stdout.not_found(creds_file_nm=self.file_nm)
+        return self._find_creds()
 
     def _find_creds(self) -> Path:
         """Traverses file system from ground up looking for creds file."""
@@ -247,15 +242,6 @@ class Configuration(Snowmobile):
             scopes[attr] = attr_value
         return scopes
 
-    def __str__(self):
-        return f"snowmobile.Configuration('{self.file_nm}')"
-
-    def __repr__(self):
-        return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"
-
-    def __json__(self, by_alias: bool = False, **kwargs):
-        return self.json(by_alias=by_alias, **kwargs)
-
     def json(self, by_alias: bool = False, **kwargs):
         """Combined serialization method for pydantic attributes."""
         total = {}
@@ -263,3 +249,12 @@ class Configuration(Snowmobile):
             if issubclass(type(v), Base):
                 total = {**total, **v.as_serializable(by_alias=by_alias)}
         return json.dumps(obj=total, default=pydantic_encoder, **kwargs)
+
+    def __json__(self, by_alias: bool = False, **kwargs):
+        return self.json(by_alias=by_alias, **kwargs)
+
+    def __str__(self):
+        return f"snowmobile.Configuration('{self.file_nm}')"
+
+    def __repr__(self):
+        return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"
