@@ -2,14 +2,16 @@
 Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
+
 import re
 from typing import Dict, List, Tuple, Union
 
 import sqlparse
 from pydantic import Field
 
-from .base import Base
 from snowmobile.core.utils import parsing as p
+
+from .base import Base
 
 
 class Wildcard(Base):

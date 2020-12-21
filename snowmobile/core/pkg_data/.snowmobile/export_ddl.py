@@ -5,6 +5,7 @@ The relative 'ddl_location' path below assumes that this script is stored
 within 'snowmobile/core/pkg_data/.snowmobile' and that `DDL.sql` is in `pkg_data`.
 """
 from pathlib import Path
+
 import snowmobile
 
 # location of the DDL.sql file

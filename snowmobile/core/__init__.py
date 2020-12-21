@@ -16,10 +16,26 @@ __all__ = [
     "utils",
 ]
 from .configuration import Configuration
-from .connector import Connector, Connect
+from .connector import Connect, Connector
 from .markup import Markup, Section
 from .sql import SQL
 from .statement import Statement
 
 from .script import Script  # isort:skip
 from .loader import Loader  # isort:skip
+
+
+# ====================================
+# -- Static path variables accessed --
+# -- across `snowmobile.core`.      --
+# ====================================
+
+from pathlib import Path
+
+# -- directories
+_DIR_MODULES = Path(__file__).absolute().parent
+_DIR_PKG_DATA = _DIR_MODULES / 'pkg_data'
+
+# -- files
+_PATH_EXTENSIONS_DEFAULT = _DIR_PKG_DATA / 'snowmobile_backend.toml'
+_PATH_DDL_DEFAULT = _DIR_PKG_DATA / 'DDL.sql'

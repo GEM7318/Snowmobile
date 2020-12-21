@@ -24,12 +24,14 @@ note:
 
 """
 from __future__ import annotations
+
 from pathlib import Path
-from typing import List, Union, Optional, Dict
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from snowmobile.core.utils.parsing import up, strip, p
+from snowmobile.core.utils.parsing import p, strip, up
+
 from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO
 
 

@@ -2,6 +2,7 @@
 :class:`Column` object. Purpose is..
 """
 from __future__ import annotations
+
 import itertools
 import re
 import string

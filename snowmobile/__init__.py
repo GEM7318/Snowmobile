@@ -14,8 +14,8 @@ __all__ = [
 from .core import (
     SQL,
     Configuration,
-    Connector,
     Connect,
+    Connector,
     Loader,
     Script,
     Section,

@@ -22,6 +22,7 @@ import sqlparse
 from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.statement import Diff, Empty, Statement
+
 from ._stdout import Script as Stdout
 
 

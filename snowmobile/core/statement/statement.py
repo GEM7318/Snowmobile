@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import re
 import time
-from typing import Any, Dict, List, Set, Tuple, Union, ContextManager
 from contextlib import contextmanager
+from typing import Any, ContextManager, Dict, List, Set, Tuple, Union
 
 import pandas as pd
 import sqlparse

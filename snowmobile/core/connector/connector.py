@@ -3,15 +3,15 @@
 SnowflakeConnection for query/statement execution.
 """
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Union
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
-
 from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
-from snowflake.connector.errors import ProgrammingError, DatabaseError
+from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration

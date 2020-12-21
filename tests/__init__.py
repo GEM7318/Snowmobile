@@ -1,20 +1,17 @@
 """
-The intent of this file is to store objects accessed by the entire test suite
-within the scope of:
+This file is to store objects accessed by the entire test suite within the scope
+of:
     *   Constant variables
     *   A base test class and an associated `idfn` for pytest IDs
     *   Static utility functions
 
-See README.md within the `tests/` directory for more information.
 """
 from pathlib import Path
 
 from pydantic import BaseModel
 
 
-# =========================
 # -- CONSTANT VARIABLES ---
-# =========================
 
 CREDS = 'snowmobile_testing'
 CONFIG_FILE_NM = 'snowmobile_testing.toml'
@@ -23,10 +20,7 @@ TESTS_ROOT = Path(__file__).absolute().parent
 FILES = {p.name: p for p in TESTS_ROOT.rglob('*') if p.is_file()}
 
 
-# =========================
 # -- BASE TEST CLASS ------
-# =========================
-
 
 class BaseTest(BaseModel):
     """Base object for snowmobile test classes.
@@ -35,13 +29,12 @@ class BaseTest(BaseModel):
         *   This class is intended to be used as a **namespace only** and
             should not be extended with additional methods unless necessary
             in order to maintain test readability.
-        *   Built from pydantic's BaseModel as opposed to a vanilla data class
-            as it's already a dependency of the project and allows for
-            annotating attributes with clear descriptions while referencing
-            them in code with more succinct variable names.
         *   Its extensions should define a __repr__ function that will be
-            retrieved by pytest via the `pytest_id` property when `idfn` is
-            called on its instances.
+            retrieved by pytest when :func:`tests.idfn()` is called on its instances.
+        *   Built from pydantic's BaseModel as opposed to a straight dataclass
+            since it will enforce type safety, enables annotating attributes
+            with clear descriptions while referencing them in code with
+            succinct variable names, and is already a project dependency.
 
     """
 
@@ -65,9 +58,7 @@ def idfn(val: BaseTest):
     return val.pytest_id
 
 
-# ========================
 # -- UTILITY FUNCTIONS ---
-# ========================
 
 def get_validation_file(path1: Path, sub_dir: str = 'expected_outcomes') -> Path:
     """Returns a path for the validation file given a test file path."""

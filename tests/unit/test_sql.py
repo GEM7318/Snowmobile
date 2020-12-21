@@ -15,15 +15,17 @@ from tests import (
 
 from snowmobile.core import Configuration
 
-INPUT_JSON = 'mod_sql_unit_input.json'
-VALIDATION_SQL = 'mod_sql_unit_validation.sql'
+from tests.unit import (
+    INPUT_JSON,
+    VALIDATION_SQL
+)
 
 
 # noinspection PyProtectedMember
 class SQLUnit(BaseTest):
-    """Represents a unit test instance for a method of :class:`snowmobile.SQL`."""
+    """Represents a unit test instance for a method of :class:`snowmobile.SQL`.
+    """
 
-    # -- START: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -----------------------
     base: Any = Field(
         description='An instantiated instance of the SQL class.',
     )
@@ -48,7 +50,8 @@ class SQLUnit(BaseTest):
     value_expected_id: int = Field(
         description="The integer ID within VALIDATION_SQL of the expected return value."
     )
-    # -- END: ATTRIBUTES FOR A SPECIFIC TEST INSTANCE -------------------------
+
+    # -- END: ATTRIBUTES FOR TEST INSTANCE ------------------------------------
 
     cfg: Configuration = Field(
         description="snowmobile.Configuration object for use of static methods."
@@ -56,6 +59,7 @@ class SQLUnit(BaseTest):
 
     # noinspection PyProtectedMember
     def __init__(self, **data):
+        """Set remaining attributes with static configuration methods."""
         super().__init__(**data)
 
         # set the state on the SQL class for this test
@@ -69,7 +73,7 @@ class SQLUnit(BaseTest):
         self.value_returned = method_to_run(**self.method_args)
 
     def __repr__(self) -> str:
-        """Full __repr__ string to reproduce the object under test."""
+        """Valid __repr__ to fully reproduce the object under test."""
         init_args = (
             ', '.join(f"{k}='{v}'" for k, v in self.base_attrs.items())
             if self.base_attrs else ''
@@ -80,9 +84,6 @@ class SQLUnit(BaseTest):
         )
         return f"sql({init_args}).{self.method}({method_args})  # {self.value_expected_id}"
 
-    class Config:
-        arbitrary_types_allowed = True
-
 
 # noinspection PyProtectedMember
 def setup_for_sql_module_unit_tests():
@@ -91,6 +92,7 @@ def setup_for_sql_module_unit_tests():
     import snowmobile
 
     try:
+
         # importing test inputs from .json
         with open(FILES[INPUT_JSON], 'r') as r:
             statement_test_cases_as_dict = {
@@ -100,6 +102,7 @@ def setup_for_sql_module_unit_tests():
         statements_to_validate_against: Dict[int, snowmobile.Statement] = (
             script(script_name=VALIDATION_SQL).statements
         )
+
     except (IOError, TypeError) as e:
         raise e
 
@@ -118,26 +121,30 @@ def setup_for_sql_module_unit_tests():
 
     for test_idx in shared_unit_test_ids:
 
-        arguments_to_instantiate_test_case_with = \
-            statement_test_cases_as_dict[test_idx]        # to instantiate test with
-        str_of_sql_to_validate_test_with = \
-            statements_to_validate_against[test_idx].sql  # required value for test to pass
+        # to instantiate test with
+        arguments_to_instantiate_test_case_with = statement_test_cases_as_dict[test_idx]
+
+        # required value for test to pass
+        str_of_sql_to_validate_test_with = statements_to_validate_against[test_idx].sql
 
         yield SQLUnit(
-            base=sn.sql._reset(),
             cfg=sn.cfg,
+
+            base=sn.sql._reset(),
+
+            **arguments_to_instantiate_test_case_with,
+
             value_expected=str_of_sql_to_validate_test_with,
             value_expected_id=test_idx,
-            **arguments_to_instantiate_test_case_with
         )
 
 
-@pytest.mark.sql
 @pytest.mark.parametrize(
     "sql_unit_test",
     setup_for_sql_module_unit_tests(),
     ids=idfn
 )
+@pytest.mark.sql
 def test_sql_module_unit_tests(sql_unit_test):
     # TODO: Refactor this such that the stripping isn't necessary
     from snowmobile.core.utils.parsing import strip

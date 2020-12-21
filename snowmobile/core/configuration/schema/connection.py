@@ -2,6 +2,7 @@
 Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
+
 from typing import Dict
 
 from pydantic import Field
@@ -9,6 +10,7 @@ from pydantic import Field
 from .base import Base
 
 
+# TODO: type hints/updated docstrings
 # noinspection PyUnresolvedReferences
 class Credentials(Base):
     """Represents a set of `Snowflake` credentials.

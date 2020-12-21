@@ -9,7 +9,7 @@ __all__ = [
     # fmt: on
 ]
 from .base import Base
-from .connection import Connection, Credentials
-from .script import Script, Pattern, Marker, Markdown, QA
-from .loading import Loading
 from .combined import Snowmobile
+from .connection import Connection, Credentials
+from .loading import Loading
+from .script import QA, Markdown, Marker, Pattern, Script

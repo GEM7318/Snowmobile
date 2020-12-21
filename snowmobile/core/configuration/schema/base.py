@@ -4,10 +4,11 @@ configuration model are derived (i.e. ``snowmobile.toml`` and
 ``snowmobile_backend.toml``.)
 """
 from __future__ import annotations
+
 import json
-from pathlib import Path, WindowsPath
 from collections.abc import Mapping
-from typing import Dict, Set, Any, Callable
+from pathlib import Path, WindowsPath
+from typing import Any, Callable, Dict, Set
 
 from pydantic import BaseModel, Extra
 from pydantic.json import pydantic_encoder

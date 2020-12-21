@@ -7,19 +7,20 @@ Module handles:
 """
 from __future__ import annotations
 
-import shutil
 import json
+import shutil
 from pathlib import Path
-from typing import Dict, Union, Any, Callable
 from types import MethodType
+from typing import Any, Callable, Dict, Union
 
 import toml
 from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Snowmobile, Base
+from .schema import Base, Snowmobile
 
+# TODO: Add to snowmobile.core __init__.py
 # ====================================
 # Mapping to package data directory
 HERE = Path(__file__).absolute()
@@ -53,7 +54,7 @@ class Cache(FileCache):
             self.pop(item_name)
         return self
 
-    def as_path(self, item_name: str):
+    def as_path(self, item_name: str) -> Path:
         """Utility to return `item_name` as a :class:`Path` object."""
         return Path(self.get(item_name)) if self.get(item_name) else None
 

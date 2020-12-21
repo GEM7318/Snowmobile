@@ -2,6 +2,7 @@
 Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Dict, List
 

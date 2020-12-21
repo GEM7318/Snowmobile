@@ -2,6 +2,7 @@
 Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
+
 from typing import Dict
 
 from pydantic import Field

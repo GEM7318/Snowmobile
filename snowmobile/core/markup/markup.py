@@ -47,12 +47,12 @@ Header-levels and formatting of tagged information is configured in the
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Tuple, Union, List
+from typing import Dict, List, Tuple, Union
 
-from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.configuration import Configuration
+from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.connector import Connector
-from snowmobile.core.statement import Statement, Diff, Empty
+from snowmobile.core.statement import Diff, Empty, Statement
 from snowmobile.core.utils import Console
 
 from .section import Section

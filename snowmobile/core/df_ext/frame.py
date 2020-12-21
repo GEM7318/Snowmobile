@@ -5,7 +5,7 @@ Light extensions to pd.DataFrame object.
 import datetime
 import itertools
 import re
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 

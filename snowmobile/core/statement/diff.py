@@ -4,7 +4,7 @@ associated with all tags that have :attr:`Tag.Name.anchor`='qa-diff'.
 """
 from __future__ import annotations
 
-from typing import Dict, List, Any, Set
+from typing import Any, Dict, List, Set
 
 import pandas as pd
 
