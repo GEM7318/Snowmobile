@@ -66,6 +66,7 @@ class Cache(FileCache):
             self.pop(k)
 
     def contains(self, item: Union[List, str] = None) -> bool:
+        """Checks if an item or list of items exist in the cache."""
         if isinstance(item, str):
             return bool(self.get(item))
         return all(i in self.contents for i in item)
@@ -272,8 +273,8 @@ class Configuration(Snowmobile):
     def __json__(self, by_alias: bool = False, **kwargs):
         return self.json(by_alias=by_alias, **kwargs)
 
-    def __str__(self):  # pragma exclude
+    def __str__(self):
         return f"snowmobile.Configuration('{self.file_nm}')"
 
-    def __repr__(self):  # pragma exclude
+    def __repr__(self):
         return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"

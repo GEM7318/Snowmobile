@@ -148,7 +148,7 @@ def test_get_attrs_from_obj():
 
     # noinspection PyMissingOrEmptyDocstring
     class AnyClass:
-        """Example class with an attribute and a method."""
+        """Example class with an attribute, a method, and a property."""
         def __init__(self):
             self.any_attr = 1
 

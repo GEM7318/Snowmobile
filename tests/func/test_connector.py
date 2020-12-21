@@ -103,5 +103,22 @@ def test_invalid_sql_passed_to_ex_raises_exception(sn):
 
 
 @pytest.mark.connector
+def test_invalid_credentials_alias_raises_exception(sn):
+    """Tests that an invalid credentials name creds raises KeyError."""
+    with pytest.raises(KeyError):
+        sn.cfg.connection.get(creds='name_for_a_nonexistent_set_of_creds')
+
+
+@pytest.mark.connector
+def test_masked_dunder_str_method_for_sets_of_credentials(sn):
+    """Verifies that the __str()__ method for a set of credentials is masked."""
+    assert all(
+        not line.split('=')[-1].strip("'").replace('*', '')
+        for line in str(sn.cfg.connection.credentials).split('\n')
+        if str(line).startswith('  ')
+    )
+
+
+@pytest.mark.connector
 def test_dunder_repr_is_valid(sn):
     assert sn.__repr__()

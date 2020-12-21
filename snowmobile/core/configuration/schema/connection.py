@@ -162,8 +162,8 @@ class Connection(Base):
         """Returns current credentials."""
         return self.get(self.creds)
 
-    def __getitem__(self, item):
-        try:
-            return self.credentials[item]
-        except KeyError as e:
-            raise KeyError(e)
+    # def __getitem__(self, item):
+    #     try:
+    #         return self.credentials[item]
+    #     except KeyError as e:
+    #         raise KeyError(e)
