@@ -57,7 +57,7 @@ class Config:
             return attrs
 
     def serialize(self, as_dict: Dict) -> Dict:
-        """Recursively applies `json_encoder` functions to all items of a dict."""
+        """Recursively applies `json_encoder` functions to all items of a dictionary."""
         serializable = as_dict
         for typ, serialize_func in self.json_encoders.items():
             serializable = self.apply_map_by_type(

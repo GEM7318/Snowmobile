@@ -3,7 +3,7 @@ branch=True
 source=snowmobile
 
 [report]
-fail_under = 20
+fail_under = 85
 show_missing = True
 omit = tests/*
 exclude_lines =
