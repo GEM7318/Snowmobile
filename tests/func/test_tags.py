@@ -42,3 +42,31 @@ def test_tag_from_stripped_line(sn, tags):
     """Testing tag generation from sql statements in no_tags.sql."""
     tag_generated, tag_expected = tags
     assert tag_generated == tag_expected
+
+
+@pytest.fixture()
+def a_sample_tag(sn):
+    """Testing __setattr__ on Tag.."""
+    from snowmobile.core.statement.tag import Tag
+
+    # noinspection SqlResolve
+    return Tag(
+        configuration=sn.cfg,
+        nm_pr='test-tag',
+        first_keyword='select',
+        sql='select * from sample_table',
+        index=1,
+    )
+
+
+def test_set_item_on_tag(a_sample_tag):
+    """Testing __setattr__ and __bool__ on Tag.."""
+    a_sample_tag.is_included = False
+    a_sample_tag.__setitem__('is_included', False)
+    assert not a_sample_tag.is_included
+    assert not a_sample_tag
+
+
+def test_repr_on_tag(a_sample_tag):
+    """Testing __repr__ on Tag.."""
+    assert a_sample_tag.__repr__() == "statement.Tag(nm='test-tag')"

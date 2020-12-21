@@ -140,11 +140,10 @@ class Tag:
 
         self.obj_pr = self.part_description[0] if self.is_struct_desc else str()
         self.desc_pr = self.part_description[2] if self.is_struct_desc else str()
-
         self.anchor_pr = f"{self.kw_pr}{self.patt.core.sep_keyword}{self.obj_pr}"
 
         # ---------------------------------------------------------------------
-        self.first_line = (sql or str()).split("\n")[0].lower().strip()
+        self.first_line = (sql or str()).strip('\n').split("\n")[0].lower().strip()
         self.incl_if_exists = "if exists" in self.first_line
         self.first_keyword = first_keyword or str()
         self.first_line_remainder = self.first_line_sans_keyword(
@@ -248,8 +247,8 @@ class Tag:
             return f"{self.cfg.DEF_DESC}{idx_str}"
 
         partitioned = [p for p in self.first_line_remainder.partition(named_obj) if p]
-        if len(partitioned) < 2:
-            return str()
+        # if len(partitioned) < 2:
+        #     return str()
 
         partitioned_rhs = [p for p in partitioned[-1].split(" ") if p]
         idx_to_use = -1 if self.incl_if_exists else 0
