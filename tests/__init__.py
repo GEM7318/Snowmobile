@@ -11,7 +11,10 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-# -- CONSTANT VARIABLES -------------------------------------------------------
+
+# =========================
+# -- CONSTANT VARIABLES ---
+# =========================
 
 CREDS = 'snowmobile_testing'
 CONFIG_FILE_NM = 'snowmobile_testing.toml'
@@ -20,7 +23,10 @@ TESTS_ROOT = Path(__file__).absolute().parent
 FILES = {p.name: p for p in TESTS_ROOT.rglob('*') if p.is_file()}
 
 
-# -- BASE TEST CLASS ----------------------------------------------------------
+# =========================
+# -- BASE TEST CLASS ------
+# =========================
+
 
 class BaseTest(BaseModel):
     """Base object for snowmobile test classes.
@@ -59,7 +65,9 @@ def idfn(val: BaseTest):
     return val.pytest_id
 
 
-# -- UTILITY FUNCTIONS --------------------------------------------------------
+# ========================
+# -- UTILITY FUNCTIONS ---
+# ========================
 
 def get_validation_file(path1: Path, sub_dir: str = 'expected_outcomes') -> Path:
     """Returns a path for the validation file given a test file path."""
