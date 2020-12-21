@@ -117,8 +117,6 @@ class Statement:
         self.patterns: Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
-        self.outcome: int = int()
-
         self.start_time: int = int()
         self.end_time: int = int()
         self.execution_time: int = int()
@@ -328,9 +326,8 @@ class Statement:
         self.tag.is_included = True
         return self
 
-    # TODO: This should just become 'outcome'
     @property
-    def _outcome_latest(self):
+    def outcome(self):
         """Returns the numeric :attr:`outcome` value based on current context.
 
 
@@ -345,12 +342,12 @@ class Statement:
         """
         # if not self:  # statement is not included within the current context
         #     return -1
-        if not self.is_derived and not self.outcome:  # generic completed
+        if not self.is_derived and not self._outcome:  # generic completed
             return 2
-        elif not self.outcome:  # setting outcome for QA statements
+        elif not self._outcome:  # setting outcome for QA statements
             return 3 if self._outcome else 1
         else:  # keeping value of '-2' (i.e. error encountered)
-            return self.outcome
+            return self._outcome
 
     def _validate_qa(self, **kwargs):
         """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""
@@ -380,7 +377,6 @@ class Statement:
         the statement and alter the value of :attr:`_outcome`.
 
         """
-        self.outcome = self._outcome_latest
         self._validate_qa(**kwargs)
 
     def process(self):
@@ -425,13 +421,13 @@ class Statement:
             yield self
 
         except (ProgrammingError, pdDataBaseError, DatabaseError):
-            self.outcome = -2
+            self._outcome = -2
 
         finally:
 
             self.update(**kwargs)
 
-            if self.outcome == -2:
+            if self._outcome == -2:
                 self._log_exception(
                     e=self.sn.error,
                     _id=-2,
