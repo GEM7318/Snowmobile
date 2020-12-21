@@ -6,6 +6,9 @@ This script stores the test cases for `snowmobile.Markup`.
 
 - **Notes**
 	- This is just a sample table for the other test statements to run on.
+* last-execution
+	* **outcome**: _completed_
+	* **time**: _2s_
 
 ```sql
 create or replace temp table sample_table as
@@ -13,22 +16,19 @@ create or replace temp table sample_table as
 union
 	select 2 as dummy_dim, 1 as dummy_exclude, 1 as dummy_col;
 ```
-* last-execution
-	* **outcome**: _completed_
-	* **time**: _2s_
 
 # intra-statement-marker
 * **Description**: _This is a sample intra statement marker._
 
 ## (2) select-data~sample select statement
+* last-execution
+	* **outcome**: _completed_
+	* **time**: _0s_
 * **Description**: _This is a sample select statement, including results_
 
 ```sql
 select * from sample_table;
 ```
-* last-execution
-	* **outcome**: _completed_
-	* **time**: _0s_
 
 Results
 |   dummy_dim |   dummy_exclude |   dummy_col |
@@ -37,6 +37,9 @@ Results
 |           2 |               1 |           1 |
 
 ## (3) qa-empty~an expected success
+* last-execution
+	* **outcome**: _passed_
+	* **time**: _0s_
 
 ```sql
 select
@@ -46,11 +49,11 @@ from sample_table a
 group by 1
 having count(*) <> 1;
 ```
-* last-execution
-	* **outcome**: _passed_
-	* **time**: _0s_
 
 ## (4) qa-empty~an expected failure
+* last-execution
+	* **outcome**: _failed_
+	* **time**: _0s_
 
 ```sql
 select
@@ -60,9 +63,6 @@ from (select * from sample_table union all select * from sample_table)a
 group by 1
 having count(*) <> 1;
 ```
-* last-execution
-	* **outcome**: _failed_
-	* **time**: _0s_
 
 Results
 |   dummy_dim |   count(a.*) |
