@@ -6,68 +6,47 @@ directory structure/approach to this part of the testing.
 """
 import pytest
 
+from typing import Dict
+
 from tests import (
     script as get_script,
     contents_are_identical,
     get_validation_file,
 )
 
+import snowmobile
+
 
 # noinspection PyProtectedMember
-def _export_all_markup_test_cases():
-    """Exports a set of .sql and .md files for comparison to a validation set.
+def export_markup_combinations_from_script(
+    script: snowmobile.Script, run: bool, run_args: Dict = None
+):
+    """Exports different versions of a `Script` object given sets of args.
 
-    ..note:
-        *   This method instantiates several script objects and exports
-            different mutations of that object to the local file system.
-        *   It returns a list of the paths that were exported which is passed
-            to :meth:`get_validation_file()` to retrieve the path to the file
-            it is supposed to be validated against.
-        *   The pair of paths is then passed to :meth:`contents_are_identical()`,
-            the return value of which (bool) is used for the assertion under test.
+    Args:
+        script (Script):
+            Script object under test.
+        run (bool):
+            Indicates whether or not to run the script before exporting.
+        run_args (dict):
+            Arguments to pass to `script.run()` if `run=True`
 
-    ..warning:
-        *   In the body of the below method, a private attribute of each
-            statement within the script is modified.
-        *   The modification made is adding the `execution_time_txt` to
-            a list of attributes that will be excluded from any exports; this
-            is done so that small changes in the execution time across test
-            runs not cause failures due to the test set not matching the
-            validation set.
+    Returns (List[Path]):
+        A list of the paths that were exported which is used within the body
+        of the test method to fetch the validation file and assert their equality.
 
-    The data structures below mirror those that the validation instances were
-    created with, their contents are as follows:
-
-        script_dtl (List[Tuple[str, bool, Dict]]):
-            A list of tuples containing:
-                1.  The script name under test
-                        *   Used to locate the file path from `/tests/data`
-                2.  A boolean indicator of whether or not to run the script
-                        *   This is based on whether or not the script object
-                            from which the validation files were exported was
-                            run prior to exporting or not.
-                3.  A dictionary of kwargs for script.run()
-                        *   To be provided in instances when (2) is `True` in
-                            order for the script to reach the intended state
-                            while running; this most often contains a single
-                            argument `silence_qa=True` so assertion errors
-                            won't be raised when intentional failures are hit.
-        args (List[Dict]):
-            A list of dictionaries containing:
-                1.  A set of kwargs for markup()
-                        *   Most often alternate file prefixes.
-                2.  A set of kwargs from markup.export()
-                        *   Most often `markdown_only=True` or `sql_only=True`.
+    export_args (explanation)
+        *   config:
+                Arguments to pass to markup.config() or to the markup object as
+                a callable; i.e. markup()(**args) as opposed to
+                markup.config(**args)
+        *   export:
+                Arguments to pass to markup.export() to modify the contents
+                that are exported and the target file name.
 
     """
-    # (1)
-    script_dtl = [
-        ('markup_no_results.sql', False, {}),
-        ('markup_with_results.sql', True, {'on_failure': 'c'}),
-        ('markup_template_anchor.sql', False, {})
-    ]
-    # (2)
-    args = [
+
+    export_args = [
         {
             'config': {'alt_file_prefix': '(default) '},
             'export': {}
@@ -89,61 +68,76 @@ def _export_all_markup_test_cases():
             'export': {'sql_only': True}
         },
     ]
-    try:
-        export_dtl = []
-        for s in script_dtl:
-            script_nm, run, run_kwargs = s
-            script = get_script(script_name=script_nm)
 
-            if run:
-                script.run(**run_kwargs)
-                for i, st in script.executed.items():
-                    st._exclude_attrs.append('execution_time_txt')
-
-            for arg in args:
-                doc = script.doc()(**arg['config'])
-                doc.export(**arg['export'])
-
-                for p in doc.exported:
-                    if p.exists():
-                        export_dtl.append(
-                            {'path': p, 'args': arg}
-                        )
-
-        return export_dtl
-    except Exception as e:
-        raise e
+    if run:
+        script.run(**run_args or dict())
+        for i, st in script.executed.items():  # excluding execution time from unit test
+            st._exclude_attrs.append('execution_time_txt')
+    file_paths = []
+    for arg in export_args:
+        markup = script.doc()(**arg['config'])
+        markup.export(**arg['export'])
+        for p in markup.exported:
+            file_paths.append(p)
+    return file_paths
 
 
-def _setup_for_markup_test_cases():
-    """Exports test cases, locates validation paths, generates IDs."""
-    # export test cases
-    export_dtl = _export_all_markup_test_cases()
-    # list of tuples containing (test path, validation path)
-    test_cases = [
-        (a['path'], get_validation_file(a['path']))
-        for a in export_dtl
-    ]
-    # list of strings for pytest IDs
-    ids = [
-        f"File='{a['path'].name}', Args={a['args']}"
-        for a in export_dtl
-    ]
+def test_markup_with_results(sn):
+    """Unit test for markup export including results."""
+    script = get_script('markup_with_results.sql')
 
-    return ids, test_cases
-
-
-ids, test_cases = _setup_for_markup_test_cases()
-
-
-@pytest.mark.markup
-@pytest.mark.parametrize(
-    "markups", test_cases, ids=ids
-)
-def test_markup_exports(markups):
-    """Testing primary functionality of markup/export functionality."""
-    path_to_test_export, path_to_validation_export = markups
-    assert contents_are_identical(
-        path1=path_to_test_export,
-        path2=path_to_validation_export
+    exported_paths_for_current_test = export_markup_combinations_from_script(
+        script=script,
+        run=True,
+        run_args={'on_failure': 'c'}
     )
+    paths_under_test_mapped_to_validation_paths = {
+        p: get_validation_file(path1=p) for p in exported_paths_for_current_test
+    }
+
+    for p_under_test, p_validation in paths_under_test_mapped_to_validation_paths.items():
+        assert contents_are_identical(
+            path1=p_under_test,
+            path2=p_validation
+        )
+
+
+def test_markup_no_results(sn):
+    """Unit test for markup export including results."""
+    script = get_script('markup_no_results.sql')
+
+    exported_paths_for_current_test = export_markup_combinations_from_script(
+        script=script,
+        run=False,
+        run_args={}
+    )
+    paths_under_test_mapped_to_validation_paths = {
+        p: get_validation_file(path1=p) for p in exported_paths_for_current_test
+    }
+
+    for p_under_test, p_validation in paths_under_test_mapped_to_validation_paths.items():
+        assert contents_are_identical(
+            path1=p_under_test,
+            path2=p_validation
+        )
+
+
+def test_markup_using_template_anchor_attributes(sn):
+    """Unit test for markup export using an __anchor__ that is included in
+    the `script.markdown.attributes.markers` section of ``snowmobile.toml``.."""
+    script = get_script('markup_template_anchor.sql')
+
+    exported_paths_for_current_test = export_markup_combinations_from_script(
+        script=script,
+        run=False,
+        run_args={}
+    )
+    paths_under_test_mapped_to_validation_paths = {
+        p: get_validation_file(path1=p) for p in exported_paths_for_current_test
+    }
+
+    for p_under_test, p_validation in paths_under_test_mapped_to_validation_paths.items():
+        assert contents_are_identical(
+            path1=p_under_test,
+            path2=p_validation
+        )

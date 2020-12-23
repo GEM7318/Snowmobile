@@ -13,12 +13,8 @@ __all__ = [
     "StatementPostProcessingError",
     "StatementInternalError",
 ]
+from .errors import QAFailure, StatementInternalError, StatementPostProcessingError
 from .qa import Diff, Empty, QADiffFailure, QAEmptyFailure
-from .errors import (
-    QAFailure,
-    StatementPostProcessingError,
-    StatementInternalError,
-)
-from .statement import Statement
 from .scope import Scope
+from .statement import Statement
 from .tag import Tag

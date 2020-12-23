@@ -11,15 +11,14 @@ import json
 import shutil
 from pathlib import Path
 from types import MethodType
-from typing import Any, Callable, Dict, Union, List
+from typing import Any, Callable, Dict, List, Union
 
 import toml
 from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Base, Snowmobile, Wildcard, Markdown, Attributes
-
+from .schema import Attributes, Base, Markdown, Snowmobile, Wildcard
 
 # ====================================
 HERE = Path(__file__).absolute()

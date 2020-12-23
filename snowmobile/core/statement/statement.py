@@ -5,18 +5,18 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Any, ContextManager, Dict, Set, Union, Callable
+from typing import Any, Callable, ContextManager, Dict, Set, Union
 
 import pandas as pd
 import sqlparse
 from IPython.core.display import Markdown, display
-
-from snowflake.connector.errors import ProgrammingError, DatabaseError
 from pandas.io.sql import DatabaseError as pdDataBaseError
+from snowflake.connector.errors import DatabaseError, ProgrammingError
 
+from snowmobile.core import Connector
 from snowmobile.core.configuration import Pattern
 from snowmobile.core.markup.section import Section
-from snowmobile.core import Connector
+
 from .errors import StatementInternalError
 from .tag import Tag
 
@@ -404,7 +404,6 @@ class Statement:
         on_exception: str = None,
         on_failure: str = None,
         tmstmp: int = None,
-        **kwargs,
     ) -> Statement:
         """Run method for all statement objects.
 
@@ -417,13 +416,24 @@ class Statement:
             render (bool):
                 Render the sql executed as markdown.
             on_error (str):
-                *   `e`: exception
-                *   `c`: continue
+                Behavior if an execution/database error is encountered
+                    * `None`: default behavior, exception will be raised
+                    * `c`: continue with execution
+            on_exception (str):
+                Behavior if an exception is raised in the **post-processing**
+                of results from a derived class of :class:`Statement` (
+                :class:`Empty` and :class:`Diff`).
+                    * `None`: default behavior, exception will be raised
+                    * `c`: continue with execution
+            on_failure (str):
+                Behavior if no error is encountered in execution or post-processing
+                but the result of the post-processing has turned the statement's
+                :attr:`outcome` attribute to False, indicating the results of
+                the statement have failed validation.
+                    * `None`: default behavior, exception will be raised
+                    * `c`: continue with execution
             tmstmp (str):
                 Unix timestamp of the current context initialization.
-            **kwargs:
-                Keyword arguments for :meth:`update()` and compatibility with
-                derived classes.
 
         Returns (Statement):
             Statement object post-executing query.

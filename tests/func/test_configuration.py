@@ -134,7 +134,7 @@ def test_finds_a_valid_configuration_file():
 
 @pytest.mark.configuration
 def test_configuration_json_serialization():
-    """"""
+    """Testing serialization methods of configuration objects."""
     from snowmobile import Configuration
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
 
@@ -160,9 +160,10 @@ def test_get_attrs_from_obj():
             return self.any_callable_method() + 1
 
     from snowmobile import Configuration
-    any_instance_of_any_class = AnyClass()
 
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
+
+    any_instance_of_any_class = AnyClass()
     attributes = cfg.attrs_from_obj(obj=any_instance_of_any_class)
     methods = cfg.methods_from_obj(obj=any_instance_of_any_class)
 

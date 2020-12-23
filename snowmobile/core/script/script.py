@@ -12,13 +12,13 @@ script is parsed.
 from __future__ import annotations
 
 import collections
+import time
 from collections import Counter
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, ContextManager, Dict, List, Optional, Set, Tuple, Union
 
 import sqlparse
-import time
 
 from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
@@ -648,6 +648,7 @@ class Script:
         self, idx: int, counter: Counter, is_marker: bool = False, as_int: bool = False
     ) -> int:
         """Generates an index (int) taking into account statements and markers."""
+        # sourcery skip: simplify-constant-sum
         index = idx + (
             sum(v for k, v in counter.items() if k <= idx)
             if not is_marker

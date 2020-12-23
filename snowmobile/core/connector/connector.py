@@ -5,7 +5,7 @@ SnowflakeConnection for query/statement execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Union, Dict, Any, Tuple
+from typing import Any, Dict, Tuple, Union
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError

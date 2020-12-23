@@ -1,8 +1,8 @@
 """
 Base Snowmobile exception class.
 """
-from typing import Dict, Optional
 import time
+from typing import Dict, Optional
 
 
 class Error(Exception):

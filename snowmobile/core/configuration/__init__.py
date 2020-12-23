@@ -12,19 +12,15 @@ __all__ = [
     "DDL_DEFAULT_PATH",
     "DIR_PKG_DATA",
 ]
-from .configuration import (
-    Configuration,
-    DIR_PKG_DATA,
-    DDL_DEFAULT_PATH,
-)
+from .configuration import DDL_DEFAULT_PATH, DIR_PKG_DATA, Configuration
 from .schema import (
-    Snowmobile,
-    Credentials,
-    Connection,
-    Script,
-    Pattern,
-    Marker,
-    Markdown,
     QA,
+    Connection,
+    Credentials,
     Loading,
+    Markdown,
+    Marker,
+    Pattern,
+    Script,
+    Snowmobile,
 )

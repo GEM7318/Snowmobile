@@ -49,7 +49,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-from snowmobile.core.configuration import Configuration, DIR_PKG_DATA
+from snowmobile.core.configuration import DIR_PKG_DATA, Configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.connector import Connector
 from snowmobile.core.statement import Diff, Empty, Statement

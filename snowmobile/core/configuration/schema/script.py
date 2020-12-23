@@ -551,14 +551,18 @@ class Script(Base):
     def split_sub_blocks(self, s: sqlparse.sql.Statement) -> Tuple[List, str]:
         """Breaks apart blocks of arguments within a :class:`sqlparse.sql.Statement`.
 
-        Explanation:
+        Note:
             *   :meth:`sqlparse.parsestream()` returns a list of
-                :class:`sqlparse.sql.Statement` objects which includes all comments
-                after the end of the prior statement.
-            *   This method finds all blocks of arguments in the space between the
-                end of the last statement and the start of the current one, then
-                traverses the other blocks looking for __marker__ tags so that
-                they can be exported in the appropriate order to a markdown file.
+                :class:`sqlparse.sql.Statement` objects, each of which includes
+                all text (comments) between the last character of the prior
+                statement and the first character of the current one.
+            *   :meth:`split_sub_blocks()` traverses that space and identifies
+                all spans of text wrapped in `open` (``/*-``) and `close`
+                (``-*/``) tags, storing their index positions relative to the
+                other statements & markers.
+            *   These are stored as :class:`snowmobile.core.Script` attributes
+                as statements are parsed and so that they can be exported in
+                the appropriate order to a markdown file.
 
         Args:
             s (sqlparse.sql.Statement):

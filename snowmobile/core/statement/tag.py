@@ -4,12 +4,10 @@ Base class for all :class:`Statement` objects.
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Set, Union
+from typing import Dict, Set, Union
 
-from snowmobile.core.configuration import (
-    Configuration,
-    Pattern,
-)
+from snowmobile.core.configuration import Configuration, Pattern
+
 from .scope import Scope
 
 

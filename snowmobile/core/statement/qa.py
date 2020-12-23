@@ -9,9 +9,10 @@ from typing import Any, Dict, List, Set
 import pandas as pd
 
 from snowmobile.core import Connector
-from .statement import Statement
-from .errors import StatementPostProcessingError, QAEmptyFailure, QADiffFailure
 from snowmobile.core.df_ext.frame import Frame
+
+from .errors import QADiffFailure, QAEmptyFailure, StatementPostProcessingError
+from .statement import Statement
 
 
 class QA(Statement):
@@ -221,7 +222,7 @@ class Diff(QA):
         if not self.compare_cols:
             self._exception_collector(
                 e=StatementPostProcessingError(
-                    msg=(f"Arguments provided don't result in any comparison columns.")
+                    msg=f"Arguments provided don't result in any comparison columns."
                 ),
                 _id=-1,
             )

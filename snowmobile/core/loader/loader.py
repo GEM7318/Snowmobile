@@ -1,5 +1,5 @@
 """
-Module handles flexible loading of data from a local DataFrame into a table.
+Flexible loading of data from a local DataFrame into a table.
 """
 from __future__ import annotations
 
@@ -11,11 +11,7 @@ from typing import Dict, List, Union
 
 import pandas as pd
 
-from snowmobile.core import (
-    Connector,
-    Script,
-    SQL,
-)
+from snowmobile.core import SQL, Connector, Script
 from snowmobile.core.configuration import DDL_DEFAULT_PATH
 
 

@@ -63,7 +63,7 @@ def test_qa_empty_failures(setup_for_qa_statement_tests):
         incl_anchor=['qa-empty'], incl_desc=['.*expected failure']
     ) as s:
         s.run(on_failure='c')                    # SILENCING QA FAILURES
-        for s2 in s.executed.values():           # ..note: Exception tests below
+        for s2 in s.executed.values():
             assert not s2.outcome                # NOT outcome bool
             assert s2.outcome_txt() == 'failed'  # 'failed' outcome text
             assert s2.errors                     # errors encountered
@@ -78,11 +78,11 @@ def test_qa_diff_failures(setup_for_qa_statement_tests):
     with script.filter(
         incl_anchor=['qa-diff'], incl_desc=['.*expected failure']
     ) as s:
-        s.run(on_failure='c')                    # !! SILENCING QA FAILURES !!
+        s.run(on_failure='c')                    # SILENCING QA FAILURES
         for s2 in s.executed.values():
             assert s2.outcome                    # NOT outcome bool
             assert s2.outcome_txt() == 'failed'  # 'failed' outcome text
-            assert s2.errors                 # no errors encountered
+            assert s2.errors                     # errors encountered
 
 
 @pytest.mark.exceptions
@@ -100,9 +100,9 @@ def test_qa_empty_failure_exceptions(setup_for_qa_statement_tests):
             s.run()         # verify with `script.run()`
         for i in s.statements:
             with pytest.raises(QAEmptyFailure):
-                s.run(i)    # verify same when calling `script.run()` on each statement
+                s.run(i)    # verify when manually calling `script.run()` on each statement
             with pytest.raises(QAEmptyFailure):
-                s(i).run()  # verify with each statement's `.run()` method
+                s(i).run()  # verify when calling each individual statement's `.run()` method
 
 
 @pytest.mark.exceptions

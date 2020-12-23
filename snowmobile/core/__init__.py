@@ -18,12 +18,13 @@ __all__ = [
     "utils",
     "errors",
 ]
+from snowmobile.core import errors
+
 from .configuration import Configuration
 from .connector import Connect, Connector
 from .markup import Markup, Section
 from .sql import SQL
-from .statement import Statement, Diff, Empty
-from snowmobile.core import errors
+from .statement import Diff, Empty, Statement
 
 from .script import Script  # isort:skip
 from .loader import Loader  # isort:skip

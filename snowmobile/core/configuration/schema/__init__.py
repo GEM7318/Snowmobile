@@ -19,4 +19,4 @@ from .base import Base
 from .combined import Snowmobile
 from .connection import Connection, Credentials
 from .loading import Loading
-from .script import QA, Markdown, Marker, Pattern, Script, Wildcard, Attributes
+from .script import QA, Attributes, Markdown, Marker, Pattern, Script, Wildcard
