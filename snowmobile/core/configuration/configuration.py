@@ -18,7 +18,7 @@ from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Base, Snowmobile
+from .schema import Base, Snowmobile, Wildcard
 
 
 # ====================================
@@ -59,8 +59,7 @@ class Cache(FileCache):
         if isinstance(item, str):
             item = [item]
         to_clear = (
-            list(self) if not item
-            else set(self.contents).intersection(set(item))
+            list(self) if not item else set(self.contents).intersection(set(item))
         )
         for k in to_clear:
             self.pop(k)
@@ -159,7 +158,9 @@ class Configuration(Snowmobile):
                 if not cfg["external-file-locations"].get("ddl"):
                     cfg["external-file-locations"]["ddl"] = DDL_DEFAULT_PATH
                 if not cfg["external-file-locations"].get("backend-ext"):
-                    cfg["external-file-locations"]["backend-ext"] = EXTENSIONS_DEFAULT_PATH
+                    cfg["external-file-locations"][
+                        "backend-ext"
+                    ] = EXTENSIONS_DEFAULT_PATH
 
                 super().__init__(**cfg)
 
@@ -253,7 +254,7 @@ class Configuration(Snowmobile):
             for attr in self.SCOPE_ATTRIBUTES
         }
 
-    def scopes_from_kwargs(self, **kwargs) -> Dict:
+    def scopes_from_kwargs(self, only_populated: bool = False, **kwargs) -> Dict:
         """Turns filter arguments into a valid set of kwargs for :class:`Scope`.
 
         Returns dictionary of all combinations of 'arg' ("kw", "obj", "desc",
@@ -265,11 +266,19 @@ class Configuration(Snowmobile):
         for attr in self.scopes:
             attr_value = kwargs.get(attr) or set()
             scopes[attr] = attr_value
-        return scopes
+        return (
+            {k: v for k, v in scopes.items() if v} if only_populated
+            else scopes
+        )
 
     def scopes_from_tag(self, t: Any):
         """Generates list of keyword arguments to instantiate all scopes for a tag."""
-        return [{'base': vars(t)[k], 'arg': k} for k in self.SCOPE_ATTRIBUTES]
+        return [{"base": vars(t)[k], "arg": k} for k in self.SCOPE_ATTRIBUTES]
+
+    @property
+    def wildcards(self) -> Wildcard:
+        """patterns.Wildcard accessor."""
+        return self.script.patterns.wildcards
 
     def json(self, by_alias: bool = False, **kwargs):
         """Combined serialization method for pydantic attributes."""

@@ -127,9 +127,9 @@ class Marker(Base):
             self.attrs[k] = v
         return self
 
-    def _set_update(self):
-        """Returns grouped attributes if enabled."""
-        return {self.group: self.attrs} if self.group else self.attrs
+    # def _set_update(self):
+    #     """Returns grouped attributes if enabled."""
+    #     return {self.group: self.attrs} if self.group else self.attrs
 
     def split_attrs(self, attrs: Dict):
         shared = {k: v for k, v in attrs.items() if k in self.attrs}
@@ -141,7 +141,7 @@ class Marker(Base):
         self.raw = attrs.pop("raw-text")
         shared_attrs, new_attrs = self.split_attrs(attrs=attrs)
         self.attrs.update(shared_attrs)
-        self.attrs = self._set_update()
+        self.attrs = {self.group: self.attrs} if self.group else self.attrs
         self.add(attrs=new_attrs)
         return self
 
@@ -487,7 +487,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0]: span[1]]
+                i: sql[span[0] : span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:
@@ -626,7 +626,9 @@ class Script(Base):
         return parsed
 
     @staticmethod
-    def ensure_sqlparse(sql: Union[sqlparse.sql.Statement, str]) -> sqlparse.sql.Statement:
+    def ensure_sqlparse(
+        sql: Union[sqlparse.sql.Statement, str]
+    ) -> sqlparse.sql.Statement:
         """Accepts a string or a sqlparse.sql.Statement and returns a sqlparse.sql.Statement.
 
         Necessary in order to accommodate the dynamic addition of statements as
@@ -648,7 +650,8 @@ class Script(Base):
             return sql
 
         parsed = [
-            s for s in sqlparse.parsestream(stream=sql.strip().strip(';'))
+            s
+            for s in sqlparse.parsestream(stream=sql.strip().strip(";"))
             if not s.value.isspace()
         ]
         assert (

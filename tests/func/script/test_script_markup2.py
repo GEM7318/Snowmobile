@@ -7,6 +7,7 @@ directory structure/approach to this part of the testing.
 import pytest
 
 from tests import (
+    FILES,
     script as get_script,
     contents_are_identical,
     get_validation_file,

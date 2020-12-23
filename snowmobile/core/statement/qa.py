@@ -10,10 +10,70 @@ import pandas as pd
 
 from snowmobile.core import Connector
 from .statement import Statement
+from .errors import StatementPostProcessingError, QAEmptyFailure, QADiffFailure
 from snowmobile.core.df_ext.frame import Frame
 
 
-class Diff(Statement):
+class QA(Statement):
+    """Base class for QA statements."""
+
+    MSG = "object-specific exception message goes here."
+
+    def __init__(self, sn: Connector, **kwargs):
+        super().__init__(sn=sn, **kwargs)
+
+    def set_outcome(self):
+        """Updates ._outcome upon completion of processing invoked by .process().
+
+        """
+        # fmt: off
+        if self._outcome in [
+            -1,          # post-processing exception occurred
+            1,           # execution error occurred
+        ]:
+            return self  # then no modification necessary
+
+        # -- otherwise --
+        if self.outcome:  # passed QA check
+            self._outcome = -3
+        else:             # failed QA check
+            object_specific_exception = (
+                QAEmptyFailure if self.tag.anchor.lower() == 'qa-empty'
+                else QADiffFailure
+            )
+            self._exception(
+                e=object_specific_exception(
+                    nm=self.tag.nm,
+                    msg=self.MSG,
+                    idx=self.index,
+                    to_raise=True,
+                ),
+                _id=-2
+            )
+        # fmt: on
+
+        return self
+
+
+class Empty(QA):
+    """QA class for results expected to be empty."""
+
+    MSG = (
+        "a 'qa-empty' check did not pass its validation; this means that "
+        "a query you expected to return empty results returned a non-zero "
+        "number of records."
+    )
+
+    def __init__(self, sn: Connector, **kwargs):
+        super().__init__(sn=sn, **kwargs)
+
+    def process(self) -> QA:
+        """Over-ride method; checks if results are empty and updates outcome"""
+        self.outcome = self.results.empty
+        return self.set_outcome()
+
+
+class Diff(QA):
     """QA class for comparison of values within a table based on
     partitioning on a field.
 
@@ -51,6 +111,12 @@ class Diff(Statement):
             failure.
 
     """
+
+    MSG = (
+        "a 'qa-diff' check did not pass its validation; this means that "
+        "the difference in the values compared did not fall within the "
+        "specified threshold."
+    )
 
     def __init__(
         self, sn: Connector = None, **kwargs,
@@ -115,12 +181,14 @@ class Diff(Statement):
         self.ignore_patterns: List = (
             self.attrs_parsed.get("ignore-patterns", qa_cfg.ignore_patterns)
         )
-        self.relative_tolerance = (
-            self.attrs_parsed.get('relative-tolerance', qa_cfg.tolerance.relative)
+        self.relative_tolerance = self.attrs_parsed.get(
+            "relative-tolerance", qa_cfg.tolerance.relative
         )
         self.absolute_tolerance = (
-            self.attrs_parsed.get('absolute-tolerance', qa_cfg.tolerance.absolute)
-            if not self.relative_tolerance else 0
+            self.attrs_parsed.get("absolute-tolerance",
+                                  qa_cfg.tolerance.absolute)
+            if not self.relative_tolerance
+            else 0
         )
 
     def _idx(self) -> None:
@@ -129,13 +197,14 @@ class Diff(Statement):
             self.end_index_at, ignore_patterns=[self.partition_on]
         )
         if not self.idx_cols:
-            self._log_exception(
-                e=Exception(
-                    f"Arguments provided don't result in any index columns to join"
-                    f" DataFrame's partitions back together on."
+            self._exception(
+                e=StatementPostProcessingError(
+                    msg=(
+                        f"Arguments provided don't result in any index columns "
+                        f"on which to join DataFrame's partitions."
+                    )
                 ),
-                _id=-3,
-                _raise=True,
+                _id=-1,
             )
 
     def _drop(self) -> None:
@@ -151,12 +220,13 @@ class Diff(Statement):
             ignore_patterns=[self.partition_on, self.idx_cols, self.drop_cols],
         )
         if not self.compare_cols:
-            self._log_exception(
-                e=Exception(
-                    f"Arguments provided don't result in any comparison columns."
+            self._exception(
+                e=StatementPostProcessingError(
+                    msg=(
+                        f"Arguments provided don't result in any comparison columns."
+                    )
                 ),
-                _id=-3,
-                _raise=True,
+                _id=-1,
             )
 
     def split_cols(self) -> Diff:
@@ -177,28 +247,19 @@ class Diff(Statement):
             self._compare()
         except Exception:
             raise
+
         # fmt: off
         if self.partition_on not in list(self.results.columns):
-            self._log_exception(
-                e=Exception(
-                    f"Column `{self.partition_on}` not found in DataFrames columns."
+            self._exception(
+                e=StatementPostProcessingError(
+                    msg=(
+                        f"Column `{self.partition_on}` not found in DataFrames columns."
+                    )
                 ),
-                _id=-3,
-                _raise=True,
+                _id=-1,
             )
         # fmt: on
 
-        return self
-
-    def drop_ignored(self) -> Diff:
-        """Drops ignored columns from results."""
-        if self.drop_cols:
-            self.results.drop(columns=self.drop_cols, inplace=True)
-        return self
-
-    def set_index(self) -> Diff:
-        """Sets index columns before partitioning results."""
-        self.results.set_index(keys=self.idx_cols, inplace=True)
         return self
 
     @property
@@ -236,26 +297,47 @@ class Diff(Statement):
         }
         checks_for_equality: List[bool] = [
             partitions_by_index[i].snowmobile.df_diff(
-                df2=partitions_by_index[i + 1], rel_tol=rel_tol, abs_tol=abs_tol
+                df2=partitions_by_index[i + 1], rel_tol=rel_tol,
+                abs_tol=abs_tol
             )
             for i in range(1, len(partitions_by_index))
         ]
         return all(checks_for_equality)
 
     def process(self) -> Diff:
+        """Post-processing for :class:`Diff`-specific results.
+        """
         try:
+            self.outcome = False
+
             self.split_cols()
-            self.drop_ignored()
-            self.set_index()
-            self.partitions = self.results.snowmobile.partitions(on=self.partition_on)
-            self._outcome = self.partitions_are_equal(
-                partitions=self.partitions,
-                abs_tol=self.absolute_tolerance,
-                rel_tol=self.relative_tolerance,
-            )
-            return self
-        except Exception as e:
-            raise e
+            if self.drop_cols:
+                self.results.drop(columns=self.drop_cols, inplace=True)
+            self.results.set_index(keys=self.idx_cols, inplace=True)
+
+            try:
+                self.partitions = self.results.snowmobile.partitions(
+                    on=self.partition_on
+                )
+            except Exception as e:
+                self._exception(
+                    e=StatementPostProcessingError(msg=(e.args[0])),
+                    _id=-1
+                )
+
+            if self._outcome != -1:
+                # TESTS: add test to verify what happens if this fails
+                self.outcome = self.partitions_are_equal(
+                    partitions=self.partitions,
+                    abs_tol=self.absolute_tolerance,
+                    rel_tol=self.relative_tolerance,
+                )
+
+        finally:
+            # TODO: Build in a protected message argument to statement tags
+            #   so a custom message can be embedded per-check to display
+            #   exactly what is being tested to stdout/logs when it fails.
+            return self.set_outcome()
 
     def __getitem__(self, item):
         return vars(self)[item]

@@ -5,7 +5,7 @@ SnowflakeConnection for query/statement execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Union, List
+from typing import Union, Dict, Any, Tuple
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -18,7 +18,16 @@ from snowmobile.core.configuration import Configuration
 from snowmobile.core.df_ext import Frame
 
 
+# noinspection PyTypeChecker
+# noinspection PydanticTypeChecker
 class Connector:
+
+    _QUERY_OUTCOMES: Dict[Any, Tuple] = {
+        0: ("", ""),
+        1: ("warning", "failed"),
+        2: ("info", "completed"),
+    }
+
     """Primary Connection and Query Execution Class.
 
     Attributes:
@@ -55,7 +64,8 @@ class Connector:
                 with specific file-system configurations.
 
         """
-        self.error: Exception = Exception()
+        self.outcome: int = int()
+        self.error: Union[DatabaseError, pdDataBaseError] = None
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
@@ -98,7 +108,6 @@ class Connector:
             return self
 
         except DatabaseError as e:
-            self.error = e
             raise e
 
     def disconnect(self) -> Connector:
@@ -121,7 +130,7 @@ class Connector:
             self.connect()
         return self.conn.cursor()
 
-    def ex(self, sql: str, **kwargs) -> SnowflakeCursor:
+    def ex(self, sql: str, on_error: str = None, **kwargs) -> SnowflakeCursor:
         """Executes a command via :class:`SnowflakeCursor`.
 
         Args:
@@ -135,8 +144,10 @@ class Connector:
 
         """
         try:
+            self.outcome = 2
             return self.cursor.execute(command=sql, **kwargs)
         except ProgrammingError as e:
+            self._exception(e=e, _id=1, _raise=on_error != "c")
             self.error = e
             raise ProgrammingError(f"ProgrammingError: {e}")
 
@@ -149,7 +160,7 @@ class Connector:
     #         self._ex(sql=s, **kwargs)
 
     def query(
-        self, sql: str, results: bool = True, lower: bool = True,
+        self, sql: str, results: bool = True, lower: bool = True, on_error: str = None,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
         """Execute a query and return results.
 
@@ -165,6 +176,9 @@ class Connector:
             lower (bool):
                 Boolean value indicating whether or not to return results
                 with columns lower-cased.
+            on_error (str):
+                String value to impose a specific behavior if an error occurs
+                during the execution of ``sql``.
 
         Returns (Union[pd.DataFrame, SnowflakeCursor]):
             Results from ``sql`` as a :class:`DataFrame` by default or the
@@ -175,6 +189,8 @@ class Connector:
             return self.ex(sql=sql)
 
         try:
+            self.outcome = 2
+
             if not self.alive and self.ensure_alive:
                 self.connect()
 
@@ -182,7 +198,12 @@ class Connector:
             return df.snowmobile.lower_cols() if lower else df
 
         except (pdDataBaseError, DatabaseError) as e:
-            self.error = e
+            self._exception(e=e, _id=1, _raise=on_error != "c")
+
+    def _exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
+        """Saves exception encountered; will raise if `_raise=False` is passed."""
+        self.outcome, self.error = _id, e
+        if _raise:
             raise e
 
     def __setattr__(self, key, value):

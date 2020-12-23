@@ -146,7 +146,7 @@ class Tag:
 
         # ---------------------------------------------------------------------
 
-        self.first_line = (sql or str()).strip('\n').split("\n")[0].lower().strip()
+        self.first_line = (sql or str()).strip("\n").split("\n")[0].lower().strip()
         self.incl_if_exists = "if exists" in self.first_line
         self.first_keyword = first_keyword or str()
         self.first_line_remainder = self.first_line_sans_keyword(
@@ -162,8 +162,7 @@ class Tag:
         self.anchor = self.anchor_pr or self.anchor_ge
 
         self.scopes: Set[Scope] = {
-            Scope(**kwargs)
-            for kwargs in self.cfg.scopes_from_tag(t=self)
+            Scope(**kwargs) for kwargs in self.cfg.scopes_from_tag(t=self)
         }
 
     def scope(self, **kwargs) -> bool:

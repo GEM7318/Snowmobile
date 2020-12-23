@@ -12,7 +12,7 @@ import snowmobile
 ddl_location = Path(__file__).absolute().parent.parent / "DDL.sql"
 
 # connector object, connection omitted
-sn = snowmobile.Connect(delay=True, config_file_nm='snowmobile_testing.toml')
+sn = snowmobile.Connect(delay=True, config_file_nm="snowmobile_testing.toml")
 
 # script object from DDL.sql
 script = snowmobile.Script(path=ddl_location, sn=sn)

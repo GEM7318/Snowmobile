@@ -56,7 +56,7 @@ args = [
 
 script_dtl = [
 	('markup_no_results.sql', False, {}),
-	('markup_with_results.sql', True, {'silence_qa': True}),
+	('markup_with_results.sql', True, {'on_failure': 'c'}),
 	('markup_template_anchor.sql', False, {})
 ]
 

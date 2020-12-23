@@ -50,10 +50,7 @@ from typing import Dict, List, Union
 
 import pandas as pd
 
-from snowmobile.core.configuration import (
-    Configuration,
-    Markdown
-)
+from snowmobile.core.configuration import Configuration, Markdown
 from snowmobile.core.utils import parsing as p
 
 
@@ -71,9 +68,8 @@ class Name:
 
         self.nm_raw = nm
 
-        self.nm_stripped, self.flags = cfg_script.patterns.wildcards.partition_on_wc(
-            attr_nm=nm
-        )
+        # self.nm_stripped, self.flags = cfg_script.patterns.wildcards.partition_on_wc(
+        self.nm_stripped, self.flags = config.wildcards.partition_on_wc(attr_nm=nm)
 
         self.is_paragraph = cfg_script.patterns.wildcards.wc_paragraph in self.flags
         self.is_no_reformat = cfg_script.patterns.wildcards.wc_as_is in self.flags

@@ -6,8 +6,6 @@ This script stores the test cases for `snowmobile.Markup`.
 
 - **Notes**
 	- This is just a sample table for the other test statements to run on.
-* Execution-Information
-	* **Last Outcome**: _completed_
 
 ```sql
 create or replace temp table sample_table as
@@ -20,8 +18,6 @@ union
 * **Description**: _This is a sample intra statement marker._
 
 ## (2) select-data~sample select statement
-* Execution-Information
-	* **Last Outcome**: _completed_
 * **Description**: _This is a sample select statement, excluding results_
 
 ```sql

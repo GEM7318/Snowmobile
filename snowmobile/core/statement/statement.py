@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Any, ContextManager, Dict, Tuple, Union, Callable
+from typing import Any, ContextManager, Dict, Set, Union, Callable
 
 import pandas as pd
 import sqlparse
@@ -14,10 +14,10 @@ from IPython.core.display import Markdown, display
 from snowflake.connector.errors import ProgrammingError, DatabaseError
 from pandas.io.sql import DatabaseError as pdDataBaseError
 
-
 from snowmobile.core.configuration import Pattern
 from snowmobile.core.markup.section import Section
 from snowmobile.core import Connector
+from .errors import StatementInternalError
 from .tag import Tag
 
 
@@ -85,14 +85,13 @@ class Statement:
     """
 
     # fmt: off
-    _OUTCOME_MAPPING: Dict[Any, Tuple] = {
-        -3: ("-", "error (qa-processing)"),
-        -2: ("-", "error (execution)"),
-        -1: ("-", "skipped"),
+    _PROCESS_OUTCOMES: Dict[Any, Any] = {
+        -3: ("success", "passed"),
+        -2: ("warning", "failed"),
+        -1: ("-", "error: post-processing"),
         0: ("-", ""),
-        1: ("warning", "failed"),
-        2: ("info", "completed"),
-        3: ("success", "passed"),
+        1: ("-", "error: execution"),
+        2: ("success", "completed"),
     }
     # fmt: on
 
@@ -105,14 +104,27 @@ class Statement:
         attrs_raw: str = None,
         **kwargs,
     ):
-        self.errors: Dict[str, Dict[int, Exception]] = dict()
         self._index: int = index
         self._exclude_attrs = []
-        self._outcome: bool = bool()
+
+        self._tmstmp: int = None
+        self.timestamps: Set[int] = set()
+        # self._errors: Dict[str, Dict[int, Exception]] = dict()
+
+        self.errors: Dict[int, Dict[int, Exception]] = {}
+        self.error_last: Dict[int, Exception] = {}
+        self.enc_exception: bool = bool()
+
+        self._outcome: int = int()
+        self.outcome: bool = True
+
+        self.executed: bool = bool()
 
         self.sn = sn
-        self.statement: sqlparse.sql.Statement = \
-            sn.cfg.script.ensure_sqlparse(statement)
+        self.statement: sqlparse.sql.Statement = sn.cfg.script.ensure_sqlparse(
+            statement
+        )
+
         self.index: int = index or int()
         self.patterns: Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
@@ -125,20 +137,17 @@ class Statement:
         self.attrs_raw = attrs_raw or str()
         self.is_tagged: bool = bool(self.attrs_raw)
 
+        # TODO: Make this a single static method from cfg.script
         self.first_keyword = self.statement.token_first(skip_ws=True, skip_cm=True)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
 
         self.tag: Tag = None
         self.attrs_parsed = self.parse()
 
-    # @property
-    # def index(self):
-    #     return self.tag.index
-
     @property
     def is_multiline(self) -> bool:
         """Indicates if provided statement tag is a multiline tag."""
-        return '\n' in self.attrs_raw
+        return "\n" in self.attrs_raw
 
     def parse(self) -> Dict:
         """Parses a statement tag into a valid dictionary.
@@ -199,6 +208,7 @@ class Statement:
             *   :attr:`execution_time_txt`
 
         """
+        self._outcome, self.outcome, self.executed = 2, True, True
         self.end_time = time.time()
         self.execution_time = int(self.end_time - self.start_time)
         self.execution_time_txt = (
@@ -225,16 +235,13 @@ class Statement:
         config_namespace = self.sn.cfg.script.markdown.attrs.from_namespace
         current_namespace = {
             **self.sn.cfg.attrs_from_obj(obj=self),
-            **self.sn.cfg.methods_from_obj(obj=self)
+            **self.sn.cfg.methods_from_obj(obj=self),
         }
-        attrs_to_dump = \
-            set(
-                current_namespace
-            ).intersection(
-                config_namespace
-            ).difference(
-                self._exclude_attrs
-            )
+        attrs_to_dump = (
+            set(current_namespace)
+            .intersection(config_namespace)
+            .difference(self._exclude_attrs)
+        )
 
         attrs = self.attrs_parsed
         for k in attrs_to_dump:
@@ -267,11 +274,6 @@ class Statement:
         return self.tag.nm
 
     @property
-    def executed(self) -> bool:
-        """Indicates whether the statement has been executed or not."""
-        return self.outcome >= 1 or self.outcome == -2
-
-    @property
     def is_derived(self):
         """Indicates whether or not it's a generic or derived (QA) statement."""
         return self.tag.anchor in self.sn.cfg.QA_ANCHORS
@@ -292,6 +294,23 @@ class Statement:
             results=self.results,
         )
 
+    def set_state(self, tmstmp: int = None, filters: dict = None) -> None:
+        """Sets current state/context on a statement object.
+
+        Args:
+            tmstmp (int):
+                Unix timestamp the :meth:`script.filter()` context manager was
+                invoked.
+            filters (dict):
+                Kwargs passed to :meth:`script.filter()`.
+
+        """
+        if tmstmp:
+            self.reset(tmstmp=True)
+            self._tmstmp = tmstmp
+        if filters:
+            self.tag.scope(**filters)
+
     def index_to(self, index: int) -> Statement:
         """Sets the index of the current statement to a specific value.
 
@@ -311,7 +330,13 @@ class Statement:
         self.tag.index = index
         return self
 
-    def reset(self) -> Statement:
+    def reset(
+        self,
+        index: bool = False,
+        scope: bool = False,
+        tmstmp: bool = False,
+        errors: bool = False,
+    ) -> Statement:
         """Resets statement object to its original state as read from source.
 
         This includes:
@@ -321,63 +346,17 @@ class Statement:
                 :attr:`tag` to `True`.
 
         """
-        self.index = self._index
-        self.tag.index = self._index
-        self.tag.is_included = True
+        if index:
+            self.index = self._index
+            self.tag.index = self._index
+        if scope:
+            self.tag.is_included = True
+        if errors:
+            self.error_last = self.exceptions(from_tmstmp=self._tmstmp)
+        if tmstmp:
+            self.timestamps.add(self.tmstmp)
+            self._tmstmp = None
         return self
-
-    @property
-    def outcome(self):
-        """Returns the numeric :attr:`outcome` value based on current context.
-
-
-        ..note:
-            *   The default value of :attr:`outcome` is 0.
-            *   The first set of conditionals below will only modify its value
-                if it's current value is still the default; if the statement
-                encounters an error during execution, the value of :attr`outcome`
-                will be changed to `-2` before exiting the context of
-                :meth:`_run()` and the below codes will leave it as is.
-
-        """
-        # if not self:  # statement is not included within the current context
-        #     return -1
-        if not self.is_derived and not self._outcome:  # generic completed
-            return 2
-        elif not self._outcome:  # setting outcome for QA statements
-            return 3 if self._outcome else 1
-        else:  # keeping value of '-2' (i.e. error encountered)
-            return self._outcome
-
-    def _validate_qa(self, **kwargs):
-        """Runs assertion based on the :attr:`_outcome` attribute set by QA classes."""
-        if (
-            self
-            and self.is_derived
-            and not kwargs.get("silence_qa")
-            and not self._outcome
-        ):
-            self._log_exception(
-                e=AssertionError(f"'{self.tag}' did not pass its QA check."),
-                _id=1,
-                _raise=True
-            )
-
-    def update(self, **kwargs):
-        """Updates outcome attributes and runs QA validation for derived classes.
-
-        In total, updates are made to:
-            *   :attr:`outcome`, assuming statement is within current scope.
-            *   :attr:`outcome_txt', plain text form of outcome.
-            *   :attr:`outcome_html`, outcome as an html admonition banner.
-
-        Intended to be called directly after :meth:`process()`, which in the
-        generic case will return the unmodified object but in derived classes,
-        :meth:`process()` will perform validation on the results returned by
-        the statement and alter the value of :attr:`_outcome`.
-
-        """
-        self._validate_qa(**kwargs)
 
     def process(self):
         """Used by derived classes for validation logic of the returned results."""
@@ -385,7 +364,7 @@ class Statement:
 
     @contextmanager
     def _run(
-        self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
+        self, results: bool = True, lower: bool = True, **kwargs,
     ) -> ContextManager[Statement]:
         """Executes statement; used by generic case and derived classes.
 
@@ -421,26 +400,26 @@ class Statement:
             yield self
 
         except (ProgrammingError, pdDataBaseError, DatabaseError):
-            self._outcome = -2
+            self._exception(e=self.sn.error, _id=1)
+            yield
 
         finally:
-
-            self.update(**kwargs)
-
-            if self._outcome == -2:
-                self._log_exception(
-                    e=self.sn.error,
-                    _id=-2,
-                    _raise=True
-                )
-
-            if self and render:
-                self.render()
+            # only post-process when execution did not raise database error
+            if self._outcome == 2:
+                self.process()
 
             return self
 
     def run(
-        self, results: bool = True, lower: bool = True, render: bool = False, **kwargs,
+        self,
+        results: bool = True,
+        lower: bool = True,
+        render: bool = False,
+        on_error: str = None,
+        on_exception: str = None,
+        on_failure: str = None,
+        tmstmp: int = None,
+        **kwargs,
     ) -> Statement:
         """Run method for all statement objects.
 
@@ -452,6 +431,11 @@ class Statement:
                 `results=True`.
             render (bool):
                 Render the sql executed as markdown.
+            on_error (str):
+                *   `e`: exception
+                *   `c`: continue
+            tmstmp (str):
+                Unix timestamp of the current context initialization.
             **kwargs:
                 Keyword arguments for :meth:`update()` and compatibility with
                 derived classes.
@@ -460,11 +444,50 @@ class Statement:
             Statement object post-executing query.
 
         """
-        with self._run(results=results, lower=lower, render=render, **kwargs) as r:
-            try:
-                return r.process()
-            except Exception as e:
-                raise e
+
+        if tmstmp and self._tmstmp != tmstmp:
+            self.set_state(tmstmp=tmstmp)
+        elif not tmstmp and not self._tmstmp:
+            self.set_state(tmstmp=self.tmstmp)
+
+        with self._run(results=results, lower=lower, **kwargs) as r:
+            pass
+
+        # ---------------------------
+        if (
+            not self.is_derived      # is generic statement
+            and self._outcome == 1   # database error raised during execution
+            and on_error != "c"      # stop on execution error
+        ):
+            self.exceptions(last=True, _raise=True)
+            raise self.exceptions(last=True)
+        # ---------------------------
+        if (
+            self.is_derived          # is child class with `.process()` method
+            and self._outcome == -1  # exception thrown during post-processing
+            and on_exception != "c"  # stop on post-processing exception
+        ):
+            self.exceptions(last=True, _raise=True)
+        # ---------------------------
+        if (
+            self.is_derived          # is child class with `.process()` method
+            and self._outcome == -2  # outcome of `.process()` did not pass
+            and on_failure != "c"    # stop on failure of `.process()`
+        ):
+            self.exceptions(last=True, _raise=True)
+        # ---------------------------
+
+        if render:
+            self.render()
+
+        return self
+
+    @property
+    def tmstmp(self):
+        """Returns timestamp id of current context."""
+        if not self._tmstmp:
+            self._tmstmp = int(time.time())
+        return self._tmstmp
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):
@@ -476,20 +499,65 @@ class Statement:
         )
         return condition, msg
 
-    def _log_exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
-        desc = self.outcome_txt(_id=_id)
-        self.errors.get(desc, dict())[int(time.time())] = e
+    # confusing part is that this sets outcome and logs exception
+    def _exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
+        """Saves exception encountered; will raise if `_raise=False` is passed."""
+        self._outcome = _id
+        current_total = self.errors[self._tmstmp] if self._tmstmp in self.errors else dict()
+        current_total[int(time.time())] = e
+        self.errors[self._tmstmp] = current_total
         if _raise:
             raise e
 
+    def exceptions(
+        self, last: bool = False, hist: bool = False, _raise: bool = False,
+        from_tmstmp: int = None,
+    ):
+        """All exceptions encountered, sorted from most to least recent."""
+        if from_tmstmp:
+            return self.errors.get(from_tmstmp)
+
+        if not self._tmstmp:
+            raise StatementInternalError(
+                nm='statement._tmstmp = None',
+                msg=(
+                    'a call was made to `statement.exceptions()` while the '
+                    'current value of `statement._tmstmp` is None.'
+                )
+            )
+        elif not self.errors.get(self._tmstmp):
+            raise StatementInternalError(
+                nm='statement._tmstmp not in statement.errors',
+                msg=(
+                    'a call was made to `statement.exceptions()` without the '
+                    'current statement._tmstmp existing in statement.errors.'
+                )
+            )
+
+        if hist:
+            return self.errors
+
+        total = {
+            tmstmp: e
+            for tmstmp, e in self.errors[self._tmstmp].items()
+        }
+        sorted_total = {i: total[i] for i in sorted(total, reverse=True)}
+
+        if not last:
+            return sorted_total
+        elif not _raise:
+            return sorted_total[max(sorted_total)]
+        else:
+            raise sorted_total[max(sorted_total)]
+
     def outcome_txt(self, _id: int = None) -> str:
         """Outcome as a string."""
-        return self._OUTCOME_MAPPING[_id or self.outcome][1]
+        return self._PROCESS_OUTCOMES[_id or self._outcome][1]
 
     @property
     def outcome_html(self) -> str:
         """Outcome as an html admonition banner."""
-        alert = self._OUTCOME_MAPPING[self.outcome][0]
+        alert = self._PROCESS_OUTCOMES[self._outcome][0]
         return f"""
 <div class="alert-{alert}">
 <center><b>====/ {self.outcome_txt()} /====</b></center>
