@@ -16,7 +16,7 @@ __all__ = [
     "Diff",
     "Empty",
     "utils",
-    "errors"
+    "errors",
 ]
 from .configuration import Configuration
 from .connector import Connect, Connector

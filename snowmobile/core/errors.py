@@ -45,9 +45,7 @@ class Error(Exception):
 
     def __str__(self):
         """Default error message."""
-        return (
-            f"{self.msg}" if self.msg else f"Exception encountered"
-        )
+        return f"{self.msg}" if self.msg else f"Exception encountered"
 
     def escalate(self):
         """Raises error."""
@@ -60,7 +58,7 @@ class Error(Exception):
         sep: str = None,
         lines: int = None,
         _filter: bool = True,
-        **kwargs: Dict[str, str]
+        **kwargs: Dict[str, str],
     ) -> str:
         """Formats a dictionary of arguments into an aligned/indented error msg.
 
@@ -94,9 +92,9 @@ class Error(Exception):
             Formatted arguments as a string.
 
         """
-        prefix = prefix or '\t'
-        line_sep = '\n' * (lines or 1)
-        sep = sep or ': '
+        prefix = prefix or "\t"
+        line_sep = "\n" * (lines or 1)
+        sep = sep or ": "
 
         if _filter:
             kwargs = {k: v for k, v in kwargs.items() if v}
@@ -128,12 +126,8 @@ class InternalError(Error):
         """InternalError message."""
         str_args = self.format_error_args(
             _filter=True,
-            **{
-                'name': f"'{self.nm}'",
-                'msg': self.msg,
-                'errno': self.errno,
-            }
-        ).strip('\n')
+            **{"name": f"'{self.nm}'", "msg": self.msg, "errno": self.errno,},
+        ).strip("\n")
         return f"""
 An internal exception was raised.
 {str_args}

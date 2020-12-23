@@ -136,6 +136,9 @@ class Connector:
         Args:
             sql (str):
                 ``sql`` command as a string.
+            on_error (str):
+                String value to impose a specific behavior if an error occurs
+                during the execution of ``sql``.
             **kwargs:
                 Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
 
@@ -148,16 +151,6 @@ class Connector:
             return self.cursor.execute(command=sql, **kwargs)
         except ProgrammingError as e:
             self._exception(e=e, _id=1, _raise=on_error != "c")
-            self.error = e
-            raise ProgrammingError(f"ProgrammingError: {e}")
-
-    # def ex(self, sql: Union[str, List[str]], **kwargs):
-    #     if not isinstance(sql, List):
-    #         return self._ex(sql=sql, **kwargs)
-    #
-    #     cur = self.cursor
-    #     for s in sql:
-    #         self._ex(sql=s, **kwargs)
 
     def query(
         self, sql: str, results: bool = True, lower: bool = True, on_error: str = None,

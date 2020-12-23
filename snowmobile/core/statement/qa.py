@@ -41,7 +41,7 @@ class QA(Statement):
                 QAEmptyFailure if self.tag.anchor.lower() == 'qa-empty'
                 else QADiffFailure
             )
-            self._exception(
+            self._exception_collector(
                 e=object_specific_exception(
                     nm=self.tag.nm,
                     msg=self.MSG,
@@ -185,8 +185,7 @@ class Diff(QA):
             "relative-tolerance", qa_cfg.tolerance.relative
         )
         self.absolute_tolerance = (
-            self.attrs_parsed.get("absolute-tolerance",
-                                  qa_cfg.tolerance.absolute)
+            self.attrs_parsed.get("absolute-tolerance", qa_cfg.tolerance.absolute)
             if not self.relative_tolerance
             else 0
         )
@@ -197,7 +196,7 @@ class Diff(QA):
             self.end_index_at, ignore_patterns=[self.partition_on]
         )
         if not self.idx_cols:
-            self._exception(
+            self._exception_collector(
                 e=StatementPostProcessingError(
                     msg=(
                         f"Arguments provided don't result in any index columns "
@@ -220,11 +219,9 @@ class Diff(QA):
             ignore_patterns=[self.partition_on, self.idx_cols, self.drop_cols],
         )
         if not self.compare_cols:
-            self._exception(
+            self._exception_collector(
                 e=StatementPostProcessingError(
-                    msg=(
-                        f"Arguments provided don't result in any comparison columns."
-                    )
+                    msg=(f"Arguments provided don't result in any comparison columns.")
                 ),
                 _id=-1,
             )
@@ -250,7 +247,7 @@ class Diff(QA):
 
         # fmt: off
         if self.partition_on not in list(self.results.columns):
-            self._exception(
+            self._exception_collector(
                 e=StatementPostProcessingError(
                     msg=(
                         f"Column `{self.partition_on}` not found in DataFrames columns."
@@ -297,8 +294,7 @@ class Diff(QA):
         }
         checks_for_equality: List[bool] = [
             partitions_by_index[i].snowmobile.df_diff(
-                df2=partitions_by_index[i + 1], rel_tol=rel_tol,
-                abs_tol=abs_tol
+                df2=partitions_by_index[i + 1], rel_tol=rel_tol, abs_tol=abs_tol
             )
             for i in range(1, len(partitions_by_index))
         ]
@@ -320,10 +316,7 @@ class Diff(QA):
                     on=self.partition_on
                 )
             except Exception as e:
-                self._exception(
-                    e=StatementPostProcessingError(msg=(e.args[0])),
-                    _id=-1
-                )
+                self._exception_collector(e=StatementPostProcessingError(msg=(e.args[0])), _id=-1)
 
             if self._outcome != -1:
                 # TESTS: add test to verify what happens if this fails

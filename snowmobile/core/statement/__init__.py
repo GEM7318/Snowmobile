@@ -7,8 +7,11 @@ __all__ = [
     "Statement",
     "Scope",
     "Tag",
-    "QADiffFailure", "QAEmptyFailure", "QAFailure",
-    "StatementPostProcessingError", "StatementInternalError",
+    "QADiffFailure",
+    "QAEmptyFailure",
+    "QAFailure",
+    "StatementPostProcessingError",
+    "StatementInternalError",
 ]
 from .qa import Diff, Empty, QADiffFailure, QAEmptyFailure
 from .errors import (

@@ -18,7 +18,7 @@ from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Base, Snowmobile, Wildcard
+from .schema import Base, Snowmobile, Wildcard, Markdown, Attributes
 
 
 # ====================================
@@ -167,6 +167,21 @@ class Configuration(Snowmobile):
             except IOError as e:
                 raise IOError(e)
 
+    @property
+    def markdown(self) -> Markdown:
+        """Accessor for cfg.script.markdown."""
+        return self.script.markdown
+
+    @property
+    def attrs(self) -> Attributes:
+        """Accessor for cfg.script.markdown.attributes."""
+        return self.script.markdown.attrs
+
+    @property
+    def wildcards(self) -> Wildcard:
+        """Accessor for cfg.script.patterns.wildcards."""
+        return self.script.patterns.wildcards
+
     def _get_path(self, is_provided: bool = False):
         """Checks for cache existence and validates - traverses OS if not.
 
@@ -266,22 +281,14 @@ class Configuration(Snowmobile):
         for attr in self.scopes:
             attr_value = kwargs.get(attr) or set()
             scopes[attr] = attr_value
-        return (
-            {k: v for k, v in scopes.items() if v} if only_populated
-            else scopes
-        )
+        return {k: v for k, v in scopes.items() if v} if only_populated else scopes
 
     def scopes_from_tag(self, t: Any):
         """Generates list of keyword arguments to instantiate all scopes for a tag."""
         return [{"base": vars(t)[k], "arg": k} for k in self.SCOPE_ATTRIBUTES]
 
-    @property
-    def wildcards(self) -> Wildcard:
-        """patterns.Wildcard accessor."""
-        return self.script.patterns.wildcards
-
     def json(self, by_alias: bool = False, **kwargs):
-        """Combined serialization method for pydantic attributes."""
+        """Serialization method for core object attributes."""
         total = {}
         for k, v in vars(self).items():
             if issubclass(type(v), Base):

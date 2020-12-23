@@ -109,7 +109,6 @@ class Statement:
 
         self._tmstmp: int = None
         self.timestamps: Set[int] = set()
-        # self._errors: Dict[str, Dict[int, Exception]] = dict()
 
         self.errors: Dict[int, Dict[int, Exception]] = {}
         self.error_last: Dict[int, Exception] = {}
@@ -232,19 +231,18 @@ class Statement:
 
         """
 
-        config_namespace = self.sn.cfg.script.markdown.attrs.from_namespace
         current_namespace = {
             **self.sn.cfg.attrs_from_obj(obj=self),
             **self.sn.cfg.methods_from_obj(obj=self),
         }
-        attrs_to_dump = (
-            set(current_namespace)
-            .intersection(config_namespace)
-            .difference(self._exclude_attrs)
+        namespace_overlap_with_config = (
+            set(current_namespace)  # all from current namespace
+            .intersection(self.sn.cfg.attrs.from_namespace)  # snowmobile.toml
+            .difference(self._exclude_attrs)  # exists for testing purposes
         )
 
         attrs = self.attrs_parsed
-        for k in attrs_to_dump:
+        for k in namespace_overlap_with_config:
             attr = current_namespace[k]
             attr_value = attr() if isinstance(attr, Callable) else attr
             if attr_value:
@@ -294,7 +292,12 @@ class Statement:
             results=self.results,
         )
 
-    def set_state(self, tmstmp: int = None, filters: dict = None) -> None:
+    def set_state(
+        self,
+        tmstmp: int = None,
+        filters: dict = None,
+        index: int = None,
+    ) -> Statement:
         """Sets current state/context on a statement object.
 
         Args:
@@ -303,6 +306,8 @@ class Statement:
                 invoked.
             filters (dict):
                 Kwargs passed to :meth:`script.filter()`.
+            index (int):
+                Integer to set as the statement's index position.
 
         """
         if tmstmp:
@@ -310,24 +315,8 @@ class Statement:
             self._tmstmp = tmstmp
         if filters:
             self.tag.scope(**filters)
-
-    def index_to(self, index: int) -> Statement:
-        """Sets the index of the current statement to a specific value.
-
-        Invoked from within :class:`snowmobile.Script` when operating on a
-        script within a given context; changes index on the statement object
-        and the index stored within the :attr:`tag` attribute.
-
-        Args:
-            index (int):
-                Integer to set as the statement's index..
-
-        Returns (Statement):
-            Current :class:`Statement` object reflecting the revised index.
-
-        """
-        self.index = index
-        self.tag.index = index
+        if index:
+            self.index = self.tag.index = index
         return self
 
     def reset(
@@ -337,34 +326,34 @@ class Statement:
         tmstmp: bool = False,
         errors: bool = False,
     ) -> Statement:
-        """Resets statement object to its original state as read from source.
+        """Resets attributes on the statement object to reflect as if read from source.
 
-        This includes:
-            *   Resetting the statement's index to its original value.
-            *   Resetting the statement *tag's* index to its original value.
+        In its current form, includes:
+            *   Resetting the statement/tag's index to their original values.
             *   Resetting the :attr:`is_included` attribute of the statement's
                 :attr:`tag` to `True`.
+            *   Populating :attr:`error_last` with errors from current context.
+            *   Caching current context's timestamp and resetting back to `None`.
 
         """
         if index:
-            self.index = self._index
-            self.tag.index = self._index
+            self.index = self.tag.index = self._index
         if scope:
             self.tag.is_included = True
         if errors:
-            self.error_last = self.exceptions(from_tmstmp=self._tmstmp)
+            self.error_last = self.exceptions(from_tmstmp=self.tmstmp)
         if tmstmp:
             self.timestamps.add(self.tmstmp)
             self._tmstmp = None
         return self
 
     def process(self):
-        """Used by derived classes for validation logic of the returned results."""
+        """Used by derived classes for post-processing the returned results."""
         return self
 
     @contextmanager
     def _run(
-        self, results: bool = True, lower: bool = True, **kwargs,
+        self, results: bool = True, lower: bool = True
     ) -> ContextManager[Statement]:
         """Executes statement; used by generic case and derived classes.
 
@@ -380,12 +369,6 @@ class Statement:
             lower (bool):
                 Whether or not to lower-case the columns on the returned
                 :class:`pandas.DataFrame` if `results=True`.
-            render (bool):
-                Whether or not to render the sql being executed; useful in
-                notebooks when wanting to render the syntax-highlighted sql
-                while executing a statement.
-            **kwargs:
-                Included for compatibility purposes with derived classes.
 
         Returns (Statement):
             The :class:`Statement` object itself post-executing or skipping
@@ -397,10 +380,12 @@ class Statement:
                 self.start()
                 self.results = self.sn.query(self.sql, results=results, lower=lower)
                 self.end()
+
             yield self
 
         except (ProgrammingError, pdDataBaseError, DatabaseError):
-            self._exception(e=self.sn.error, _id=1)
+            self._exception_collector(e=self.sn.error, _id=1)
+
             yield
 
         finally:
@@ -450,29 +435,29 @@ class Statement:
         elif not tmstmp and not self._tmstmp:
             self.set_state(tmstmp=self.tmstmp)
 
-        with self._run(results=results, lower=lower, **kwargs) as r:
+        with self._run(results=results, lower=lower) as r:
             pass
 
         # ---------------------------
         if (
-            not self.is_derived      # is generic statement
-            and self._outcome == 1   # database error raised during execution
-            and on_error != "c"      # stop on execution error
+            not self.is_derived  # is generic statement
+            and self._outcome == 1  # database error raised during execution
+            and on_error != "c"  # stop on execution error
         ):
             self.exceptions(last=True, _raise=True)
             raise self.exceptions(last=True)
         # ---------------------------
         if (
-            self.is_derived          # is child class with `.process()` method
+            self.is_derived  # is child class with `.process()` method
             and self._outcome == -1  # exception thrown during post-processing
             and on_exception != "c"  # stop on post-processing exception
         ):
             self.exceptions(last=True, _raise=True)
         # ---------------------------
         if (
-            self.is_derived          # is child class with `.process()` method
+            self.is_derived  # is child class with `.process()` method
             and self._outcome == -2  # outcome of `.process()` did not pass
-            and on_failure != "c"    # stop on failure of `.process()`
+            and on_failure != "c"  # stop on failure of `.process()`
         ):
             self.exceptions(last=True, _raise=True)
         # ---------------------------
@@ -500,60 +485,61 @@ class Statement:
         return condition, msg
 
     # confusing part is that this sets outcome and logs exception
-    def _exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
-        """Saves exception encountered; will raise if `_raise=False` is passed."""
+    def _exception_collector(self, _id: int, e: Exception) -> None:
+        """Stores exceptions encountered within a distinct context."""
+        if not self._tmstmp:
+            raise StatementInternalError(
+                nm=f"`s._exception_collector(_id='{e}')`",
+                msg="a call was made to `s._exception_collector()` while `s._tmstmp` is None."
+            )
         self._outcome = _id
-        current_total = self.errors[self._tmstmp] if self._tmstmp in self.errors else dict()
-        current_total[int(time.time())] = e
-        self.errors[self._tmstmp] = current_total
-        if _raise:
-            raise e
+        current_exceptions = (
+            self.errors[self._tmstmp]
+            if self._tmstmp in self.errors
+            else dict()
+        )
+        current_exceptions[int(time.time())] = e
+        self.errors[self._tmstmp] = current_exceptions
 
     def exceptions(
-        self, last: bool = False, hist: bool = False, _raise: bool = False,
+        self,
+        last: bool = False,
+        hist: bool = False,
+        _raise: bool = False,
         from_tmstmp: int = None,
     ):
         """All exceptions encountered, sorted from most to least recent."""
         if from_tmstmp:
             return self.errors.get(from_tmstmp)
-
+        elif hist:
+            return self.errors
+        # ------
         if not self._tmstmp:
             raise StatementInternalError(
-                nm='statement._tmstmp = None',
-                msg=(
-                    'a call was made to `statement.exceptions()` while the '
-                    'current value of `statement._tmstmp` is None.'
-                )
+                nm=f"`s.exceptions()`",
+                msg="a call was made to `s.exceptions()` while `s._tmstmp` is None."
             )
         elif not self.errors.get(self._tmstmp):
             raise StatementInternalError(
-                nm='statement._tmstmp not in statement.errors',
-                msg=(
-                    'a call was made to `statement.exceptions()` without the '
-                    'current statement._tmstmp existing in statement.errors.'
-                )
+                nm=f"`s.exceptions()`",
+                msg=f"no exceptions stored for `s._tmstmp`={self._tmstmp}"
             )
-
-        if hist:
-            return self.errors
-
-        total = {
-            tmstmp: e
-            for tmstmp, e in self.errors[self._tmstmp].items()
-        }
+        # ------
+        total = {tmstmp: e for tmstmp, e in self.errors[self._tmstmp].items()}
         sorted_total = {i: total[i] for i in sorted(total, reverse=True)}
-
         if not last:
             return sorted_total
         elif not _raise:
             return sorted_total[max(sorted_total)]
         else:
             raise sorted_total[max(sorted_total)]
+        # ------
 
     def outcome_txt(self, _id: int = None) -> str:
         """Outcome as a string."""
         return self._PROCESS_OUTCOMES[_id or self._outcome][1]
 
+    # TODO: Move this to patterns
     @property
     def outcome_html(self) -> str:
         """Outcome as an html admonition banner."""

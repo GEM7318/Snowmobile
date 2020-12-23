@@ -284,9 +284,9 @@ class Script:
                 A full set of scope arguments.
         """
         for s in self._statements_all.values():
-            # TODO: Extract the tmstmp piece of this at some point
-            s.set_state(tmstmp=self.tmstmp, filters=scope_to_set)  # 2nd context stage change
-            # s.tag.scope(**scope_to_set)
+            s.set_state(
+                tmstmp=self.tmstmp, filters=scope_to_set
+            )
 
     def _update_scope_script(self, _id: Any[int, str], **kwargs) -> Dict:
         """Returns a valid set of scope args from an ``_id`` and the scope kwargs.
@@ -355,13 +355,13 @@ class Script:
             )
         # fmt: on
         try:
-            self.reset(tmstmp=True, context=True)  # 1st context state change
+            self.reset(tmstmp=True, context=True)
 
             if last:
                 from_id, as_id = self._latest_scope_id, None
 
-            # A new, distinct timestamp/context ID will be st on the script and
-            # the statements within the scope of this method.
+            # A new, distinct timestamp will be set on the script & the
+            # statements within the scope of `script._update_scope()`
             self._update_scope(
                 as_id=as_id,
                 from_id=from_id,
@@ -379,28 +379,18 @@ class Script:
             )
 
             yield self.reset(_filter=True)  # script.filtered = True; filter imposed
-            # self.filtered = True
-            # yield self
 
         except ValueError as e:
             raise e
 
-        finally:  # 3rd context state changed
+        finally:
             self.reset(
-                index=True,    # restore statement indices
-                scope=True,    # reset included/excluded status of all statements
-                tmstmp=True,   # cache context tmstmp for both script and statements
+                index=True,  # restore statement indices
+                scope=True,  # reset included/excluded status of all statements
+                tmstmp=True,  # cache context tmstmp for both script and statements
                 context=True,  # release 'in context manager' indicator (to False)
                 _filter=True,  # release 'impose filter' indicator (to False)
             )
-
-            # self.reset(_filter=True, index=True)
-            # if self.last and self.last.exceptions(from_tmstmp=self.tmstmp):
-            #     total = self.last.exceptions(from_tmstmp=self.tmstmp)
-            #     last = total[max(total)]
-            #     raise last
-            # self.reset(tmstmp=True, context=True, scope=True)
-
             return self
 
     def _depth(self, full: bool = False) -> int:
@@ -437,7 +427,7 @@ class Script:
             return self._statements_all
         statements = {s.index: s for s in self._statements_all.values() if s}
         return {
-            current_idx: statements[prior_idx].index_to(current_idx)
+            current_idx: statements[prior_idx].set_state(index=current_idx)
             for current_idx, prior_idx in enumerate(sorted(statements), start=1)
         }
 
@@ -474,6 +464,7 @@ class Script:
         exclusion scope set by :meth:`Statement.Tag.scope()`.
 
         """
+
         def batch_reset(**kwargs) -> Dict[Statement]:
             """Calls .reset() with kwargs on all statement objects."""
             return {i: s.reset(**kwargs) for i, s in self._statements_all.items()}
@@ -490,17 +481,6 @@ class Script:
             }
 
         if tmstmp:
-            # ..note:
-            #   In total, `script.reset(tmstmp=True)`..
-            #       *   Caches the old script timestamp
-            #       *   Sets the current private timestamp to None
-            #       *   Does the same on all statements
-            #
-            #   Within the context manager, a new timestamp isn't set for the
-            #   script or its statements until the call to `s.set_state()`
-            #   from within `script._update_statement_scopes()` - this is how
-            #   the script and the statements shared the same unix timestamp
-            #   within a **distinct** context.
             self.timestamps.add(self.tmstmp)
             self._tmstmp = None
             self._statements_all = batch_reset(tmstmp=tmstmp)
@@ -555,7 +535,9 @@ class Script:
             contents_to_return = self._adjusted_contents
         if by_index:
             return contents_to_return
+
         # validation to ensure keys are unique if fetching contents by tag name
+        # TODO: Custom error
         tags_are_unique, error_msg = self._validate_distinct_tags(contents_to_return)
         if validate and not tags_are_unique:
             raise Exception(error_msg)
@@ -759,8 +741,11 @@ class Script:
         s = self.statement(_id=_id)
         try:
             s.run(
-                results=results, lower=lower, render=render,
-                tmstmp=self.tmstmp, **kwargs,
+                results=results,
+                lower=lower,
+                render=render,
+                tmstmp=self.tmstmp,
+                **kwargs,
             )
         except Exception as e:
             raise e
@@ -776,11 +761,8 @@ class Script:
         on_failure: str = None,
         lower: bool = True,
         render: bool = False,
-        r: bool = False,
         **kwargs,
     ):
-        if r:
-            self.read()
         if not self._in_context:
             self.reset(tmstmp=True)
 

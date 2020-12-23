@@ -289,6 +289,7 @@ class Section:
         self.is_marker = is_marker or bool()
         self.sql: str = sql
         self.results = results
+        # TODO: Make this bs part of configuration
         h_level = self.cfg_md.hx_marker if self.is_marker else self.cfg_md.hx_statement
         self.hx: str = int(h_level[1:]) * "#"
         self.h_contents: str = h_contents
@@ -406,6 +407,7 @@ class Section:
     def body(self):
         return "\n".join(i.md for i in self.items)
 
+    # TODO: Change to 'full' or 'total'
     @property
     def section(self) -> str:
         """Constructs a full section as a string from various components.
