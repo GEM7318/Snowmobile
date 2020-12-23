@@ -15,7 +15,7 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration
-from snowmobile.core.df_ext import Frame
+from snowmobile.core.df_ext import SnowFrame
 
 
 # noinspection PyTypeChecker
@@ -188,7 +188,7 @@ class Connector:
                 self.connect()
 
             df = pd.read_sql(sql, con=self.conn)
-            return df.snowmobile.lower_cols() if lower else df
+            return df.snf.lower() if lower else df
 
         except (pdDataBaseError, DatabaseError) as e:
             self._exception(e=e, _id=1, _raise=on_error != "c")

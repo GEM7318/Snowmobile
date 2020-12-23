@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Set
 import pandas as pd
 
 from snowmobile.core import Connector
-from snowmobile.core.df_ext.frame import Frame
+from snowmobile.core.df_ext.snowframe import SnowFrame
 
 from .errors import QADiffFailure, QAEmptyFailure, StatementPostProcessingError
 from .statement import Statement
@@ -193,7 +193,7 @@ class Diff(QA):
 
     def _idx(self) -> None:
         """Isolates columns to use as indices."""
-        self.idx_cols = self.results.snowmobile.cols_ending_at(
+        self.idx_cols = self.results.snf.cols_ending(
             self.end_index_at, ignore_patterns=[self.partition_on]
         )
         if not self.idx_cols:
@@ -209,13 +209,13 @@ class Diff(QA):
 
     def _drop(self) -> None:
         """Isolates columns to ignore/drop."""
-        self.drop_cols = self.results.snowmobile.cols_matching_patterns(
+        self.drop_cols = self.results.snf.cols_matching(
             patterns=self.ignore_patterns
         )
 
     def _compare(self) -> None:
         """Isolate columns to use for comparison."""
-        self.compare_cols = self.results.snowmobile.cols_matching_patterns(
+        self.compare_cols = self.results.snf.cols_matching(
             patterns=self.compare_patterns,
             ignore_patterns=[self.partition_on, self.idx_cols, self.drop_cols],
         )
@@ -313,7 +313,7 @@ class Diff(QA):
             self.results.set_index(keys=self.idx_cols, inplace=True)
 
             try:
-                self.partitions = self.results.snowmobile.partitions(
+                self.partitions = self.results.snf.partitions(
                     on=self.partition_on
                 )
             except Exception as e:

@@ -1,3 +1,3 @@
-__all__ = ["Frame", "Column"]
+__all__ = ["SnowFrame", "Column"]
 from .column import Column
-from .frame import Frame
+from .snowframe import SnowFrame

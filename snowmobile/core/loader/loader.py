@@ -39,7 +39,7 @@ class Loader:
         self._raise_error: bool = bool()
         self._exists: bool = bool()
 
-        self.df = df.snowmobile.upper_cols() if upper_case_cols else df
+        self.df = df.snf.upper() if upper_case_cols else df
         self.name: str = table
         self.sn: Connector = sn
         self.sql: SQL = SQL(sn=sn, nm=table)
@@ -52,11 +52,11 @@ class Loader:
 
         if add_tmstmp:
             col_nm = tmstmp_col_nm or "loaded_tmstmp"
-            self.df.snowmobile.add_tmstmp(
+            self.df.snf.add_tmstmp(
                 col_nm=col_nm.upper() if upper_case_cols else col_nm.lower()
             )
         if reformat_cols:
-            self.df.snowmobile.reformat_cols()
+            self.df.snf.reformat()
 
         self.db_responses: Dict[str, str] = dict()
         self.start_time: int = int()
@@ -187,7 +187,7 @@ class Loader:
     def _load_prep_sql(self, from_script: Path) -> str:
         """Generates table DDL or truncate statement where applicable."""
         if self._requires_sql == "ddl" and not from_script:
-            return self.df.snowmobile.ddl(table=self.name)
+            return self.df.snf.ddl(table=self.name)
         elif self._requires_sql == "ddl":
             return Script(path=from_script, sn=self.sn).statement(_id=self.name).sql
         else:
