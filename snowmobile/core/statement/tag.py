@@ -4,7 +4,7 @@ Base class for all :class:`Statement` objects.
 from __future__ import annotations
 
 import re
-from typing import Dict, Set, Union, Optional
+from typing import Dict, Optional, Set, Union
 
 from snowmobile.core.configuration import Configuration, Pattern
 

@@ -24,9 +24,9 @@ from snowmobile.core import errors
 from .configuration import Configuration
 from .connector import Connect, Connector
 from .markup import Markup, Section
+from .snowframe import SnowFrame
 from .sql import SQL
 from .statement import Diff, Empty, Statement
-from .snowframe import SnowFrame
 
 from .script import Script  # isort:skip
 from .loader import Loader  # isort:skip

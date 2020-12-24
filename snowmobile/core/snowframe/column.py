@@ -23,7 +23,11 @@ class Column:
     )
 
     def __init__(
-        self, original: str, current: Optional[str] = None, prior: Optional[str] = None, src: Optional[str] = None,
+        self,
+        original: str,
+        current: Optional[str] = None,
+        prior: Optional[str] = None,
+        src: Optional[str] = None,
     ):
         self.original = original
         self.src = src or "original"
@@ -73,7 +77,9 @@ class Column:
             current = current.replace(match, char)
         return current
 
-    def reformat(self, fill_char: Optional[str] = None, dedupe_special: bool = True) -> str:
+    def reformat(
+        self, fill_char: Optional[str] = None, dedupe_special: bool = True
+    ) -> str:
         """Reformat column for a load to the database.
 
         Args:

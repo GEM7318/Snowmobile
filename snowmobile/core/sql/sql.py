@@ -82,7 +82,7 @@ class SQL:
         nm: Optional[str] = None,
         fields: List[str] = None,
         restrictions: Dict[str, str] = None,
-        order_by: List[Union[str, int]] = None,
+        order_by: List[Optional[str, int]] = None,
         all_schemas: bool = False,
         run: bool = None,
     ) -> Union[str, pd.DataFrame]:
@@ -551,7 +551,9 @@ class SQL:
         sql = f"show file formats"
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def ddl(self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,) -> str:
+    def ddl(
+        self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,
+    ) -> str:
         """Query the DDL for an in-warehouse object.
 
         Args:
@@ -729,7 +731,9 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def use_schema(self, nm: Optional[str] = None, run: bool = None) -> Union[str, pd.DataFrame]:
+    def use_schema(
+        self, nm: Optional[str] = None, run: bool = None
+    ) -> Union[str, pd.DataFrame]:
         """Use schema command."""
         return self.use(obj="schema", nm=nm, run=run)
 
@@ -745,12 +749,17 @@ limit {n or 1}
         """Use warehouse command."""
         return self.use(obj="warehouse", nm=nm, run=run)
 
-    def use_role(self, nm: Optional[str] = None, run: bool = None) -> Union[str, pd.DataFrame]:
+    def use_role(
+        self, nm: Optional[str] = None, run: bool = None
+    ) -> Union[str, pd.DataFrame]:
         """Use role command."""
         return self.use(obj="role", nm=nm, run=run)
 
     def columns(
-        self, nm: Optional[str] = None, from_info_schema: bool = False, run: bool = None,
+        self,
+        nm: Optional[str] = None,
+        from_info_schema: bool = False,
+        run: bool = None,
     ) -> Union[str, List]:
         """Returns an ordered list of columns for a table or view.
 
@@ -967,7 +976,9 @@ from information_schema.{info_schema_loc}
         )
 
     @staticmethod
-    def _validate(val: Union[str, int], nm: str, attr_nm: Optional[str] = None) -> str:
+    def _validate(
+        val: Optional[str, int], nm: str, attr_nm: Optional[str] = None
+    ) -> str:
         """Validates the value of an argument passed to a method.
 
         This method is built to validate method arguments in instances where an

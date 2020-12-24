@@ -7,26 +7,26 @@ import csv
 import os
 import time
 from pathlib import Path
-from typing import Dict, List, Union, Any, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
+from snowmobile.core import SQL, Connector, Script
 from snowmobile.core.configuration import DDL_DEFAULT_PATH
 from snowmobile.core.script import StatementNotFoundError
-from snowmobile.core import SQL, Script, Connector
+
 from .errors import (
-    LoadingInternalError,
-    ExistingTableError,
     ColumnMismatchError,
+    ExistingTableError,
     FileFormatNameError,
+    LoadingInternalError,
 )
 
 
 # TODO: (rename) Loader -> Table
 class Loader:
-
     def __init__(
         self,
         df: pd.DataFrame,
@@ -34,7 +34,7 @@ class Loader:
         sn: Connector,
         if_exists: Optional[str] = None,
         path_ddl: Optional[Path] = None,
-        path_output: Union[str, Path] = None,
+        path_output: Optional[str, Path] = None,
         file_format: Optional[str] = None,
         incl_tmstmp: bool = True,
         tmstmp_col_nm: Optional[str] = None,
@@ -358,9 +358,7 @@ class Loader:
     def _stdout_time(self, verbose: bool) -> None:
         """Time summary message for stdout."""
         if verbose:
-            print(
-                f'..completed: {self.df.shape[0]} rows in {self.tm_total} seconds'
-            )
+            print(f"..completed: {self.df.shape[0]} rows in {self.tm_total} seconds")
 
     def __str__(self) -> str:
         return f"snowmobile.Loader(table='{self.name}')"

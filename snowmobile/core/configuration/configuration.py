@@ -11,7 +11,7 @@ import json
 import shutil
 from pathlib import Path
 from types import MethodType
-from typing import Any, Callable, Dict, List, Union, Optional
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import toml
 from fcache.cache import FileCache
@@ -53,7 +53,7 @@ class Cache(FileCache):
         """Utility to return `item_name` as a :class:`Path` object."""
         return Path(self.get(item_name)) if self.get(item_name) else None
 
-    def clear(self, item: Union[List, str] = None):
+    def clear(self, item: Optional[List, str] = None):
         """Clears an item or a list of items from the cache by name."""
         if isinstance(item, str):
             item = [item]
@@ -63,7 +63,7 @@ class Cache(FileCache):
         for k in to_clear:
             self.pop(k)
 
-    def contains(self, item: Union[List, str] = None) -> bool:
+    def contains(self, item: Optional[List, str] = None) -> bool:
         """Checks if an item or list of items exist in the cache."""
         if isinstance(item, str):
             return bool(self.get(item))

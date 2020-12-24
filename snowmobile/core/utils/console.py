@@ -4,7 +4,7 @@ Base class for all module-level Stdout objects.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
 
 class Console:

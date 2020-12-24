@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, ContextManager, Dict, Set, Union, Optional
+from typing import Any, Callable, ContextManager, Dict, Optional, Set, Union
 
 import pandas as pd
 import sqlparse
@@ -293,7 +293,10 @@ class Statement:
         )
 
     def set_state(
-        self, tmstmp: Optional[int] = None, filters: dict = None, index: Optional[int] = None,
+        self,
+        tmstmp: Optional[int] = None,
+        filters: dict = None,
+        index: Optional[int] = None,
     ) -> Statement:
         """Sets current state/context on a statement object.
 

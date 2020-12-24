@@ -24,8 +24,8 @@ from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.statement import Diff, Empty, Statement
 
-from .errors import StatementNotFoundError, DuplicateTagError
 from ._stdout import Script as Stdout
+from .errors import DuplicateTagError, StatementNotFoundError
 
 
 # noinspection PydanticTypeChecker,PyTypeChecker
@@ -136,7 +136,7 @@ class Script:
                 yield s
 
     def add_statement(
-        self, s: Union[sqlparse.sql.Statement, str], index: Optional[int] = None
+        self, s: Optional[sqlparse.sql.Statement, str], index: Optional[int] = None
     ) -> None:
         """Adds a statement object to the script.
 
@@ -442,7 +442,7 @@ class Script:
         """Executed statements by index position included in the current context."""
         return {i: s for i, s in self.statements.items() if s.executed}
 
-    def statement(self, _id: Union[str, int] = None) -> Any[Statement, Empty, Diff]:
+    def statement(self, _id: Optional[str, int] = None) -> Any[Statement, Empty, Diff]:
         """Fetch a single statement by _id."""
         index_of_id = self._id(_id=_id)
         if index_of_id not in self.statements:
@@ -702,7 +702,7 @@ class Script:
 
     def _run(
         self,
-        _id: Union[str, int] = None,
+        _id: Optional[str, int] = None,
         results: bool = True,
         lower: bool = True,
         render: bool = False,
@@ -739,7 +739,7 @@ class Script:
     # DOCSTRING
     def run(
         self,
-        _id: Union[str, int, Tuple, List] = None,
+        _id: Optional[str, int, Tuple, List] = None,
         results: bool = True,
         on_error: Optional[str] = None,
         on_exception: Optional[str] = None,

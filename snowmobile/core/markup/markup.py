@@ -47,7 +47,7 @@ Header-levels and formatting of tagged information is configured in the
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, List, Tuple, Union, Optional
+from typing import Dict, List, Optional, Tuple, Union
 
 from snowmobile.core.configuration import DIR_PKG_DATA, Configuration
 from snowmobile.core.configuration.schema import Marker

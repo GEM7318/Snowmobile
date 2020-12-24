@@ -5,7 +5,7 @@ SnowflakeConnection for query/statement execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, Tuple, Union, Optional
+from typing import Any, Dict, Optional, Tuple, Union
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -13,9 +13,9 @@ from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration
+
 # from snowmobile.core.loader.errors import (
 #     LoadingInternalError,
 #     ExistingTableError,
@@ -47,7 +47,7 @@ class Connector:
         self,
         creds: Optional[str] = None,
         config_file_nm: Optional[str] = None,
-        from_config: Union[str, Path] = None,
+        from_config: Optional[str, Path] = None,
         ensure_alive: bool = True,
         delay: bool = False,
         mode: Optional[str] = None,
@@ -157,7 +157,11 @@ class Connector:
             self._exception(e=e, _id=1, _raise=on_error != "c")
 
     def query(
-        self, sql: str, results: bool = True, lower: bool = True, on_error: Optional[str] = None,
+        self,
+        sql: str,
+        results: bool = True,
+        lower: bool = True,
+        on_error: Optional[str] = None,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
         """Execute a query and return results.
 
@@ -204,15 +208,15 @@ class Connector:
             raise e
 
     def to_table(
-            self,
-            df: pd.DataFrame,
-            table: str,
-            file_format: Optional[str] = None,
-            incl_tmstmp: Optional[bool] = None,
-            on_error: Optional[str] = None,
-            if_exists: Optional[str] = None,
-            as_is: bool = False,
-            **kwargs,
+        self,
+        df: pd.DataFrame,
+        table: str,
+        file_format: Optional[str] = None,
+        incl_tmstmp: Optional[bool] = None,
+        on_error: Optional[str] = None,
+        if_exists: Optional[str] = None,
+        as_is: bool = False,
+        **kwargs,
     ):
         """Table re-implementation."""
         from snowmobile.core import Loader  # isort:skip
@@ -226,15 +230,13 @@ class Connector:
                 incl_tmstmp=incl_tmstmp,
                 on_error=on_error,
                 if_exists=if_exists,
-                **(kwargs or {})
+                **(kwargs or {}),
             )
             if as_is:
                 return table.load()
             return table
 
-        except (
-            ProgrammingError, pdDataBaseError, DatabaseError
-        ) as e:
+        except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             raise e
 
     def __setattr__(self, key, value):

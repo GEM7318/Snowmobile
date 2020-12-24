@@ -1,7 +1,7 @@
 """
 Exceptions for :class:`Loader`..
 """
-from typing import Optional, List
+from typing import List, Optional
 
 from snowmobile.core import errors
 from snowmobile.core.script.errors import StatementNotFoundError
