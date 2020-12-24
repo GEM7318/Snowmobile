@@ -18,8 +18,7 @@ from snowmobile.core.configuration import Configuration
 from snowmobile.core.df_ext import SnowFrame
 
 
-# noinspection PyTypeChecker
-# noinspection PydanticTypeChecker
+# noinspection PyTypeChecker, PydanticTypeChecker
 class Connector:
 
     _QUERY_OUTCOMES: Dict[Any, Tuple] = {
@@ -198,6 +197,11 @@ class Connector:
         self.outcome, self.error = _id, e
         if _raise:
             raise e
+
+    def to_table(self, df: pd.DataFrame, table: str):
+        from snowmobile.core import Loader  # isort:skip
+
+        return Loader(sn=self, df=df, table=table)
 
     def __setattr__(self, key, value):
         vars(self)[key] = value

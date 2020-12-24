@@ -131,18 +131,15 @@ class SQL:
         restrictions = {
             **(restrictions or dict()),
             **{
-                'lower(table_name)': f"'{table.lower()}'",
-                'lower(table_schema)': f"'{schema.lower()}'",
+                "lower(table_name)": f"'{table.lower()}'",
+                "lower(table_schema)": f"'{schema.lower()}'",
             },
         }
         if all_schemas:
-            _ = restrictions.pop('lower(table_schema)')
+            _ = restrictions.pop("lower(table_schema)")
 
         sql = self._info_schema_generic(
-            obj="table",
-            fields=fields,
-            restrictions=restrictions,
-            order_by=order_by,
+            obj="table", fields=fields, restrictions=restrictions, order_by=order_by,
         )
 
         return self.sn.query(sql=sql) if self._run(run) else sql
@@ -194,30 +191,51 @@ class SQL:
             )
         except ValueError as e:
             raise e
-        # fmt: off
+        # fmt: on
         restrictions = {
             **(restrictions or dict()),
             **{
-                'lower(table_name)': f"'{table.lower()}'",
-                'lower(table_schema)': f"'{schema.lower()}'",
+                "lower(table_name)": f"'{table.lower()}'",
+                "lower(table_schema)": f"'{schema.lower()}'",
             },
         }
         if all_schemas:
-            restrictions.pop('lower(table_schema)')
+            restrictions.pop("lower(table_schema)")
 
         sql = self._info_schema_generic(
-            obj="column",
-            fields=fields,
-            restrictions=restrictions,
-            order_by=order_by,
+            obj="column", fields=fields, restrictions=restrictions, order_by=order_by,
         )
 
         return self.sn.query(sql=sql) if self._run(run) else sql
 
+    def cnt_records(self, nm: str = None, run: bool = None):
+        """Number of records within a table or view.
+
+        Args:
+            nm (str):
+                Table name, including schema if creating a stage outside of the
+                current schema.
+            run (bool):
+                Indicates whether to execute generated sql or return as string;
+                default is `True`.
+
+        Returns (Union[str, pd.DataFrame]):
+            Either:
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
+                2.  The generated query as a :class:`str` of sql.
+
+        """
+        try:
+            obj_name = self._validate(
+                val=(nm or self.nm), nm="obj_name", attr_nm="obj_name"
+            )
+        except ValueError as e:
+            raise e
+        sql = f"select count(*) from {obj_name}"
+        return self.sn.query(sql=sql) if self._run(run) else sql
+
     def table_last_altered(
-        self,
-        nm: str = None,
-        run: bool = None,
+        self, nm: str = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Last altered timestamp for a table or view.
 
@@ -237,8 +255,7 @@ class SQL:
         """
         try:
             sql = self.info_schema_tables(
-                nm=nm,
-                fields=["table_name", "table_schema", "last_altered"],
+                nm=nm, fields=["table_name", "table_schema", "last_altered"],
             )
             return self.sn.query(sql=sql) if self._run(run) else sql
         except AssertionError as e:
@@ -312,7 +329,7 @@ class SQL:
         # fmt: on
         _sql = (
             f"drop {obj} if exists {up(obj_schema)}.{up(obj_name)}"
-            if obj.lower() in ['table', 'view', 'file_format']
+            if obj.lower() in ["table", "view", "file_format"]
             else f"drop {obj} if exists {up(obj_name)}"
         )
         sql = strip(_sql)
@@ -412,8 +429,7 @@ class SQL:
         # fmt: on
         create = self._create(replace=replace)
         _sql = (
-            f"{create} {obj} {up(to_schema)}.{up(to)} "
-            f"clone {up(schema)}.{up(nm)}"
+            f"{create} {obj} {up(to_schema)}.{up(to)} " f"clone {up(schema)}.{up(nm)}"
         )
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
@@ -450,10 +466,9 @@ class SQL:
                 2.  The generated query as a :class:`str` of sql.
 
         """
-        # fmt: off
         path = Path(str(path))
         statement = [f"put file://{path.as_posix()} @{nm_stage}"]
-
+        # fmt: off
         defaults = (
             self.sn.cfg.loading.put.dict(by_alias=False) if not ignore_defaults
             else dict()
@@ -464,12 +479,11 @@ class SQL:
         }
         for k, v in options.items():
             statement.append(f"\t{k} = {str(v).lower() if isinstance(v, bool) else v}")
-
+        # fmt: on
         _sql = "\n".join(statement)
-        sql = strip(_sql)
+        sql = strip(_sql, trailing=False, whitespace=False, blanks=True)
 
         return self.sn.query(sql=sql) if self._run(run) else sql
-        # fmt: off
 
     def copy_into_table_from_stage(
         self,
@@ -506,7 +520,8 @@ class SQL:
         """
         statement = [f"copy into {nm} from @{nm_stage}"]
         defaults = (
-            self.sn.cfg.loading.copy_into.dict(by_alias=False) if not ignore_defaults
+            self.sn.cfg.loading.copy_into.dict(by_alias=False)
+            if not ignore_defaults
             else dict()
         )
         options = {
@@ -516,7 +531,7 @@ class SQL:
         for k, v in options.items():
             statement.append(f"\t{k} = {v}")
         _sql = "\n".join(statement)
-        sql = strip(_sql)
+        sql = strip(_sql, trailing=False, whitespace=False, blanks=True)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def show_file_formats(self, run: bool = None) -> Union[str, pd.DataFrame]:
@@ -536,12 +551,7 @@ class SQL:
         sql = f"show file formats"
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def ddl(
-        self,
-        nm: str = None,
-        obj: str = None,
-        run: bool = None,
-    ) -> str:
+    def ddl(self, nm: str = None, obj: str = None, run: bool = None,) -> str:
         """Query the DDL for an in-warehouse object.
 
         Args:
@@ -562,15 +572,11 @@ class SQL:
         """
         schema, nm = p(nm)
         try:
-            obj = self._validate(
-                val=(obj or self.obj), nm='obj', attr_nm='obj'
-            )
+            obj = self._validate(val=(obj or self.obj), nm="obj", attr_nm="obj")
             schema = self._validate(
-                val=(schema or self.schema), nm='schema', attr_nm='schema'
+                val=(schema or self.schema), nm="schema", attr_nm="schema"
             )
-            nm = self._validate(
-                val=(nm or self.nm), nm='nm', attr_nm='nm'
-            )
+            nm = self._validate(val=(nm or self.nm), nm="nm", attr_nm="nm")
         except ValueError as e:
             raise e
         _sql = f"select get_ddl('{obj}', '{up(schema)}.{up(nm)}') as ddl"
@@ -578,10 +584,7 @@ class SQL:
         return self.sn.query(sql=sql).snowmobile.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
-        self,
-        nm: str = None,
-        n: int = None,
-        run: bool = None,
+        self, nm: str = None, n: int = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Select `n` sample records from a table.
 
@@ -623,11 +626,7 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def truncate(
-        self,
-        nm: str,
-        run: bool = None
-    ) -> Union[str, pd.DataFrame]:
+    def truncate(self, nm: str, run: bool = None) -> Union[str, pd.DataFrame]:
         """Truncate a table.
 
         Args:
@@ -751,10 +750,7 @@ limit {n or 1}
         return self.use(obj="role", nm=nm, run=run)
 
     def columns(
-        self,
-        nm: str,
-        from_info_schema: bool = False,
-        run: bool = None,
+        self, nm: str = None, from_info_schema: bool = False, run: bool = None,
     ) -> Union[str, List]:
         """Returns an ordered list of columns for a table or view.
 
@@ -809,7 +805,9 @@ limit {n or 1}
         except:
             return False
 
-    def _columns_from_info_schema(self, nm: str = None, run: bool = None) -> Union[str, List]:
+    def _columns_from_info_schema(
+        self, nm: str = None, run: bool = None
+    ) -> Union[str, List]:
         """Retrieves list of columns for a table or view **from information schema**.
 
         Args:
@@ -828,18 +826,13 @@ limit {n or 1}
 
         """
         sql = self.info_schema_columns(
-            nm=nm,
-            fields=["ordinal_position", "column_name"],
-            order_by=[1],
-            run=False,
+            nm=nm, fields=["ordinal_position", "column_name"], order_by=[1], run=False,
         )
-        return (
-            self.sn.query(sql).snowmobile.to_list(col_nm="column_name")
-            if run
-            else sql
-        )
+        return self.sn.query(sql).snowmobile.to_list(col="column_name") if run else sql
 
-    def _columns_from_sample(self, nm: str = None, run: bool = None) -> Union[str, List]:
+    def _columns_from_sample(
+        self, nm: str = None, run: bool = None
+    ) -> Union[str, List]:
         """Retrieves a list of columns for a table or view from **sampling table**.
 
         Args:
@@ -858,9 +851,7 @@ limit {n or 1}
         """
         _sql = self.table_sample(nm=nm, run=False, n=1)
         sql = strip(_sql)
-        return list(
-            self.sn.query(sql, lower=False).columns
-        ) if self._run(run) else sql
+        return list(self.sn.query(sql, lower=False).columns) if self._run(run) else sql
 
     @staticmethod
     def _create(replace: bool = False):
@@ -918,6 +909,7 @@ limit {n or 1}
                 f" information_schema method called.\n"
                 f"Supported objects are:\n\t[{','.join(INFO.keys())}]"
             )
+        # fmt: on
 
         info_schema_loc = INFO[obj]
         fields = self.fields(fields=fields)
@@ -932,13 +924,12 @@ from information_schema.{info_schema_loc}
 {order_by}
 """
         return strip(sql, trailing=False, blanks=True)
-        # fmt: on
 
     @staticmethod
     def order(by: List[Union[int, str]]) -> str:
         """Generates 'order by' clause from a list of fields or field ordinal positions."""
         if by:
-            order_by_fields = ','.join(str(v) for v in by)
+            order_by_fields = ",".join(str(v) for v in by)
             return f"order by {order_by_fields}"
         else:
             return str()
@@ -970,9 +961,9 @@ from information_schema.{info_schema_loc}
     @staticmethod
     def fields(fields: List) -> str:
         """Utility to generate fields within a 'select' statement."""
-        return '\n'.join(
+        return "\n".join(
             f'\t{"," if i > 1 else ""}{f}'
-            for i, f in enumerate(fields or ['*'], start=1)
+            for i, f in enumerate(fields or ["*"], start=1)
         )
 
     @staticmethod
@@ -999,11 +990,11 @@ from information_schema.{info_schema_loc}
         """
         if not val:
             closing1 = (
-                '.' if not attr_nm
-                else f", nor is its fallback attribute '{attr_nm}'."
+                "." if not attr_nm else f", nor is its fallback attribute '{attr_nm}'."
             )
             closing2 = (
-                '.' if not attr_nm
+                "."
+                if not attr_nm
                 else f" or set the '{attr_nm}' attribute before calling the method."
             )
             raise ValueError(
@@ -1015,15 +1006,11 @@ from information_schema.{info_schema_loc}
     def _reset(self):
         self.schema = self.sn.cfg.connection.current.schema_name
         self.nm = None
-        self.obj = 'table'
+        self.obj = "table"
         return self
 
     def __copy__(self) -> SQL:
-        return type(self)(
-            sn=self.sn,
-            nm=f"{self.schema}.{self.nm}",
-            obj=self.obj,
-        )
+        return type(self)(sn=self.sn, nm=f"{self.schema}.{self.nm}", obj=self.obj,)
 
     def copy(self) -> SQL:
         return self.__copy__()

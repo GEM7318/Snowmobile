@@ -209,9 +209,7 @@ class Diff(QA):
 
     def _drop(self) -> None:
         """Isolates columns to ignore/drop."""
-        self.drop_cols = self.results.snf.cols_matching(
-            patterns=self.ignore_patterns
-        )
+        self.drop_cols = self.results.snf.cols_matching(patterns=self.ignore_patterns)
 
     def _compare(self) -> None:
         """Isolate columns to use for comparison."""
@@ -313,11 +311,11 @@ class Diff(QA):
             self.results.set_index(keys=self.idx_cols, inplace=True)
 
             try:
-                self.partitions = self.results.snf.partitions(
-                    on=self.partition_on
-                )
+                self.partitions = self.results.snf.partitions(on=self.partition_on)
             except Exception as e:
-                self._exception_collector(e=StatementPostProcessingError(msg=(e.args[0])), _id=-1)
+                self._exception_collector(
+                    e=StatementPostProcessingError(msg=(e.args[0])), _id=-1
+                )
 
             if self._outcome != -1:
                 # TESTS: add test to verify what happens if this fails

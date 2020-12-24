@@ -13,10 +13,11 @@ from .column import Column
 from .errors import SnowFrameInternalError
 
 
-# DOCSTRING
 @pd.api.extensions.register_dataframe_accessor("snf")
 class SnowFrame:
-    """Extensions to :class:`pandas.DataFrame` with a ``snf`` entry point."""
+    """Light extension to :class:`pandas.DataFrame` with a ``snf`` entry point.
+
+    """
 
     def __init__(self, df: pd.DataFrame):
         self._obj: pd.DataFrame = df
@@ -130,12 +131,6 @@ class SnowFrame:
                     f"within '{on}' column of DataFrame. A minimum of 2 is required."
                 )
             )
-        # assert (
-        #     len(partitioned_by) >= 2
-        # ), f"""
-        #     DataFrame has {len(partitioned_by)} distinct values within
-        #     '{on}' column; at least 2 required.
-        #     """
         base_partitions = {p: self._obj[self._obj[on] == p] for p in partitioned_by}
         return {p: df.drop(columns=[on]) for p, df in base_partitions.items()}
 
@@ -148,14 +143,24 @@ class SnowFrame:
             .replace('"', "")
         )
 
-    def lower(self) -> pd.DataFrame:
-        """Lower cases all columns."""
-        self._obj.rename(columns={c.prior: c.lower() for c in self.cols}, inplace=True)
+    def lower(self, col: str = None) -> pd.DataFrame:
+        """Lower cases all column names **or** all values within `col` if provided."""
+        if col:
+            self._obj[col] = self._obj[col].apply(lambda x: str(x).lower())
+        else:
+            self._obj.rename(
+                columns={c.prior: c.lower() for c in self.cols}, inplace=True
+            )
         return self._obj
 
-    def upper(self) -> pd.DataFrame:
-        """Upper cases all columns."""
-        self._obj.rename(columns={c.prior: c.upper() for c in self.cols}, inplace=True)
+    def upper(self, col: str = None) -> pd.DataFrame:
+        """Upper cases all column names **or** all values within `col` if provided."""
+        if col:
+            self._obj[col] = self._obj[col].apply(lambda x: str(x).lower())
+        else:
+            self._obj.rename(
+                columns={c.prior: c.upper() for c in self.cols}, inplace=True
+            )
         return self._obj
 
     def reformat(self):
@@ -165,19 +170,19 @@ class SnowFrame:
         )
         return self._obj
 
-    def to_list(self, col_nm: str = None, n: int = None) -> List:
+    def to_list(self, col: str = None, n: int = None) -> List:
         """Succinctly retrieves a column as a list.
 
         Args:
-            col_nm (str):
+            col (str):
                 Name of column.
             n (int):
                 Number of records to return; defaults to full depth of column.
 
         """
-        if not col_nm:
-            col_nm = list(self._obj.columns)[0]
-        as_list = list(self._obj[col_nm])
+        if not col:
+            col = list(self._obj.columns)[0]
+        as_list = list(self._obj[col])
         return as_list if not n else as_list[n - 1]
 
     def add_tmstmp(self, col_nm: str = None) -> pd.DataFrame:
@@ -200,11 +205,13 @@ class SnowFrame:
 
         """
         df: pd.DataFrame = self._obj[
-            [c.current for c in self.cols if c.src == 'original']
+            [c.current for c in self.cols if c.src == "original"]
         ]
         return df.rename(columns={c.current: c.original for c in self.cols})
 
-    def cols_matching(self, patterns: List[str], ignore_patterns: List[str] = None) -> List[str]:
+    def cols_matching(
+        self, patterns: List[str], ignore_patterns: List[str] = None
+    ) -> List[str]:
         """Returns a list of columns given a list of patterns to find.
 
         Args:
@@ -249,7 +256,8 @@ class SnowFrame:
         for i, col in enumerate(self._obj.columns, start=1):
             if col == nm:
                 matches = [
-                    c for c in list(self._obj.columns)[:i]
+                    c
+                    for c in list(self._obj.columns)[:i]
                     if not any(list(re.findall(p, c)) for p in ignore_patterns)
                 ]
         return matches

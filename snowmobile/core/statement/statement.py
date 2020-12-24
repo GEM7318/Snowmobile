@@ -293,10 +293,7 @@ class Statement:
         )
 
     def set_state(
-        self,
-        tmstmp: int = None,
-        filters: dict = None,
-        index: int = None,
+        self, tmstmp: int = None, filters: dict = None, index: int = None,
     ) -> Statement:
         """Sets current state/context on a statement object.
 
@@ -500,13 +497,11 @@ class Statement:
         if not self._tmstmp:
             raise StatementInternalError(
                 nm=f"`s._exception_collector(_id='{e}')`",
-                msg="a call was made to `s._exception_collector()` while `s._tmstmp` is None."
+                msg="a call was made to `s._exception_collector()` while `s._tmstmp` is None.",
             )
         self._outcome = _id
         current_exceptions = (
-            self.errors[self._tmstmp]
-            if self._tmstmp in self.errors
-            else dict()
+            self.errors[self._tmstmp] if self._tmstmp in self.errors else dict()
         )
         current_exceptions[int(time.time())] = e
         self.errors[self._tmstmp] = current_exceptions
@@ -527,12 +522,12 @@ class Statement:
         if not self._tmstmp:
             raise StatementInternalError(
                 nm=f"`s.exceptions()`",
-                msg="a call was made to `s.exceptions()` while `s._tmstmp` is None."
+                msg="a call was made to `s.exceptions()` while `s._tmstmp` is None.",
             )
         elif not self.errors.get(self._tmstmp):
             raise StatementInternalError(
                 nm=f"`s.exceptions()`",
-                msg=f"no exceptions stored for `s._tmstmp`={self._tmstmp}"
+                msg=f"no exceptions stored for `s._tmstmp`={self._tmstmp}",
             )
         # ------
         total = {tmstmp: e for tmstmp, e in self.errors[self._tmstmp].items()}

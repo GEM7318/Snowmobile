@@ -24,6 +24,7 @@ from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.statement import Diff, Empty, Statement
 
+from .errors import StatementNotFoundError, DuplicateTagError
 from ._stdout import Script as Stdout
 
 
@@ -284,9 +285,7 @@ class Script:
                 A full set of scope arguments.
         """
         for s in self._statements_all.values():
-            s.set_state(
-                tmstmp=self.tmstmp, filters=scope_to_set
-            )
+            s.set_state(tmstmp=self.tmstmp, filters=scope_to_set)
 
     def _update_scope_script(self, _id: Any[int, str], **kwargs) -> Dict:
         """Returns a valid set of scope args from an ``_id`` and the scope kwargs.
@@ -446,6 +445,8 @@ class Script:
     def statement(self, _id: Union[str, int] = None) -> Any[Statement, Empty, Diff]:
         """Fetch a single statement by _id."""
         index_of_id = self._id(_id=_id)
+        if index_of_id not in self.statements:
+            raise StatementNotFoundError(nm=_id)
         return self.statements[index_of_id]
 
     def reset(
@@ -501,23 +502,6 @@ class Script:
         counted = collections.Counter([s.tag.nm for s in self._statements_all.values()])
         return {tag: cnt for tag, cnt in counted.items() if cnt > 1}
 
-    def _validate_distinct_tags(
-        self, statements_to_validate: Dict[int, Any[Statement, Marker]]
-    ) -> Tuple[bool, str]:
-        """validates statement tags are unique if contents are requested by
-        statement/tag name as opposed to index position."""
-        to_validate = statements_to_validate
-        return (
-            (
-                len({s for s in to_validate})
-                == len({s.name for s in to_validate.values()})
-            ),
-            f"Statement names in within {self.path.name} must be unique if "
-            f"passing `by_index=False` to 'script.contents()'.\n"
-            f"See 'script.duplicates' for a dictionary of the indistinct tag "
-            f"names found within script.",
-        )
-
     def contents(
         self,
         by_index: bool = True,
@@ -535,12 +519,12 @@ class Script:
             contents_to_return = self._adjusted_contents
         if by_index:
             return contents_to_return
-
         # validation to ensure keys are unique if fetching contents by tag name
-        # TODO: Custom error
-        tags_are_unique, error_msg = self._validate_distinct_tags(contents_to_return)
-        if validate and not tags_are_unique:
-            raise Exception(error_msg)
+        if validate and not (
+            len({s for s in contents_to_return})
+            == len({s.name for s in contents_to_return.values()})
+        ):
+            raise DuplicateTagError(nm=self.path.name)
         return {s.name: s for i, s in contents_to_return.items()}
 
     def dtl(self, full: bool = False) -> None:

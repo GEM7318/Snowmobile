@@ -17,3 +17,12 @@ class SnowFrameInternalError(errors.InternalError):
         to_raise: Optional[bool] = False,
     ):
         super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+
+    def __str__(self):
+        """SnowFrameInternalError message."""
+        str_args = self.format_error_args(
+            _filter=True, **{"name": self.nm, "msg": self.msg,},
+        ).strip("\n")
+        return f"""
+{str_args}
+"""

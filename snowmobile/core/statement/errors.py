@@ -22,10 +22,10 @@ class StatementInternalError(errors.InternalError):
 class StatementPostProcessingError(errors.Error):
     """Exceptions that occur in the post-processing invoked by `s.process()`.
 
-	Indicates a non-database error occurred in the over-ride :meth:`process()`
-	method from a derived class of :class:`Statement`.
+    Indicates a non-database error occurred in the over-ride :meth:`process()`
+    method from a derived class of :class:`Statement`.
 
-	"""
+    """
 
     def __init__(
         self,
@@ -47,18 +47,18 @@ class StatementPostProcessingError(errors.Error):
 class QAFailure(errors.Error):
     """Exceptions that occur in post-processing invoked by `s.process()`.
 
-	Indicates a non-database error occurred in the :meth:`process()` over-ride
-	method of :class:`Statement`'s derived classes.
+    Indicates a non-database error occurred in the :meth:`process()` over-ride
+    method of :class:`Statement`'s derived classes.
 
-	Args:
-		nm (str):
-			Tag name of QA statement.
-		desc (str):
-			Object-specific exception message to display.
-		idx (int):
-			Index of the statement that failed its QA check.
+    Args:
+        nm (str):
+            Tag name of QA statement.
+        desc (str):
+            Object-specific exception message to display.
+        idx (int):
+            Index of the statement that failed its QA check.
 
-	"""
+    """
 
     def __init__(
         self,

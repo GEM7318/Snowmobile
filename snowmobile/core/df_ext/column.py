@@ -1,5 +1,5 @@
 """
-:class:`Column` object. Purpose is..
+:class:`Column` object.
 """
 from __future__ import annotations
 
@@ -9,9 +9,8 @@ import string
 from contextlib import contextmanager
 
 
-# DOCSTRING
 class Column:
-    """Handles the transformation of a single column within a DataFrame."""
+    """Handles transformation operations of a single column within a DataFrame."""
 
     _EXCLUDE_CHARS = list(
         itertools.chain.from_iterable(
@@ -32,6 +31,7 @@ class Column:
 
     @contextmanager
     def update(self):
+        """Simple context manager for dealing with current/prior migration."""
         try:
             self.prior = self.current
             yield self
@@ -39,31 +39,58 @@ class Column:
             return self.current
 
     def lower(self) -> str:
+        """Lower case column."""
         with self.update() as s:
             s.current = s.current.lower()
         return self.current
 
     def upper(self) -> str:
+        """Upper case column."""
         with self.update() as s:
             s.current = s.current.upper()
         return self.current
 
+    @staticmethod
+    def dedupe(current: str, char: str = None) -> str:
+        """Dedupes consecutive characters within a string.
+
+        Note:
+            *   Must iterate through matches and perform replacements in the
+                order of the **largest to the smallest by number of characters**;
+                this is to avoid altering the matches found before replacing them.
+
+        Args:
+            current (str):
+                String containing characters to dedupe.
+            char (str):
+                Character to dedupe.
+
+        """
+        matches = re.findall(f"{char}+", current)
+
+        for match in reversed(matches):
+            current = current.replace(match, char)
+        return current
+
     def reformat(self, fill_char: str = None, dedupe_special: bool = True) -> str:
+        """Reformat column for a load to the database.
+
+        Args:
+            fill_char (str):
+                Character to replace special characters and whitespace with;
+                defaults to `_`.
+            dedupe_special (bool):
+                Dedupe consecutive special characters; defaults to `True`.
+
+        """
         with self.update() as s:
             fill_char = fill_char or "_"
             to_swap = {k: fill_char for k in self._EXCLUDE_CHARS}
             for char, swap_char in to_swap.items():
                 s.current = s.current.replace(char, swap_char)
             if dedupe_special:
-                s.current = s.dedupe(fill_char, s.current)
+                s.current = s.dedupe(fill_char=fill_char, current=s.current)
         return self.current
-
-    @staticmethod
-    def dedupe(char: str, to_dedupe: str) -> str:
-        matches = re.findall(f"{char}+", to_dedupe)
-        for match in reversed(matches):
-            to_dedupe = to_dedupe.replace(match, char)
-        return to_dedupe
 
     def __setattr__(self, key, value):
         vars(self)[key] = value

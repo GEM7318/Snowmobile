@@ -1,2 +1,2 @@
-__all__ = ["Script"]
-from .script import Script
+__all__ = ["Script", "StatementNotFoundError"]
+from .script import Script, StatementNotFoundError

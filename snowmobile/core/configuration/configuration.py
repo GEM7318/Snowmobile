@@ -287,7 +287,7 @@ class Configuration(Snowmobile):
         return [{"base": vars(t)[k], "arg": k} for k in self.SCOPE_ATTRIBUTES]
 
     def json(self, by_alias: bool = False, **kwargs):
-        """Serialization method for core object attributes."""
+        """Serialization method for core object model."""
         total = {}
         for k, v in vars(self).items():
             if issubclass(type(v), Base):
