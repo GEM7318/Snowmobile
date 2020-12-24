@@ -474,7 +474,7 @@ class Script(Base):
                 raise AssertionError(
                     f"parsing.find_tags() error.\n"
                     f"Found different number of open-tags to closing-tags; please check "
-                    f"script to ensure each open-_tag matching '{to_open}' has an "
+                    f"script to ensure each open-tag matching '{to_open}' has an "
                     f"associated closing-_tag matching '{to_close}'."
                 )
             return {i: (open_spans[i], close_spans[i]) for i in close_spans}

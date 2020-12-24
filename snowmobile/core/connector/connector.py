@@ -5,7 +5,7 @@ SnowflakeConnection for query/statement execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Tuple, Union, Optional
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -13,12 +13,18 @@ from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
+
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration
+# from snowmobile.core.loader.errors import (
+#     LoadingInternalError,
+#     ExistingTableError,
+#     ColumnMismatchError,
+# )
 from snowmobile.core.snowframe import SnowFrame
 
 
-# noinspection PyTypeChecker, PydanticTypeChecker
+# TODO: Create 'connect' alias
 class Connector:
 
     _QUERY_OUTCOMES: Dict[Any, Tuple] = {
@@ -64,12 +70,12 @@ class Connector:
 
         """
         self.outcome: int = int()
-        self.error: Union[DatabaseError, pdDataBaseError] = None
+        self.error: Optional[DatabaseError, pdDataBaseError] = None
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
         self.ensure_alive = ensure_alive
-        self.conn: SnowflakeConnection = None
+        self.conn: Optional[SnowflakeConnection] = None
         self.sql: sql.SQL = sql.SQL(sn=self)
         self.mode = mode or "e"
 
@@ -103,7 +109,10 @@ class Connector:
             )
             self.sql = sql.SQL(sn=self)
 
-            print(str(self))
+            # print(f"connected: {str(self)}")
+            # print(f"<connected> {str(self)}")
+            # print(f"connected to: {str(self)}")
+            print(f"..connected: {str(self)}")
             return self
 
         except DatabaseError as e:
@@ -198,10 +207,39 @@ class Connector:
         if _raise:
             raise e
 
-    def to_table(self, df: pd.DataFrame, table: str):
+    def to_table(
+            self,
+            df: pd.DataFrame,
+            table: str,
+            file_format: Optional[str] = None,
+            incl_tmstmp: Optional[bool] = None,
+            on_error: Optional[str] = None,
+            if_exists: Optional[str] = None,
+            as_is: bool = False,
+            **kwargs,
+    ):
+        """Table re-implementation."""
         from snowmobile.core import Loader  # isort:skip
 
-        return Loader(sn=self, df=df, table=table)
+        try:
+            table = Loader(
+                sn=self,
+                df=df,
+                table=table,
+                file_format=file_format,
+                incl_tmstmp=incl_tmstmp,
+                on_error=on_error,
+                if_exists=if_exists,
+                **(kwargs or {})
+            )
+            if as_is:
+                return table.load()
+            return table
+
+        except (
+            ProgrammingError, pdDataBaseError, DatabaseError
+        ) as e:
+            raise e
 
     def __setattr__(self, key, value):
         vars(self)[key] = value

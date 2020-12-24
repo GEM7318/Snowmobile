@@ -74,6 +74,9 @@ class Loading(Base):
     default_file_format: str = Field(
         default_factory=str, alias="default-file-format"
     )
+    default_if_exists: str = Field(
+        alias="default-if-exists-behavior"
+    )
     put: Put = Field(
         default_factory=Put, alias="put"
     )
