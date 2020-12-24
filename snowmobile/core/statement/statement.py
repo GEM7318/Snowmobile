@@ -100,14 +100,14 @@ class Statement:
         self,
         sn: Connector,
         statement: Union[sqlparse.sql.Statement, str],
-        index: int = None,
+        index: Optional[int] = None,
         attrs_raw: Optional[str] = None,
         **kwargs,
     ):
         self._index: int = index
         self._exclude_attrs = []
 
-        self._tmstmp: int = None
+        self._tmstmp: Optional[int] = None
         self.timestamps: Set[int] = set()
 
         self.errors: Dict[int, Dict[int, Exception]] = {}
@@ -293,7 +293,7 @@ class Statement:
         )
 
     def set_state(
-        self, tmstmp: int = None, filters: dict = None, index: int = None,
+        self, tmstmp: Optional[int] = None, filters: dict = None, index: Optional[int] = None,
     ) -> Statement:
         """Sets current state/context on a statement object.
 
@@ -400,7 +400,7 @@ class Statement:
         on_error: Optional[str] = None,
         on_exception: Optional[str] = None,
         on_failure: Optional[str] = None,
-        tmstmp: int = None,
+        tmstmp: Optional[int] = None,
     ) -> Statement:
         """Run method for all statement objects.
 
@@ -511,7 +511,7 @@ class Statement:
         last: bool = False,
         hist: bool = False,
         _raise: bool = False,
-        from_tmstmp: int = None,
+        from_tmstmp: Optional[int] = None,
     ):
         """All exceptions encountered, sorted from most to least recent."""
         if from_tmstmp:
@@ -540,7 +540,7 @@ class Statement:
             raise sorted_total[max(sorted_total)]
         # ------
 
-    def outcome_txt(self, _id: int = None) -> str:
+    def outcome_txt(self, _id: Optional[int] = None) -> str:
         """Outcome as a string."""
         return self._PROCESS_OUTCOMES[_id or self._outcome][1]
 

@@ -136,7 +136,7 @@ class Script:
                 yield s
 
     def add_statement(
-        self, s: Union[sqlparse.sql.Statement, str], index: int = None
+        self, s: Union[sqlparse.sql.Statement, str], index: Optional[int] = None
     ) -> None:
         """Adds a statement object to the script.
 
@@ -329,16 +329,16 @@ class Script:
         self,
         as_id: Any[str, int] = None,
         from_id: Any[str, int] = None,
-        incl_kw: List = None,
-        incl_obj: List = None,
-        incl_desc: List = None,
-        incl_anchor: List = None,
-        incl_nm: List = None,
-        excl_kw: List = None,
-        excl_obj: List = None,
-        excl_desc: List = None,
-        excl_anchor: List = None,
-        excl_nm: List = None,
+        incl_kw: Optional[List] = None,
+        incl_obj: Optional[List] = None,
+        incl_desc: Optional[List] = None,
+        incl_anchor: Optional[List] = None,
+        incl_nm: Optional[List] = None,
+        excl_kw: Optional[List] = None,
+        excl_obj: Optional[List] = None,
+        excl_desc: Optional[List] = None,
+        excl_anchor: Optional[List] = None,
+        excl_nm: Optional[List] = None,
         last: bool = False,
     ) -> ContextManager[Script]:
         # fmt: off

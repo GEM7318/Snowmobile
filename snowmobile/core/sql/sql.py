@@ -147,9 +147,9 @@ class SQL:
     def info_schema_columns(
         self,
         nm: Optional[str] = None,
-        fields: List = None,
+        fields: Optional[List] = None,
         restrictions: Dict = None,
-        order_by: List = None,
+        order_by: Optional[List] = None,
         all_schemas: bool = False,
         run: bool = None,
     ) -> Union[str, pd.DataFrame]:
@@ -584,7 +584,7 @@ class SQL:
         return self.sn.query(sql=sql).snowmobile.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
-        self, nm: Optional[str] = None, n: int = None, run: bool = None,
+        self, nm: Optional[str] = None, n: Optional[int] = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Select `n` sample records from a table.
 
@@ -891,7 +891,7 @@ limit {n or 1}
         obj: str,
         fields: List[str] = None,
         restrictions: Dict[str, str] = None,
-        order_by: List = None,
+        order_by: Optional[List] = None,
     ) -> str:
         """Generic case of selecting from information schema tables/columns.
 

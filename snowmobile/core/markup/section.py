@@ -264,7 +264,7 @@ class Section:
         config: Configuration,
         is_marker: bool = None,
         h_contents: Optional[str] = None,
-        index: int = None,
+        index: Optional[int] = None,
         parsed: Dict = None,
         sql: Optional[str] = None,
         results: pd.DataFrame = None,

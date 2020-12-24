@@ -56,7 +56,7 @@ class Error(Exception):
     def format_error_args(
         prefix: Optional[str] = None,
         sep: Optional[str] = None,
-        lines: int = None,
+        lines: Optional[int] = None,
         _filter: bool = True,
         **kwargs: Dict[str, str],
     ) -> str:

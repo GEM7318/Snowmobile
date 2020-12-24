@@ -108,10 +108,6 @@ class Connector:
                 },
             )
             self.sql = sql.SQL(sn=self)
-
-            # print(f"connected: {str(self)}")
-            # print(f"<connected> {str(self)}")
-            # print(f"connected to: {str(self)}")
             print(f"..connected: {str(self)}")
             return self
 
@@ -126,14 +122,14 @@ class Connector:
 
     @property
     def alive(self) -> bool:
-        """Check if the connection is still alive."""
+        """Check if the connection is alive."""
         if not isinstance(self.conn, SnowflakeConnection):
             return False
         return not self.cursor.is_closed()
 
     @property
     def cursor(self) -> Union[SnowflakeCursor, None]:
-        """:class:`SnowflakeCursor` accessor off :class:`snowmobile.Connect`."""
+        """:class:`SnowflakeCursor` accessor."""
         if not isinstance(self.conn, SnowflakeConnection):
             self.connect()
         return self.conn.cursor()

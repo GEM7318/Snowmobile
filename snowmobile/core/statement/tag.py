@@ -118,7 +118,7 @@ class Tag:
         nm_pr: Optional[str] = None,
         first_keyword: Optional[str] = None,
         sql: Optional[str] = None,
-        index: int = None,
+        index: Optional[int] = None,
     ):
         self.cfg: Configuration = configuration
         self.patt: Pattern = self.cfg.script.patterns

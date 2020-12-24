@@ -170,7 +170,7 @@ class SnowFrame:
         )
         return self._obj
 
-    def to_list(self, col: Optional[str] = None, n: int = None) -> List:
+    def to_list(self, col: Optional[str] = None, n: Optional[int] = None) -> List:
         """Succinctly retrieves a column as a list.
 
         Args:
@@ -236,7 +236,7 @@ class SnowFrame:
             and not any(re.findall(col, p_excl) for p_excl in to_ignore)
         ]
 
-    def cols_ending(self, nm: str, ignore_patterns: List = None) -> List[str]:
+    def cols_ending(self, nm: str, ignore_patterns: Optional[List] = None) -> List[str]:
         """Returns all columns up to ``nm`` in a DataFrame.
 
         Args:
