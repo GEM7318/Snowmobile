@@ -7,7 +7,7 @@ import csv
 import os
 import time
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Any
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -15,71 +15,95 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from snowmobile.core.configuration import DDL_DEFAULT_PATH
 from snowmobile.core.script import StatementNotFoundError
-from .errors import LoadingValidationError, LoadingInternalError
-
 from snowmobile.core import SQL, Script, Connector
+from .errors import (
+    LoadingValidationError,
+    LoadingInternalError,
+    ExistingTableError,
+    ColumnMismatchError,
+    FileFormatNameError,
+)
 
 
 # TODO: (rename) Loader -> Table
 class Loader:
+
+    # noinspection PyTypeChecker,PydanticTypeChecker
     def __init__(
         self,
         df: pd.DataFrame,
         table: str,
         sn: Connector,
         keep_local: bool = False,
-        output_location: Union[str, Path] = None,
-        on_error: str = None,
+        path_ddl: Path = None,
+        path_output: Union[str, Path] = None,
         file_format: str = None,
         incl_tmstmp: bool = True,
         tmstmp_col_nm: str = None,
         reformat_cols: bool = True,
-        upper_case_cols: bool = True,
-        path_ddl: Path = None,
-        lower_allow: bool = False,
         validate_format: bool = True,
+        upper_case_cols: bool = True,
+        lower_case_table: bool = False,
+        on_error: str = None,
     ):
-        # error handling and validation
-        # -----------------------------
+        # sql generation and execution
+        # ----------------------------
+        self.sql: SQL = SQL(sn=sn, nm=table)
+
+        # flow control
+        # ------------
         self.msg: str = str()
-        self.continue_load: bool = bool()
-        self.validated: bool = bool()
-        self.raise_error: bool = bool()
+        self.error: Any[
+            LoadingValidationError,
+            LoadingInternalError,
+            ExistingTableError,
+            ColumnMismatchError,
+            FileFormatNameError,
+        ] = None
         self.requires_sql: bool = bool()
 
-        # dataframe vs table information
-        # ------------------------------
+        # dataframe / table information
+        # -----------------------------
+        self.df = df.snf.upper() if upper_case_cols else df
+        self.name: str = table.upper() if not lower_case_table else table
         self._exists: bool = bool()
         self._col_diff: Dict[int, bool] = dict()
 
+        # argument specs + snowmobile.toml
+        # --------------------------------
+        self.path_ddl = path_ddl or DDL_DEFAULT_PATH
+        self.path_output = path_output or Path.cwd() / f"{table}.csv"
+        self.keep_local = keep_local or sn.cfg.loading.other.keep_local
+        self.on_error = on_error or sn.cfg.loading.copy_into.on_error
+        self.file_format = file_format or sn.cfg.loading.default_file_format
+
         # time tracking
         # -------------
-        self._format_validation_start: int = int()
-        self._format_validation_end: int = int()
         self._upload_validation_start: int = int()
         self._upload_validation_end: int = int()
         self._load_start: int = int()
         self._load_end: int = int()
 
-        # sql generation and execution
-        # ------------------------------------
-        self.sql: SQL = SQL(sn=sn, nm=table)
+        # file format validation
+        # ----------------------
+        if not validate_format:
+            return
 
-        # dataframe / table information
-        # -----------------------------
-        self.df = df.snf.upper() if upper_case_cols else df
-        self.name: str = table.upper() if not lower_allow else table
-
-        # specifications, combined with snowmobile.toml
-        # ---------------------------------------------
-        self.path_ddl = path_ddl or DDL_DEFAULT_PATH
-        self.keep_local = keep_local or sn.cfg.loading.other.keep_local
-        self.on_error = on_error or sn.cfg.loading.copy_into.on_error
-        self.file_format = file_format or sn.cfg.loading.default_file_format
-
-        self.loaded: bool = bool()
-        self.db_responses: Dict[str, str] = dict()
-        self.output_location = output_location or Path.cwd() / f"{table}.csv"
+        format_exists_in_schema: bool = self.file_format.lower() in [
+            c.lower() for c in self.sql.show_file_formats().snf.to_list("name")
+        ]
+        if not format_exists_in_schema:  # read from source file otherwise
+            assert (self.path_ddl.exists(), f"{self.path_ddl} does not exist")
+            ddl = Script(sn=self.sql.sn, path=self.path_ddl)
+            st_name = f"create-file format~{self.file_format}"
+            args = {  # only used if exception is thrown
+                "nm": st_name,
+                "statements": list(ddl.contents(by_index=False)),
+            }
+            try:
+                ddl.run(st_name, results=False)
+            except StatementNotFoundError(**args) as e:
+                raise FileFormatNameError(**args) from e
 
         # load timestamp
         # --------------
@@ -94,27 +118,10 @@ class Loader:
         if reformat_cols:
             self.df.snf.reformat()
 
-        # file format validation
-        # ----------------------
-        if not validate_format:
-            return
-        self._format_validation_start = time.time()
-
-        format_exists = self.file_format.lower() in self.sql.show_file_formats().snf.lower(
-            col="name"
-        ).snf.to_list(
-            col="name"
-        )
-        if not format_exists:  # read from source file otherwise
-            assert self.path_ddl.exists()
-            ddl = Script(sn=self.sql.sn, path=self.path_ddl)
-
-            st_name = f"create-file format~{self.file_format}"
-            if st_name not in ddl.statements:
-                raise StatementNotFoundError(nm=st_name)
-            ddl.run(st_name, results=False)
-
-        self._format_validation_end = time.time()
+        # other
+        # -----
+        self.db_responses: Dict[str, str] = dict()
+        self.loaded: bool = bool()
 
     @property
     def exists(self):
@@ -129,20 +136,21 @@ class Loader:
 
         def fetch(idx: int, from_list: List) -> str:
             """Grab list item without throwing error if index exceeds length."""
-            return from_list[idx] if idx <= (len(from_list) - 1) else None
+            return str(from_list[idx]).lower() if idx <= (len(from_list) - 1) else None
 
         if self._col_diff:
             return self._col_diff
+
         if not self.exists:
             raise LoadingInternalError(
-                nm="Table.compare()", msg=f"called while `table.exists={self.exists}`."
+                nm="Table.col_diff()", msg=f"called while `table.exists={self.exists}`."
             )
 
         cols_t = self.sql.columns()
         cols_df = list(self.df.columns)
 
         self._col_diff = {
-            i: fetch(i, cols_t).lower() == fetch(i, cols_df).lower()
+            i: fetch(i, cols_t) == fetch(i, cols_df)
             for i in range(max(len(cols_t), len(cols_df)))
         }
 
@@ -164,7 +172,7 @@ class Loader:
     def to_local(self, quote_all: bool = True):
         """Export to local file via configuration in ``snowmobile.toml``."""
         export_options = self.sql.sn.cfg.loading.export_options[self.file_format]
-        export_options["path_or_buf"] = self.output_location
+        export_options["path_or_buf"] = self.path_output
         if quote_all:
             export_options["quoting"] = csv.QUOTE_ALL
         self.df.to_csv(**export_options)
@@ -180,14 +188,9 @@ class Loader:
         return int(self._upload_validation_end - self._upload_validation_start)
 
     @property
-    def tm_validate_format(self) -> int:
-        """Seconds elapsed during validation."""
-        return int(self._format_validation_end - self._format_validation_start)
-
-    @property
     def tm_total(self):
         """Total seconds elapsed for load."""
-        return self.tm_load + self.tm_validate_load + self.tm_validate_format
+        return self.tm_load + self.tm_validate_load
 
     def validate(self, if_exists: str) -> None:
         """Validates load based on current state through a variety of operations.
@@ -195,11 +198,15 @@ class Loader:
         Exactly `one` of the conditions within this method is expected to
         evaluate to `True`, at which point the following 5 attributes will be
         will be set on the :class:`Table` object:
-            *   *continue_load (bool)*
-            *   *requires_sql (str)*
-            *   *raise_error (bool)*
-            *   *msg (str)*
-            *   *validated (bool)*
+            *   **continue_load** (`bool`): Indicates whether or not to
+                continue with loading process.
+            *   **requires_sql** (`str`): Type of statement needed to execute
+                prior to continuing with load if `continue_load=True`; either
+                'ddl', 'truncate', or an empty string if not required.
+            *   **raise_error** (`bool`): Whether or not the validation has
+                resulted in an error to be raised.
+            *   **msg** (`str`): Message for error to be raised if applicable.
+            *   **validated** (`bool`): Denotes validation process has been run.
 
         Args:
             if_exists (str):
@@ -207,73 +214,67 @@ class Loader:
                 in from :meth:`table.load()` by default.
 
         """
+        self.error = None  # wipe prior validation results
         self._upload_validation_start = time.time()
-        self._col_diff = self.col_diff
 
         if not self.exists:
-            msg = f"{self.name} does not exist."
-            continue_load, requires_sql, raise_error = True, "ddl", False
+            self.msg = f"{self.name} does not exist."
+            self.requires_sql = "ddl"
+            self._upload_validation_end = time.time()
+            return
 
-        elif if_exists == "fail":
-            msg = (
+        self._col_diff = self.col_diff
+        if if_exists == "fail":
+            self.msg = (
                 f"`{self.name}` already exists and if_exists='fail' was "
                 f"provided; please provide 'replace', 'append', or "
                 f"'truncate' to continue loading with a pre-existing table."
             )
-            continue_load, requires_sql, raise_error = False, "", True
+            self.error = ExistingTableError(msg=self.msg)
 
         elif self.cols_match and if_exists == "append":
-            msg = (
+            self.msg = (
                 f"`{self.name}` exists with matching columns to local "
                 f"DataFrame; if_exists='{if_exists}'"
             )
-            continue_load, requires_sql, raise_error = True, "", False
 
         elif self.cols_match and if_exists == "replace":
-            msg = (
+            self.msg = (
                 f"`{self.name}` exists with matching columns to local "
                 f"DataFrame; if_exists='{if_exists}'"
             )
-            continue_load, requires_sql, raise_error = True, "ddl", False
+            self.requires_sql = "ddl"
 
         elif self.cols_match and if_exists == "truncate":
-            msg = (
+            self.msg = (
                 f"`{self.name}` exists with matching columns to local "
                 f"DataFrame; if_exists='{if_exists}'"
             )
-            continue_load, requires_sql, raise_error = True, "truncate", False
+            self.requires_sql = "truncate"
 
         elif not self.cols_match and if_exists != "replace":
-            msg = (
-                f"`{self.name}` exists with mismatched columns to local "
-                f"DataFrame and if_exists='{if_exists}' was specified. "
-                f"Either provide a different value for `if_exists` or see "
-                f"``table.col_diff`` to inspect the mismatched columns."
+            self.msg = (
+                f"`{self.name}` columns do not equal those in the local "
+                f"DataFrame and if_exists='{if_exists}' was specified.\nEither"
+                f" provide if_exists='replace' to overwrite the existing table "
+                f"or see `table.col_diff` to inspect the mismatched columns."
             )
-            continue_load, requires_sql, raise_error = False, "", True
+            self.error = ColumnMismatchError(msg=self.msg)
 
         elif not self.cols_match:
-            msg = (
+            self.msg = (
                 f"`{self.name}` exists with mismatched columns to local "
                 f"DataFrame; recreating the table with new DDL as specified "
                 f"by if_exists='{if_exists}'"
             )
-            continue_load, requires_sql, raise_error = True, "ddl", False
+            self.requires_sql = "ddl"
 
         else:
-            msg = (
+            self.msg = (
                 f"Unknown combination of arguments passed to "
                 f"``loadable.to_table()``."
             )
-            continue_load, requires_sql, raise_error = False, "", True
-
-        (
-            self.continue_load,
-            self.requires_sql,
-            self.raise_error,
-            self.msg,
-            self.validated,
-        ) = (continue_load, requires_sql, raise_error, msg, True)
+            self.error = LoadingValidationError(msg=self.msg)
 
         self._upload_validation_end = time.time()
 
@@ -296,16 +297,8 @@ class Loader:
         # check for table existence; validate if so, all respecting `if_exists`
         if validate:
             self.validate(if_exists=if_exists)
-            if self.raise_error or not self.continue_load:
-                raise LoadingValidationError(msg=self.msg)
-        else:
-            (
-                self.continue_load,
-                self.requires_sql,
-                self.raise_error,
-                self.msg,
-                self.validated,
-            ) = (True, str(), False, str(), False)
+            if self.error:
+                raise self.error
 
         try:
             self._stdout_starting(verbose)
@@ -327,7 +320,7 @@ class Loader:
             self._load_end = time.time()
             self.sql.drop(nm=f"{self.name}_stage", obj="stage")  # drop stage
             if not self.keep_local:
-                os.remove(str(self.output_location))
+                os.remove(str(self.path_output))
             self._stdout_time(verbose=(not kwargs.get("silence") and self.loaded))
 
         return self
@@ -343,7 +336,7 @@ class Loader:
                 run=False,
             ),
             self.sql.put_file_from_stage(
-                path=self.output_location,
+                path=self.path_output,
                 nm_stage=f"{self.name}_stage",
                 run=False,
             ),
@@ -383,13 +376,12 @@ class Loader:
     def _stdout_time(self, verbose: bool) -> None:
         """Time summary message for stdout."""
         if verbose:
-            v_format = f"~{self.tm_validate_format}s validate format"
-            v_load = f"~{self.tm_validate_load}s validate load"
-            act_load = f"~{self.tm_load}s create/put/copy"
+            # v_load = f"~{self.tm_validate_load}s validate load"
+            # act_load = f"~{self.tm_load}s create/put/copy"
             stdout = f"""
-Load process completed in {self.tm_total} seconds ({v_format}, {v_load}, {act_load})        
+Load completed in {self.tm_total} seconds.        
 """
-            print(stdout.strip().strip('\n'))
+            print(stdout.strip().strip("\n"))
 
     def __str__(self) -> str:
         return f"snowmobile.Loader(table='{self.name}')"

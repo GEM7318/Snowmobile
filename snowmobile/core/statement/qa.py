@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Set
 import pandas as pd
 
 from snowmobile.core import Connector
-from snowmobile.core.df_ext.snowframe import SnowFrame
+from snowmobile.core.snowframe.snowframe import SnowFrame
 
 from .errors import QADiffFailure, QAEmptyFailure, StatementPostProcessingError
 from .statement import Statement

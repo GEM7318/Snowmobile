@@ -1,7 +1,7 @@
 """
 snowmobile.Script exceptions.
 """
-from typing import Optional
+from typing import Optional, List
 
 from snowmobile.core import errors
 
@@ -12,21 +12,28 @@ class StatementNotFoundError(errors.Error):
     def __init__(
         self,
         nm: str,
+        statements: List[str] = None,
         msg: Optional[str] = None,
         errno: Optional[int] = None,
         to_raise: Optional[bool] = False,
     ):
         super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+        self.st = statements
 
     def __str__(self):
         """StatementNotFoundError message."""
+        statements = ", ".join(f"'{s}'" for s in self.st) if self.st else ""
         str_args = self.format_error_args(
             _filter=True,
-            **{"name": f"'{self.nm}'", "msg": self.msg, "errno": self.errno},
+            **{
+                "name-provided": f"'{self.nm}'",
+                "msg": self.msg,
+                "errno": self.errno,
+                "names-found": statements,
+            },
         ).strip("\n")
         return f"""
 Statement name or index, `{self.nm}`, is not found in the script.
-compare the provided value to the results of `script.dtl()` or `script.statements`.
 {str_args}
 """
 

@@ -15,7 +15,7 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 import snowmobile.core.sql as sql
 from snowmobile.core.configuration import Configuration
-from snowmobile.core.df_ext import SnowFrame
+from snowmobile.core.snowframe import SnowFrame
 
 
 # noinspection PyTypeChecker, PydanticTypeChecker

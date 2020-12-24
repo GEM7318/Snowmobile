@@ -15,6 +15,7 @@ __all__ = [
     "Statement",
     "Diff",
     "Empty",
+    "SnowFrame",
     "utils",
     "errors",
 ]
@@ -25,6 +26,7 @@ from .connector import Connect, Connector
 from .markup import Markup, Section
 from .sql import SQL
 from .statement import Diff, Empty, Statement
+from .snowframe import SnowFrame
 
 from .script import Script  # isort:skip
 from .loader import Loader  # isort:skip
