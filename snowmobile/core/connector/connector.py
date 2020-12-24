@@ -45,12 +45,12 @@ class Connector:
 
     def __init__(
         self,
-        creds: str = None,
-        config_file_nm: str = None,
+        creds: Optional[str] = None,
+        config_file_nm: Optional[str] = None,
         from_config: Union[str, Path] = None,
         ensure_alive: bool = True,
         delay: bool = False,
-        mode: str = None,
+        mode: Optional[str] = None,
         **kwargs,
     ):
         """
@@ -138,7 +138,7 @@ class Connector:
             self.connect()
         return self.conn.cursor()
 
-    def ex(self, sql: str, on_error: str = None, **kwargs) -> SnowflakeCursor:
+    def ex(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor:
         """Executes a command via :class:`SnowflakeCursor`.
 
         Args:
@@ -161,7 +161,7 @@ class Connector:
             self._exception(e=e, _id=1, _raise=on_error != "c")
 
     def query(
-        self, sql: str, results: bool = True, lower: bool = True, on_error: str = None,
+        self, sql: str, results: bool = True, lower: bool = True, on_error: Optional[str] = None,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
         """Execute a query and return results.
 

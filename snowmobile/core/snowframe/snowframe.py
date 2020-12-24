@@ -143,7 +143,7 @@ class SnowFrame:
             .replace('"', "")
         )
 
-    def lower(self, col: str = None) -> pd.DataFrame:
+    def lower(self, col: Optional[str] = None) -> pd.DataFrame:
         """Lower cases all column names **or** all values within `col` if provided."""
         if col:
             self._obj[col] = self._obj[col].apply(lambda x: str(x).lower())
@@ -153,7 +153,7 @@ class SnowFrame:
             )
         return self._obj
 
-    def upper(self, col: str = None) -> pd.DataFrame:
+    def upper(self, col: Optional[str] = None) -> pd.DataFrame:
         """Upper cases all column names **or** all values within `col` if provided."""
         if col:
             self._obj[col] = self._obj[col].apply(lambda x: str(x).lower())
@@ -170,7 +170,7 @@ class SnowFrame:
         )
         return self._obj
 
-    def to_list(self, col: str = None, n: int = None) -> List:
+    def to_list(self, col: Optional[str] = None, n: int = None) -> List:
         """Succinctly retrieves a column as a list.
 
         Args:
@@ -185,7 +185,7 @@ class SnowFrame:
         as_list = list(self._obj[col])
         return as_list if not n else as_list[n - 1]
 
-    def add_tmstmp(self, col_nm: str = None) -> pd.DataFrame:
+    def add_tmstmp(self, col_nm: Optional[str] = None) -> pd.DataFrame:
         """Adds a column containing the current timestamp to a DataFrame.
 
         Args:

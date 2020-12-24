@@ -4,7 +4,7 @@ Base class for all :class:`Statement` objects.
 from __future__ import annotations
 
 import re
-from typing import Dict, Set, Union
+from typing import Dict, Set, Union, Optional
 
 from snowmobile.core.configuration import Configuration, Pattern
 
@@ -115,9 +115,9 @@ class Tag:
     def __init__(
         self,
         configuration: Configuration,
-        nm_pr: str = None,
-        first_keyword: str = None,
-        sql: str = None,
+        nm_pr: Optional[str] = None,
+        first_keyword: Optional[str] = None,
+        sql: Optional[str] = None,
         index: int = None,
     ):
         self.cfg: Configuration = configuration

@@ -67,7 +67,7 @@ class Config:
 
 
 class Base(BaseModel, Config):
-    """Extension to pydantic's BaseModel, used a Base class for entire object model."""
+    """Base class for object model parsed from ``snowmobile.toml``."""
 
     def from_relative(self, obj: Any):
         """Updates current object's attributes with those from a different

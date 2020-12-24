@@ -7,6 +7,7 @@ import itertools
 import re
 import string
 from contextlib import contextmanager
+from typing import Optional
 
 
 class Column:
@@ -22,7 +23,7 @@ class Column:
     )
 
     def __init__(
-        self, original: str, current: str = None, prior: str = None, src: str = None,
+        self, original: str, current: Optional[str] = None, prior: Optional[str] = None, src: Optional[str] = None,
     ):
         self.original = original
         self.src = src or "original"
@@ -51,7 +52,7 @@ class Column:
         return self.current
 
     @staticmethod
-    def dedupe(current: str, char: str = None) -> str:
+    def dedupe(current: str, char: Optional[str] = None) -> str:
         """Dedupes consecutive characters within a string.
 
         Note:
@@ -72,7 +73,7 @@ class Column:
             current = current.replace(match, char)
         return current
 
-    def reformat(self, fill_char: str = None, dedupe_special: bool = True) -> str:
+    def reformat(self, fill_char: Optional[str] = None, dedupe_special: bool = True) -> str:
         """Reformat column for a load to the database.
 
         Args:

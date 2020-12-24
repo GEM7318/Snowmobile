@@ -2,7 +2,7 @@
 Module contains parsing utilities used by :class:`Script`, :class:`Statement`,
 :class:`Markup`, and :class:`Section`.
 """
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 def up(nm: str):
@@ -37,7 +37,7 @@ def strip(
 
 
 def dict_flatten(
-    attrs: dict, delim: str = None, indent_char: str = None, bullet_char: str = None
+    attrs: dict, delim: Optional[str] = None, indent_char: Optional[str] = None, bullet_char: Optional[str] = None
 ) -> List[Tuple[str, str, str]]:
     """Recursively flattens dictionary to its atomic elements.
 

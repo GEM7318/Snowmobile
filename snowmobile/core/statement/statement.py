@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, ContextManager, Dict, Set, Union
+from typing import Any, Callable, ContextManager, Dict, Set, Union, Optional
 
 import pandas as pd
 import sqlparse
@@ -101,7 +101,7 @@ class Statement:
         sn: Connector,
         statement: Union[sqlparse.sql.Statement, str],
         index: int = None,
-        attrs_raw: str = None,
+        attrs_raw: Optional[str] = None,
         **kwargs,
     ):
         self._index: int = index
@@ -397,9 +397,9 @@ class Statement:
         results: bool = True,
         lower: bool = True,
         render: bool = False,
-        on_error: str = None,
-        on_exception: str = None,
-        on_failure: str = None,
+        on_error: Optional[str] = None,
+        on_exception: Optional[str] = None,
+        on_failure: Optional[str] = None,
         tmstmp: int = None,
     ) -> Statement:
         """Run method for all statement objects.

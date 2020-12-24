@@ -46,7 +46,7 @@ Header-levels and formatting of tagged information is configured in the
 """
 from __future__ import annotations
 
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import pandas as pd
 
@@ -134,7 +134,7 @@ class Item(Name):
         flattened_attrs: tuple,
         config: Configuration,
         results: pd.DataFrame = None,
-        sql_md: str = None,
+        sql_md: Optional[str] = None,
     ):
         cfg_md = config.script.markdown
         self.is_first: bool = bool()
@@ -263,10 +263,10 @@ class Section:
         self,
         config: Configuration,
         is_marker: bool = None,
-        h_contents: str = None,
+        h_contents: Optional[str] = None,
         index: int = None,
         parsed: Dict = None,
-        sql: str = None,
+        sql: Optional[str] = None,
         results: pd.DataFrame = None,
     ):
         """Instantiation of a ``script.Section`` object.

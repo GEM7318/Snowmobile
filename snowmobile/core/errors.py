@@ -54,8 +54,8 @@ class Error(Exception):
 
     @staticmethod
     def format_error_args(
-        prefix: str = None,
-        sep: str = None,
+        prefix: Optional[str] = None,
+        sep: Optional[str] = None,
         lines: int = None,
         _filter: bool = True,
         **kwargs: Dict[str, str],

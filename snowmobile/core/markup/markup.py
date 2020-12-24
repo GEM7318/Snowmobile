@@ -47,7 +47,7 @@ Header-levels and formatting of tagged information is configured in the
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Optional
 
 from snowmobile.core.configuration import DIR_PKG_DATA, Configuration
 from snowmobile.core.configuration.schema import Marker
@@ -65,10 +65,10 @@ class Markup:
         path: Path,
         contents: Dict[int, Union[Statement, Marker]],
         directory: Path = None,
-        file_nm: str = None,
-        alt_file_nm: str = None,
-        alt_file_prefix: str = None,
-        alt_file_suffix: str = None,
+        file_nm: Optional[str] = None,
+        alt_file_nm: Optional[str] = None,
+        alt_file_prefix: Optional[str] = None,
+        alt_file_suffix: Optional[str] = None,
         incl_sql: bool = True,
         incl_markers: bool = True,
         sql_incl_export_disclaimer: bool = True,

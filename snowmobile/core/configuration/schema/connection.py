@@ -154,16 +154,9 @@ class Connection(Base):
         try:
             return self.credentials[self.creds]
         except KeyError as e:
-            raise KeyError(e)
-        # return self.__getitem__(self.creds)
+            raise e
 
     @property
     def current(self):
         """Returns current credentials."""
         return self.get(self.creds)
-
-    # def __getitem__(self, item):
-    #     try:
-    #         return self.credentials[item]
-    #     except KeyError as e:
-    #         raise KeyError(e)

@@ -11,7 +11,7 @@ import json
 import shutil
 from pathlib import Path
 from types import MethodType
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Union, Optional
 
 import toml
 from fcache.cache import FileCache
@@ -104,8 +104,8 @@ class Configuration(Snowmobile):
 
     def __init__(
         self,
-        config_file_nm: str = None,
-        creds: str = None,
+        config_file_nm: Optional[str] = None,
+        creds: Optional[str] = None,
         from_config: Path = None,
         export_dir: Path = None,
     ):

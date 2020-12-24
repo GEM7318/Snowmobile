@@ -4,7 +4,7 @@ Base class for all module-level Stdout objects.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional
 
 
 class Console:
@@ -14,8 +14,8 @@ class Console:
     @staticmethod
     def offset_path(
         file_path: Union[str, Path],
-        root_dir_nm: str = None,
-        indent: str = None,
+        root_dir_nm: Optional[str] = None,
+        indent: Optional[str] = None,
         output: bool = False,
     ) -> str:
         """Gets truncated string for file path relative to a root directory.

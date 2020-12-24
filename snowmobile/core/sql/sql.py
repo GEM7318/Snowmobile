@@ -79,7 +79,7 @@ class SQL:
 
     def info_schema_tables(
         self,
-        nm: str = None,
+        nm: Optional[str] = None,
         fields: List[str] = None,
         restrictions: Dict[str, str] = None,
         order_by: List[Union[str, int]] = None,
@@ -146,7 +146,7 @@ class SQL:
 
     def info_schema_columns(
         self,
-        nm: str = None,
+        nm: Optional[str] = None,
         fields: List = None,
         restrictions: Dict = None,
         order_by: List = None,
@@ -208,7 +208,7 @@ class SQL:
 
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def cnt_records(self, nm: str = None, run: bool = None):
+    def cnt_records(self, nm: Optional[str] = None, run: bool = None):
         """Number of records within a table or view.
 
         Args:
@@ -235,7 +235,7 @@ class SQL:
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def table_last_altered(
-        self, nm: str = None, run: bool = None,
+        self, nm: Optional[str] = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Last altered timestamp for a table or view.
 
@@ -292,7 +292,7 @@ class SQL:
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def drop(
-        self, nm: str = None, obj: str = None, run: bool = None,
+        self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Drop a ``Snowflake`` object.
 
@@ -337,9 +337,9 @@ class SQL:
 
     def clone(
         self,
-        nm: str = None,
-        to: str = None,
-        obj: str = None,
+        nm: Optional[str] = None,
+        to: Optional[str] = None,
+        obj: Optional[str] = None,
         run: bool = None,
         replace: bool = False,
     ) -> Union[str, pd.DataFrame]:
@@ -551,7 +551,7 @@ class SQL:
         sql = f"show file formats"
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def ddl(self, nm: str = None, obj: str = None, run: bool = None,) -> str:
+    def ddl(self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,) -> str:
         """Query the DDL for an in-warehouse object.
 
         Args:
@@ -584,7 +584,7 @@ class SQL:
         return self.sn.query(sql=sql).snowmobile.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
-        self, nm: str = None, n: int = None, run: bool = None,
+        self, nm: Optional[str] = None, n: int = None, run: bool = None,
     ) -> Union[str, pd.DataFrame]:
         """Select `n` sample records from a table.
 
@@ -729,28 +729,28 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def use_schema(self, nm: str = None, run: bool = None) -> Union[str, pd.DataFrame]:
+    def use_schema(self, nm: Optional[str] = None, run: bool = None) -> Union[str, pd.DataFrame]:
         """Use schema command."""
         return self.use(obj="schema", nm=nm, run=run)
 
     def use_database(
-        self, nm: str = None, run: bool = None
+        self, nm: Optional[str] = None, run: bool = None
     ) -> Union[str, pd.DataFrame]:
         """Use database command."""
         return self.use(obj="database", nm=nm, run=run)
 
     def use_warehouse(
-        self, nm: str = None, run: bool = None
+        self, nm: Optional[str] = None, run: bool = None
     ) -> Union[str, pd.DataFrame]:
         """Use warehouse command."""
         return self.use(obj="warehouse", nm=nm, run=run)
 
-    def use_role(self, nm: str = None, run: bool = None) -> Union[str, pd.DataFrame]:
+    def use_role(self, nm: Optional[str] = None, run: bool = None) -> Union[str, pd.DataFrame]:
         """Use role command."""
         return self.use(obj="role", nm=nm, run=run)
 
     def columns(
-        self, nm: str = None, from_info_schema: bool = False, run: bool = None,
+        self, nm: Optional[str] = None, from_info_schema: bool = False, run: bool = None,
     ) -> Union[str, List]:
         """Returns an ordered list of columns for a table or view.
 
@@ -787,7 +787,7 @@ limit {n or 1}
             return self._columns_from_sample(nm=nm, run=run)
 
     # noinspection PyBroadException
-    def exists(self, nm: str = None) -> bool:
+    def exists(self, nm: Optional[str] = None) -> bool:
         """Checks the existence of a table or view.
 
         Args:
@@ -806,7 +806,7 @@ limit {n or 1}
             return False
 
     def _columns_from_info_schema(
-        self, nm: str = None, run: bool = None
+        self, nm: Optional[str] = None, run: bool = None
     ) -> Union[str, List]:
         """Retrieves list of columns for a table or view **from information schema**.
 
@@ -831,7 +831,7 @@ limit {n or 1}
         return self.sn.query(sql).snowmobile.to_list(col="column_name") if run else sql
 
     def _columns_from_sample(
-        self, nm: str = None, run: bool = None
+        self, nm: Optional[str] = None, run: bool = None
     ) -> Union[str, List]:
         """Retrieves a list of columns for a table or view from **sampling table**.
 
@@ -967,7 +967,7 @@ from information_schema.{info_schema_loc}
         )
 
     @staticmethod
-    def _validate(val: Union[str, int], nm: str, attr_nm: str = None) -> str:
+    def _validate(val: Union[str, int], nm: str, attr_nm: Optional[str] = None) -> str:
         """Validates the value of an argument passed to a method.
 
         This method is built to validate method arguments in instances where an

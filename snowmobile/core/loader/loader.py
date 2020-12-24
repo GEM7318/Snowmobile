@@ -261,7 +261,7 @@ class Loader:
 
     def load(
         self,
-        if_exists: str = None,
+        if_exists: Optional[str] = None,
         verbose: bool = True,
         from_script: Path = None,
         validate: bool = True,

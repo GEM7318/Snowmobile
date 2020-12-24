@@ -38,7 +38,7 @@ class Script:
     }
 
     def __init__(
-        self, sn: Connector, path: Union[Path, str] = None, as_generic: bool = False
+        self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
     ):
         self._in_context: bool = False
         self._tmstmp: int = int()
@@ -559,7 +559,7 @@ class Script:
 
     def doc(
         self,
-        alt_file_nm: str = None,
+        alt_file_nm: Optional[str] = None,
         alt_file_prefix: Optional[str] = None,
         alt_file_suffix: Optional[str] = None,
         incl_markers: Optional[bool] = True,
@@ -741,9 +741,9 @@ class Script:
         self,
         _id: Union[str, int, Tuple, List] = None,
         results: bool = True,
-        on_error: str = None,
-        on_exception: str = None,
-        on_failure: str = None,
+        on_error: Optional[str] = None,
+        on_exception: Optional[str] = None,
+        on_failure: Optional[str] = None,
         lower: bool = True,
         render: bool = False,
         **kwargs,
