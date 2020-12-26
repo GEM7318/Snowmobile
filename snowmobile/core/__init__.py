@@ -18,6 +18,7 @@ __all__ = [
     "SnowFrame",
     "utils",
     "errors",
+    "ExceptionHandler"
 ]
 from snowmobile.core import errors
 
@@ -27,6 +28,7 @@ from .markup import Markup, Section
 from .snowframe import SnowFrame
 from .sql import SQL
 from .statement import Diff, Empty, Statement
+from .exception_handler import ExceptionHandler
 
 from .script import Script  # isort:skip
 from .loader import Loader  # isort:skip

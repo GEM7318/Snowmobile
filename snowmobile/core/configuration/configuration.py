@@ -18,7 +18,17 @@ from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from ._stdout import Configuration as Stdout
-from .schema import Attributes, Base, Markdown, Snowmobile, Wildcard
+from .schema import (
+    Connection,
+    Loading,
+    Script,
+    SQL,
+    Location,
+    Attributes,
+    Base,
+    Markdown,
+    Wildcard
+)
 
 # ====================================
 HERE = Path(__file__).absolute()
@@ -53,7 +63,8 @@ class Cache(FileCache):
         """Utility to return `item_name` as a :class:`Path` object."""
         return Path(self.get(item_name)) if self.get(item_name) else None
 
-    def clear(self, item: Optional[List, str] = None):
+    # noinspection PyMethodOverriding
+    def clear(self, item: [List, str]):
         """Clears an item or a list of items from the cache by name."""
         if isinstance(item, str):
             item = [item]
@@ -63,7 +74,7 @@ class Cache(FileCache):
         for k in to_clear:
             self.pop(k)
 
-    def contains(self, item: Optional[List, str] = None) -> bool:
+    def contains(self, item: Union[List, str]) -> bool:
         """Checks if an item or list of items exist in the cache."""
         if isinstance(item, str):
             return bool(self.get(item))
@@ -75,7 +86,7 @@ class Cache(FileCache):
         return {k: v for k, v in self.items()}
 
 
-class Configuration(Snowmobile):
+class Configuration:
 
     _stdout = Stdout()
 
@@ -161,7 +172,20 @@ class Configuration(Snowmobile):
                         "backend-ext"
                     ] = EXTENSIONS_DEFAULT_PATH
 
-                super().__init__(**cfg)
+                # super().__init__(**cfg)
+                # fmt: off
+                self.connection = Connection(**cfg.get('connection', {}))
+                self.loading = Loading(**cfg.get('loading-defaults', {}))
+                self.script = Script(**cfg.get('script', {}))
+                self.sql = SQL(**cfg.get('sql', {}))
+                self.ext_locations = Location(**cfg.get('external-file-locations', {}))
+                # fmt: on
+
+                with open(self.ext_locations.backend, "r") as r:
+                    backend = toml.load(r)
+
+                self.script.types = self.script.types.from_dict(backend["tag-to-type-xref"])
+                self.sql.from_dict(backend["sql"])
 
             except IOError as e:
                 raise IOError(e)

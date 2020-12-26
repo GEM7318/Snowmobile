@@ -8,6 +8,9 @@ from typing import Any, Dict, List, Set
 
 import pandas as pd
 
+from pandas.io.sql import DatabaseError as pdDataBaseError
+from snowflake.connector.errors import DatabaseError, ProgrammingError
+
 from snowmobile.core import Connector
 from snowmobile.core.snowframe.snowframe import SnowFrame
 
@@ -27,6 +30,32 @@ class QA(Statement):
         """Updates ._outcome upon completion of processing invoked by .process().
 
         """
+        # fmt: off
+        # if self.exception.seen(
+        #     of_type=[
+        #         StatementPostProcessingError,
+        #         pdDataBaseError, DatabaseError, ProgrammingError
+        #     ]
+        # ):
+        #     return self  # then no modification necessary
+        # # -- otherwise --
+        # if self.outcome:  # passed QA check
+        #     self._outcome = -3
+        # else:             # failed QA check
+        #     object_specific_exception = (
+        #         QAEmptyFailure if self.tag.anchor.lower() == 'qa-empty'
+        #         else QADiffFailure
+        #     )
+        #     self.exception.collect(
+        #         e=object_specific_exception(
+        #             nm=self.tag.nm,
+        #             msg=self.MSG,
+        #             idx=self.index,
+        #             to_raise=True,
+        #         )
+        #     )
+        # fmt: on
+
         # fmt: off
         if self._outcome in [
             -1,          # post-processing exception occurred

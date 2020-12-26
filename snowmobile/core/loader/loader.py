@@ -27,6 +27,7 @@ from .errors import (
 
 # TODO: (rename) Loader -> Table
 class Loader:
+
     def __init__(
         self,
         df: pd.DataFrame,

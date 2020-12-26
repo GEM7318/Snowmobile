@@ -24,16 +24,8 @@ from snowmobile.core.configuration import Configuration
 from snowmobile.core.snowframe import SnowFrame
 
 
-# TODO: Create 'connect' alias
 class Connector:
-
-    _QUERY_OUTCOMES: Dict[Any, Tuple] = {
-        0: ("", ""),
-        1: ("warning", "failed"),
-        2: ("info", "completed"),
-    }
-
-    """Primary Connection and Query Execution Class.
+    """Wrapper around :class:`SnowFlakeConnection` object.
 
     Attributes:
 
@@ -42,6 +34,12 @@ class Connector:
             includes attributes for all values within the **snowmobile.toml**.
 
     """
+
+    _QUERY_OUTCOMES: Dict[Any, Tuple] = {
+        0: ("", ""),
+        1: ("warning", "failed"),
+        2: ("info", "completed"),
+    }
 
     def __init__(
         self,

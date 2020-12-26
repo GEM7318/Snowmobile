@@ -16,6 +16,8 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 from snowmobile.core import Connector
 from snowmobile.core.configuration import Pattern
 from snowmobile.core.markup.section import Section
+# from snowmobile.core import ExceptionHandler
+from snowmobile.core.exception_handler import ExceptionHandler
 
 from .errors import StatementInternalError
 from .tag import Tag
@@ -113,6 +115,7 @@ class Statement:
         self.errors: Dict[int, Dict[int, Exception]] = {}
         self.error_last: Dict[int, Exception] = {}
         self.enc_exception: bool = bool()
+        self.exception = ExceptionHandler(within=self)
 
         self._outcome: int = int()
         self.outcome: bool = True
@@ -444,6 +447,11 @@ class Statement:
             self.set_state(tmstmp=tmstmp)
         elif not tmstmp and not self._tmstmp:
             self.set_state(tmstmp=self.tmstmp)
+
+        if tmstmp and self.exception.ctx_id != tmstmp:
+            self.exception.set(ctx_id=tmstmp)
+        elif not tmstmp and not self.exception.ctx_id:
+            self.exception.set(ctx_id=-1)
 
         with self._run(results=results, lower=lower) as r:
             pass

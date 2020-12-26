@@ -21,11 +21,9 @@ from tests.unit import (
 )
 
 
-# noinspection PyProtectedMember
 class SQLUnit(BaseTest):
     """Represents a unit test instance for a method of :class:`snowmobile.SQL`.
     """
-
     base: Any = Field(
         description='An instantiated instance of the SQL class.',
     )

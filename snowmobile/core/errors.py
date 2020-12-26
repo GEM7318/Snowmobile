@@ -1,5 +1,5 @@
 """
-Base Snowmobile exception class.
+Snowmobile exceptions.
 """
 import time
 from typing import Dict, Optional
@@ -66,14 +66,11 @@ class Error(Exception):
         combined with the returned value from this method provided with
         kwargs={'argument-description1': 'argument-value', 'arg2-desc': 'arg2-value'}
         would produce the following error message:
-
             ```
             This is a __ error.
                 argument-description: argument-value
                            arg2-desc: arg2-value
-
             ```
-
 
         Args:
             prefix (str):

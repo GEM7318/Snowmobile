@@ -9,6 +9,8 @@ __all__ = [
     "Markdown",
     "QA",
     "Loading",
+    "Location",
+    "SQL",
     "DDL_DEFAULT_PATH",
     "DIR_PKG_DATA",
 ]
@@ -22,5 +24,7 @@ from .schema import (
     Marker,
     Pattern,
     Script,
+    Location,
+    SQL,
     Snowmobile,
 )
