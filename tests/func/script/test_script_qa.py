@@ -34,7 +34,7 @@ def test_qa_empty_passes(setup_for_qa_statement_tests):
         for s2 in s.executed.values():
             assert s2.outcome                    # outcome bool
             assert s2.outcome_txt() == 'passed'  # outcome text
-            assert not s2.errors                 # no errors encountered
+            assert not s2.e                      # no errors encountered
 
 
 @pytest.mark.qa
@@ -50,7 +50,7 @@ def test_qa_diff_passes(setup_for_qa_statement_tests):
         for s2 in s.executed.values():
             assert s2.outcome                    # outcome bool
             assert s2.outcome_txt() == 'passed'  # outcome text
-            assert not s2.errors                 # no errors encountered
+            assert not s2.e                      # no errors encountered
 
 
 @pytest.mark.qa
@@ -66,7 +66,7 @@ def test_qa_empty_failures(setup_for_qa_statement_tests):
         for s2 in s.executed.values():
             assert not s2.outcome                # NOT outcome bool
             assert s2.outcome_txt() == 'failed'  # 'failed' outcome text
-            assert s2.errors                     # errors encountered
+            assert s2.e                          # errors encountered
 
 
 @pytest.mark.qa
@@ -80,9 +80,9 @@ def test_qa_diff_failures(setup_for_qa_statement_tests):
     ) as s:
         s.run(on_failure='c')                    # SILENCING QA FAILURES
         for s2 in s.executed.values():
-            assert s2.outcome                    # NOT outcome bool
+            assert not s2.outcome                # NOT outcome bool
             assert s2.outcome_txt() == 'failed'  # 'failed' outcome text
-            assert s2.errors                     # errors encountered
+            assert s2.e                          # errors encountered
 
 
 @pytest.mark.exceptions

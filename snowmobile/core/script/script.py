@@ -23,9 +23,11 @@ import sqlparse
 from snowmobile.core import Connector, Markup, configuration
 from snowmobile.core.configuration.schema import Marker
 from snowmobile.core.statement import Diff, Empty, Statement
+from snowmobile.core.exception_handler import ExceptionHandler
 
 from ._stdout import Script as Stdout
 from .errors import DuplicateTagError, StatementNotFoundError
+from snowmobile.core.errors import InternalError
 
 
 # noinspection PydanticTypeChecker,PyTypeChecker
@@ -40,9 +42,10 @@ class Script:
     def __init__(
         self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
     ):
-        self._in_context: bool = False
-        self._tmstmp: int = int()
-        self.timestamps: Set[int] = set()
+        self.e = ExceptionHandler(within=self)
+        # self._in_context: bool = False
+        # self._tmstmp: int = int()
+        # self.timestamps: Set[int] = set()
 
         self._is_from_str: bool = None
 
@@ -81,6 +84,7 @@ class Script:
             self._parse_statements()
 
         self._stdout: Stdout = Stdout(name=self.name, statements=dict())
+        # self.e = ExceptionHandler(within=self)
 
     def _post_source__init__(self, from_str: bool = False) -> Script:
         """Sets final attributes and parses source once provided."""
@@ -186,6 +190,7 @@ class Script:
         # generic case
         statement: Any[Statement, Empty, Diff] = Statement(
             sn=self.sn, statement=s, index=index, attrs_raw=attrs_raw,
+            # e=self.e,
         )
         if not statement.is_derived or self.as_generic:
             self._statements_all[index] = statement
@@ -220,7 +225,9 @@ class Script:
         """Instantiates a QA statement object based off the statement's anchor."""
         qa_base_class = self._ANCHOR_TO_QA_BASE_MAP[generic.tag.anchor]
         return qa_base_class(
-            sn=self.sn, statement=s, index=generic.index, attrs_raw=generic.attrs_raw,
+            sn=self.sn, statement=s, index=generic.index,
+            attrs_raw=generic.attrs_raw
+            # , e=self.e,
         )
 
     def _parse_statements(self) -> None:
@@ -285,7 +292,11 @@ class Script:
                 A full set of scope arguments.
         """
         for s in self._statements_all.values():
-            s.set_state(tmstmp=self.tmstmp, filters=scope_to_set)
+            s.set_state(
+                ctx_id=self.e.ctx_id,
+                in_context=True,
+                filters=scope_to_set,
+            )
 
     def _update_scope_script(self, _id: Any[int, str], **kwargs) -> Dict:
         """Returns a valid set of scope args from an ``_id`` and the scope kwargs.
@@ -314,7 +325,10 @@ class Script:
         return self.filters[_id]
 
     # DOCSTRING
-    def _update_scope(self, as_id: Any[int, str], from_id: Any[int, str], **kwargs):
+    def _update_scope(
+        self, as_id: Optional[Union[int, str]], from_id: Optional[Union[int, str]],
+            **kwargs
+    ):
         _id = from_id or as_id
         if from_id:
             scope_config = self._scope_from_id(_id=_id, pop=False)
@@ -327,8 +341,8 @@ class Script:
     @contextmanager
     def filter(
         self,
-        as_id: Any[str, int] = None,
-        from_id: Any[str, int] = None,
+        as_id: Optional[Union[str, int]] = None,
+        from_id: Optional[Union[str, int]] = None,
         incl_kw: Optional[List] = None,
         incl_obj: Optional[List] = None,
         incl_desc: Optional[List] = None,
@@ -354,7 +368,7 @@ class Script:
             )
         # fmt: on
         try:
-            self.reset(tmstmp=True, context=True)
+            self.e.set(ctx_id=-1, in_context=True)
 
             if last:
                 from_id, as_id = self._latest_scope_id, None
@@ -379,17 +393,23 @@ class Script:
 
             yield self.reset(_filter=True)  # script.filtered = True; filter imposed
 
-        except ValueError as e:
-            raise e
+        except Exception as e:
+            self.e.collect(e=e)
 
         finally:
+            to_raise = (
+                self.e.get(last=True, to_raise=True)
+                if self.e.seen(to_raise=True) else None
+            )
             self.reset(
                 index=True,  # restore statement indices
                 scope=True,  # reset included/excluded status of all statements
-                tmstmp=True,  # cache context tmstmp for both script and statements
-                context=True,  # release 'in context manager' indicator (to False)
+                ctx_id=True,  # cache context tmstmp for both script and statements
+                in_context=True,  # release 'in context manager' indicator (to False)
                 _filter=True,  # release 'impose filter' indicator (to False)
             )
+            if to_raise:
+                raise to_raise
             return self
 
     def _depth(self, full: bool = False) -> int:
@@ -452,10 +472,9 @@ class Script:
     def reset(
         self,
         index: bool = False,
-        tmstmp: bool = False,
-        context: bool = False,
+        ctx_id: bool = False,
+        in_context: bool = False,
         scope: bool = False,
-        errors: bool = False,
         _filter: bool = False,
     ) -> None:
         """Resets indices and scope on all statements to their state as read from source.
@@ -481,19 +500,18 @@ class Script:
                 i: unsorted_by_index[i] for i in sorted(unsorted_by_index)
             }
 
-        if tmstmp:
-            self.timestamps.add(self.tmstmp)
-            self._tmstmp = None
-            self._statements_all = batch_reset(tmstmp=tmstmp)
+        if ctx_id:
+            self.e.reset(ctx_id=True)
+            self._statements_all = batch_reset(ctx_id=True)
 
         if scope:
             self._statements_all = batch_reset(scope=scope)
 
-        if errors:
-            self._statements_all = batch_reset(errors=errors)
+        if in_context:
+            self.e.in_context = False
+            self._statements_all = batch_reset(in_context=in_context)
 
-        if context:
-            self._in_context = not bool(self._in_context)
+        return self
         # --------
 
     @property
@@ -729,10 +747,11 @@ class Script:
                 results=results,
                 lower=lower,
                 render=render,
-                tmstmp=self.tmstmp,
+                ctx_id=self.e.ctx_id,
                 **kwargs,
             )
         except Exception as e:
+            self.e.collect(e=e)
             raise e
         self._console.status(s)
 
@@ -748,8 +767,8 @@ class Script:
         render: bool = False,
         **kwargs,
     ):
-        if not self._in_context:
-            self.reset(tmstmp=True)
+        if not self.e.in_context:
+            self.e.set(ctx_id=-1)
 
         if isinstance(_id, (int, str)):
             self._run(
@@ -776,22 +795,12 @@ class Script:
                     render=render,
                     **kwargs,
                 )
-
-        if not self._in_context:
-            self.reset(tmstmp=True)
-
+                
     @property
     def _console(self):
         """External stdout object for console feedback without cluttering code."""
         self._stdout.statements = self.statements
         return self._stdout
-
-    @property
-    def tmstmp(self):
-        """Returns timestamp id of current context."""
-        if not self._tmstmp:
-            self._tmstmp = int(time.time())
-        return self._tmstmp
 
     def s(self, _id) -> Statement:
         """Accessor for :meth:`statement`."""

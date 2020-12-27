@@ -82,6 +82,7 @@ def export_markup_combinations_from_script(
     return file_paths
 
 
+@pytest.mark.markup
 def test_markup_with_results(sn):
     """Unit test for markup export including results."""
     script = get_script('markup_with_results.sql')
@@ -89,7 +90,7 @@ def test_markup_with_results(sn):
     exported_paths_for_current_test = export_markup_combinations_from_script(
         script=script,
         run=True,
-        run_args={'on_failure': 'c'}
+        run_args={'on_failure': 'c', 'on_exception': 'c'}
     )
     paths_under_test_mapped_to_validation_paths = {
         p: get_validation_file(path1=p) for p in exported_paths_for_current_test
@@ -102,6 +103,7 @@ def test_markup_with_results(sn):
         )
 
 
+@pytest.mark.markup
 def test_markup_no_results(sn):
     """Unit test for markup export including results."""
     script = get_script('markup_no_results.sql')
@@ -122,6 +124,7 @@ def test_markup_no_results(sn):
         )
 
 
+@pytest.mark.markup
 def test_markup_using_template_anchor_attributes(sn):
     """Unit test for markup export using an __anchor__ that is included in
     the `script.markdown.attributes.markers` section of ``snowmobile.toml``.."""

@@ -19,33 +19,53 @@ class ExceptionHandler:
     def __init__(
             self,
             within: Optional[Any] = None,
-            ctx_id: Optional[int] = None,
+            _ctx_id: Optional[int] = None,
             in_context: bool = False,
+            children: Optional[List[ExceptionHandler]] = None
     ):
-        self.within = type(within) if within else None
-        self.ctx_id: Optional[int] = ctx_id
+        self._ctx_id: Optional[int] = _ctx_id
+
+        self.within: Type = type(within) if within else None
         self.by_ctx: Dict[int, Dict[int, errors]] = dict()
         self.in_context: bool = in_context
         self.outcome: Optional[int] = None
+        self.children = children
+
+    @property
+    def ctx_id(self):
+        """Current context id."""
+        if not self._ctx_id:
+            self.set(ctx_id=time.time_ns())
+            # if self.children:
+
+        return self._ctx_id
 
     def set(
-        self, ctx_id: Optional[int] = None, in_context: bool = False,
+        self,
+        ctx_id: Optional[int] = None,
+        in_context: bool = False,
         outcome: Optional[int] = None,
     ):
         """**Set** attributes on self."""
         if ctx_id:
-            if ctx_id in self.by_ctx:
+            if ctx_id in self.by_ctx and self:
+                nm = self.within.__name__
                 raise InternalError(
-                    nm='ExceptionHandler.set()',
-                    msg=f'an existing `ctx_id` was provided to `set(ctx_id)`'
+                    nm=f'ExceptionHandler.set() from within {nm}',
+                    msg=f'an existing `_ctx_id`, {ctx_id}, was provided to `set(_ctx_id)`'
                 )
-            # ctx_id = ctx_id if ctx_id != -1 else time.time_ns()
-            self.ctx_id = ctx_id if ctx_id != -1 else time.time_ns()
-            self.by_ctx[self.ctx_id] = {}
+            self._ctx_id = ctx_id if ctx_id != -1 else time.time_ns()
+            self.by_ctx[self._ctx_id] = {}
         if in_context:
             self.in_context = in_context
         if outcome:
             self.outcome = outcome
+        return self
+
+    def set_from(self, other: ExceptionHandler) -> ExceptionHandler:
+        """Updates attributes from another ExceptionHandler object."""
+        for k in ['_ctx_id', 'in_context', 'outcome']:
+            vars(self)[k] = vars(other)[k]
         return self
 
     def reset(
@@ -53,7 +73,7 @@ class ExceptionHandler:
     ):
         """**Reset** attributes on self."""
         if ctx_id:
-            self.ctx_id = None
+            self._ctx_id = None
         if in_context:
             self.in_context = False
         if outcome:
@@ -63,38 +83,59 @@ class ExceptionHandler:
     @property
     def current(self):
         """All exceptions in the current context."""
-        if not self.ctx_id:
+        if not self._ctx_id:
             raise InternalError(
                 nm='ExceptionalHandler.current',
                 msg=f"""
-A call was made to `.current` while the current value of 'ctx_id` is None.                 
+A call was made to `.current` while the current value of '_ctx_id` is None.                 
 """.strip('\n')
             )
         return self.by_ctx[self.ctx_id] if self.ctx_id in self.by_ctx else {}
 
     def collect(self, e: Any[errors]):
         """Stores an exception."""
-        # self.current[int(time.time_ns())] = e
-        # return self
-
         current = self.current
         current[int(time.time_ns())] = e
         self.by_ctx[self.ctx_id] = current
+        return self
 
     def _first_last(self, idx: int):
         """Last exception encountered."""
         by_tmstmp = self.by_tmstmp
-        return by_tmstmp[list(by_tmstmp)[idx]]
+        return by_tmstmp[list(by_tmstmp)[idx]] if by_tmstmp else {}
 
     @property
-    def first(self):
+    def first(self) -> Error:
         """First exception encountered."""
         return self._first_last(-1)
 
     @property
-    def last(self):
+    def last(self) -> Error:
         """Last exception encountered."""
         return self._first_last(0)
+
+    @staticmethod
+    def _query_types(
+        to_search: Dict[int, errors], of_type: Optional[errors, List[errors]] = None,
+    ) -> Set[int]:
+        """Search through exceptions by type."""
+        of_type = of_type if isinstance(of_type, Iterable) else [of_type]
+        return {
+            e
+            for e in to_search
+            if any(isinstance(to_search[e], t) for t in of_type)
+        }
+
+    @staticmethod
+    def _query_mode(to_search: Dict[int, errors], to_raise: bool) -> Set[int]:
+        """Search through exceptions by mode (to_raise=True/False)."""
+        def _raise(e: Any):
+            """Generalized check of an assertion's intention to be raised."""
+            return getattr(e, 'to_raise') if hasattr(e, 'to_raise') else True
+        return {
+            _id for _id, e in to_search.items()
+            if (_raise(e) if to_raise else not _raise(e))
+        }
 
     def _query(
         self,
@@ -111,22 +152,22 @@ A call was made to `.current` while the current value of 'ctx_id` is None.
             else self.by_tmstmp
         )
         seen = set(to_consider)
+
         if of_type:
-            of_type = of_type if isinstance(of_type, Iterable) else [of_type]
-            matching_type = {
-                e: any(isinstance(to_consider[e], t) for t in of_type)
-                for e in to_consider
-            }
-            seen = seen.intersection({e for e, m in matching_type.items() if m})
+            seen = seen.intersection(
+                self._query_types(to_search=to_consider, of_type=of_type)
+            )
+
         if isinstance(to_raise, bool):
-            _to_raise = {
-                _id for _id, e in to_consider.items()
-                if (e.to_raise if to_raise else not e.to_raise)
-            }
-            seen = seen.intersection(_to_raise)
+            seen = seen.intersection(
+                self._query_mode(to_search=to_consider, to_raise=to_raise)
+            )
+
         if with_ids:
-            ids = set(with_ids if isinstance(with_ids, Iterable) else [with_ids])
-            seen = seen.intersection(ids)
+            seen = seen.intersection(
+                set(with_ids if isinstance(with_ids, Iterable) else [with_ids])
+            )
+
         return (
             {i: to_consider[i] for i in sorted(seen, reverse=True)}
             if seen
@@ -187,6 +228,19 @@ exceptions in current context are:\n\t{list(self.current.values())}
             for k2, v2 in v.items()
         }
         return {k: unordered[k] for k in sorted(unordered, reverse=True)}
+
+    def __len__(self):
+        return len(self.by_tmstmp)
+
+    def __repr__(self):
+        return (
+            f"ExceptionHandler(within={self.within}, contexts={len(self.by_ctx)}, "
+            f"cnt={len(self)}, to_raise: {bool(self)}"
+        )
+
+    def __bool__(self):
+        """False=no exceptions to be raised in current context."""
+        return self.seen(to_raise=True)
 
     def __setattr__(self, key, value):
         vars(self)[key] = value

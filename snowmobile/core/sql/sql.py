@@ -583,7 +583,7 @@ class SQL:
             raise e
         _sql = f"select get_ddl('{obj}', '{up(schema)}.{up(nm)}') as ddl"
         sql = strip(_sql)
-        return self.sn.query(sql=sql).snowmobile.to_list(n=1) if self._run(run) else sql
+        return self.sn.query(sql=sql).snf.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
         self, nm: Optional[str] = None, n: Optional[int] = None, run: bool = None,
@@ -837,7 +837,7 @@ limit {n or 1}
         sql = self.info_schema_columns(
             nm=nm, fields=["ordinal_position", "column_name"], order_by=[1], run=False,
         )
-        return self.sn.query(sql).snowmobile.to_list(col="column_name") if run else sql
+        return self.sn.query(sql).snf.to_list(col="column_name") if run else sql
 
     def _columns_from_sample(
         self, nm: Optional[str] = None, run: bool = None

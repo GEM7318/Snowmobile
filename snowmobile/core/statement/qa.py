@@ -31,54 +31,23 @@ class QA(Statement):
 
         """
         # fmt: off
-        # if self.exception.seen(
-        #     of_type=[
-        #         StatementPostProcessingError,
-        #         pdDataBaseError, DatabaseError, ProgrammingError
-        #     ]
-        # ):
-        #     return self  # then no modification necessary
-        # # -- otherwise --
-        # if self.outcome:  # passed QA check
-        #     self._outcome = -3
-        # else:             # failed QA check
-        #     object_specific_exception = (
-        #         QAEmptyFailure if self.tag.anchor.lower() == 'qa-empty'
-        #         else QADiffFailure
-        #     )
-        #     self.exception.collect(
-        #         e=object_specific_exception(
-        #             nm=self.tag.nm,
-        #             msg=self.MSG,
-        #             idx=self.index,
-        #             to_raise=True,
-        #         )
-        #     )
-        # fmt: on
-
-        # fmt: off
-        if self._outcome in [
-            -1,          # post-processing exception occurred
-            1,           # execution error occurred
-        ]:
-            return self  # then no modification necessary
+        if self.e.outcome in [-1, 1]:
+            return self
 
         # -- otherwise --
         if self.outcome:  # passed QA check
+            self.e.set(outcome=-3)
             self._outcome = -3
         else:             # failed QA check
-            object_specific_exception = (
-                QAEmptyFailure if self.tag.anchor.lower() == 'qa-empty'
-                else QADiffFailure
-            )
-            self._exception_collector(
-                e=object_specific_exception(
+            self._outcome = -2
+            self.e.set(outcome=-2)
+            self.e.collect(
+                e=self._DERIVED_FAILURE_MAPPING[self.tag.anchor](
                     nm=self.tag.nm,
                     msg=self.MSG,
                     idx=self.index,
                     to_raise=True,
                 ),
-                _id=-2
             )
         # fmt: on
 
@@ -226,15 +195,15 @@ class Diff(QA):
             self.end_index_at, ignore_patterns=[self.partition_on]
         )
         if not self.idx_cols:
-            self._exception_collector(
+            self.e.collect(
                 e=StatementPostProcessingError(
                     msg=(
                         f"Arguments provided don't result in any index columns "
                         f"on which to join DataFrame's partitions."
-                    )
+                    ),
+                    to_raise=True,
                 ),
-                _id=-1,
-            )
+            ).set(outcome=-1)
 
     def _drop(self) -> None:
         """Isolates columns to ignore/drop."""
@@ -247,12 +216,12 @@ class Diff(QA):
             ignore_patterns=[self.partition_on, self.idx_cols, self.drop_cols],
         )
         if not self.compare_cols:
-            self._exception_collector(
+            self.e.collect(
                 e=StatementPostProcessingError(
                     msg=f"Arguments provided don't result in any comparison columns."
                 ),
-                _id=-1,
-            )
+                to_raise=True,
+            ).set(outcome=-1)
 
     def split_cols(self) -> Diff:
         """Post-processes results returned from a ``qa-diff`` statement.
@@ -275,14 +244,14 @@ class Diff(QA):
 
         # fmt: off
         if self.partition_on not in list(self.results.columns):
-            self._exception_collector(
+            self.e.collect(
                 e=StatementPostProcessingError(
                     msg=(
                         f"Column `{self.partition_on}` not found in DataFrames columns."
-                    )
+                    ),
+                    to_raise=True,
                 ),
-                _id=-1,
-            )
+            ).set(outcome=-1)
         # fmt: on
 
         return self
@@ -321,7 +290,7 @@ class Diff(QA):
             i: df for i, df in enumerate(partitions.values(), start=1)
         }
         checks_for_equality: List[bool] = [
-            partitions_by_index[i].snowmobile.df_diff(
+            partitions_by_index[i].snf.df_diff(
                 df2=partitions_by_index[i + 1], rel_tol=rel_tol, abs_tol=abs_tol
             )
             for i in range(1, len(partitions_by_index))
@@ -342,11 +311,14 @@ class Diff(QA):
             try:
                 self.partitions = self.results.snf.partitions(on=self.partition_on)
             except Exception as e:
-                self._exception_collector(
-                    e=StatementPostProcessingError(msg=(e.args[0])), _id=-1
-                )
+                self.e.collect(
+                    e=StatementPostProcessingError(
+                        msg=(e.args[0]),
+                        to_raise=True,
+                    )
+                ).set(outcome=-1)
 
-            if self._outcome != -1:
+            if self.e.outcome != -1:
                 # TESTS: add test to verify what happens if this fails
                 self.outcome = self.partitions_are_equal(
                     partitions=self.partitions,

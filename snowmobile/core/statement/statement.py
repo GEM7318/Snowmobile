@@ -16,11 +16,15 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 from snowmobile.core import Connector
 from snowmobile.core.configuration import Pattern
 from snowmobile.core.markup.section import Section
-# from snowmobile.core import ExceptionHandler
 from snowmobile.core.exception_handler import ExceptionHandler
 
-from .errors import StatementInternalError
+from .errors import (
+    StatementInternalError, StatementPostProcessingError,
+    QAFailure, QAEmptyFailure, QADiffFailure
+)
 from .tag import Tag
+
+db_errors = [DatabaseError, ProgrammingError, pdDataBaseError]
 
 
 class Statement:
@@ -95,6 +99,11 @@ class Statement:
         1: ("-", "error: execution"),
         2: ("success", "completed"),
     }
+
+    _DERIVED_FAILURE_MAPPING = {
+        'qa-diff': QADiffFailure,
+        'qa-empty': QAEmptyFailure
+    }
     # fmt: on
 
     # noinspection PyTypeChecker,PydanticTypeChecker
@@ -104,18 +113,18 @@ class Statement:
         statement: Union[sqlparse.sql.Statement, str],
         index: Optional[int] = None,
         attrs_raw: Optional[str] = None,
+        e: Optional[ExceptionHandler] = None,
         **kwargs,
     ):
         self._index: int = index
         self._exclude_attrs = []
 
-        self._tmstmp: Optional[int] = None
-        self.timestamps: Set[int] = set()
+        # self._tmstmp: Optional[int] = None
+        # self.timestamps: Set[int] = set()
 
-        self.errors: Dict[int, Dict[int, Exception]] = {}
-        self.error_last: Dict[int, Exception] = {}
-        self.enc_exception: bool = bool()
-        self.exception = ExceptionHandler(within=self)
+        # self.errors: Dict[int, Dict[int, Exception]] = {}
+        # self.error_last: Dict[int, Exception] = {}
+        # self.enc_exception: bool = bool()
 
         self._outcome: int = int()
         self.outcome: bool = True
@@ -145,6 +154,8 @@ class Statement:
 
         self.tag: Tag = None
         self.attrs_parsed = self.parse()
+
+        self.e = e or ExceptionHandler(within=self)
 
     @property
     def is_multiline(self) -> bool:
@@ -297,14 +308,15 @@ class Statement:
 
     def set_state(
         self,
-        tmstmp: Optional[int] = None,
+        ctx_id: Optional[int] = None,
+        in_context: Optional[bool] = None,
         filters: dict = None,
         index: Optional[int] = None,
     ) -> Statement:
         """Sets current state/context on a statement object.
 
         Args:
-            tmstmp (int):
+            ctx_id (int):
                 Unix timestamp the :meth:`script.filter()` context manager was
                 invoked.
             filters (dict):
@@ -313,9 +325,10 @@ class Statement:
                 Integer to set as the statement's index position.
 
         """
-        if tmstmp:
-            self.reset(tmstmp=True)
-            self._tmstmp = tmstmp
+        if ctx_id:
+            self.e.set(ctx_id=ctx_id)
+        if isinstance(in_context, bool):
+            self.e.set(in_context=in_context)
         if filters:
             self.tag.scope(**filters)
         if index:
@@ -326,8 +339,8 @@ class Statement:
         self,
         index: bool = False,
         scope: bool = False,
-        tmstmp: bool = False,
-        errors: bool = False,
+        ctx_id: bool = False,
+        in_context: bool = False,
     ) -> Statement:
         """Resets attributes on the statement object to reflect as if read from source.
 
@@ -341,62 +354,17 @@ class Statement:
         """
         if index:
             self.index = self.tag.index = self._index
+        if in_context:
+            self.e.reset(in_context=True)
         if scope:
             self.tag.is_included = True
-        if errors:
-            self.error_last = self.exceptions(from_tmstmp=self.tmstmp)
-        if tmstmp:
-            self.timestamps.add(self.tmstmp)
-            self._tmstmp = None
+        if ctx_id:
+            self.e.reset(ctx_id=True)
         return self
 
     def process(self):
         """Used by derived classes for post-processing the returned results."""
         return self
-
-    @contextmanager
-    def _run(
-        self, results: bool = True, lower: bool = True
-    ) -> ContextManager[Statement]:
-        """Executes statement; used by generic case and derived classes.
-
-        note:
-            *   Will only execute sql if the :class:`Statement` object's boolean
-                representation (determined by its current scope) evaluates to `True`.
-            *   If `results=True`, the results returned are stored within the
-                :attr:`results` attribute, not returned directly from this method.
-
-        Args:
-            results (bool):
-                Whether or not to return results; default is `True`.
-            lower (bool):
-                Whether or not to lower-case the columns on the returned
-                :class:`pandas.DataFrame` if `results=True`.
-
-        Returns (Statement):
-            The :class:`Statement` object itself post-executing or skipping
-            execution of the sql based on its current scope.
-
-        """
-        try:
-            if self:
-                self.start()
-                self.results = self.sn.query(self.sql, results=results, lower=lower)
-                self.end()
-
-            yield self
-
-        except (ProgrammingError, pdDataBaseError, DatabaseError):
-            self._exception_collector(e=self.sn.error, _id=1)
-
-            yield
-
-        finally:
-            # only post-process when execution did not raise database error
-            if self._outcome == 2:
-                self.process()
-
-            return self
 
     def run(
         self,
@@ -406,7 +374,7 @@ class Statement:
         on_error: Optional[str] = None,
         on_exception: Optional[str] = None,
         on_failure: Optional[str] = None,
-        tmstmp: Optional[int] = None,
+        ctx_id: Optional[int] = None,
     ) -> Statement:
         """Run method for all statement objects.
 
@@ -435,62 +403,73 @@ class Statement:
                 the statement have failed validation.
                     * `None`: default behavior, exception will be raised
                     * `c`: continue with execution
-            tmstmp (str):
-                Unix timestamp of the current context initialization.
 
         Returns (Statement):
             Statement object post-executing query.
 
         """
 
-        if tmstmp and self._tmstmp != tmstmp:
-            self.set_state(tmstmp=tmstmp)
-        elif not tmstmp and not self._tmstmp:
-            self.set_state(tmstmp=self.tmstmp)
+        self.e.set(ctx_id=(ctx_id or -1))
 
-        if tmstmp and self.exception.ctx_id != tmstmp:
-            self.exception.set(ctx_id=tmstmp)
-        elif not tmstmp and not self.exception.ctx_id:
-            self.exception.set(ctx_id=-1)
+        try:
+            if self:
+                self.start()
+                self.results = self.sn.query(self.sql, results=results, lower=lower)
+                self.end()
+                self.e.set(outcome=2)
 
-        with self._run(results=results, lower=lower) as r:
-            pass
+        except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
+            self.e.collect(e=e).set(outcome=1)
+
+        finally:
+            # only post-process when execution did not raise database error
+            if self.e.outcome != 1:
+                self.process()
 
         # ---------------------------
         if (
             not self.is_derived  # is generic statement
-            and self._outcome == 1  # database error raised during execution
+            and self.e.seen(  # db error raised during execution
+                of_type=db_errors, to_raise=True
+            )
             and on_error != "c"  # stop on execution error
         ):
-            self.exceptions(last=True, _raise=True)
-            raise self.exceptions(last=True)
+            raise self.e.get(
+                of_type=db_errors,
+                to_raise=True,
+                first=True,
+            )
         # ---------------------------
         if (
             self.is_derived  # is child class with `.process()` method
-            and self._outcome == -1  # exception thrown during post-processing
+            and self.e.seen(  # post-processing error occurred
+                of_type=StatementPostProcessingError, to_raise=True
+            )
             and on_exception != "c"  # stop on post-processing exception
         ):
-            self.exceptions(last=True, _raise=True)
+            raise self.e.get(
+                of_type=StatementPostProcessingError,
+                to_raise=True,
+                first=True,
+            )
         # ---------------------------
         if (
             self.is_derived  # is child class with `.process()` method
-            and self._outcome == -2  # outcome of `.process()` did not pass
+            and not self.outcome  # outcome of `.process()` did not pass
             and on_failure != "c"  # stop on failure of `.process()`
         ):
-            self.exceptions(last=True, _raise=True)
+            to_raise = self.e.get(
+                of_type=list(self._DERIVED_FAILURE_MAPPING.values()),
+                to_raise=True,
+                first=True,
+            )
+            raise to_raise
         # ---------------------------
 
         if render:
             self.render()
 
         return self
-
-    @property
-    def tmstmp(self):
-        """Returns timestamp id of current context."""
-        if not self._tmstmp:
-            self._tmstmp = int(time.time())
-        return self._tmstmp
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):
@@ -502,64 +481,15 @@ class Statement:
         )
         return condition, msg
 
-    # confusing part is that this sets outcome and logs exception
-    def _exception_collector(self, _id: int, e: Exception) -> None:
-        """Stores exceptions encountered within a distinct context."""
-        if not self._tmstmp:
-            raise StatementInternalError(
-                nm=f"`s._exception_collector(_id='{e}')`",
-                msg="a call was made to `s._exception_collector()` while `s._tmstmp` is None.",
-            )
-        self._outcome = _id
-        current_exceptions = (
-            self.errors[self._tmstmp] if self._tmstmp in self.errors else dict()
-        )
-        current_exceptions[int(time.time())] = e
-        self.errors[self._tmstmp] = current_exceptions
-
-    def exceptions(
-        self,
-        last: bool = False,
-        hist: bool = False,
-        _raise: bool = False,
-        from_tmstmp: Optional[int] = None,
-    ):
-        """All exceptions encountered, sorted from most to least recent."""
-        if from_tmstmp:
-            return self.errors.get(from_tmstmp)
-        elif hist:
-            return self.errors
-        # ------
-        if not self._tmstmp:
-            raise StatementInternalError(
-                nm=f"`s.exceptions()`",
-                msg="a call was made to `s.exceptions()` while `s._tmstmp` is None.",
-            )
-        elif not self.errors.get(self._tmstmp):
-            raise StatementInternalError(
-                nm=f"`s.exceptions()`",
-                msg=f"no exceptions stored for `s._tmstmp`={self._tmstmp}",
-            )
-        # ------
-        total = {tmstmp: e for tmstmp, e in self.errors[self._tmstmp].items()}
-        sorted_total = {i: total[i] for i in sorted(total, reverse=True)}
-        if not last:
-            return sorted_total
-        elif not _raise:
-            return sorted_total[max(sorted_total)]
-        else:
-            raise sorted_total[max(sorted_total)]
-        # ------
-
     def outcome_txt(self, _id: Optional[int] = None) -> str:
         """Outcome as a string."""
-        return self._PROCESS_OUTCOMES[_id or self._outcome][1]
+        return self._PROCESS_OUTCOMES[_id or self.e.outcome or 0][1]
 
     # TODO: Move this to patterns
     @property
     def outcome_html(self) -> str:
         """Outcome as an html admonition banner."""
-        alert = self._PROCESS_OUTCOMES[self._outcome][0]
+        alert = self._PROCESS_OUTCOMES[self.e.outcome or 0][0]
         return f"""
 <div class="alert-{alert}">
 <center><b>====/ {self.outcome_txt()} /====</b></center>

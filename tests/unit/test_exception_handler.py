@@ -24,8 +24,8 @@ errors = Union[
 def test_default_exception_handler_defaults(default_test_exception_handler):
     """Testing default values of ExceptionHandler object."""
     assert default_test_exception_handler.within is None
-    assert default_test_exception_handler.ctx_id is None
-    assert default_test_exception_handler.by_ctx == dict()
+    assert isinstance(default_test_exception_handler.ctx_id, int)
+    assert default_test_exception_handler.by_ctx
     assert not default_test_exception_handler.in_context
     assert default_test_exception_handler.outcome is None
 
