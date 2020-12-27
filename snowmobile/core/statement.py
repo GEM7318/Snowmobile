@@ -12,14 +12,9 @@ from IPython.core.display import Markdown, display
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import (
-    Connector,  # isort: skip
-    Section,
-    ExceptionHandler,
-    Tag,
-    schema,
-    errors
-)
+from . import ExceptionHandler, Section, Tag, errors, schema
+
+from . import Connector  # isort: skip
 
 
 class Statement:

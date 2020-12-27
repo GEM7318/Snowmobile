@@ -31,7 +31,6 @@ from typing import Dict, List, Optional, Union
 import pandas as pd
 
 from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO_SCHEMA
-
 from .utils.parsing import p, strip, up
 
 

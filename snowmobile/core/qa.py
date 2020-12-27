@@ -8,11 +8,9 @@ from typing import Any, Dict, List, Set
 
 import pandas as pd
 
-from . import (
-    Statement,  # isort: skip
-    Connector,  # isort: skip
-    errors  # isort: skip
-)
+from . import Connector  # isort: skip
+from . import Statement  # isort: skip
+from . import errors  # isort: skip
 
 
 class QA(Statement):

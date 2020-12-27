@@ -12,9 +12,6 @@ import pandas as pd
 from . import errors
 from .column import Column
 
-# from .errors import SnowFrameInternalError
-# from . import errors, Column
-
 
 @pd.api.extensions.register_dataframe_accessor("snf")
 class SnowFrame:

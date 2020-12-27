@@ -52,6 +52,8 @@ test = [
 [tool.isort]
 profile = "black"
 src_paths = ["snowmobile", "tests"]
-sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOLDER']
+skip = ["__init__.py"]
 multi_line_output = 3
 include_trailing_comma = true
+float_to_top = true
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOLDER']
