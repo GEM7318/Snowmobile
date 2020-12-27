@@ -30,7 +30,6 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO_SCHEMA
 from .utils.parsing import p, strip, up
 
 
@@ -908,18 +907,7 @@ limit {n or 1}
         `snowmobile.core.sql._map_information_schema.py`.
 
         """
-        # fmt: off
-        if obj in INFO_SCHEMA.values():
-            obj = {v: k for k, v in INFO_SCHEMA.items()}[obj]
-        if obj not in INFO_SCHEMA.keys():
-            raise ValueError(
-                f"\nobj='{obj}' is not a supported object type for the"
-                f" information_schema method called.\n"
-                f"Supported objects are:\n\t[{','.join(INFO_SCHEMA.keys())}]"
-            )
-        # fmt: on
-
-        info_schema_loc = INFO_SCHEMA[obj]
+        info_schema_loc = self.sn.cfg.sql.info_schema_loc(obj=obj)
         fields = self.fields(fields=fields)
         where = self.where(restrictions=restrictions)
         order_by = self.order(by=order_by)
@@ -927,7 +915,7 @@ limit {n or 1}
         sql = f"""
 select 
 {fields}
-from information_schema.{info_schema_loc}
+from {info_schema_loc}
 {where}
 {order_by}
 """

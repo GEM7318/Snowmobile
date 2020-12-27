@@ -14,59 +14,14 @@ from types import MethodType
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import toml
-from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
 from snowmobile.core import paths, schema, utils
-
-
-class Cache(FileCache):
-    """Handles caching of paths to configuration files."""
-
-    def __init__(self, application: str = "snowmobile"):
-
-        application: str = application
-        flag: str = "cs"
-        super().__init__(appname=application, flag=flag)
-
-    def save(self, item_name: str, item_value):
-        """Caches `item_value` to be retrieved by `item_name`."""
-        self[item_name] = str(item_value)
-        return self
-
-    def save_all(self, items: Dict):
-        """Caches a dictionary of items"""
-        for k, v in items.items():
-            self[k] = str(v)
-
-    def as_path(self, item_name: str) -> Path:
-        """Utility to return `item_name` as a :class:`Path` object."""
-        return Path(self.get(item_name)) if self.get(item_name) else None
-
-    # noinspection PyMethodOverriding
-    def clear(self, item: [List, str]):
-        """Clears an item or a list of items from the cache by name."""
-        if isinstance(item, str):
-            item = [item]
-        to_clear = (
-            list(self) if not item else set(self.contents).intersection(set(item))
-        )
-        for k in to_clear:
-            self.pop(k)
-
-    def contains(self, item: Union[List, str]) -> bool:
-        """Checks if an item or list of items exist in the cache."""
-        if isinstance(item, str):
-            return bool(self.get(item))
-        return all(i in self.contents for i in item)
-
-    @property
-    def contents(self) -> Dict:
-        """Explicit property to get cached contents as a dictionary."""
-        return {k: v for k, v in self.items()}
+from .cache import Cache
 
 
 class Configuration:
+    """User-facing access point for a fully parsed ``snowmobile.toml`` file."""
 
     # -- Statement components to be considered for scope.
     SCOPE_ATTRIBUTES = [
@@ -215,7 +170,7 @@ class Configuration:
                     break
             if found.is_file():
                 self.location = found
-                self.cache.save(item_name=self.file_nm, item_value=self.location)
+                self.cache.save_item(item_name=self.file_nm, item_value=self.location)
                 self._stdout.file_located(file_path=self.location)
                 return self.location
 
@@ -314,7 +269,8 @@ class Configuration:
         def __init__(self):
             super().__init__()
 
-        # Export stdout
+        # exporting
+        # ---------
         def exporting(self, file_name: str):
             print(f"Exporting {file_name}..")
 
@@ -322,7 +278,8 @@ class Configuration:
             path = self.offset_path(file_path=file_path)
             print(f"<1 of 1> Exported {path}")
 
-        # Initial stdout
+        # locating
+        # --------
         def _locating(self):
             print("Locating credentials...")
             return self
@@ -339,7 +296,8 @@ class Configuration:
             _ = self._locating()
             return self.checking_cache() if not is_provided else self.reading_provided()
 
-        # File found stdout
+        # cache found
+        # ----------
         def cache_found(self, file_path: Path):
             path = self.offset_path(file_path=file_path)
             print(f"(2 of 2) Cached path found at {path}")
@@ -357,7 +315,8 @@ class Configuration:
                 else self.provided_found(file_path)
             )
 
-        # File not found stdout
+        # cache not found
+        # --------------
         def cache_not_found(self):
             print("(2 of 2) Cached path not found")
             return self
@@ -369,13 +328,15 @@ class Configuration:
         def not_found(self, creds_file_nm: str):
             return self.cache_not_found().traversing_for(creds_file_nm=creds_file_nm)
 
-        # File located stdout
+        # file found
+        # ----------
         def file_located(self, file_path: Path):
             path = self.offset_path(file_path=file_path)
             print(f"(1 of 1) Located '{file_path.name}' at {path}")
             return self
 
-        # File cannot be found stdout
+        # file not found
+        # --------------
         def cannot_find(self, creds_file_nm: str):
             print(
                 f"(1 of 1) Could not find config file {creds_file_nm} - "

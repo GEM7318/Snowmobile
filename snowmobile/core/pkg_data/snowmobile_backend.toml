@@ -1,7 +1,7 @@
 # =============================================================================
 # ../snowmobile_backend.toml
-#   DO NOT DELETE UNLESS INTENTIONALLY SPECIFYING ALTERNATE BACKEND EXTENSION
-#   LOCATION IN snowmobile.toml.
+#   DO NOT DELETE UNLESS INTENTIONALLY SPECIFYING ALTERNATE EXTENSIONS LOCATION
+#   IN snowmobile.toml.
 # =============================================================================
 
 # -- Type mapping of how attribute values should be parsed based attr name ----
@@ -39,3 +39,8 @@
 
     [sql.keyword-exceptions]
         "with" = "select"
+
+    [sql.information-schema-exceptions]
+        schema = "schemata"
+        pipe = "core"
+

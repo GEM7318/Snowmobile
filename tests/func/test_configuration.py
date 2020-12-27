@@ -32,7 +32,7 @@ def cache_with_a_testing_value_saved(sn_delayed) -> Tuple[Connector, str]:
 
     # save two values to cache under the testing item names
     for name in [CACHE_TESTING_ITEM_NAME1, CACHE_TESTING_ITEM_NAME2]:
-        sn_delayed.cfg.cache.save(
+        sn_delayed.cfg.cache.save_item(
             item_name=name,
             item_value=value_to_cache
         )
@@ -63,6 +63,7 @@ def test_cache_as_path(cache_with_a_testing_value_saved):
 
 
 @pytest.mark.cache
+@pytest.mark.configuration
 def test_cache_saving_and_deletion_operations(cache_with_a_testing_value_saved):
     """Test basic behavior of ``snowmobile.toml`` file export."""
 
@@ -101,6 +102,14 @@ def test_cache_saving_and_deletion_operations(cache_with_a_testing_value_saved):
     assert not sn_delayed.cfg.cache.contains(cached_names)
 
     # ---
+
+
+@pytest.mark.cache
+@pytest.mark.configuration
+def test_cache_dunder_methods(cache_with_a_testing_value_saved):
+    """Ensuring dunder str/repr methods throw no errors"""
+    assert str(cache_with_a_testing_value_saved)
+    assert repr(cache_with_a_testing_value_saved)
 
 
 @pytest.mark.configuration
@@ -173,7 +182,7 @@ def test_get_attrs_from_obj():
 
 
 @pytest.mark.configuration
-def test_dunder_repr_str_methods():
+def test_configuration_dunder_methods():
     """Verifies appearance of __str__ and __repr__ methods."""
     from snowmobile import Configuration
 

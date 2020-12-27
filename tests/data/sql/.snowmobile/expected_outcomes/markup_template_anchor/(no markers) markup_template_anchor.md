@@ -1,5 +1,6 @@
 ## (1) create-temp table~sample_table
 
+
 - **Notes**
 	- This is just a sample table for the other test statements to run on.
 

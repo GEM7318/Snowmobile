@@ -4,7 +4,7 @@ Module contains the object model for **snowmobile.toml**.
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Iterable
 
 import sqlparse
 from pydantic import Field
@@ -319,15 +319,6 @@ class QA(Base):
     )
     # fmt: on
 
-    @staticmethod
-    def escape_attr(attr: Union[str, List]) -> Union[str, List, Tolerance]:
-        if isinstance(attr, str):
-            return re.escape(attr)
-        elif isinstance(attr, list):
-            return [re.escape(v) for v in attr]
-        else:
-            return attr
-
 
 class Type(Base):
     # fmt: off
@@ -366,15 +357,25 @@ class Script(Base):
     # fmt: on
 
     @staticmethod
-    def arg_to_string(arg_as_str: str) -> str:
+    def power_strip(val_to_strip: str, chars_to_strip: Iterable[str]) -> str:
+        """Exhaustively strips a string of specified leading/trailing characters."""
+        while any(val_to_strip.strip(c) != val_to_strip for c in chars_to_strip):
+            for c in chars_to_strip:
+                val_to_strip = val_to_strip.strip(c)
+        return val_to_strip
+
+    def arg_to_string(self, arg_as_str: str) -> str:
         """Strips an argument as a string down to its elemental form."""
-        return arg_as_str.strip().strip('"').strip().strip("'").strip()
+        return self.power_strip(
+            val_to_strip=arg_as_str,
+            chars_to_strip=["'", '"', ' ']
+        )
 
     def arg_to_list(self, arg_as_str: str) -> List[str]:
         """Converts a list as a string into a list."""
         return [
-            self.arg_to_string(arg_as_str=v)
-            for v in arg_as_str.strip().strip("[]").strip().split(",")
+            self.power_strip(v, chars_to_strip=['"', "'", "[", "]", " "])
+            for v in arg_as_str.split(',')
         ]
 
     def arg_to_float(self, arg_as_str: str) -> float:

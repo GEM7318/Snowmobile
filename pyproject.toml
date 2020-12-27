@@ -26,6 +26,7 @@ requires=[
     'enum34;python_version<"3.4"',
     "sqlparse;python_version>=0.3.1",
     "tabulate;python_version>=0.8.7",
+    "appdirs>=1.4.4",
 ]
 
 [tool.flit.metadata]
