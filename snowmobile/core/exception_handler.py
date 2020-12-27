@@ -4,7 +4,8 @@ Module contains the object model for **snowmobile.toml**.
 from __future__ import annotations
 
 import time
-from typing import Dict, List, Optional, Any, Set, Iterable, Type, Union
+from typing import Dict, List, Optional, Any, Set, Iterable, Type, Union, Callable
+from types import MethodType
 
 from snowmobile.core.errors import InternalError, Error
 # from snowmobile.core.script import (
@@ -19,25 +20,27 @@ class ExceptionHandler:
     def __init__(
             self,
             within: Optional[Any] = None,
-            _ctx_id: Optional[int] = None,
+            ctx_id: Optional[int] = None,
             in_context: bool = False,
-            children: Optional[List[ExceptionHandler]] = None
+            children: Dict[int, Any] = None,
+            is_active_parent: bool = False,
+            to_mirror: Optional[List[Any]] = None,
     ):
-        self._ctx_id: Optional[int] = _ctx_id
+        self._ctx_id: Optional[int] = ctx_id
 
         self.within: Type = type(within) if within else None
         self.by_ctx: Dict[int, Dict[int, errors]] = dict()
         self.in_context: bool = in_context
         self.outcome: Optional[int] = None
         self.children = children
+        self.is_active_parent: bool = is_active_parent
+        self.to_mirror: Optional[List[Any]] = to_mirror
 
     @property
     def ctx_id(self):
         """Current context id."""
         if not self._ctx_id:
             self.set(ctx_id=time.time_ns())
-            # if self.children:
-
         return self._ctx_id
 
     def set(
@@ -60,6 +63,13 @@ class ExceptionHandler:
             self.in_context = in_context
         if outcome:
             self.outcome = outcome
+
+        if self.is_active_parent and 'set' in self.to_mirror:
+            for child in self.children.values():
+                child.e.set(
+                    ctx_id=ctx_id, in_context=in_context, outcome=outcome
+                )
+
         return self
 
     def set_from(self, other: ExceptionHandler) -> ExceptionHandler:
@@ -78,6 +88,13 @@ class ExceptionHandler:
             self.in_context = False
         if outcome:
             self.outcome = None
+
+        if self.is_active_parent and 'reset' in self.to_mirror:
+            for child in self.children.values():
+                child.e.reset(
+                    ctx_id=ctx_id, in_context=in_context, outcome=outcome
+                )
+
         return self
 
     @property

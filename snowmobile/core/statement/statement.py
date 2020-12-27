@@ -119,13 +119,6 @@ class Statement:
         self._index: int = index
         self._exclude_attrs = []
 
-        # self._tmstmp: Optional[int] = None
-        # self.timestamps: Set[int] = set()
-
-        # self.errors: Dict[int, Dict[int, Exception]] = {}
-        # self.error_last: Dict[int, Exception] = {}
-        # self.enc_exception: bool = bool()
-
         self._outcome: int = int()
         self.outcome: bool = True
 
@@ -308,10 +301,10 @@ class Statement:
 
     def set_state(
         self,
+        index: Optional[int] = None,
         ctx_id: Optional[int] = None,
         in_context: Optional[bool] = None,
         filters: dict = None,
-        index: Optional[int] = None,
     ) -> Statement:
         """Sets current state/context on a statement object.
 
@@ -325,22 +318,22 @@ class Statement:
                 Integer to set as the statement's index position.
 
         """
+        if index:
+            self.index = self.tag.index = index
         if ctx_id:
             self.e.set(ctx_id=ctx_id)
         if isinstance(in_context, bool):
             self.e.set(in_context=in_context)
         if filters:
             self.tag.scope(**filters)
-        if index:
-            self.index = self.tag.index = index
         return self
 
     def reset(
         self,
         index: bool = False,
-        scope: bool = False,
         ctx_id: bool = False,
         in_context: bool = False,
+        scope: bool = False,
     ) -> Statement:
         """Resets attributes on the statement object to reflect as if read from source.
 
@@ -354,12 +347,12 @@ class Statement:
         """
         if index:
             self.index = self.tag.index = self._index
+        if ctx_id:
+            self.e.reset(ctx_id=True)
         if in_context:
             self.e.reset(in_context=True)
         if scope:
-            self.tag.is_included = True
-        if ctx_id:
-            self.e.reset(ctx_id=True)
+            self.tag.scope(**{})
         return self
 
     def process(self):
@@ -425,11 +418,10 @@ class Statement:
             # only post-process when execution did not raise database error
             if self.e.outcome != 1:
                 self.process()
-
+        # fmt: off
         # ---------------------------
         if (
-            not self.is_derived  # is generic statement
-            and self.e.seen(  # db error raised during execution
+            self.e.seen(  # db error raised during execution
                 of_type=db_errors, to_raise=True
             )
             and on_error != "c"  # stop on execution error
@@ -441,8 +433,7 @@ class Statement:
             )
         # ---------------------------
         if (
-            self.is_derived  # is child class with `.process()` method
-            and self.e.seen(  # post-processing error occurred
+            self.e.seen(  # post-processing error occurred
                 of_type=StatementPostProcessingError, to_raise=True
             )
             and on_exception != "c"  # stop on post-processing exception
@@ -465,6 +456,7 @@ class Statement:
             )
             raise to_raise
         # ---------------------------
+        # fmt: on
 
         if render:
             self.render()

@@ -42,20 +42,12 @@ class Script:
     def __init__(
         self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
     ):
-        self.e = ExceptionHandler(within=self)
-        # self._in_context: bool = False
-        # self._tmstmp: int = int()
-        # self.timestamps: Set[int] = set()
-
         self._is_from_str: bool = None
-
-        self._statements_parsed: Dict[int, sqlparse.sql.Statement] = dict()
+        self._is_post_init: bool = False
         self._statements_all: Dict[int, Statement] = dict()
-
+        self._statements_parsed: Dict[int, sqlparse.sql.Statement] = dict()
         self._open = sn.cfg.script.patterns.core.to_open
         self._close = sn.cfg.script.patterns.core.to_close
-
-        self._is_post_init: bool = False
 
         self.sn: Connector = sn
         self.patterns: configuration.schema.Pattern = sn.cfg.script.patterns
@@ -63,6 +55,7 @@ class Script:
         self.filters: Dict[Any[str, int], Dict[str, Set]] = {
             int(): {k: v for k, v in self.sn.cfg.scopes.items() if v}
         }
+
         self.filtered: bool = bool()
 
         self.intra_statement_marker_hashmap_idx: Dict = dict()
@@ -83,8 +76,14 @@ class Script:
         if self.source:
             self._parse_statements()
 
+        self.e = ExceptionHandler(
+            within=self,
+            children=self.statements,
+            is_active_parent=True,
+            to_mirror=['set', 'reset']
+        )
+
         self._stdout: Stdout = Stdout(name=self.name, statements=dict())
-        # self.e = ExceptionHandler(within=self)
 
     def _post_source__init__(self, from_str: bool = False) -> Script:
         """Sets final attributes and parses source once provided."""
@@ -368,7 +367,7 @@ class Script:
             )
         # fmt: on
         try:
-            self.e.set(ctx_id=-1, in_context=True)
+            self.e.set(ctx_id=time.time_ns(), in_context=True)
 
             if last:
                 from_id, as_id = self._latest_scope_id, None
@@ -492,24 +491,18 @@ class Script:
         # --------
         if _filter:  # NOTE: must come before re-index
             self.filtered = not bool(self.filtered)
-
         if index:
             re_indexed = batch_reset(index=index)
             unsorted_by_index = {s.index: s for s in re_indexed.values()}
             self._statements_all = {
                 i: unsorted_by_index[i] for i in sorted(unsorted_by_index)
             }
-
         if ctx_id:
             self.e.reset(ctx_id=True)
-            self._statements_all = batch_reset(ctx_id=True)
-
+        if in_context:
+            self.e.set(in_context=False)
         if scope:
             self._statements_all = batch_reset(scope=scope)
-
-        if in_context:
-            self.e.in_context = False
-            self._statements_all = batch_reset(in_context=in_context)
 
         return self
         # --------
@@ -795,7 +788,7 @@ class Script:
                     render=render,
                     **kwargs,
                 )
-                
+
     @property
     def _console(self):
         """External stdout object for console feedback without cluttering code."""
