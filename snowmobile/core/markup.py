@@ -49,17 +49,23 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
-from snowmobile.core.configuration import DIR_PKG_DATA, Configuration
-from snowmobile.core.schema import Marker
-from snowmobile.core.connector import Connector
-from .statement import Statement
-from .qa import Empty, Diff
-from snowmobile.core.utils import Console
-
-from .section import Section
+from . import (
+    Configuration,
+    Connector,
+    Statement,
+    Empty,
+    Diff,
+    Section,
+)
+from .paths import DIR_PKG_DATA
+from .schema import Marker
+from .utils import Console
 
 
 class Markup:
+    """Markup document from SQL script.
+    """
+
     def __init__(
         self,
         sn: Connector,

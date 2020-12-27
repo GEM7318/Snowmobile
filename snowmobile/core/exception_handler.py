@@ -3,16 +3,10 @@ Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
 
-import time
-from typing import Dict, List, Optional, Any, Set, Iterable, Type, Union, Callable
-from types import MethodType
 
-from snowmobile.core.errors import InternalError, Error
-# from snowmobile.core.script import (
-#     StatementNotFoundError,
-# )
+from typing import Any, Set, Iterable, Type
 
-errors = Union[Error, InternalError]
+from .errors import *
 
 
 class ExceptionHandler:
@@ -29,7 +23,7 @@ class ExceptionHandler:
         self._ctx_id: Optional[int] = ctx_id
 
         self.within: Type = type(within) if within else None
-        self.by_ctx: Dict[int, Dict[int, errors]] = dict()
+        self.by_ctx: Dict[int, Dict[int, snowmobile_errors]] = dict()
         self.in_context: bool = in_context
         self.outcome: Optional[int] = None
         self.children = children
@@ -109,7 +103,7 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
             )
         return self.by_ctx[self.ctx_id] if self.ctx_id in self.by_ctx else {}
 
-    def collect(self, e: Any[errors]):
+    def collect(self, e: Any[snowmobile_errors]):
         """Stores an exception."""
         current = self.current
         current[int(time.time_ns())] = e
@@ -133,7 +127,7 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
 
     @staticmethod
     def _query_types(
-        to_search: Dict[int, errors], of_type: Optional[errors, List[errors]] = None,
+        to_search: Dict[int, snowmobile_errors], of_type: Optional[snowmobile_errors, List[snowmobile_errors]] = None,
     ) -> Set[int]:
         """Search through exceptions by type."""
         of_type = of_type if isinstance(of_type, Iterable) else [of_type]
@@ -144,7 +138,7 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
         }
 
     @staticmethod
-    def _query_mode(to_search: Dict[int, errors], to_raise: bool) -> Set[int]:
+    def _query_mode(to_search: Dict[int, snowmobile_errors], to_raise: bool) -> Set[int]:
         """Search through exceptions by mode (to_raise=True/False)."""
         def _raise(e: Any):
             """Generalized check of an assertion's intention to be raised."""
@@ -156,14 +150,14 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
 
     def _query(
         self,
-        of_type: Optional[errors, List[errors]] = None,
+        of_type: Optional[snowmobile_errors, List[snowmobile_errors]] = None,
         to_raise: Optional[bool] = None,
         with_ids: Optional[int, List[int], Set[int]] = None,
         from_ctx: Optional[int] = None,
         all_time: bool = False,
-    ) -> Dict[int, errors]:
+    ) -> Dict[int, snowmobile_errors]:
         """Search through exceptions encountered by criterion."""
-        to_consider: Dict[int, errors] = (
+        to_consider: Dict[int, snowmobile_errors] = (
             self.by_ctx[from_ctx or self.ctx_id]
             if not all_time
             else self.by_tmstmp
@@ -194,7 +188,7 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
     def seen(
         self,
         from_ctx: Optional[int] = None,
-        of_type: Optional[Any[errors], List[errors]] = None,
+        of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None,
         to_raise: Optional[bool] = None,
         with_ids: Optional[int, List[int], Set[int]] = None,
         all_time: bool = False,
@@ -210,7 +204,7 @@ A call was made to `.current` while the current value of '_ctx_id` is None.
     def get(
         self,
         from_ctx: Optional[int] = None,
-        of_type: Optional[Any[errors], List[errors]] = None,
+        of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None,
         to_raise: Optional[bool] = None,
         with_ids: Optional[int, List[int], Set[int]] = None,
         all_time: bool = False,

@@ -12,18 +12,14 @@ from IPython.core.display import Markdown, display
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from snowmobile.core import Connector
-from .schema import Pattern
-from snowmobile.core.section import Section
-from snowmobile.core.exception_handler import ExceptionHandler
-
-from .errors import (
-    StatementPostProcessingError,
-    QAEmptyFailure, QADiffFailure
+from . import (
+    Connector,
+    Section,
+    ExceptionHandler,
+    Tag,
+    schema,
+    errors
 )
-from .tag import Tag
-
-db_errors = [DatabaseError, ProgrammingError, pdDataBaseError]
 
 
 class Statement:
@@ -100,8 +96,8 @@ class Statement:
     }
 
     _DERIVED_FAILURE_MAPPING = {
-        'qa-diff': QADiffFailure,
-        'qa-empty': QAEmptyFailure
+        'qa-diff': errors.QADiffFailure,
+        'qa-empty': errors.QAEmptyFailure
     }
     # fmt: on
 
@@ -129,7 +125,7 @@ class Statement:
         )
 
         self.index: int = index or int()
-        self.patterns: Pattern = sn.cfg.script.patterns
+        self.patterns: schema.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
         self.start_time: int = int()
@@ -421,24 +417,24 @@ class Statement:
         # ---------------------------
         if (
             self.e.seen(  # db error raised during execution
-                of_type=db_errors, to_raise=True
+                of_type=errors.db_errors, to_raise=True
             )
             and on_error != "c"  # stop on execution error
         ):
             raise self.e.get(
-                of_type=db_errors,
+                of_type=errors.db_errors,
                 to_raise=True,
                 first=True,
             )
         # ---------------------------
         if (
             self.e.seen(  # post-processing error occurred
-                of_type=StatementPostProcessingError, to_raise=True
+                of_type=errors.StatementPostProcessingError, to_raise=True
             )
             and on_exception != "c"  # stop on post-processing exception
         ):
             raise self.e.get(
-                of_type=StatementPostProcessingError,
+                of_type=errors.StatementPostProcessingError,
                 to_raise=True,
                 first=True,
             )

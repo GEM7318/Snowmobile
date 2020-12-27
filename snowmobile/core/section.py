@@ -50,15 +50,14 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from snowmobile.core.configuration import Configuration, Markdown
-from snowmobile.core.utils import parsing as p
+from . import Configuration
+from .schema import Markdown
+from .utils import parsing as p
 
 
 # TESTS: Add tests for Name
 class Name:
     """Handles attribute-name parsing including identification of wildcards.
-
-
 
     """
 
@@ -68,7 +67,6 @@ class Name:
 
         self.nm_raw = nm
 
-        # self.nm_stripped, self.flags = cfg_script.patterns.wildcards.partition_on_wc(
         self.nm_stripped, self.flags = config.wildcards.partition_on_wc(attr_nm=nm)
 
         self.is_paragraph = cfg_script.patterns.wildcards.wc_paragraph in self.flags

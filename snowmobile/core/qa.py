@@ -8,10 +8,11 @@ from typing import Any, Dict, List, Set
 
 import pandas as pd
 
-from snowmobile.core import Connector
-
-from .errors import StatementPostProcessingError
-from .statement import Statement
+from . import (
+    Connector,
+    Statement,
+    errors
+)
 
 
 class QA(Statement):
@@ -192,7 +193,7 @@ class Diff(QA):
         )
         if not self.idx_cols:
             self.e.collect(
-                e=StatementPostProcessingError(
+                e=errors.StatementPostProcessingError(
                     msg=(
                         f"Arguments provided don't result in any index columns "
                         f"on which to join DataFrame's partitions."
@@ -213,7 +214,7 @@ class Diff(QA):
         )
         if not self.compare_cols:
             self.e.collect(
-                e=StatementPostProcessingError(
+                e=errors.StatementPostProcessingError(
                     msg=f"Arguments provided don't result in any comparison columns."
                 ),
                 to_raise=True,
@@ -241,7 +242,7 @@ class Diff(QA):
         # fmt: off
         if self.partition_on not in list(self.results.columns):
             self.e.collect(
-                e=StatementPostProcessingError(
+                e=errors.StatementPostProcessingError(
                     msg=(
                         f"Column `{self.partition_on}` not found in DataFrames columns."
                     ),
@@ -308,7 +309,7 @@ class Diff(QA):
                 self.partitions = self.results.snf.partitions(on=self.partition_on)
             except Exception as e:
                 self.e.collect(
-                    e=StatementPostProcessingError(
+                    e=errors.StatementPostProcessingError(
                         msg=(e.args[0]),
                         to_raise=True,
                     )

@@ -17,102 +17,11 @@ import toml
 from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
-from snowmobile.core.utils import Console
-from .schema import (
-    Connection,
-    Loading,
-    Script,
-    SQL,
-    Location,
-    Attributes,
-    Base,
-    Markdown,
-    Wildcard
+from snowmobile.core import (
+    schema,
+    utils,
+    paths,
 )
-
-# ====================================
-HERE = Path(__file__).absolute()
-DIR_MODULES = HERE.parent
-DIR_PKG_DATA = DIR_MODULES / "pkg_data"
-
-EXTENSIONS_DEFAULT_PATH = DIR_PKG_DATA / "snowmobile_backend.toml"
-DDL_DEFAULT_PATH = DIR_PKG_DATA / "DDL.sql"
-# ====================================
-
-
-class Stdout(Console):
-    def __init__(self):
-        super().__init__()
-
-    # Export stdout
-    def exporting(self, file_name: str):
-        print(f"Exporting {file_name}..")
-
-    def exported(self, file_path: Path):
-        path = self.offset_path(file_path=file_path)
-        print(f"<1 of 1> Exported {path}")
-
-    # Initial stdout
-    def _locating(self):
-        print("Locating credentials...")
-        return self
-
-    def checking_cache(self):
-        print("(1 of 2) Checking for cached path...")
-        return self
-
-    def reading_provided(self):
-        print("(1 of 2) Checking provided path...")
-        return self
-
-    def locating(self, is_provided: bool):
-        _ = self._locating()
-        return self.checking_cache() if not is_provided else self.reading_provided()
-
-    # File found stdout
-    def cache_found(self, file_path: Path):
-        path = self.offset_path(file_path=file_path)
-        print(f"(2 of 2) Cached path found at {path}")
-        return self
-
-    def provided_found(self, file_path: Path):
-        path = self.offset_path(file_path=file_path)
-        print(f"(2 of 2) Reading provided path {path}")
-        return self
-
-    def found(self, file_path: Path, is_provided: bool):
-        return (
-            self.cache_found(file_path)
-            if not is_provided
-            else self.provided_found(file_path)
-        )
-
-    # File not found stdout
-    def cache_not_found(self):
-        print("(2 of 2) Cached path not found")
-        return self
-
-    def traversing_for(self, creds_file_nm: str):
-        print(f"\nLooking for {creds_file_nm} in local file system..")
-        return self
-
-    def not_found(self, creds_file_nm: str):
-        return self.cache_not_found().traversing_for(creds_file_nm=creds_file_nm)
-
-    # File located stdout
-    def file_located(self, file_path: Path):
-        path = self.offset_path(file_path=file_path)
-        print(f"(1 of 1) Located '{file_path.name}' at {path}")
-        return self
-
-    # File cannot be found stdout
-    def cannot_find(self, creds_file_nm: str):
-        print(
-            f"(1 of 1) Could not find config file {creds_file_nm} - "
-            f"please double check the name of your configuration file or "
-            f"value passed in the 'creds_file_nm' argument"
-        )
-        return self
 
 
 class Cache(FileCache):
@@ -163,8 +72,6 @@ class Cache(FileCache):
 
 class Configuration:
 
-    _stdout = Stdout()
-
     # -- Statement components to be considered for scope.
     SCOPE_ATTRIBUTES = [
         "kw",
@@ -211,14 +118,16 @@ class Configuration:
                 `snowmobile_SAMPLE.toml`.
 
         """
+        self._stdout = self.Stdout()
         self.file_nm = config_file_nm or "snowmobile.toml"
         self.cache = Cache()
 
         if export_dir:
+
             self._stdout.exporting(file_name=self.file_nm)
             export_dir = export_dir or Path.cwd()
             export_path = export_dir / self.file_nm
-            template_path = DIR_PKG_DATA / "snowmobile_TEMPLATE.toml"
+            template_path = paths.DIR_PKG_DATA / "snowmobile_TEMPLATE.toml"
             shutil.copy(template_path, export_path)
             self._stdout.exported(file_path=export_path)
 
@@ -241,19 +150,17 @@ class Configuration:
 
                 # TODO: Add sql export disclaimer to this as well
                 if not cfg["external-file-locations"].get("ddl"):
-                    cfg["external-file-locations"]["ddl"] = DDL_DEFAULT_PATH
+                    cfg["external-file-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
                 if not cfg["external-file-locations"].get("backend-ext"):
                     cfg["external-file-locations"][
                         "backend-ext"
-                    ] = EXTENSIONS_DEFAULT_PATH
-
-                # super().__init__(**cfg)
+                    ] = paths.EXTENSIONS_DEFAULT_PATH
                 # fmt: off
-                self.connection = Connection(**cfg.get('connection', {}))
-                self.loading = Loading(**cfg.get('loading-defaults', {}))
-                self.script = Script(**cfg.get('script', {}))
-                self.sql = SQL(**cfg.get('sql', {}))
-                self.ext_locations = Location(**cfg.get('external-file-locations', {}))
+                self.connection = schema.Connection(**cfg.get('connection', {}))
+                self.loading = schema.Loading(**cfg.get('loading-defaults', {}))
+                self.script = schema.Script(**cfg.get('script', {}))
+                self.sql = schema.SQL(**cfg.get('sql', {}))
+                self.ext_locations = schema.Location(**cfg.get('external-file-locations', {}))
                 # fmt: on
 
                 with open(self.ext_locations.backend, "r") as r:
@@ -266,17 +173,17 @@ class Configuration:
                 raise IOError(e)
 
     @property
-    def markdown(self) -> Markdown:
+    def markdown(self) -> schema.Markdown:
         """Accessor for cfg.script.markdown."""
         return self.script.markdown
 
     @property
-    def attrs(self) -> Attributes:
+    def attrs(self) -> schema.Attributes:
         """Accessor for cfg.script.markdown.attributes."""
         return self.script.markdown.attrs
 
     @property
-    def wildcards(self) -> Wildcard:
+    def wildcards(self) -> schema.Wildcard:
         """Accessor for cfg.script.patterns.wildcards."""
         return self.script.patterns.wildcards
 
@@ -389,7 +296,7 @@ class Configuration:
         """Serialization method for core object model."""
         total = {}
         for k, v in vars(self).items():
-            if issubclass(type(v), Base):
+            if issubclass(type(v), schema.Base):
                 total = {**total, **v.as_serializable(by_alias=by_alias)}
         return json.dumps(obj=total, default=pydantic_encoder, **kwargs)
 
@@ -401,3 +308,79 @@ class Configuration:
 
     def __repr__(self):
         return f"snowmobile.Configuration(config_file_nm='{self.file_nm}')"
+
+    # noinspection PyMissingOrEmptyDocstring,PyMethodMayBeStatic
+    class Stdout(utils.Console):
+        """Console output."""
+        def __init__(self):
+            super().__init__()
+
+        # Export stdout
+        def exporting(self, file_name: str):
+            print(f"Exporting {file_name}..")
+
+        def exported(self, file_path: Path):
+            path = self.offset_path(file_path=file_path)
+            print(f"<1 of 1> Exported {path}")
+
+        # Initial stdout
+        def _locating(self):
+            print("Locating credentials...")
+            return self
+
+        def checking_cache(self):
+            print("(1 of 2) Checking for cached path...")
+            return self
+
+        def reading_provided(self):
+            print("(1 of 2) Checking provided path...")
+            return self
+
+        def locating(self, is_provided: bool):
+            _ = self._locating()
+            return self.checking_cache() if not is_provided else self.reading_provided()
+
+        # File found stdout
+        def cache_found(self, file_path: Path):
+            path = self.offset_path(file_path=file_path)
+            print(f"(2 of 2) Cached path found at {path}")
+            return self
+
+        def provided_found(self, file_path: Path):
+            path = self.offset_path(file_path=file_path)
+            print(f"(2 of 2) Reading provided path {path}")
+            return self
+
+        def found(self, file_path: Path, is_provided: bool):
+            return (
+                self.cache_found(file_path)
+                if not is_provided
+                else self.provided_found(file_path)
+            )
+
+        # File not found stdout
+        def cache_not_found(self):
+            print("(2 of 2) Cached path not found")
+            return self
+
+        def traversing_for(self, creds_file_nm: str):
+            print(f"\nLooking for {creds_file_nm} in local file system..")
+            return self
+
+        def not_found(self, creds_file_nm: str):
+            return self.cache_not_found().traversing_for(creds_file_nm=creds_file_nm)
+
+        # File located stdout
+        def file_located(self, file_path: Path):
+            path = self.offset_path(file_path=file_path)
+            print(f"(1 of 1) Located '{file_path.name}' at {path}")
+            return self
+
+        # File cannot be found stdout
+        def cannot_find(self, creds_file_nm: str):
+            print(
+                f"(1 of 1) Could not find config file {creds_file_nm} - "
+                f"please double check the name of your configuration file or "
+                f"value passed in the 'creds_file_nm' argument"
+            )
+            return self

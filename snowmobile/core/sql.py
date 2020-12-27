@@ -30,9 +30,9 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from snowmobile.core.utils.parsing import p, strip, up
-
-from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO
+# from snowmobile.core.utils.parsing import p, strip, up
+from .utils.parsing import p, strip, up
+from ._map_information_schema import MAP_INFORMATION_SCHEMA as INFO_SCHEMA
 
 
 class SQL:
@@ -910,17 +910,17 @@ limit {n or 1}
 
         """
         # fmt: off
-        if obj in INFO.values():
-            obj = {v: k for k, v in INFO.items()}[obj]
-        if obj not in INFO.keys():
+        if obj in INFO_SCHEMA.values():
+            obj = {v: k for k, v in INFO_SCHEMA.items()}[obj]
+        if obj not in INFO_SCHEMA.keys():
             raise ValueError(
                 f"\nobj='{obj}' is not a supported object type for the"
                 f" information_schema method called.\n"
-                f"Supported objects are:\n\t[{','.join(INFO.keys())}]"
+                f"Supported objects are:\n\t[{','.join(INFO_SCHEMA.keys())}]"
             )
         # fmt: on
 
-        info_schema_loc = INFO[obj]
+        info_schema_loc = INFO_SCHEMA[obj]
         fields = self.fields(fields=fields)
         where = self.where(restrictions=restrictions)
         order_by = self.order(by=order_by)

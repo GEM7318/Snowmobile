@@ -13,14 +13,8 @@ from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-import snowmobile.core.sql as sql
-from .configuration import Configuration
-
-# from snowmobile.core.loader.errors import (
-#     LoadingInternalError,
-#     ExistingTableError,
-#     ColumnMismatchError,
-# )
+from . import Configuration
+from snowmobile.core import sql
 from snowmobile.core.snowframe import SnowFrame
 
 

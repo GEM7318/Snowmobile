@@ -4,6 +4,12 @@ Snowmobile exceptions.
 import time
 from typing import Dict, Optional, List
 
+from pandas.io.sql import DatabaseError as pdDataBaseError
+from snowflake.connector.errors import (
+    DatabaseError as sfDatabaseError,
+    ProgrammingError
+)
+
 
 class Error(Exception):
     """Base Snowmobile exception class.
@@ -366,3 +372,24 @@ class FileFormatNameError(StatementNotFoundError):
     """The name of the provided file format is invalid."""
 
     pass
+
+
+db_errors = (sfDatabaseError, ProgrammingError, pdDataBaseError)
+
+snowmobile_errors = (
+    Error,
+    InternalError,
+    StatementNotFoundError,
+    StatementInternalError,
+    StatementPostProcessingError,
+    QAFailure,
+    QADiffFailure,
+    QAEmptyFailure,
+    SnowFrameInternalError,
+    StatementNotFoundError,
+    DuplicateTagError,
+    LoadingInternalError,
+    ExistingTableError,
+    ColumnMismatchError,
+    FileFormatNameError,
+)

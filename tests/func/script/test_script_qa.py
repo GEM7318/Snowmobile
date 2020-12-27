@@ -89,7 +89,7 @@ def test_qa_diff_failures(setup_for_qa_statement_tests):
 @pytest.mark.qa
 def test_qa_empty_failure_exceptions(setup_for_qa_statement_tests):
     """Verifies that an invalid `qa-empty` throws appropriate exception."""
-    from snowmobile.core.statement import QAEmptyFailure
+    from snowmobile.core.errors import QAEmptyFailure
 
     script = setup_for_qa_statement_tests
     with script.filter(

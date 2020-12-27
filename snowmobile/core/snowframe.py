@@ -10,7 +10,9 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 from .column import Column
-from .errors import SnowFrameInternalError
+from . import errors
+# from .errors import SnowFrameInternalError
+# from . import errors, Column
 
 
 @pd.api.extensions.register_dataframe_accessor("snf")
@@ -125,7 +127,7 @@ class SnowFrame:
         """
         partitioned_by = set(self._obj[on])
         if len(partitioned_by) < 2:
-            raise SnowFrameInternalError(
+            raise errors.SnowFrameInternalError(
                 msg=(
                     f"Found one distinct value, '{list(partitioned_by)[0]}' "
                     f"within '{on}' column of DataFrame. A minimum of 2 is required."

@@ -20,81 +20,18 @@ from typing import Any, ContextManager, Dict, List, Optional, Set, Tuple, Union
 
 import sqlparse
 
-from .schema import Marker
-from .connector import Connector
-from .markup import Markup
-from . import configuration
-from .schema import Pattern
-from .statement import Statement
-from .qa import Empty, Diff
-from .exception_handler import ExceptionHandler
-from .errors import DuplicateTagError, StatementNotFoundError
+from . import (
+    Connector,
+    Markup,
+    Statement,
+    Empty,
+    Diff,
+    ExceptionHandler,
+    schema,
+    errors,
+)
 
 
-class Stdout:
-    def __init__(
-        self,
-        name: str,
-        statements: Dict[int, Statement],
-        verbose: bool = True,
-    ):
-        self.name: str = name
-        self.statements = statements
-        self.verbose = verbose
-        self.max_width_outcome = len("<COMPLETED>")
-        self.outputs: Dict[int, str] = {}
-
-    @property
-    def cnt_statements(self) -> int:
-        return len(self.statements)
-
-    @property
-    def max_width_progress(self) -> int:
-        return max(
-            len(f"<{i} of {self.cnt_statements}>")
-            for i, _ in enumerate(self.statements.values(), start=1)
-        )
-
-    @property
-    def max_width_tag_and_time(self) -> int:
-        return max(len(f"{s.tag.nm} (~0s)") for s in self.statements.values())
-
-    def console_progress(self, s: Statement) -> str:
-        return f"<{s.index} of {self.cnt_statements}>".rjust(
-            self.max_width_progress, " "
-        )
-
-    def console_tag_and_time(self, s: Statement) -> str:
-        return f"{s.tag.nm} ({s.execution_time_txt})".ljust(
-            self.max_width_tag_and_time + 3, "."
-        )
-
-    def console_outcome(self, s: Statement) -> str:
-        return f"<{s.outcome_txt().lower()}>".ljust(self.max_width_outcome, " ")
-
-    def status(
-        self, s: Statement, return_val: bool = False
-    ) -> Union[None, str]:
-        progress = self.console_progress(s)
-        tag_and_time = self.console_tag_and_time(s)
-        outcome = self.console_outcome(s)
-        stdout = f"{progress} {tag_and_time} {outcome}"
-        self.outputs[s.index] = stdout
-        if self.verbose:
-            print(stdout)
-        if return_val:
-            return stdout
-
-    def display(self, underline: bool = True):
-        name = self.name
-        if underline:
-            bottom_border = "=" * len(name)
-            name = f"{bottom_border}\n{name}\n{bottom_border}"
-        if self.verbose:
-            print(f"{name}")
-
-
-# noinspection PydanticTypeChecker,PyTypeChecker
 class Script:
 
     # Maps statement anchors to alternate base class.
@@ -106,7 +43,7 @@ class Script:
     def __init__(
         self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
     ):
-        self._is_from_str: bool = None
+        self._is_from_str: Optional[bool] = None
         self._is_post_init: bool = False
         self._statements_all: Dict[int, Statement] = dict()
         self._statements_parsed: Dict[int, sqlparse.sql.Statement] = dict()
@@ -114,7 +51,7 @@ class Script:
         self._close = sn.cfg.script.patterns.core.to_close
 
         self.sn: Connector = sn
-        self.patterns: Pattern = sn.cfg.script.patterns
+        self.patterns: schema.Pattern = sn.cfg.script.patterns
         self.as_generic = as_generic
         self.filters: Dict[Any[str, int], Dict[str, Set]] = {
             int(): {k: v for k, v in self.sn.cfg.scopes.items() if v}
@@ -125,7 +62,7 @@ class Script:
         self.intra_statement_marker_hashmap_idx: Dict = dict()
         self.intra_statement_marker_hashmap_txt: Dict = dict()
         self.all_marker_hashmap: Dict = dict()
-        self.markers: Dict[int, Marker] = dict()
+        self.markers: Dict[int, schema.Marker] = dict()
 
         if path:
             try:
@@ -147,7 +84,7 @@ class Script:
             to_mirror=['set', 'reset']
         )
 
-        self._stdout: Stdout = Stdout(name=self.name, statements=dict())
+        self._stdout: Script.Stdout = self.Stdout(name=self.name, statements=dict())
 
     def _post_source__init__(self, from_str: bool = False) -> Script:
         """Sets final attributes and parses source once provided."""
@@ -529,7 +466,7 @@ class Script:
         """Fetch a single statement by _id."""
         index_of_id = self._id(_id=_id)
         if index_of_id not in self.statements:
-            raise StatementNotFoundError(nm=_id)
+            raise errors.StatementNotFoundError(nm=_id)
         return self.statements[index_of_id]
 
     def reset(
@@ -539,7 +476,7 @@ class Script:
         in_context: bool = False,
         scope: bool = False,
         _filter: bool = False,
-    ) -> None:
+    ) -> Script:
         """Resets indices and scope on all statements to their state as read from source.
 
         Invoked before exiting :meth:`filter()` context manger to reverse
@@ -599,7 +536,7 @@ class Script:
             len({s for s in contents_to_return})
             == len({s.name for s in contents_to_return.values()})
         ):
-            raise DuplicateTagError(nm=self.path.name)
+            raise errors.DuplicateTagError(nm=self.path.name)
         return {s.name: s for i, s in contents_to_return.items()}
 
     def dtl(self, full: bool = False) -> None:
@@ -744,7 +681,7 @@ class Script:
         except Exception as e:
             raise e
 
-    def ids_from_iterable(self, _id: Union[Tuple, List],) -> List[int]:
+    def ids_from_iterable(self, _id: Optional[Union[Tuple, List]] = None) -> List[int]:
         """Utility function to get a list of statement IDs given an `_id`.
 
         Invoked within script.run() if the `_id` parameter is either a:
@@ -763,6 +700,8 @@ class Script:
                 A list of statement indices to run.
 
         """
+        if not _id:
+            return list(self.statements)
         if isinstance(_id, List):
             return _id
         elif isinstance(_id, Tuple):
@@ -772,8 +711,6 @@ class Script:
                 (self._id(_id=stop_intl) + 1),
             )
             return [i for i in range(start, stop)]
-        else:
-            return list(self.statements)
 
     def _run(
         self,
@@ -827,31 +764,22 @@ class Script:
         if not self.e.in_context:
             self.e.set(ctx_id=-1)
 
+        static_kwargs = {
+            'results': results,
+            'on_error': on_error,
+            'on_exception': on_exception,
+            'on_failure': on_failure,
+            'lower': lower,
+            'render': render,
+        }
+
         if isinstance(_id, (int, str)):
-            self._run(
-                _id=_id,
-                results=results,
-                on_error=on_error,
-                on_exception=on_exception,
-                on_failure=on_failure,
-                lower=lower,
-                render=render,
-                **kwargs,
-            )
+            self._run(_id=_id, **{**static_kwargs, **kwargs})
         else:
             indices_to_execute = self.ids_from_iterable(_id=_id)
             self._console.display()
             for i in indices_to_execute:
-                self._run(
-                    _id=i,
-                    results=results,
-                    on_error=on_error,
-                    on_exception=on_exception,
-                    on_failure=on_failure,
-                    lower=lower,
-                    render=render,
-                    **kwargs,
-                )
+                self._run(_id=i, **{**static_kwargs, **kwargs})
 
     @property
     def _console(self):
@@ -885,3 +813,67 @@ class Script:
 
     def __repr__(self) -> str:
         return f"snowmobile.Script('{self.name}')"
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Stdout:
+        """Console output."""
+        def __init__(
+            self,
+            name: str,
+            statements: Dict[int, Statement],
+            verbose: bool = True,
+        ):
+            self.name: str = name
+            self.statements = statements
+            self.verbose = verbose
+            self.max_width_outcome = len("<COMPLETED>")
+            self.outputs: Dict[int, str] = {}
+
+        @property
+        def cnt_statements(self) -> int:
+            return len(self.statements)
+
+        @property
+        def max_width_progress(self) -> int:
+            return max(
+                len(f"<{i} of {self.cnt_statements}>")
+                for i, _ in enumerate(self.statements.values(), start=1)
+            )
+
+        @property
+        def max_width_tag_and_time(self) -> int:
+            return max(len(f"{s.tag.nm} (~0s)") for s in self.statements.values())
+
+        def console_progress(self, s: Statement) -> str:
+            return f"<{s.index} of {self.cnt_statements}>".rjust(
+                self.max_width_progress, " "
+            )
+
+        def console_tag_and_time(self, s: Statement) -> str:
+            return f"{s.tag.nm} ({s.execution_time_txt})".ljust(
+                self.max_width_tag_and_time + 3, "."
+            )
+
+        def console_outcome(self, s: Statement) -> str:
+            return f"<{s.outcome_txt().lower()}>".ljust(self.max_width_outcome, " ")
+
+        def status(
+            self, s: Statement, return_val: bool = False
+        ) -> Union[None, str]:
+            progress = self.console_progress(s)
+            tag_and_time = self.console_tag_and_time(s)
+            outcome = self.console_outcome(s)
+            stdout = f"{progress} {tag_and_time} {outcome}"
+            self.outputs[s.index] = stdout
+            if self.verbose:
+                print(stdout)
+            if return_val:
+                return stdout
+
+        def display(self, underline: bool = True):
+            name = self.name
+            if underline:
+                bottom_border = "=" * len(name)
+                name = f"{bottom_border}\n{name}\n{bottom_border}"
+            if self.verbose:
+                print(f"{name}")

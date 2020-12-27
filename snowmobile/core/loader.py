@@ -13,16 +13,13 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from snowmobile.core import SQL, Connector, Script
-from snowmobile.core.configuration import DDL_DEFAULT_PATH
-from snowmobile.core.script import StatementNotFoundError
-
-from .errors import (
-    ColumnMismatchError,
-    ExistingTableError,
-    FileFormatNameError,
-    LoadingInternalError,
+from . import (
+    Connector,
+    Script,
+    SQL,
+    errors
 )
+from .paths import DDL_DEFAULT_PATH
 
 
 # TODO: (rename) Loader -> Table
@@ -54,10 +51,10 @@ class Loader:
         # ------------
         self.msg: str = str()
         self.error: Any[
-            LoadingInternalError,
-            ExistingTableError,
-            ColumnMismatchError,
-            FileFormatNameError,
+            errors.LoadingInternalError,
+            errors.ExistingTableError,
+            errors.ColumnMismatchError,
+            errors.FileFormatNameError,
         ] = None
         self.requires_sql: bool = bool()
 
@@ -91,7 +88,8 @@ class Loader:
                 c.lower() for c in self.sql.show_file_formats().snf.to_list("name")
             ]
             if not format_exists_in_schema:  # read from source file otherwise
-                assert self.path_ddl.exists(), f"{self.path_ddl} does not exist"
+                if not self.path_ddl.exists():
+                    raise IOError(f"`{self.path_ddl}` does not exist.")
                 ddl = Script(sn=self.sql.sn, path=self.path_ddl)
                 st_name = f"create-file format~{self.file_format}"
                 args = {  # only used if exception is thrown below
@@ -100,8 +98,8 @@ class Loader:
                 }
                 try:
                     ddl.run(st_name, results=False)
-                except StatementNotFoundError(**args) as e:
-                    raise FileFormatNameError(**args) from e
+                except errors.StatementNotFoundError(**args) as e:
+                    raise errors.FileFormatNameError(**args) from e
 
         # load timestamp
         # --------------
@@ -139,7 +137,7 @@ class Loader:
         if self._col_diff:
             return self._col_diff
         if not self.exists:
-            raise LoadingInternalError(
+            raise errors.LoadingInternalError(
                 nm="Table.col_diff()", msg=f"called while `table.exists={self.exists}`."
             )
 
@@ -212,7 +210,7 @@ class Loader:
                 f"provided; please provide 'replace', 'append', or "
                 f"'truncate' to continue loading with a pre-existing table."
             )
-            self.error = ExistingTableError(msg=self.msg)
+            self.error = errors.ExistingTableError(msg=self.msg)
 
         elif self.cols_match and if_exists == "append":
             self.msg = (
@@ -241,7 +239,7 @@ class Loader:
                 f" provide if_exists='replace' to overwrite the existing table "
                 f"or see `table.col_diff` to inspect the mismatched columns."
             )
-            self.error = ColumnMismatchError(msg=self.msg)
+            self.error = errors.ColumnMismatchError(msg=self.msg)
 
         elif not self.cols_match:
             self.msg = (
@@ -256,7 +254,7 @@ class Loader:
                 f"Unknown combination of arguments passed to "
                 f"``loadable.to_table()``."
             )
-            self.error = LoadingInternalError(msg=self.msg)
+            self.error = errors.LoadingInternalError(msg=self.msg)
 
         self._upload_validation_end = time.time()
 

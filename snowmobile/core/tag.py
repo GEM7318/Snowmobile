@@ -6,9 +6,11 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional, Set, Union
 
-from .configuration import Configuration
+from . import (
+    Configuration,
+    Scope,
+)
 from .schema import Pattern
-from .scope import Scope
 
 
 class Tag:
