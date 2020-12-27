@@ -50,7 +50,7 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from . import Snowmobile, Configuration
+from . import Snowmobile, Configuration, errors
 from .schema import Markdown
 from .utils import parsing as p
 
@@ -61,8 +61,15 @@ class Name(Snowmobile):
 
     """
 
-    def __init__(self, nm: str, config: Configuration):
+    def __init__(
+            self,
+            nm: str,
+            config: Configuration,
+            is_title: Optional[bool] = None
+    ):
         super().__init__()
+        # This is for all attributes; however, name needs to handle the
+        # flags differently
         cfg_md = config.script.markdown
         cfg_script = config.script
 
@@ -91,7 +98,10 @@ class Name(Snowmobile):
         elif self.nm_stripped in cfg_md.attrs.from_namespace:
             self.nm_adj = cfg_md.attrs.from_namespace.get(self.nm_stripped)
         else:
-            self.nm_adj = self.nm_stripped.title()
+            self.nm_adj = (
+                self.nm_stripped.title() if not is_title
+                else self.nm_stripped
+            )
 
         self.specified_position = cfg_md.attrs.get_position(attr=self.nm_stripped)
 
@@ -132,7 +142,7 @@ class Item(Name):
         index: int,
         flattened_attrs: tuple,
         config: Configuration,
-        results: pd.DataFrame = None,
+        results: Optional[pd.DataFrame] = None,
         sql_md: Optional[str] = None,
     ):
         cfg_md = config.script.markdown
@@ -264,9 +274,9 @@ class Section(Snowmobile):
         is_marker: bool = None,
         h_contents: Optional[str] = None,
         index: Optional[int] = None,
-        parsed: Dict = None,
+        parsed: Optional[Dict] = None,
         sql: Optional[str] = None,
-        results: pd.DataFrame = None,
+        results: Optional[pd.DataFrame] = None,
     ):
         """Instantiation of a ``script.Section`` object.
 
@@ -284,33 +294,37 @@ class Section(Snowmobile):
 
         """
         super().__init__()
-        cfg_md = config.script.markdown
-        self.cfg_md: Markdown = cfg_md
+
+        self.cfg_md: Markdown = config.script.markdown
         self.is_marker = is_marker or bool()
         self.sql: str = sql
         self.results = results
-        # TODO: Make this bs part of configuration
-        h_level = self.cfg_md.hx_marker if self.is_marker else self.cfg_md.hx_statement
-        self.hx: str = int(h_level[1:]) * "#"
-        self.h_contents: str = h_contents
         self.index: int = index
-        grouped_attrs = self._group_attrs(attrs=parsed, groups=cfg_md.attrs.groups)
-        self.parsed: Dict = self.reorder_attrs(parsed=grouped_attrs, config=config)
-        self.items: List[Item] = self.parse_contents(
-            sorted_parsed=self.parsed, config=config
+
+        self._name = Name(nm=h_contents, config=config, is_title=True)
+        if len(self._name.flags) > 1:
+            raise errors.InvalidTagsError(
+                msg=self._exception_invalid_title(raw=h_contents)
+            )
+        self.hx = self.cfg_md.pref_header(
+            is_marker=self.is_marker,
+            from_wc=self._name.flags[0] if self._name.flags else str(),
         )
+        self.h_contents = self._name.nm_adj
+
+        grouped_attrs = self._group_attrs(attrs=parsed, groups=self.cfg_md.attrs.groups)
+        self.parsed: Dict = self.reorder_attrs(parsed=grouped_attrs, config=config)
+        self.items: List[Item] = self.parse_contents(config=config)
 
     def _add_reserved_attr(
         self,
         attrs: Dict[str, Union[str, Dict, bool]],
-        cfg_md: Markdown,
         reserved_attr: str,
     ) -> Dict:
         """Adds reserved attributes based on configuration (i.e. SQL and Results).
 
         Args:
             attrs (Dict): Dictionary of currently parsed attributes.
-            cfg_md (:class:`Markdown`): Markdown configuration object.
             reserved_attr (str): Name of reserved attribute.
 
         Returns (Dict):
@@ -318,7 +332,7 @@ class Section(Snowmobile):
             **snowmobile.toml**.
 
         """
-        attr_config = cfg_md.attrs.reserved[reserved_attr]
+        attr_config = self.cfg_md.attrs.reserved[reserved_attr]
         if not attr_config.include_by_default or self.is_marker:
             return attrs
 
@@ -346,7 +360,7 @@ class Section(Snowmobile):
         cfg_md = config.script.markdown
         for reserved_attr_nm, reserved_attr in cfg_md.attrs.reserved.items():
             parsed = self._add_reserved_attr(
-                attrs=parsed, cfg_md=cfg_md, reserved_attr=reserved_attr_nm,
+                attrs=parsed, reserved_attr=reserved_attr_nm,
             )
         included = {k: v for k, v in parsed.items() if cfg_md.attrs.include(attr=k)}
         specified_position_to_attr_nm: Dict[int, str] = {
@@ -362,10 +376,10 @@ class Section(Snowmobile):
             parsed[attr_nm] = parsed.pop(attr_nm)
         return parsed
 
-    def parse_contents(self, sorted_parsed: dict, config: Configuration) -> List[Item]:
+    def parse_contents(self, config: Configuration) -> List[Item]:
         """Unpacks sorted dictionary of parsed attributes into formatted Items."""
         flattened = p.dict_flatten(
-            attrs=sorted_parsed, bullet_char=config.script.markdown.bullet_char
+            attrs=self.parsed, bullet_char=config.script.markdown.bullet_char
         )
         items = [
             Item(
@@ -417,6 +431,17 @@ class Section(Snowmobile):
 
         """
         return "\n".join([self.header, self.body])
+
+    @staticmethod
+    def _exception_invalid_title(raw: str) -> str:
+        """Invalid title message; isolating to avoid cluttering __init__ method."""
+        return f"""
+Multiple sets of wildcards detected in the below statement or marker title; only
+a single set of unescaped wildcards is permitted.
+```
+{raw}
+```       
+"""
 
     def __repr__(self):
         return f"script.Section({str(vars(self))})"

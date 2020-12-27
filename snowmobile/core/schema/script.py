@@ -4,12 +4,13 @@ Module contains the object model for **snowmobile.toml**.
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Tuple, Union, Iterable
+from typing import Dict, List, Tuple, Union, Iterable, Optional
 
 import sqlparse
 from pydantic import Field
 
 from snowmobile.core.utils import parsing as p
+from snowmobile.core import errors
 
 from .base import Base
 
@@ -274,6 +275,18 @@ class Markdown(Base):
     )
     # fmt: on
 
+    def pref_header(
+            self,
+            is_marker: bool = False,
+            from_wc: Optional[str] = False,
+    ) -> str:
+        """Creates header prefix based on specifications."""
+        h_level = self.hx_marker if is_marker else self.hx_statement
+        if not from_wc:
+            return int(h_level.strip()[1:]) * '#'
+        wc_only = ''.join(c for c in from_wc if c == '*')
+        return len(wc_only) * '#'
+
 
 class Pattern(Base):
     # fmt: off
@@ -488,7 +501,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0] : span[1]]
+                i: sql[span[0]: span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:
@@ -592,8 +605,31 @@ class Script(Base):
             )
         return splitter[0]
 
+    def parse_name(
+            self,
+            raw: str,
+            offset: Optional[int] = None,
+            silence: bool = False,
+    ) -> str:
+        """Parses name from a raw set of arguments if not given an explicit tag."""
+        by_line = raw.strip('\n').split('\n')
+        offset = offset or 0
+        if by_line[offset].startswith('__'):
+            e = errors.InvalidTagsError(
+                msg=f"""
+invalid statement tags provided. 
+multi-line statement tags without an explicit `__name` attribute must include 
+a name not beginning with '__' on the first line within the open & closing tag;
+first line found is:\n```\n{raw}\n```. 
+"""
+            )
+            if silence:
+                return str()
+            raise e
+        return self.power_strip(by_line[offset], ['"', "'", " "])
+
     @staticmethod
-    def add_name(nm: str, attrs: dict, overwrite: bool = False):
+    def add_name(nm_title: str, nm_marker: str, attrs: dict, overwrite: bool = False):
         """Adds a name to a set of parsed marker attributes.
 
         Accepts a name and a dict of parsed attributes from a marker and:
@@ -606,8 +642,14 @@ class Script(Base):
                 __name__ with template markers in ``snowmobile.toml``.
 
         Args:
-            nm (str):
-                The name of the marker as returned from :func:`name_from_marker()`.
+            nm_title (str):
+                The name of the marker as either:
+                    1.  Returned value from :meth:`name_from_marker()`
+                    2.  Returned value from :meth:`parse_name()`
+                    3.  None if neither is provided
+            nm_marker (str):
+                The string value wrapped in ``__`` on the first line of the
+                argument block.
             attrs (dict):
                 A dictionary of parsed attributes as returned from :func:`parse_str()`.
             overwrite (bool):
@@ -615,17 +657,26 @@ class Script(Base):
                 within the .sql script.
 
         """
-        nm_from_attrs = attrs.get("name")
-        if not nm_from_attrs or overwrite:
-            attrs["name"] = nm
-        attrs["marker-name"] = nm
+        attrs["marker-name"] = nm_marker
+        if nm_title:
+            attrs["name"] = nm_title
+        if not nm_title or overwrite:
+            attrs["name"] = nm_marker
         return attrs
 
     def parse_marker(self, attrs_raw: str) -> Dict:
         """Parses a raw string of __marker__ text between an open and a close pattern."""
         parsed = self.parse_str(attrs_raw)
+        nm_title = (
+            parsed.get('name')
+            or self.parse_name(raw=attrs_raw, offset=1, silence=True)
+        )
+        marker_nm = self.name_from_marker(attrs_raw)
         self.add_name(
-            nm=self.name_from_marker(attrs_raw), attrs=parsed, overwrite=False
+            nm_title=nm_title,
+            nm_marker=marker_nm,
+            attrs=parsed,
+            overwrite=False
         )
         parsed["raw-text"] = attrs_raw
         return parsed

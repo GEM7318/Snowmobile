@@ -166,10 +166,13 @@ class Statement(Snowmobile):
         """
         if self.is_multiline:
             attrs_parsed = self.sn.cfg.script.parse_str(block=self.attrs_raw)
-            parsed_contains_name, msg = self._validate_parsed(attrs_parsed=attrs_parsed)
-            if not parsed_contains_name:
-                raise ValueError(msg)
-            name = attrs_parsed.pop("name")
+            if 'name' in attrs_parsed:
+                name = attrs_parsed.pop('name')
+            else:
+                try:
+                    name = self.sn.cfg.script.parse_name(raw=self.attrs_raw)
+                except errors.InvalidTagsError as e:
+                    raise e
         else:
             attrs_parsed, name = dict(), self.attrs_raw
 

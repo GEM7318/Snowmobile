@@ -41,7 +41,7 @@ class Error(Exception):
         to_raise: Optional[bool] = False,
     ):
         self.tmstmp: int = int(time.time())
-        self.msg = msg
+        self.msg = (msg or str()).strip('\n')
         self.errno = errno
         self.nm = nm
         self.to_raise: bool = to_raise
@@ -368,6 +368,12 @@ class ColumnMismatchError(Error):
 
 class FileFormatNameError(StatementNotFoundError):
     """The name of the provided file format is invalid."""
+
+    pass
+
+
+class InvalidTagsError(Error):
+    """Error to be raised when a given statement tag is not valid."""
 
     pass
 

@@ -148,7 +148,7 @@ class SQL(Snowmobile):
         self,
         nm: Optional[str] = None,
         fields: Optional[List] = None,
-        restrictions: Dict = None,
+        restrictions: Optional[Dict] = None,
         order_by: Optional[List] = None,
         all_schemas: bool = False,
         run: bool = None,
@@ -438,7 +438,7 @@ class SQL(Snowmobile):
         self,
         path: Union[Path, str],
         nm_stage: str,
-        options: Dict = None,
+        options: Optional[Dict] = None,
         ignore_defaults: bool = False,
         run: bool = None,
     ) -> Union[str, pd.DataFrame]:
@@ -489,7 +489,7 @@ class SQL(Snowmobile):
         self,
         nm: str,
         nm_stage: str,
-        options: Dict = None,
+        options: Optional[Dict] = None,
         ignore_defaults: bool = False,
         run: bool = None,
     ) -> Union[str, pd.DataFrame]:
