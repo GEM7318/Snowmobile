@@ -109,7 +109,7 @@ def test_qa_empty_failure_exceptions(setup_for_qa_statement_tests):
 @pytest.mark.qa
 def test_qa_diff_failure_exceptions(setup_for_qa_statement_tests):
     """Verifies that an invalid `qa-diff` throws appropriate exception."""
-    from snowmobile.core.statement import QADiffFailure
+    from snowmobile.core.errors import QADiffFailure
     script = setup_for_qa_statement_tests
     with script.filter(
         incl_anchor=['qa-diff'], incl_desc=['.*expected failure']
@@ -128,7 +128,7 @@ def test_qa_diff_failure_exceptions(setup_for_qa_statement_tests):
 @pytest.mark.qa
 def test_qa_diff_post_processing_exception(setup_for_qa_statement_tests):
     """Verifies that an invalid `qa-diff` throws appropriate exception."""
-    from snowmobile.core.statement.errors import StatementPostProcessingError
+    from snowmobile.core.errors import StatementPostProcessingError
 
     script = setup_for_qa_statement_tests
 

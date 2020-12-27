@@ -2,7 +2,7 @@
 Snowmobile exceptions.
 """
 import time
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 
 class Error(Exception):
@@ -129,3 +129,240 @@ class InternalError(Error):
 An internal exception was raised.
 {str_args}
 """
+
+
+class StatementInternalError(InternalError):
+    """Internal error class for Statement and derived classes."""
+
+    def __init__(
+        self,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        nm: Optional[str] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+
+
+class StatementPostProcessingError(Error):
+    """Exceptions that occur in the post-processing invoked by `s.process()`.
+
+    Indicates a non-database error occurred in the over-ride :meth:`process()`
+    method from a derived class of :class:`Statement`.
+
+    """
+
+    def __init__(
+        self,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(msg=msg, errno=errno, to_raise=to_raise)
+
+    def __str__(self):
+        """StatementPostProcessingError message."""
+        return (
+            f"An error was encountered during post-processing '{self.msg}'"
+            if self.msg
+            else f"Post-processing error encountered"
+        )
+
+
+class QAFailure(Error):
+    """Exceptions that occur in post-processing invoked by `s.process()`.
+
+    Indicates a non-database error occurred in the :meth:`process()` over-ride
+    method of :class:`Statement`'s derived classes.
+
+    Args:
+        nm (str):
+            Tag name of QA statement.
+        desc (str):
+            Object-specific exception message to display.
+        idx (int):
+            Index of the statement that failed its QA check.
+
+    """
+
+    def __init__(
+        self,
+        nm: str,
+        msg: str,
+        idx: int,
+        desc: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(msg=msg, errno=errno, nm=nm, to_raise=to_raise)
+        self.desc = desc
+        self.idx = idx
+
+    def __str__(self):
+        """QAFailure message."""
+        str_args = self.format_error_args(
+            _filter=True,
+            **{
+                "name": f"'{self.nm}' (statement #{self.idx})",
+                "msg": self.msg,
+                "user-description": self.desc,
+            },
+        ).strip("\n")
+        return f"""
+A configured QA check did not pass its validation:
+{str_args}
+"""
+
+
+class QAEmptyFailure(QAFailure):
+    """Exception class for `qa.Empty` statements."""
+
+    def __init__(
+        self,
+        nm: str,
+        msg: str,
+        idx: int,
+        desc: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(
+            nm=nm, msg=msg, idx=idx, desc=desc, errno=errno, to_raise=to_raise
+        )
+
+
+class QADiffFailure(QAFailure):
+    """Exception class for `qa.Empty` statements."""
+
+    def __init__(
+        self,
+        nm: str,
+        msg: str,
+        idx: int,
+        desc: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(
+            nm=nm, msg=msg, idx=idx, desc=desc, errno=errno, to_raise=to_raise
+        )
+
+
+class SnowFrameInternalError(InternalError):
+    """Internal error class for 'class:`SnowFrame`."""
+
+    def __init__(
+        self,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        nm: Optional[str] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+
+    def __str__(self):
+        """SnowFrameInternalError message."""
+        str_args = self.format_error_args(
+            _filter=True, **{"name": self.nm, "msg": self.msg,},
+        ).strip("\n")
+        return f"""
+{str_args}
+"""
+
+
+class StatementNotFoundError(Error):
+    """Exceptions due to an invalid statement name or index."""
+
+    def __init__(
+        self,
+        nm: str,
+        statements: List[str] = None,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+        self.st = statements
+
+    def __str__(self):
+        """StatementNotFoundError message."""
+        statements = ", ".join(f"'{s}'" for s in self.st) if self.st else ""
+        str_args = self.format_error_args(
+            _filter=True,
+            **{
+                "name-provided": f"'{self.nm}'",
+                "msg": self.msg,
+                "errno": self.errno,
+                "names-found": statements,
+            },
+        ).strip("\n")
+        return f"""
+Statement name or index, `{self.nm}`, is not found in the script.
+{str_args}
+"""
+
+
+class DuplicateTagError(Error):
+    """Exceptions due to a duplicate statement tag."""
+
+    def __init__(
+        self,
+        nm: str,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+
+    def __str__(self):
+        """DuplicateTagError message."""
+        str_args = self.format_error_args(
+            _filter=True,
+            **{"name": f"'{self.nm}'", "msg": self.msg, "errno": self.errno},
+        ).strip("\n")
+        return f"""
+indistinct statement names found within {self.nm}; tag names must be unique if
+running `script.contents(by_index=False)`.
+see contents of `script.duplicates` for the exact tag names causing the issue.
+"""
+
+
+class LoadingInternalError(InternalError):
+    """Exception class for errors boundary exception detection while loading."""
+
+    def __init__(
+        self,
+        msg: Optional[str] = None,
+        errno: Optional[int] = None,
+        nm: Optional[str] = None,
+        to_raise: Optional[bool] = False,
+    ):
+        super().__init__(nm=nm, msg=msg, errno=errno, to_raise=to_raise)
+
+    def __str__(self):
+        """LoadingInternalError message."""
+        str_args = self.format_error_args(
+            _filter=True, **{"name": self.nm, "msg": self.msg,},
+        ).strip("\n")
+        return f"""
+An internal exception was encountered in `snowmobile.Table`.
+{str_args}
+"""
+
+
+class ExistingTableError(Error):
+    """Table exists and `if_exists=Fail`"""
+
+    pass
+
+
+class ColumnMismatchError(Error):
+    """Columns do not match and `if_exists!='replace'`"""
+
+    pass
+
+
+class FileFormatNameError(StatementNotFoundError):
+    """The name of the provided file format is invalid."""
+
+    pass

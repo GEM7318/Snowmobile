@@ -8,13 +8,9 @@ from typing import Any, Dict, List, Set
 
 import pandas as pd
 
-from pandas.io.sql import DatabaseError as pdDataBaseError
-from snowflake.connector.errors import DatabaseError, ProgrammingError
-
 from snowmobile.core import Connector
-from snowmobile.core.snowframe.snowframe import SnowFrame
 
-from .errors import QADiffFailure, QAEmptyFailure, StatementPostProcessingError
+from .errors import StatementPostProcessingError
 from .statement import Statement
 
 

@@ -6,8 +6,8 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional, Set, Union
 
-from snowmobile.core.configuration import Configuration, Pattern
-
+from .configuration import Configuration
+from .schema import Pattern
 from .scope import Scope
 
 

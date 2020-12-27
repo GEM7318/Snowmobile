@@ -47,7 +47,7 @@ def test_tag_from_stripped_line(sn, tags):
 @pytest.fixture()
 def a_sample_tag(sn):
     """Testing __setattr__ on Tag.."""
-    from snowmobile.core.statement.tag import Tag
+    from snowmobile.core.tag import Tag
 
     # noinspection SqlResolve
     return Tag(

@@ -14,7 +14,7 @@ from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 import snowmobile.core.sql as sql
-from snowmobile.core.configuration import Configuration
+from .configuration import Configuration
 
 # from snowmobile.core.loader.errors import (
 #     LoadingInternalError,

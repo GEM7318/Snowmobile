@@ -39,7 +39,7 @@ def test_marker_number_duplicates(sn_delayed):
 def test_combined_marker_and_statement_indices(sn_delayed):
     """Test that the combined marker and statement order is correct."""
     from snowmobile.core import Statement
-    from snowmobile.core.configuration.schema import Marker
+    from snowmobile.core.schema import Marker
 
     script = snowmobile.Script(
         path=FILES['markers_standard.sql'],

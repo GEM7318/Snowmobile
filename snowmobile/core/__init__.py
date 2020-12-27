@@ -23,11 +23,13 @@ __all__ = [
 from snowmobile.core import errors
 
 from .configuration import Configuration
-from .connector import Connect, Connector
+from .connector import Connector
+from .connector import Connector as Connect
 from .markup import Markup, Section
 from .snowframe import SnowFrame
 from .sql import SQL
-from .statement import Diff, Empty, Statement
+from .statement import Statement
+from .qa import Empty, Diff
 from .exception_handler import ExceptionHandler
 
 from .script import Script  # isort:skip

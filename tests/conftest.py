@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from pathlib import Path
-
 import pytest
 collect_ignore = ["__init__.py", "pkg_data", "_stdout.py"]
 

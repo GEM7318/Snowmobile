@@ -4,8 +4,7 @@ Base class for all :class:`Statement` objects.
 from __future__ import annotations
 
 import time
-from contextlib import contextmanager
-from typing import Any, Callable, ContextManager, Dict, Optional, Set, Union
+from typing import Any, Callable, Dict, Optional, Union
 
 import pandas as pd
 import sqlparse
@@ -14,13 +13,13 @@ from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from snowmobile.core import Connector
-from snowmobile.core.configuration import Pattern
-from snowmobile.core.markup.section import Section
+from .schema import Pattern
+from snowmobile.core.section import Section
 from snowmobile.core.exception_handler import ExceptionHandler
 
 from .errors import (
-    StatementInternalError, StatementPostProcessingError,
-    QAFailure, QAEmptyFailure, QADiffFailure
+    StatementPostProcessingError,
+    QAEmptyFailure, QADiffFailure
 )
 from .tag import Tag
 

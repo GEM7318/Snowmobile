@@ -7,7 +7,7 @@ import pytest
 @pytest.fixture()
 def sample_scope_object(sn_delayed):
     """An example statement object for testing."""
-    from snowmobile.core.statement import Scope
+    from snowmobile.core.scope import Scope
     return Scope(
         arg='kw',
         base='select'

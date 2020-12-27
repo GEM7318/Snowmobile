@@ -5,18 +5,26 @@ Unit tests for :class:`ExceptionHandler`.
 import pytest
 
 import time
-from typing import Union, Tuple, Type, List
+from typing import Union
 
-from snowmobile.core.errors import InternalError, Error
-from snowmobile.core.script.errors import (
+from snowmobile.core.errors import (
     StatementNotFoundError,
     DuplicateTagError,
+    QAFailure,
+    QAEmptyFailure,
+    QADiffFailure,
+    InternalError,
+    Error,
 )
-from snowmobile.core.statement.errors import QAFailure, QAEmptyFailure, QADiffFailure
 
 errors = Union[
-    Error, InternalError, StatementNotFoundError, DuplicateTagError,
-    QAFailure, QAEmptyFailure, QADiffFailure,
+    StatementNotFoundError,
+    DuplicateTagError,
+    QAFailure,
+    QAEmptyFailure,
+    QADiffFailure,
+    InternalError,
+    Error,
 ]
 
 
