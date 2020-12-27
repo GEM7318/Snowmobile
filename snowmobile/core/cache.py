@@ -11,6 +11,7 @@ from contextlib import contextmanager
 
 from appdirs import AppDirs
 
+from . import Snowmobile
 from snowmobile import (
     __version__ as version,
     __author__ as author,
@@ -18,10 +19,11 @@ from snowmobile import (
 )
 
 
-class Cache:
+class Cache(Snowmobile):
     """Bare bones caching implementation for configuration file locations."""
 
     def __init__(self):
+        super().__init__()
         app_dirs = AppDirs(appname=application, appauthor=author, version=version)
         self.file_nm = f"{application}_cache.json"
         self.cache_dir = Path(app_dirs.user_cache_dir)
@@ -86,17 +88,6 @@ class Cache:
         """Fetch an item from contents."""
         return self.contents.get(item)
 
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
-
     def __str__(self) -> str:
         return f"Cache(application='{application}', items={len(self.contents)})"
 
-    def __repr__(self) -> str:
-        return str(self)

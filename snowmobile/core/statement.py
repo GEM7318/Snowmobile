@@ -14,10 +14,10 @@ from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from . import ExceptionHandler, Section, Tag, errors, schema
 
-from . import Connector  # isort: skip
+from . import Snowmobile, Connector  # isort: skip
 
 
-class Statement:
+class Statement(Snowmobile):
     """Base class for all :class:`Statement` objects.
 
     Home for attributes and methods that are associated with **all** statement
@@ -106,6 +106,7 @@ class Statement:
         e: Optional[ExceptionHandler] = None,
         **kwargs,
     ):
+        super().__init__()
         self._index: int = index
         self._exclude_attrs = []
 
@@ -480,15 +481,6 @@ class Statement:
     def __bool__(self):
         """Determined by the value of :attr:`Tag.is_included`."""
         return self.tag.is_included
-
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __str__(self) -> str:
         return f"Statement('{self.tag.nm}')"

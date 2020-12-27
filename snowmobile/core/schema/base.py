@@ -83,7 +83,7 @@ class Base(BaseModel, Config):
 
     def as_serializable(self, by_alias: bool = False):
         """Returns a dictionary in serializable form."""
-        return self.serialize(as_dict=self.dict(by_alias=by_alias))
+        return super().serialize(as_dict=self.dict(by_alias=by_alias))
 
     def json(self, by_alias: bool = False, **kwargs) -> str:
         """API-facing json serialization method."""

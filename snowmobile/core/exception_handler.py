@@ -6,9 +6,10 @@ from __future__ import annotations
 from typing import Any, Iterable, Set, Type
 
 from .errors import *
+from . import Snowmobile
 
 
-class ExceptionHandler:
+class ExceptionHandler(Snowmobile):
     """Context management for snowmobile objects."""
 
     def __init__(
@@ -20,6 +21,7 @@ class ExceptionHandler:
         is_active_parent: bool = False,
         to_mirror: Optional[List[Any]] = None,
     ):
+        super().__init__()
         self._ctx_id: Optional[int] = ctx_id
 
         self.within: Type = type(within) if within else None
@@ -243,15 +245,13 @@ exceptions in current context are:\n\t{list(self.current.values())}
     def __len__(self):
         return len(self.by_tmstmp)
 
+    def __bool__(self):
+        """False=no exceptions to be raised in current context."""
+        return self.seen(to_raise=True)
+
     def __repr__(self):
         return (
             f"ExceptionHandler(within={self.within}, contexts={len(self.by_ctx)}, "
             f"cnt={len(self)}, to_raise: {bool(self)}"
         )
 
-    def __bool__(self):
-        """False=no exceptions to be raised in current context."""
-        return self.seen(to_raise=True)
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value

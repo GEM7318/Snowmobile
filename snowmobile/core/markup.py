@@ -49,13 +49,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
-from . import Configuration, Connector, Diff, Empty, Section, Statement
+from . import Snowmobile, Configuration, Connector, Diff, Empty, Section, Statement
 from .paths import DIR_PKG_DATA
 from .schema import Marker
 from .utils import Console
 
 
-class Markup:
+class Markup(Snowmobile):
     """Markup document from SQL script.
     """
 
@@ -73,6 +73,7 @@ class Markup:
         incl_markers: bool = True,
         sql_incl_export_disclaimer: bool = True,
     ):
+        super().__init__()
         self._stdout = Console()
         self.pkg_data_dir = DIR_PKG_DATA
         self.contents = contents
@@ -272,15 +273,6 @@ class Markup:
     def __call__(self, **kwargs):
         """Batch setattr function for all keywords matching Markup's attributes."""
         return self.cfg.batch_set_attrs(obj=self, attrs=kwargs)
-
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __str__(self) -> str:
         return f"script.Markup('{self.file_nm_sql}')"

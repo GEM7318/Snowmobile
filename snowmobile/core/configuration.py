@@ -17,10 +17,11 @@ import toml
 from pydantic.json import pydantic_encoder
 
 from snowmobile.core import paths, schema, utils
+from .base import Snowmobile
 from .cache import Cache
 
 
-class Configuration:
+class Configuration(Snowmobile):
     """User-facing access point for a fully parsed ``snowmobile.toml`` file."""
 
     # -- Statement components to be considered for scope.
@@ -69,6 +70,7 @@ class Configuration:
                 `snowmobile_SAMPLE.toml`.
 
         """
+        super().__init__()
         self._stdout = self.Stdout()
         self.file_nm = config_file_nm or "snowmobile.toml"
         self.cache = Cache()

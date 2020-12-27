@@ -9,8 +9,10 @@ import string
 from contextlib import contextmanager
 from typing import Optional
 
+from . import Snowmobile
 
-class Column:
+
+class Column(Snowmobile):
     """Handles transformation operations of a single column within a DataFrame."""
 
     _EXCLUDE_CHARS = list(
@@ -29,6 +31,7 @@ class Column:
         prior: Optional[str] = None,
         src: Optional[str] = None,
     ):
+        super().__init__()
         self.original = original
         self.src = src or "original"
         self.current = current or self.original
@@ -98,12 +101,6 @@ class Column:
             if dedupe_special:
                 s.current = s.dedupe(fill_char=fill_char, current=s.current)
         return self.current
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
 
     def __eq__(self, other: Column) -> bool:
         return all(

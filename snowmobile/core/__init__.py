@@ -3,6 +3,7 @@ All modules housed in ``snowmobile.core`` to keep from cluttering intellisense
 completion when interacting with the user-facing API.
 """
 # isort: skip_file
+from .base import Snowmobile
 from .exception_handler import ExceptionHandler
 from .configuration import Configuration
 from .connector import Connector
@@ -24,6 +25,7 @@ from .paths import DDL_DEFAULT_PATH, DIR_MODULES, DIR_PKG_DATA, EXTENSIONS_DEFAU
 
 __all__ = [
     # core object model
+    "Snowmobile",
     "Configuration",
     "Connector",
     "Connect",
@@ -39,15 +41,19 @@ __all__ = [
     "SnowFrame",
     "Column",
     "Tag",
+
     # parsed `snowmobile.toml` objects
     "schema",
+
     # error/exception handling
     "ExceptionHandler",
     "errors",
+
     # file paths
     "DIR_PKG_DATA",
     "DDL_DEFAULT_PATH",
     "EXTENSIONS_DEFAULT_PATH",
+
     # other
     "utils",
 ]

@@ -43,13 +43,3 @@ class SQL(Base):
         obj = obj.strip("s")
         default = f"{obj}s"  # 'table' -> 'tables'/'column' -> 'columns'
         return f"information_schema.{self.info_schema_exceptions.get(obj, default)}"
-
-
-class Snowmobile:
-    """Full configuration object.
-
-    Represents the parsed **snowmobile.toml** file.
-
-    """
-
-    pass

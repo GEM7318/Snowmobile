@@ -30,10 +30,11 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
+from . import Snowmobile
 from .utils.parsing import p, strip, up
 
 
-class SQL:
+class SQL(Snowmobile):
     """SQL class for generation & execution of common sql commands.
 
     Intended to be interacted with as an attribute of :class:`snowmobile.Connect`.
@@ -68,6 +69,7 @@ class SQL:
         auto_run: Optional[bool] = True,
     ):
         """Initializes a :class:`snowmobile.SQL` object."""
+        super().__init__()
         self.sn = sn
         schema, nm = p(nm=nm)
         self.nm: str = nm
@@ -1007,29 +1009,19 @@ from {info_schema_loc}
         self.obj = "table"
         return self
 
-    def __copy__(self) -> SQL:
-        return type(self)(sn=self.sn, nm=f"{self.schema}.{self.nm}", obj=self.obj,)
-
     def copy(self) -> SQL:
+        """User-facing copy method."""
         return self.__copy__()
+
+    def __copy__(self) -> SQL:
+        """Dunder copy method."""
+        return type(self)(sn=self.sn, nm=f"{self.schema}.{self.nm}", obj=self.obj,)
 
     def __call__(self, *args, **kwargs) -> SQL:
         for k, v in kwargs.items():
             if k in vars(self):
                 setattr(self, k, v)
         return self
-
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __getattr__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __str__(self) -> str:
         return f"snowmobile.SQL(creds='{self.sn.cfg.connection.creds}')"

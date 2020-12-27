@@ -12,7 +12,6 @@ __all__ = [
     "QA",
     "Wildcard",
     "Loading",
-    "Snowmobile",
     "SQL",
     "Location",
     "Attributes",
@@ -20,5 +19,5 @@ __all__ = [
 from .base import Base
 from .connection import Connection, Credentials
 from .loading import Loading
-from .other import SQL, Location, Snowmobile
+from .other import SQL, Location
 from .script import QA, Attributes, Markdown, Marker, Pattern, Script, Wildcard

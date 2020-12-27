@@ -6,11 +6,11 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional, Set, Union
 
-from . import Configuration, Scope
+from . import Snowmobile, Configuration, Scope
 from .schema import Pattern
 
 
-class Tag:
+class Tag(Snowmobile):
     """Handles the decomposition/parsing of statement tags.
 
     Should never be instantiated directly by the user-facing API but its
@@ -119,6 +119,7 @@ class Tag:
         sql: Optional[str] = None,
         index: Optional[int] = None,
     ):
+        super().__init__()
         self.cfg: Configuration = configuration
         self.patt: Pattern = self.cfg.script.patterns
         self.nm_pr = nm_pr or str()

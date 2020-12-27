@@ -6,8 +6,10 @@ from __future__ import annotations
 import re
 from typing import Dict
 
+from . import Snowmobile
 
-class Scope:
+
+class Scope(Snowmobile):
     """Handles the scope/context for :class:`Statement` objects and derived classes.
 
     Should never be interacted with from the user-facing API.
@@ -54,6 +56,7 @@ class Scope:
         self, arg: str, base: str,
     ):
         """Instantiates a :class:`Scope` object."""
+        super().__init__()
         self.component: str = arg  # 'kw'
         self.base = base.lower()  # 'qa'
         self.incl_arg = f"incl_{arg}"  # 'incl_kw'

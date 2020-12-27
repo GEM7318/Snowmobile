@@ -325,12 +325,3 @@ class Diff(QA):
             #   so a custom message can be embedded per-check to display
             #   exactly what is being tested to stdout/logs when it fails.
             return self.set_outcome()
-
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value

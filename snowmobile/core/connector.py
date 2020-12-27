@@ -17,9 +17,10 @@ from snowmobile.core import sql
 from snowmobile.core.snowframe import SnowFrame
 
 from . import Configuration
+from . import Snowmobile
 
 
-class Connector:
+class Connector(Snowmobile):
     """Wrapper around :class:`SnowFlakeConnection` object.
 
     Attributes:
@@ -62,6 +63,7 @@ class Connector:
                 with specific file-system configurations.
 
         """
+        super().__init__()
         self.outcome: int = int()
         self.error: Optional[DatabaseError, pdDataBaseError] = None
         self.cfg: Configuration = Configuration(
@@ -231,9 +233,6 @@ class Connector:
 
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             raise e
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __str__(self) -> str:
         return f"snowmobile.Connect(creds='{self.cfg.connection.creds}')"

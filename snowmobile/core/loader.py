@@ -13,12 +13,14 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import SQL, Connector, Script, errors
+from . import Snowmobile, SQL, Connector, Script, errors
 from .paths import DDL_DEFAULT_PATH
 
 
 # TODO: (rename) Loader -> Table
-class Loader:
+class Loader(Snowmobile):
+
+
     def __init__(
         self,
         df: pd.DataFrame,
@@ -37,6 +39,8 @@ class Loader:
         keep_local: bool = False,
         on_error: Optional[str] = None,
     ):
+        super().__init__()
+
         # sql generation and execution
         # ----------------------------
         self.sql: SQL = SQL(sn=sn, nm=table)

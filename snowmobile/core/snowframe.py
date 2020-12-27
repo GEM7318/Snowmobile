@@ -11,15 +11,17 @@ import pandas as pd
 
 from . import errors
 from .column import Column
+from . import Snowmobile
 
 
 @pd.api.extensions.register_dataframe_accessor("snf")
-class SnowFrame:
+class SnowFrame(Snowmobile):
     """Light extension to :class:`pandas.DataFrame` with a ``snf`` entry point.
 
     """
 
     def __init__(self, df: pd.DataFrame):
+        super().__init__()
         self._obj: pd.DataFrame = df
         self._cols: List[Column] = [Column(c) for c in self._obj.columns]
         self.cols: List[Column] = [Column(c) for c in self._obj.columns]

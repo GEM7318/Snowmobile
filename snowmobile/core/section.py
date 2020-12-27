@@ -50,18 +50,19 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from . import Configuration
+from . import Snowmobile, Configuration
 from .schema import Markdown
 from .utils import parsing as p
 
 
 # TESTS: Add tests for Name
-class Name:
+class Name(Snowmobile):
     """Handles attribute-name parsing including identification of wildcards.
 
     """
 
     def __init__(self, nm: str, config: Configuration):
+        super().__init__()
         cfg_md = config.script.markdown
         cfg_script = config.script
 
@@ -223,7 +224,7 @@ class Item(Name):
 
 
 # TESTS: Add tests for Section
-class Section:
+class Section(Snowmobile):
     """Represents any (1-6 level) header section within `Script Name (doc).md`.
 
 
@@ -282,6 +283,7 @@ class Section:
                 script-section if included.
 
         """
+        super().__init__()
         cfg_md = config.script.markdown
         self.cfg_md: Markdown = cfg_md
         self.is_marker = is_marker or bool()
@@ -415,9 +417,6 @@ class Section:
 
         """
         return "\n".join([self.header, self.body])
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __repr__(self):
         return f"script.Section({str(vars(self))})"

@@ -21,6 +21,7 @@ from typing import Any, ContextManager, Dict, List, Optional, Set, Tuple, Union
 import sqlparse
 
 from . import (
+    Snowmobile,
     Connector,
     Diff,
     Empty,
@@ -32,7 +33,7 @@ from . import (
 )
 
 
-class Script:
+class Script(Snowmobile):
 
     # Maps statement anchors to alternate base class.
     _ANCHOR_TO_QA_BASE_MAP = {
@@ -43,6 +44,7 @@ class Script:
     def __init__(
         self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
     ):
+        super().__init__()
         self._is_from_str: Optional[bool] = None
         self._is_post_init: bool = False
         self._statements_all: Dict[int, Statement] = dict()
@@ -804,15 +806,6 @@ class Script:
 
     def __call__(self, _id: Union[int, str]) -> Statement:
         return self.statement(_id=_id)
-
-    def __getitem__(self, item):
-        return vars(self)[item]
-
-    def __setitem__(self, key, value):
-        vars(self)[key] = value
-
-    def __setattr__(self, key, value):
-        vars(self)[key] = value
 
     def __str__(self) -> str:
         return f"snowmobile.Script('{self.name}')"
