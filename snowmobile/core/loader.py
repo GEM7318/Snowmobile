@@ -13,18 +13,12 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import (
-    Connector,
-    Script,
-    SQL,
-    errors
-)
+from . import SQL, Connector, Script, errors
 from .paths import DDL_DEFAULT_PATH
 
 
 # TODO: (rename) Loader -> Table
 class Loader:
-
     def __init__(
         self,
         df: pd.DataFrame,

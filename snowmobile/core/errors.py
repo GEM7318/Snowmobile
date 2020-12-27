@@ -2,13 +2,11 @@
 Snowmobile exceptions.
 """
 import time
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
 from pandas.io.sql import DatabaseError as pdDataBaseError
-from snowflake.connector.errors import (
-    DatabaseError as sfDatabaseError,
-    ProgrammingError
-)
+from snowflake.connector.errors import DatabaseError as sfDatabaseError
+from snowflake.connector.errors import ProgrammingError
 
 
 class Error(Exception):

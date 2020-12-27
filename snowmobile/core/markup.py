@@ -49,14 +49,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
-from . import (
-    Configuration,
-    Connector,
-    Statement,
-    Empty,
-    Diff,
-    Section,
-)
+from . import Configuration, Connector, Diff, Empty, Section, Statement
 from .paths import DIR_PKG_DATA
 from .schema import Marker
 from .utils import Console

@@ -13,7 +13,7 @@ from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from . import (
-    Connector,
+    Connector,  # isort: skip
     Section,
     ExceptionHandler,
     Tag,

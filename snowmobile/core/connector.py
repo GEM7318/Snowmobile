@@ -13,9 +13,10 @@ from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import Configuration
 from snowmobile.core import sql
 from snowmobile.core.snowframe import SnowFrame
+
+from . import Configuration
 
 
 class Connector:

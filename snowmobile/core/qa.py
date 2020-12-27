@@ -9,9 +9,9 @@ from typing import Any, Dict, List, Set
 import pandas as pd
 
 from . import (
-    Connector,
-    Statement,
-    errors
+    Statement,  # isort: skip
+    Connector,  # isort: skip
+    errors  # isort: skip
 )
 
 
@@ -310,8 +310,7 @@ class Diff(QA):
             except Exception as e:
                 self.e.collect(
                     e=errors.StatementPostProcessingError(
-                        msg=(e.args[0]),
-                        to_raise=True,
+                        msg=(e.args[0]), to_raise=True,
                     )
                 ).set(outcome=-1)
 

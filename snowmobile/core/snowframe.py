@@ -9,8 +9,9 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from .column import Column
 from . import errors
+from .column import Column
+
 # from .errors import SnowFrameInternalError
 # from . import errors, Column
 

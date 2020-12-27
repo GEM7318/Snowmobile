@@ -44,8 +44,6 @@ documentation = "https://snowmobile.readthedocs.io/en/latest/index.html"
 [tool.flit.sdist]
 include = ["snowmobile/.*"]
 
-#[tool.flit.scripts]
-
 [tool.flit.metadata.requires-extra]
 test = [
     "pytest >= 5.0.0"
@@ -54,3 +52,6 @@ test = [
 [tool.isort]
 profile = "black"
 src_paths = ["snowmobile", "tests"]
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOLDER']
+multi_line_output = 3
+include_trailing_comma = true

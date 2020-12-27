@@ -6,10 +6,7 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional, Set, Union
 
-from . import (
-    Configuration,
-    Scope,
-)
+from . import Configuration, Scope
 from .schema import Pattern
 
 

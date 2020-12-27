@@ -22,13 +22,13 @@ import sqlparse
 
 from . import (
     Connector,
+    Diff,
+    Empty,
+    ExceptionHandler,
     Markup,
     Statement,
-    Empty,
-    Diff,
-    ExceptionHandler,
-    schema,
     errors,
+    schema,
 )
 
 
@@ -81,7 +81,7 @@ class Script:
             within=self,
             children=self.statements,
             is_active_parent=True,
-            to_mirror=['set', 'reset']
+            to_mirror=["set", "reset"],
         )
 
         self._stdout: Script.Stdout = self.Stdout(name=self.name, statements=dict())
@@ -189,7 +189,10 @@ class Script:
         """
         # generic case
         statement: Any[Statement, Empty, Diff] = Statement(
-            sn=self.sn, statement=s, index=index, attrs_raw=attrs_raw,
+            sn=self.sn,
+            statement=s,
+            index=index,
+            attrs_raw=attrs_raw,
             # e=self.e,
         )
         if not statement.is_derived or self.as_generic:
@@ -225,7 +228,9 @@ class Script:
         """Instantiates a QA statement object based off the statement's anchor."""
         qa_base_class = self._ANCHOR_TO_QA_BASE_MAP[generic.tag.anchor]
         return qa_base_class(
-            sn=self.sn, statement=s, index=generic.index,
+            sn=self.sn,
+            statement=s,
+            index=generic.index,
             attrs_raw=generic.attrs_raw
             # , e=self.e,
         )
@@ -293,9 +298,7 @@ class Script:
         """
         for s in self._statements_all.values():
             s.set_state(
-                ctx_id=self.e.ctx_id,
-                in_context=True,
-                filters=scope_to_set,
+                ctx_id=self.e.ctx_id, in_context=True, filters=scope_to_set,
             )
 
     def _update_scope_script(self, _id: Any[int, str], **kwargs) -> Dict:
@@ -326,8 +329,10 @@ class Script:
 
     # DOCSTRING
     def _update_scope(
-        self, as_id: Optional[Union[int, str]], from_id: Optional[Union[int, str]],
-            **kwargs
+        self,
+        as_id: Optional[Union[int, str]],
+        from_id: Optional[Union[int, str]],
+        **kwargs,
     ):
         _id = from_id or as_id
         if from_id:
@@ -399,7 +404,8 @@ class Script:
         finally:
             to_raise = (
                 self.e.get(last=True, to_raise=True)
-                if self.e.seen(to_raise=True) else None
+                if self.e.seen(to_raise=True)
+                else None
             )
             self.reset(
                 index=True,  # restore statement indices
@@ -765,12 +771,12 @@ class Script:
             self.e.set(ctx_id=-1)
 
         static_kwargs = {
-            'results': results,
-            'on_error': on_error,
-            'on_exception': on_exception,
-            'on_failure': on_failure,
-            'lower': lower,
-            'render': render,
+            "results": results,
+            "on_error": on_error,
+            "on_exception": on_exception,
+            "on_failure": on_failure,
+            "lower": lower,
+            "render": render,
         }
 
         if isinstance(_id, (int, str)):
@@ -817,11 +823,9 @@ class Script:
     # noinspection PyMissingOrEmptyDocstring
     class Stdout:
         """Console output."""
+
         def __init__(
-            self,
-            name: str,
-            statements: Dict[int, Statement],
-            verbose: bool = True,
+            self, name: str, statements: Dict[int, Statement], verbose: bool = True,
         ):
             self.name: str = name
             self.statements = statements
@@ -857,9 +861,7 @@ class Script:
         def console_outcome(self, s: Statement) -> str:
             return f"<{s.outcome_txt().lower()}>".ljust(self.max_width_outcome, " ")
 
-        def status(
-            self, s: Statement, return_val: bool = False
-        ) -> Union[None, str]:
+        def status(self, s: Statement, return_val: bool = False) -> Union[None, str]:
             progress = self.console_progress(s)
             tag_and_time = self.console_tag_and_time(s)
             outcome = self.console_outcome(s)

@@ -42,4 +42,5 @@ class Snowmobile:
     Represents the parsed **snowmobile.toml** file.
 
     """
+
     pass

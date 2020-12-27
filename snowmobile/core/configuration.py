@@ -17,11 +17,7 @@ import toml
 from fcache.cache import FileCache
 from pydantic.json import pydantic_encoder
 
-from snowmobile.core import (
-    schema,
-    utils,
-    paths,
-)
+from snowmobile.core import paths, schema, utils
 
 
 class Cache(FileCache):
@@ -166,7 +162,9 @@ class Configuration:
                 with open(self.ext_locations.backend, "r") as r:
                     backend = toml.load(r)
 
-                self.script.types = self.script.types.from_dict(backend["tag-to-type-xref"])
+                self.script.types = self.script.types.from_dict(
+                    backend["tag-to-type-xref"]
+                )
                 self.sql.from_dict(backend["sql"])
 
             except IOError as e:
@@ -312,6 +310,7 @@ class Configuration:
     # noinspection PyMissingOrEmptyDocstring,PyMethodMayBeStatic
     class Stdout(utils.Console):
         """Console output."""
+
         def __init__(self):
             super().__init__()
 

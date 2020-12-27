@@ -18,7 +18,7 @@ __all__ = [
     "Attributes",
 ]
 from .base import Base
-from .other import Snowmobile, Location, SQL
 from .connection import Connection, Credentials
 from .loading import Loading
+from .other import SQL, Location, Snowmobile
 from .script import QA, Attributes, Markdown, Marker, Pattern, Script, Wildcard
