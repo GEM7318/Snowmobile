@@ -58,3 +58,18 @@ multi_line_output = 3
 include_trailing_comma = true
 float_to_top = true
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOLDER']
+
+[tool.coverage]
+
+[tool.coverage.run]
+source = 'snowmobile'
+branch = '0.2.1'
+require_ci_to_pass = false
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+omit = 'tests/*'
+exclude_lines = [
+    'def __repr__'
+]

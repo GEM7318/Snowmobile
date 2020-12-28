@@ -1,10 +1,12 @@
 codecov:
-  require_ci_to_pass: yes
+  branch: 0.2.1
+  source: snowmobile
+  require_ci_to_pass: no
 
 coverage:
   precision: 2
   round: down
-  range: "10...100"
+  range: "70...100"
 
 parsers:
   gcov:
