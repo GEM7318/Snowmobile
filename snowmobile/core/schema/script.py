@@ -98,7 +98,7 @@ class Reserved(Base):
 
 class Marker(Base):
     # fmt: off
-    name: str = Field(
+    nm: str = Field(
         default_factory=str, alias="name"
     )
     group: str = Field(
@@ -148,24 +148,24 @@ class Marker(Base):
 
     def set_name(self, name: str, overwrite: bool = False) -> Marker:
         """Sets the name attribute."""
-        if self.name and not overwrite:
+        if self.nm and not overwrite:
             return self
-        self.name = name.replace("_", "")
+        self.nm = name.replace("_", "")
         return self
 
     def as_args(self):
         """Returns a dictionary of arguments for :class:`Section`."""
         if self.attrs.get("name"):
-            self.name = self.attrs.pop("name")
+            self.nm = self.attrs.pop("name")
         if self.attrs.get("marker-name"):
             _ = self.attrs.pop("marker-name")
-        return {"h_contents": self.name, "parsed": self.attrs, "is_marker": True}
+        return {"h_contents": self.nm, "parsed": self.attrs, "is_marker": True}
 
     def __str__(self):
-        return f"Marker('{self.name}')"
+        return f"Marker('{self.nm}')"
 
     def __repr__(self):
-        return f"Marker('{self.name}')"
+        return f"Marker('{self.nm}')"
 
 
 class Attributes(Base):

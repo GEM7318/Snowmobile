@@ -423,12 +423,11 @@ class Statement(Tag, Snowmobile):
             and not self.outcome  # outcome of `.process()` did not pass
             and on_failure != "c"  # stop on failure of `.process()`
         ):
-            to_raise = self.e.get(
+            raise self.e.get(
                 of_type=list(self._DERIVED_FAILURE_MAPPING.values()),
                 to_raise=True,
                 first=True,
             )
-            raise to_raise
         # ---------------------------
         # fmt: on
 

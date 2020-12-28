@@ -97,12 +97,27 @@ def test_qa_empty_failure_exceptions(setup_for_qa_statement_tests):
     ) as s:
 
         with pytest.raises(QAEmptyFailure):
-            s.run()         # verify with `script.run()`
+            s.run()
+            # try:
+            #     s.run()         # verify with `script.run()`
+            # except Exception as e:
+            #     to_inspect = e
+            #     raise e
         for i in s.statements:
             with pytest.raises(QAEmptyFailure):
-                s.run(i)    # verify when manually calling `script.run()` on each statement
+                s.run(i)
+                # try:
+                #     s.run(i)    # verify when manually calling `script.run()` on each statement
+                # except Exception as e:
+                #     to_inspect2 = e
+                #     raise e
             with pytest.raises(QAEmptyFailure):
-                s(i).run()  # verify when calling each individual statement's `.run()` method
+                s(i).run()
+                # try:
+                #     s(i).run()  # verify when calling each individual statement's `.run()` method
+                # except Exception as e:
+                #     to_inspect3 = e
+                #     raise e
 
 
 @pytest.mark.exceptions

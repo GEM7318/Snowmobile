@@ -43,6 +43,7 @@ __description: This is an example of a multiline tag that will cause an error.
     # given
     sample_statement_object.attrs_raw = multiline_tag_without_a_name_argument
     sample_statement_object.is_multiline = True
+    sample_statement_object.is_tagged = True
 
     # then
     with pytest.raises(InvalidTagsError):

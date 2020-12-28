@@ -160,7 +160,7 @@ class Markup(Snowmobile):
                 sections[i] = Section(  # create section from marker metadata
                     incl_raw=self.incl_raw,
                     is_multiline=True,
-                    config=self.cfg,
+                    cfg=self.cfg,
                     raw=s.raw,
                     **s.as_args(),
                 )
