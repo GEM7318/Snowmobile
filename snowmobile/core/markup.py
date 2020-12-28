@@ -71,6 +71,7 @@ class Markup(Snowmobile):
         alt_file_suffix: Optional[str] = None,
         incl_sql: bool = True,
         incl_markers: bool = True,
+        incl_raw: bool = False,
         sql_incl_export_disclaimer: bool = True,
     ):
         super().__init__()
@@ -84,6 +85,7 @@ class Markup(Snowmobile):
         self.sql_incl_export_disclaimer: bool = sql_incl_export_disclaimer
         self.incl_markers: bool = incl_markers
         self.incl_sql = incl_sql
+        self.incl_raw = incl_raw
         self.exported: List[Path] = list()
         self.created: List[Path] = list()
 
@@ -149,14 +151,19 @@ class Markup(Snowmobile):
 
     @property
     def sections(self) -> Dict[int, Section]:
-        """All header sections of markdown file as a dictionary.
-        """
+        """All header sections of markdown file as a dictionary."""
         sections = {}
         for i, s in self.contents.items():
-            if self._is_statement(s=s):
-                sections[i] = s.as_section()
+            if self._is_statement(s=s):  # create section from statement.section()
+                sections[i] = s.as_section(self.incl_raw)
             else:
-                sections[i] = Section(config=self.cfg, **s.as_args())
+                sections[i] = Section(  # create section from marker metadata
+                    incl_raw=self.incl_raw,
+                    is_multiline=True,
+                    config=self.cfg,
+                    raw=s.raw,
+                    **s.as_args(),
+                )
 
         return {i: sections[i] for i in sorted(sections)}
 

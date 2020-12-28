@@ -250,8 +250,6 @@ class Section(Snowmobile):
 
 
     Attributes:
-        cfg_md (config.Markdown): Markdown configuration specified in the
-            `snowmobile.toml` file.
         hx (str): String form of the markdown header tag (e.g. '#' for h1),
             based on the script/statement header-level specifications in
             `snowmobile.toml`.
@@ -275,8 +273,11 @@ class Section(Snowmobile):
         h_contents: Optional[str] = None,
         index: Optional[int] = None,
         parsed: Optional[Dict] = None,
+        raw: Optional[str] = None,
         sql: Optional[str] = None,
         results: Optional[pd.DataFrame] = None,
+        incl_raw: bool = False,
+        is_multiline: bool = False,
     ):
         """Instantiation of a ``script.Section`` object.
 
@@ -295,24 +296,28 @@ class Section(Snowmobile):
         """
         super().__init__()
 
-        self.cfg_md: Markdown = config.script.markdown
+        # self.cfg_md: Markdown = config.script.markdown
+        self.cfg: Configuration = config
         self.is_marker = is_marker or bool()
+        self.is_multiline = is_multiline
         self.sql: str = sql
         self.results = results
         self.index: int = index
+        self.raw = raw or str()
+        self.incl_raw = incl_raw
 
         self._name = Name(nm=h_contents, config=config, is_title=True)
         if len(self._name.flags) > 1:
             raise errors.InvalidTagsError(
                 msg=self._exception_invalid_title(raw=h_contents)
             )
-        self.hx = self.cfg_md.pref_header(
+        self.hx = self.cfg.markdown.pref_header(
             is_marker=self.is_marker,
             from_wc=self._name.flags[0] if self._name.flags else str(),
         )
         self.h_contents = self._name.nm_adj
 
-        grouped_attrs = self._group_attrs(attrs=parsed, groups=self.cfg_md.attrs.groups)
+        grouped_attrs = self._group_attrs(attrs=parsed, groups=self.cfg.markdown.attrs.groups)
         self.parsed: Dict = self.reorder_attrs(parsed=grouped_attrs, config=config)
         self.items: List[Item] = self.parse_contents(config=config)
 
@@ -332,7 +337,7 @@ class Section(Snowmobile):
             **snowmobile.toml**.
 
         """
-        attr_config = self.cfg_md.attrs.reserved[reserved_attr]
+        attr_config = self.cfg.markdown.attrs.reserved[reserved_attr]
         if not attr_config.include_by_default or self.is_marker:
             return attrs
 
@@ -378,6 +383,8 @@ class Section(Snowmobile):
 
     def parse_contents(self, config: Configuration) -> List[Item]:
         """Unpacks sorted dictionary of parsed attributes into formatted Items."""
+        # how is the sql getting included in the statements but not the
+        # markers?
         flattened = p.dict_flatten(
             attrs=self.parsed, bullet_char=config.script.markdown.bullet_char
         )
@@ -407,7 +414,7 @@ class Section(Snowmobile):
             Formatted header line as a string.
 
         """
-        if self.is_marker or not self.cfg_md.incl_index_in_sh:
+        if self.is_marker or not self.cfg.markdown.incl_index_in_sh:
             return f"{self.hx} {self.h_contents}"
         else:
             return f"{self.hx} ({self.index}) {self.h_contents}"
@@ -415,7 +422,19 @@ class Section(Snowmobile):
     @property
     def sql_md(self) -> str:
         """Returns renderable sql or an empty string if script-level section."""
-        return f"```sql\n{self.sql.strip()};\n```" if not self.is_marker else ""
+        sql = self.cfg.script.power_strip(
+            val_to_strip=('' if self.is_marker else self.sql),
+            chars_to_strip=[";", " ", "\n"]
+        )
+        if self.incl_raw:
+            raw = self.cfg.script.as_parsable(self.raw, self.is_multiline)
+            sql = f"{raw}\n{sql}"
+        if not self.is_marker:
+            sql = f"{sql};"
+        if self.is_marker and not self.incl_raw:
+            return str()
+        char = '\n'
+        return f"```sql\n{sql.strip(char)}\n```"
 
     @property
     def body(self):

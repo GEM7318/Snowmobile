@@ -455,7 +455,7 @@ class Script(Base):
         splitter = self.split_args(args_str=stripped)
         return self.parse_split_arguments(splitter=splitter)
 
-    def as_parsable(self, raw: str) -> str:
+    def as_parsable(self, raw: str, is_multiline: Optional[bool] = None) -> str:
         """Returns a raw string wrapped in open/close tags.
 
         Used for taking a raw string of marker or statement attributes and
@@ -463,12 +463,12 @@ class Script(Base):
         being exported re-parsable by `snowmobile`.
 
         """
+        _open = self.patterns.core.to_open
+        _close = self.patterns.core.to_close
         raw = raw.strip("\n")
-        return (
-            f"{self.patterns.core.to_open}\n{raw}\n{self.patterns.core.to_close}\n"
-            if "\n" in raw
-            else f"{self.patterns.core.to_open}{raw}{self.patterns.core.to_close}"
-        )
+        if is_multiline:
+            return f"{_open}\n{raw}\n{_close}"
+        return f"{_open}{raw}{_close}"
 
     def find_spans(self, sql: str) -> Dict[int, Tuple[int, int]]:
         """Finds indices of script tags given a sql script as a string and an

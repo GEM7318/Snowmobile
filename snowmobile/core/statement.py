@@ -282,15 +282,18 @@ class Statement(Snowmobile):
         """Depth of the statement's sql by number of lines."""
         return len(self.sql.split("\n"))
 
-    def as_section(self) -> Section:
+    def as_section(self, incl_raw: Optional[bool] = None) -> Section:
         """Returns current statement as a :class:`Section` object."""
         return Section(
             h_contents=self.tag.nm,
             index=self.index,
             parsed=self.dump_namespace(),
+            raw=self.attrs_raw,
             sql=self.sql,
             config=self.sn.cfg,
             results=self.results,
+            incl_raw=incl_raw,
+            is_multiline=self.is_multiline,
         )
 
     def set_state(
