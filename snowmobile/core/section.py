@@ -46,7 +46,7 @@ Header-levels and formatting of tagged information is configured in the
 """
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
@@ -64,18 +64,17 @@ class Name(Snowmobile):
     def __init__(
             self,
             nm: str,
-            config: Configuration,
+            cfg: Configuration,
             is_title: Optional[bool] = None
     ):
         super().__init__()
-        # This is for all attributes; however, name needs to handle the
-        # flags differently
-        cfg_md = config.script.markdown
-        cfg_script = config.script
+
+        cfg_md = cfg.script.markdown
+        cfg_script = cfg.script
 
         self.nm_raw = nm
 
-        self.nm_stripped, self.flags = config.wildcards.partition_on_wc(attr_nm=nm)
+        self.nm_stripped, self.flags = cfg.wildcards.partition_on_wc(attr_nm=nm)
 
         self.is_paragraph = cfg_script.patterns.wildcards.wc_paragraph in self.flags
         self.is_no_reformat = cfg_script.patterns.wildcards.wc_as_is in self.flags
@@ -124,10 +123,10 @@ class Name(Snowmobile):
             return False
 
     def __repr__(self):
-        return f"Item.Name(nm='{self.nm_raw}', nm_adj='{self.nm_adj}')"
+        return f"Name(nm='{self.nm_raw}', nm_adj='{self.nm_adj}')"
 
     def __str__(self):
-        return f"Item.Name(nm='{self.nm_raw}', nm_adj='{self.nm_adj}')"
+        return f"Name(nm='{self.nm_raw}', nm_adj='{self.nm_adj}')"
 
 
 # TESTS: Add tests for Item
@@ -140,12 +139,12 @@ class Item(Name):
     def __init__(
         self,
         index: int,
-        flattened_attrs: tuple,
-        config: Configuration,
+        flattened_attrs: Tuple,
+        cfg: Configuration,
         results: Optional[pd.DataFrame] = None,
         sql_md: Optional[str] = None,
     ):
-        cfg_md = config.script.markdown
+        cfg_md = cfg.script.markdown
         self.is_first: bool = bool()
 
         self.cfg_md: Markdown = cfg_md
@@ -154,12 +153,12 @@ class Item(Name):
 
         self._split = nested.split(self._DELIMITER)
 
-        super().__init__(nm=self._split[-1], config=config)
+        super().__init__(nm=self._split[-1], cfg=cfg)
 
         self.depth = len(self._split) - 1
         self.indent: str = self._INDENT_CHAR * self.depth
         parent = self._split[self.depth - 1]
-        self.parent = Name(nm=parent, config=config)
+        self.parent = Name(nm=parent, cfg=cfg)
 
         self._is_reserved: bool = False
         if self.is_results:
@@ -268,7 +267,7 @@ class Section(Snowmobile):
 
     def __init__(
         self,
-        config: Configuration,
+        cfg: Configuration,
         is_marker: bool = None,
         h_contents: Optional[str] = None,
         index: Optional[int] = None,
@@ -296,7 +295,7 @@ class Section(Snowmobile):
         """
         super().__init__()
 
-        self.cfg: Configuration = config
+        self.cfg: Configuration = cfg
         self.is_marker = is_marker or bool()
         self.is_multiline = is_multiline
         self.sql: str = sql
@@ -305,7 +304,7 @@ class Section(Snowmobile):
         self.raw = raw or str()
         self.incl_raw = incl_raw
 
-        self._name = Name(nm=h_contents, config=config, is_title=True)
+        self._name = Name(nm=h_contents, cfg=cfg, is_title=True)
         if len(self._name.flags) > 1:
             raise errors.InvalidTagsError(
                 msg=self._exception_invalid_title(raw=h_contents)
@@ -316,82 +315,35 @@ class Section(Snowmobile):
         )
         self.h_contents = self._name.nm_adj
 
-        grouped_attrs = self._group_attrs(attrs=parsed, groups=self.cfg.markdown.attrs.groups)
-        self.parsed: Dict = self.reorder_attrs(parsed=grouped_attrs, config=config)
-        self.items: List[Item] = self.parse_contents(config=config)
+        grouped_attrs = self.cfg.attrs.group_parsed_attrs(parsed)
+        self.parsed: Dict = self.reorder_attrs(parsed=grouped_attrs, cfg=cfg)
+        self.items: List[Item] = self.parse_contents(cfg=cfg)
 
-    def _add_reserved_attr(
-        self,
-        attrs: Dict[str, Union[str, Dict, bool]],
-        reserved_attr: str,
-    ) -> Dict:
-        """Adds reserved attributes based on configuration (i.e. SQL and Results).
-
-        Args:
-            attrs (Dict): Dictionary of currently parsed attributes.
-            reserved_attr (str): Name of reserved attribute.
-
-        Returns (Dict):
-            Dictionary with attribute added if 'include-by-default'=true in
-            **snowmobile.toml**.
-
-        """
-        attr_config = self.cfg.markdown.attrs.reserved[reserved_attr]
-        if not attr_config.include_by_default or self.is_marker:
-            return attrs
-
-        reserved_keyword = attr_config.attr_nm
-        attrs_contain_results = [
-            attr for attr in attrs if attr.lower().startswith(reserved_keyword)
-        ]
-        if not attrs_contain_results:
-            attrs[attr_config.default_val] = attr_config.include_by_default
-        return attrs
-
-    @staticmethod
-    def _group_attrs(attrs: Dict, groups: Dict) -> Dict:
-        grouped = {}
-        for parent, child_attrs in groups.items():
-            children = {
-                attr: attrs.pop(attr) for attr in child_attrs if attrs.get(attr)
-            }
-            if children:
-                grouped[parent] = children
-        return {**grouped, **attrs}
-
-    def reorder_attrs(self, parsed: dict, config: Configuration) -> Dict:
+    def reorder_attrs(self, parsed: dict, cfg: Configuration) -> Dict:
         """Re-orders parsed attributes based on configuration."""
-        cfg_md = config.script.markdown
-        for reserved_attr_nm, reserved_attr in cfg_md.attrs.reserved.items():
-            parsed = self._add_reserved_attr(
-                attrs=parsed, reserved_attr=reserved_attr_nm,
-            )
-        included = {k: v for k, v in parsed.items() if cfg_md.attrs.include(attr=k)}
+        parsed = self.cfg.attrs.add_reserved_attrs(parsed, self.is_marker)
         specified_position_to_attr_nm: Dict[int, str] = {
-            Name(nm=k, config=config).specified_position: k
-            for k in included
-            if Name(nm=k, config=config).specified_position
+            Name(nm=k, cfg=cfg).specified_position: k
+            for k in parsed
+            if Name(nm=k, cfg=cfg).specified_position
         }
-        ordered_attr_nms = [
-            specified_position_to_attr_nm[position]
-            for position in sorted(specified_position_to_attr_nm)
-        ]
-        for attr_nm in ordered_attr_nms:
-            parsed[attr_nm] = parsed.pop(attr_nm)
+        for position in sorted(specified_position_to_attr_nm):
+            attr_nm = specified_position_to_attr_nm[position]
+            parsed[attr_nm] = parsed.pop(attr_nm)  # re-inserting in order
         return parsed
 
-    def parse_contents(self, config: Configuration) -> List[Item]:
+    def parse_contents(self, cfg: Configuration) -> List[Item]:
         """Unpacks sorted dictionary of parsed attributes into formatted Items."""
         # how is the sql getting included in the statements but not the
         # markers?
         flattened = p.dict_flatten(
-            attrs=self.parsed, bullet_char=config.script.markdown.bullet_char
+            attrs=self.parsed, bullet_char=cfg.script.markdown.bullet_char
         )
         items = [
             Item(
                 index=i,
                 flattened_attrs=v,
-                config=config,
+                cfg=cfg,
                 results=self.results,
                 sql_md=self.sql_md,
             )
@@ -439,7 +391,6 @@ class Section(Snowmobile):
     def body(self):
         return "\n".join(i.md for i in self.items)
 
-    # TODO: Change to 'full' or 'total'
     @property
     def md(self) -> str:
         """Constructs a full section as a string from various components.

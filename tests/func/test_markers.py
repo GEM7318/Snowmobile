@@ -69,7 +69,7 @@ def test_combined_marker_and_statement_indices(sn_delayed):
         assert all(
              [
                  expected_index == i,
-                 expected_name == c.name,
+                 expected_name == c.nm,
                  isinstance(c, expected_base_class),
              ]
         )

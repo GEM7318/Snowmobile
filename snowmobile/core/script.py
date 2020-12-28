@@ -227,7 +227,7 @@ class Script(Snowmobile):
         self, s: sqlparse.sql.Statement, generic: Statement
     ) -> Union[Diff, Empty]:
         """Instantiates a QA statement object based off the statement's anchor."""
-        qa_base_class = self._ANCHOR_TO_QA_BASE_MAP[generic.tag.anchor]
+        qa_base_class = self._ANCHOR_TO_QA_BASE_MAP[generic.anchor]
         return qa_base_class(
             sn=self.sn,
             statement=s,
@@ -514,7 +514,7 @@ class Script(Snowmobile):
     @property
     def duplicates(self) -> Dict[str, int]:
         """Dictionary of indistinct statement names/tags within script."""
-        counted = collections.Counter([s.tag.nm for s in self._statements_all.values()])
+        counted = collections.Counter([s.nm for s in self._statements_all.values()])
         return {tag: cnt for tag, cnt in counted.items() if cnt > 1}
 
     def contents(
@@ -537,10 +537,10 @@ class Script(Snowmobile):
         # validation to ensure keys are unique if fetching contents by tag name
         if validate and not (
             len({s for s in contents_to_return})
-            == len({s.name for s in contents_to_return.values()})
+            == len({s.nm for s in contents_to_return.values()})
         ):
             raise errors.DuplicateTagError(nm=self.path.name)
-        return {s.name: s for i, s in contents_to_return.items()}
+        return {s.nm: s for i, s in contents_to_return.items()}
 
     def dtl(self, full: bool = False) -> None:
         """Prints summary of statements within the current scope to console."""
@@ -834,7 +834,7 @@ class Script(Snowmobile):
 
         @property
         def max_width_tag_and_time(self) -> int:
-            return max(len(f"{s.tag.nm} (~0s)") for s in self.statements.values())
+            return max(len(f"{s.nm} (~0s)") for s in self.statements.values())
 
         def console_progress(self, s: Statement) -> str:
             return f"<{s.index} of {self.cnt_statements}>".rjust(
@@ -842,7 +842,7 @@ class Script(Snowmobile):
             )
 
         def console_tag_and_time(self, s: Statement) -> str:
-            return f"{s.tag.nm} ({s.execution_time_txt})".ljust(
+            return f"{s.nm} ({s.execution_time_txt})".ljust(
                 self.max_width_tag_and_time + 3, "."
             )
 

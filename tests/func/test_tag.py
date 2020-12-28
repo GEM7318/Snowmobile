@@ -14,17 +14,17 @@ def _setup_for_test_tag_from_stripped_line():
 
     # remove index from generated tag
     for s in script._statements_all.values():
-        s.tag.incl_idx_in_desc = False
+        s.incl_idx_in_desc = False
 
     # generate test cases
     test_cases = [
-        (s.tag.nm_ge, s.tag.nm_pr)
+        (s.nm_ge, s.nm_pr)
         for s in script.statements.values()
     ]
 
     # generate IDs test cases/console output
     ids = [
-        f"FirstLine='{s.tag.first_line}',Tag='{s.tag.nm}'"
+        f"FirstLine='{s.first_line}',Tag='{s.nm}'"
         for s in script.statements.values()
     ]
 

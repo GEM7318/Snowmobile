@@ -70,9 +70,9 @@ def export_markup_combinations_from_script(
     ]
 
     if run:
+        # excluding execution time from unit test as this can vary run to run
+        script.sn.cfg.attrs.exclude('execution_time_txt')
         script.run(**run_args or dict())
-        for i, st in script.executed.items():  # excluding execution time from unit test
-            st._exclude_attrs.append('execution_time_txt')
     file_paths = []
     for arg in export_args:
         markup = script.doc()(**arg['config'])

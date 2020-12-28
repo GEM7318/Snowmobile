@@ -4,7 +4,7 @@ Base class for all :class:`Statement` objects.
 from __future__ import annotations
 
 import time
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Union, Tuple
 
 import pandas as pd
 import sqlparse
@@ -13,11 +13,10 @@ from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from . import ExceptionHandler, Section, Tag, errors, schema
-
 from . import Snowmobile, Connector  # isort: skip
 
 
-class Statement(Snowmobile):
+class Statement(Tag, Snowmobile):
     """Base class for all :class:`Statement` objects.
 
     Home for attributes and methods that are associated with **all** statement
@@ -105,13 +104,13 @@ class Statement(Snowmobile):
         e: Optional[ExceptionHandler] = None,
         **kwargs,
     ):
-        super().__init__()
+        Snowmobile.__init__(self)
+
         self._index: int = index
         self._exclude_attrs = []
-
         self._outcome: int = int()
-        self.outcome: bool = True
 
+        self.outcome: bool = True
         self.executed: bool = bool()
 
         self.sn = sn
@@ -119,7 +118,6 @@ class Statement(Snowmobile):
             statement
         )
 
-        self.index: int = index or int()
         self.patterns: schema.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
@@ -131,17 +129,20 @@ class Statement(Snowmobile):
         self.attrs_raw = attrs_raw or str()
         self.is_multiline = '\n' in self.attrs_raw
         self.is_tagged: bool = bool(self.attrs_raw)
-
-        # TODO: Make this a single static method from cfg.script
-        self.first_keyword = self.statement.token_first(skip_ws=True, skip_cm=True)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
+        self.attrs_parsed, nm = self.parse()
 
-        self.tag: Optional[Tag] = None
-        self.attrs_parsed = self.parse()
+        Tag.__init__(
+            self,
+            index=index,
+            sql=self.sql,
+            nm_pr=nm,
+            configuration=self.sn.cfg,
+        )
 
         self.e = e or ExceptionHandler(within=self)
 
-    def parse(self) -> Dict:
+    def parse(self) -> Tuple[Dict, str]:
         """Parses a statement tag into a valid dictionary.
 
         Uses the values specified in **snowmobile.toml** to parse a
@@ -159,6 +160,9 @@ class Statement(Snowmobile):
             Parsed tag arguments as a dictionary.
 
         """
+        if not self.is_tagged:
+            return dict(), str()
+
         if self.is_multiline:
             attrs_parsed = self.sn.cfg.script.parse_str(block=self.attrs_raw)
             if 'name' in attrs_parsed:
@@ -168,26 +172,10 @@ class Statement(Snowmobile):
                     name = self.sn.cfg.script.parse_name(raw=self.attrs_raw)
                 except errors.InvalidTagsError as e:
                     raise e
-        else:
-            attrs_parsed, name = dict(), self.attrs_raw
 
-        self.set_tag(nm_pr=name)
+            return attrs_parsed, name
 
-        return attrs_parsed
-
-    def set_tag(self, nm_pr: str) -> None:
-        """Sets the :attr:`tag` attribute post-parsing of arguments.
-
-        Args:
-            nm_pr (str):
-                Tag name; will be blank if no tag is provided.
-        """
-        self.tag: Tag = Tag(
-            index=self.index,
-            sql=self.sql,
-            nm_pr=nm_pr,
-            configuration=self.sn.cfg,
-        )
+        return dict(), self.attrs_raw
 
     def start(self):
         """Sets :attr:`start_time` attribute."""
@@ -211,7 +199,8 @@ class Statement(Snowmobile):
             else f"{int(self.execution_time/60)}m"
         )
 
-    def dump_namespace(self) -> Dict:
+    @property
+    def attrs_total(self) -> Dict:
         """Parses namespace for attributes specified in **snowmobile.toml**.
 
         Searches attributes for those matching the keys specified in
@@ -227,16 +216,15 @@ class Statement(Snowmobile):
         """
 
         current_namespace = {
-            **self.sn.cfg.attrs_from_obj(obj=self),
-            **self.sn.cfg.methods_from_obj(obj=self),
+            **self.sn.cfg.attrs_from_obj(obj=self, excl=['attrs_total']),
+            **self.sn.cfg.methods_from_obj(obj=self, excl=['attrs_total']),
         }
         namespace_overlap_with_config = (
             set(current_namespace)  # all from current namespace
             .intersection(self.sn.cfg.attrs.from_namespace)  # snowmobile.toml
-            .difference(self._exclude_attrs)  # exists for testing purposes
+            .difference(self._exclude_attrs)  # testing purposes only
         )
-
-        attrs = self.attrs_parsed
+        attrs = {k: v for k, v in self.attrs_parsed.items()}
         for k in namespace_overlap_with_config:
             attr = current_namespace[k]
             attr_value = attr() if isinstance(attr, Callable) else attr
@@ -255,21 +243,16 @@ class Statement(Snowmobile):
         """
         patterns = self.sn.cfg.script.patterns
         open_p, close_p = patterns.core.to_open, patterns.core.to_close
-        return f"{open_p}{self.tag.nm}{close_p}\n{self.sql};\n"
+        return f"{open_p}{self.nm}{close_p}\n{self.sql};\n"
 
     def render(self) -> None:
         """Renders the statement's sql as markdown in Notebook/IPython environments."""
         display((Markdown(self.as_section().sql_md),))
 
     @property
-    def name(self):
-        """Quick access to tag name directly off the :class:`Statement`.."""
-        return self.tag.nm
-
-    @property
     def is_derived(self):
         """Indicates whether or not it's a generic or derived (QA) statement."""
-        return self.tag.anchor in self.sn.cfg.QA_ANCHORS
+        return self.anchor in self.sn.cfg.QA_ANCHORS
 
     @property
     def lines(self) -> int:
@@ -279,12 +262,12 @@ class Statement(Snowmobile):
     def as_section(self, incl_raw: Optional[bool] = None) -> Section:
         """Returns current statement as a :class:`Section` object."""
         return Section(
-            h_contents=self.tag.nm,
             index=self.index,
-            parsed=self.dump_namespace(),
+            h_contents=self.nm,
+            parsed=self.attrs_total,
             raw=self.attrs_raw,
             sql=self.sql,
-            config=self.sn.cfg,
+            cfg=self.sn.cfg,
             results=self.results,
             incl_raw=incl_raw,
             is_multiline=self.is_multiline,
@@ -310,13 +293,13 @@ class Statement(Snowmobile):
 
         """
         if index:
-            self.index = self.tag.index = index
+            self.index = index
         if ctx_id:
             self.e.set(ctx_id=ctx_id)
         if isinstance(in_context, bool):
             self.e.set(in_context=in_context)
         if filters:
-            self.tag.scope(**filters)
+            super().scope(**filters)
         return self
 
     def reset(
@@ -337,13 +320,13 @@ class Statement(Snowmobile):
 
         """
         if index:
-            self.index = self.tag.index = self._index
+            self.index = self._index
         if ctx_id:
             self.e.reset(ctx_id=True)
         if in_context:
             self.e.reset(in_context=True)
         if scope:
-            self.tag.scope(**{})
+            super().scope(**{})
         return self
 
     def process(self):
@@ -480,10 +463,10 @@ class Statement(Snowmobile):
 
     def __bool__(self):
         """Determined by the value of :attr:`Tag.is_included`."""
-        return self.tag.is_included
+        return self.is_included
 
     def __str__(self) -> str:
-        return f"Statement('{self.tag.nm}')"
+        return f"Statement('{self.nm}')"
 
     def __repr__(self) -> str:
-        return f"Statement('{self.tag.nm}')"
+        return f"Statement('{self.nm}')"

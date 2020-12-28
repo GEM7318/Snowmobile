@@ -5,7 +5,7 @@ pydantic's BaseModel).
 from __future__ import annotations
 
 
-class Snowmobile:
+class Snowmobile(object):
     """Generic dunder implementation for ``snowmobile`` objects.
 
     Base class for all ``snowmobile`` objects that do **not** inherit from
@@ -14,6 +14,9 @@ class Snowmobile:
     """
     def __init__(self):
         pass
+
+    def __getattr__(self, item):
+        return getattr(self, item)
 
     def __getitem__(self, item):
         return vars(self)[item]

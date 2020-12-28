@@ -170,7 +170,7 @@ class Marker(Base):
 
 class Attributes(Base):
     # fmt: off
-    exclude: List[str] = Field(
+    excluded: List[str] = Field(
         default_factory=list, alias='exclude'
     )
     from_namespace: Dict[str, str] = Field(
@@ -204,6 +204,11 @@ class Attributes(Base):
         for marker, marker_attrs in data["markers"].items():
             self.markers[marker] = Marker(**marker_attrs).set_name(name=marker)
 
+    def exclude(self, item: str):
+        if item not in self.excluded:
+            self.excluded.append(item)
+        return self
+
     def get_marker(self, name: str):
         return self.markers.get(f"__{name}__")
 
@@ -224,8 +229,37 @@ class Attributes(Base):
             if attr == ordered_attr:
                 return i
 
-    def include(self, attr: str) -> bool:
-        return attr not in self.exclude
+    def included(self, attrs: Dict) -> Dict:
+        return {k: v for k, v in attrs.items() if k not in self.excluded}
+
+    def group_parsed_attrs(self, parsed: Dict) -> Dict:
+        grouped = {}
+        attrs = self.included(parsed)
+        for parent, child_attrs in self.groups.items():
+            children = {
+                attr: attrs.pop(attr) for attr in child_attrs if attrs.get(attr)
+            }
+            if children:
+                grouped[parent] = children
+        return {**grouped, **attrs}
+
+    def _add_reserved(self, nm: str, attrs: Dict, is_marker: bool = False):
+        reserved_attr = self.reserved[nm]
+        reserved_nm = reserved_attr.attr_nm
+        if is_marker:
+            return attrs
+        if not attrs.get(reserved_nm) and reserved_attr.include_by_default:
+            attrs[reserved_attr.default_val] = reserved_attr.include_by_default
+        elif reserved_attr.include_by_default:
+            attrs[reserved_attr.default_val] = attrs[reserved_nm]
+        return attrs
+
+    def add_reserved_attrs(self, attrs: Dict, is_marker: bool = False):
+        attrs = {k: v for k, v in attrs.items()}
+        for nm in self.reserved:
+            attrs = self._add_reserved(nm=nm, attrs=attrs, is_marker=is_marker)
+        return attrs
+
 
 
 class Core(Base):
@@ -454,6 +488,9 @@ class Script(Base):
         stripped = p.strip(block, blanks=strip_blanks, trailing=strip_trailing)
         splitter = self.split_args(args_str=stripped)
         return self.parse_split_arguments(splitter=splitter)
+
+    def parse(self, raw: str, is_statement: Optional[bool] = None):
+        pass
 
     def as_parsable(
             self,

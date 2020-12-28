@@ -37,8 +37,8 @@ class QA(Statement):
             self._outcome = -2
             self.e.set(outcome=-2)
             self.e.collect(
-                e=self._DERIVED_FAILURE_MAPPING[self.tag.anchor](
-                    nm=self.tag.nm,
+                e=self._DERIVED_FAILURE_MAPPING[self.anchor](
+                    nm=self.nm,
                     msg=self.MSG,
                     idx=self.index,
                     to_raise=True,
