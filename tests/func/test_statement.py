@@ -34,14 +34,18 @@ def test_statement_number_of_lines(sample_statement_object):
 @pytest.mark.statement
 def test_multiline_attributes_without_a_name_causes_error(sample_statement_object):
     """Verifies that a multiline tag without a '__name:' argument will raise an error."""
-    # given
+    from snowmobile.core.errors import InvalidTagsError
+
     multiline_tag_without_a_name_argument = """
 __description: This is an example of a multiline tag that will cause an error.    
 """
+
+    # given
     sample_statement_object.attrs_raw = multiline_tag_without_a_name_argument
+    sample_statement_object.is_multiline = True
 
     # then
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidTagsError):
         sample_statement_object.parse()
 
 
@@ -74,7 +78,7 @@ def test_statement_dunder_getitem(sample_statement_object):
 @pytest.mark.statement
 def test_statement_dunder_str(sample_statement_object):
     """Verifies `s.__str__()`."""
-    assert str(sample_statement_object) == "Statement('select-data~statement #1')"
+    assert str(sample_statement_object) == "Statement('select data~statement #1')"
 
 
 @pytest.mark.statement

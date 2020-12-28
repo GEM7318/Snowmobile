@@ -3,7 +3,7 @@
 
 This script stores the test cases for `snowmobile.Markup`.
 
-## (1) create-temp table~sample_table
+## (1) create temp table~sample_table
 
 
 - **Notes**
@@ -19,7 +19,7 @@ union
 # intra-statement-marker
 * **Description**: _This is a sample intra statement marker._
 
-## (2) select-data~sample select statement
+## (2) select data~sample select statement
 * **Description**: _This is a sample select statement, excluding results_
 
 ```sql

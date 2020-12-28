@@ -61,8 +61,8 @@ class Script(Snowmobile):
 
         self.filtered: bool = bool()
 
-        self.intra_statement_marker_hashmap_idx: Dict = dict()
-        self.intra_statement_marker_hashmap_txt: Dict = dict()
+        self._intra_statement_marker_hashmap_idx: Dict = dict()
+        self._intra_statement_marker_hashmap_txt: Dict = dict()
         self.all_marker_hashmap: Dict = dict()
         self.markers: Dict[int, schema.Marker] = dict()
 
@@ -195,7 +195,6 @@ class Script(Snowmobile):
             statement=s,
             index=index,
             attrs_raw=attrs_raw,
-            # e=self.e,
         )
         if not statement.is_derived or self.as_generic:
             self._statements_all[index] = statement
@@ -221,8 +220,8 @@ class Script(Snowmobile):
         for i, m in enumerate(markers, start=1):
             _hash = hash(m)
             marker_index = idx + (i / 10)
-            self.intra_statement_marker_hashmap_idx[_hash] = marker_index
-            self.intra_statement_marker_hashmap_txt[_hash] = m
+            self._intra_statement_marker_hashmap_idx[_hash] = marker_index
+            self._intra_statement_marker_hashmap_txt[_hash] = m
 
     def _derive_qa_from_generic(
         self, s: sqlparse.sql.Statement, generic: Statement
@@ -380,8 +379,6 @@ class Script(Snowmobile):
             if last:
                 from_id, as_id = self._latest_scope_id, None
 
-            # A new, distinct timestamp will be set on the script & the
-            # statements within the scope of `script._update_scope()`
             self._update_scope(
                 as_id=as_id,
                 from_id=from_id,
@@ -497,7 +494,6 @@ class Script(Snowmobile):
             """Calls .reset() with kwargs on all statement objects."""
             return {i: s.reset(**kwargs) for i, s in self._statements_all.items()}
 
-        # --------
         if _filter:  # NOTE: must come before re-index
             self.filtered = not bool(self.filtered)
         if index:
@@ -514,7 +510,6 @@ class Script(Snowmobile):
             self._statements_all = batch_reset(scope=scope)
 
         return self
-        # --------
 
     @property
     def duplicates(self) -> Dict[str, int]:
@@ -603,8 +598,8 @@ class Script(Snowmobile):
     def _intra_statement_markers(self):
         """All markers (raw text) above/between statements by index position."""
         return {
-            i: self.intra_statement_marker_hashmap_txt[h]
-            for h, i in self.intra_statement_marker_hashmap_idx.items()
+            i: self._intra_statement_marker_hashmap_txt[h]
+            for h, i in self._intra_statement_marker_hashmap_idx.items()
         }
 
     @property
@@ -613,7 +608,7 @@ class Script(Snowmobile):
         markers_r_unadjusted = {
             m
             for h, m in self.all_marker_hashmap.items()
-            if not self.intra_statement_marker_hashmap_idx.get(h)
+            if not self._intra_statement_marker_hashmap_idx.get(h)
         }
         return {
             (self.depth + 1 + (i / 10)): m

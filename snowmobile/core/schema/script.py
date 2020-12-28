@@ -455,7 +455,13 @@ class Script(Base):
         splitter = self.split_args(args_str=stripped)
         return self.parse_split_arguments(splitter=splitter)
 
-    def as_parsable(self, raw: str, is_multiline: Optional[bool] = None) -> str:
+    def as_parsable(
+            self,
+            raw: str,
+            is_multiline: Optional[bool] = None,
+            is_marker: Optional[bool] = None,
+            lines: Optional[int] = None,
+    ) -> str:
         """Returns a raw string wrapped in open/close tags.
 
         Used for taking a raw string of marker or statement attributes and
@@ -463,10 +469,13 @@ class Script(Base):
         being exported re-parsable by `snowmobile`.
 
         """
+        raw = raw.strip("\n")
         _open = self.patterns.core.to_open
         _close = self.patterns.core.to_close
-        raw = raw.strip("\n")
-        if is_multiline:
+        if is_marker:
+            lines = (0 if lines == -1 else lines or 1) * '\n'
+            return f"{_open}\n{raw}\n{_close}{lines}"
+        elif is_multiline:
             return f"{_open}\n{raw}\n{_close}"
         return f"{_open}{raw}{_close}"
 

@@ -96,7 +96,6 @@ class Statement(Snowmobile):
     }
     # fmt: on
 
-    # noinspection PyTypeChecker,PydanticTypeChecker
     def __init__(
         self,
         sn: Connector,
@@ -130,21 +129,17 @@ class Statement(Snowmobile):
         self.execution_time_txt: str = str()
 
         self.attrs_raw = attrs_raw or str()
+        self.is_multiline = '\n' in self.attrs_raw
         self.is_tagged: bool = bool(self.attrs_raw)
 
         # TODO: Make this a single static method from cfg.script
         self.first_keyword = self.statement.token_first(skip_ws=True, skip_cm=True)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
 
-        self.tag: Tag = None
+        self.tag: Optional[Tag] = None
         self.attrs_parsed = self.parse()
 
         self.e = e or ExceptionHandler(within=self)
-
-    @property
-    def is_multiline(self) -> bool:
-        """Indicates if provided statement tag is a multiline tag."""
-        return "\n" in self.attrs_raw
 
     def parse(self) -> Dict:
         """Parses a statement tag into a valid dictionary.
@@ -192,7 +187,6 @@ class Statement(Snowmobile):
             sql=self.sql,
             nm_pr=nm_pr,
             configuration=self.sn.cfg,
-            first_keyword=str(self.first_keyword),
         )
 
     def start(self):
@@ -407,7 +401,6 @@ class Statement(Snowmobile):
                 self.results = self.sn.query(self.sql, results=results, lower=lower)
                 self.end()
                 self.e.set(outcome=2)
-
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             self.e.collect(e=e).set(outcome=1)
 
@@ -415,6 +408,7 @@ class Statement(Snowmobile):
             # only post-process when execution did not raise database error
             if self.e.outcome != 1:
                 self.process()
+
         # fmt: off
         # ---------------------------
         if (

@@ -4,23 +4,23 @@ __script__
 __description*: Script houses test cases for QA statements.
 -*/
 
-/*-set-param~schema_name-*/
+/*-set param~schema_name-*/
 set schema_name = 'snowmobile_testing';
 
-/*-create-schema~#2-*/
+/*-create schema~#2-*/
 create or replace schema identifier($schema_name)
 comment = 'Sample schema script';
 
-/*-use-schema~#3-*/
+/*-use schema~#3-*/
 use schema identifier($schema_name);
 
-/*-create-table~snowmobile_testing.sample_table-*/
+/*-create table~snowmobile_testing.sample_table-*/
 create or replace temp table snowmobile_testing.sample_table as
 	select 1 as dummy_dim, 1 as dummy_exclude, 1 as dummy_col
 union
 	select 2 as dummy_dim, 1 as dummy_exclude, 1 as dummy_col;
 
-/*-select-data~snowmobile_testing.sample_table-*/
+/*-select data~snowmobile_testing.sample_table-*/
 select
 	*
 from snowmobile_testing.sample_table st;
@@ -34,7 +34,7 @@ group by 1
 having count(*) <> 1;
 
 /*-
-__name: select-data~results testing
+__name: select data~results testing
 __description*: Test of inserting results.
 __another-bullet: This is a bullet
 __results*: true
@@ -42,21 +42,21 @@ __results*: true
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select-data~results testing2
+__name: select data~results testing2
 __description*: *Note*: This is a paragraph
 __results*_***: true
 -*/
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select-data~results testing3
+__name: select data~results testing3
 __results*_***: true
 __sql*_***: true
 -*/
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select-data~results testing4
+__name: select data~results testing4
 __sql*_***: true
 __results*_***: true
 -*/

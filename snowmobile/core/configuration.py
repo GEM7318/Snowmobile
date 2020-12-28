@@ -38,7 +38,7 @@ class Configuration(Snowmobile):
     ]
 
     # -- e.g. populates associated parts of 'insert into-unknown~statement #2'
-    DEF_OBJ = "unknown"
+    DEF_OBJ = ""
     DEF_DESC = "statement"
 
     # -- Anchors to associate with QA statements.

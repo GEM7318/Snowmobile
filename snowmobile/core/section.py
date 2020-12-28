@@ -296,7 +296,6 @@ class Section(Snowmobile):
         """
         super().__init__()
 
-        # self.cfg_md: Markdown = config.script.markdown
         self.cfg: Configuration = config
         self.is_marker = is_marker or bool()
         self.is_multiline = is_multiline
@@ -442,7 +441,7 @@ class Section(Snowmobile):
 
     # TODO: Change to 'full' or 'total'
     @property
-    def section(self) -> str:
+    def md(self) -> str:
         """Constructs a full section as a string from various components.
 
         Returns:

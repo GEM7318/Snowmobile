@@ -50,10 +50,10 @@ def test_combined_marker_and_statement_indices(sn_delayed):
     ] = [
         # (index, BaseClass, 'tag.nm')
         (1, Marker, 'markers_standard.sql'),
-        (2, Statement, 'create-table~sample_table'),
+        (2, Statement, 'create table~sample_table'),
         (3, Marker, 'marker2'),
         (4, Marker, 'marker3'),
-        (5, Statement, 'create-table~sample_table2'),
+        (5, Statement, 'create table~sample_table2'),
         (6, Marker, 'trailing_marker'),
     ]
 

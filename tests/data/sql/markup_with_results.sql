@@ -22,7 +22,7 @@ __description: This is a sample intra statement marker.
 -*/
 
 /*-
-__name: select-data~sample select statement
+__name: select data~sample select statement
 __description: This is a sample select statement, including results
 __results*: true
 -*/

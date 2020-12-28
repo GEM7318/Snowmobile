@@ -32,10 +32,11 @@
     ]
 
     [sql.generic-anchors]
-        "select" = "select-data"
-        "set" = "set-param"
-        "unset" = "unset-param"
-        "insert" = "insert-into"
+        "select" = "select data"
+        "set" = "set param"
+        "unset" = "unset param"
+        "insert" = "insert into"
+        "delete" = "delete from"
 
     [sql.keyword-exceptions]
         "with" = "select"

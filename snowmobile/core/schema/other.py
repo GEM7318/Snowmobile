@@ -3,6 +3,8 @@ Module contains the object model for **snowmobile.toml**.
 """
 from __future__ import annotations
 
+import re
+
 from pathlib import Path
 from typing import Dict, List
 
@@ -43,3 +45,11 @@ class SQL(Base):
         obj = obj.strip("s")
         default = f"{obj}s"  # 'table' -> 'tables'/'column' -> 'columns'
         return f"information_schema.{self.info_schema_exceptions.get(obj, default)}"
+
+    def objects_within(self, first_line: str):
+        """Searches the first line of sql for matches to named objects."""
+        matched_terms = {
+            i: re.findall(f"\\b{term}\\b", first_line)
+            for i, term in enumerate(self.named_objects)
+        }
+        return {k: v[0] for k, v in matched_terms.items() if v}

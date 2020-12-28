@@ -22,7 +22,7 @@ The behavior expected is for the script to containing the following objects/orde
 6. Marker('trailing_marker')
 -*/
 
-/*-create-table~sample_table-*/
+/*-create table~sample_table-*/
 create or replace table sample_table as
 select 1 as sample_col;
 
@@ -37,7 +37,7 @@ __description: third marker in total, second consecutive marker between two
 statements.
 -*/
 
-/*-create-table~sample_table2-*/
+/*-create table~sample_table2-*/
 create or replace table sample_table2 as
 select 1 as sample_col;
 

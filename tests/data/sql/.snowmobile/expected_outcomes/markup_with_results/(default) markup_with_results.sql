@@ -24,7 +24,7 @@ __intra-statement-marker__
 __description: This is a sample intra statement marker.
 -*/
 
-/*-select-data~sample select statement-*/
+/*-select data~sample select statement-*/
 select * from sample_table;
 
 /*-qa-empty~an expected success-*/

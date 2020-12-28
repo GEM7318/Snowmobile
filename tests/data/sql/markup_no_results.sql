@@ -6,7 +6,7 @@ This script stores the test cases for `snowmobile.Markup`.
 -*/
 
 /*-
-__name: create-temp table~sample_table
+__name: create temp table~sample_table
 __bullets***:
 - **Notes**
 	- This is just a sample table for the other test statements to run on.
@@ -22,7 +22,7 @@ __description: This is a sample intra statement marker.
 -*/
 
 /*-
-__name: select-data~sample select statement
+__name: select data~sample select statement
 __description: This is a sample select statement, excluding results
 -*/
 select * from sample_table;

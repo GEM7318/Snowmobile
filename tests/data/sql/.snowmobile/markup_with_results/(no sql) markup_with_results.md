@@ -21,7 +21,7 @@ union
 # intra-statement-marker
 * **Description**: _This is a sample intra statement marker._
 
-## (2) select-data~sample select statement
+## (2) select data~sample select statement
 * Execution-Information
 	* **Last Outcome**: _completed_
 * **Description**: _This is a sample select statement, including results_

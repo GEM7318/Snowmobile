@@ -171,7 +171,7 @@ class Markup(Snowmobile):
     def markdown(self) -> str:
         """Full markdown file as a string."""
         included = self.included
-        return "\n\n".join(s.section for i, s in self.sections.items() if i in included)
+        return "\n\n".join(s.md for i, s in self.sections.items() if i in included)
 
     @property
     def _export_disclaimer(self) -> str:
@@ -197,9 +197,11 @@ class Markup(Snowmobile):
     def sql(self):
         """SQL for export."""
         to_export = [
-            s.trim()
-            if self._is_statement(s)
-            else self.cfg.script.as_parsable(raw=s.raw)
+            s.trim() if self._is_statement(s)
+            else self.cfg.script.as_parsable(
+                raw=s.raw,
+                is_marker=True
+            )
             for i, s in self.contents.items()
             if i in self.included
         ]

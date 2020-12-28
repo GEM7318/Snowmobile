@@ -13,7 +13,7 @@ on the script since its contents including the name are identical to the second
 marker in the script.
 -*/
 
-/*-create-table~sample_table-*/
+/*-create table~sample_table-*/
 create or replace table sample_table as
 select 1 as sample_col;
 
