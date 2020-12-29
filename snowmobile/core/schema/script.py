@@ -128,10 +128,6 @@ class Marker(Base):
             self.attrs[k] = v
         return self
 
-    # def _set_update(self):
-    #     """Returns grouped attributes if enabled."""
-    #     return {self.group: self.attrs} if self.group else self.attrs
-
     def split_attrs(self, attrs: Dict):
         shared = {k: v for k, v in attrs.items() if k in self.attrs}
         new = {k: attrs[k] for k, v in attrs.items() if k not in self.attrs}

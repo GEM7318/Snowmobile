@@ -1,6 +1,6 @@
 
-- name: Upload coverage to codecov.io
+- name: Codecov
   on: [push]
-  steps:
-  - uses: actions/checkout@0.2.1
-  - uses: codecov/codecov-action@v1
+  - uses: codecov/codecov-action@v1.1.1
+#  steps:
+#  - uses: actions/checkout@0.2.1

@@ -152,6 +152,16 @@ def test_configuration_json_serialization():
 
 
 @pytest.mark.configuration
+def test_base_json_serialization():
+    """Testing serialization methods of pydantic-derived objects."""
+    from snowmobile import Configuration
+    cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
+
+    assert cfg.script.json(by_alias=True) == cfg.script.__json__(by_alias=True)
+    assert cfg.script.json(by_alias=False) != cfg.script.json(by_alias=True)
+
+
+@pytest.mark.configuration
 def test_get_attrs_from_obj():
     """Tests 'attrs_from_obj() method of configuration class."""
 
