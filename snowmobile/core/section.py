@@ -55,7 +55,6 @@ from .schema import Markdown
 from .utils import parsing as p
 
 
-# TESTS: Add tests for Name
 class Name(Snowmobile):
     """Handles attribute-name parsing including identification of wildcards.
 
