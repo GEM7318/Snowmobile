@@ -201,3 +201,14 @@ def test_configuration_dunder_methods():
     assert str(cfg) == f"snowmobile.Configuration('{CONFIG_FILE_NM}')"
     assert str(repr(cfg)) == f"snowmobile.Configuration(config_file_nm='{CONFIG_FILE_NM}')"
 
+
+@pytest.mark.configuration
+def test_set_item_on_base_class():
+    """Verifies behavior of __setitem__ dunder method for base class."""
+    from snowmobile import Configuration
+
+    cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
+    cfg.script.any_arbitrary_attribute = 1  # cfg.script derives from Base, cfg does not
+    cfg.script['tw'] = 1
+    assert cfg.script.any_arbitrary_attribute
+    assert cfg.script.tw

@@ -144,3 +144,31 @@ def test_markup_using_template_anchor_attributes(sn):
             path1=p_under_test,
             path2=p_validation
         )
+
+
+@pytest.mark.markup
+def test_markup_scaffolding(sn, tmpdir):
+    """Verifies calling markup.export() without a pre-existing directory."""
+    from pathlib import Path
+
+    # given
+    script = get_script('markup_template_anchor.sql')
+
+    # when
+    script.path = Path(tmpdir) / script.path.name
+    markup = script.doc()
+    markup.export()
+
+    # then
+    assert not script.path.exists()  # script path is set but never written to
+    assert Path(markup.path_md).exists()  # doc paths take directory of script path
+    assert Path(markup.path_sql).exists()
+
+
+@pytest.mark.markup
+def test_markup_dunder_methods(sn):
+    """Verifies __str__ and __repr__ do not cause errors."""
+    script = get_script('markup_template_anchor.sql')
+    markup = script.doc()
+    assert str(markup)
+    assert repr(markup)

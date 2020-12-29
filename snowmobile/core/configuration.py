@@ -202,27 +202,28 @@ class Configuration(Snowmobile):
         return obj
 
     @staticmethod
-    def methods_from_obj(
-        obj: Any, excl: Optional[List[str]] = None
-    ) -> Dict[str, MethodType]:
-        """Utility to return methods from an object as a dictionary."""
-        return {
-            m: getattr(obj, m)
-            for m in dir(obj)
-            if m not in (excl or [])
-            and isinstance(getattr(obj, m), MethodType)
-        }
-
-    @staticmethod
     def attrs_from_obj(
-        obj: Any, excl: Optional[List[str]] = None
+        obj: Any, within: Optional[List[str]] = None
     ) -> Dict[str, MethodType]:
         """Utility to return attributes/properties from an object as a dictionary."""
         return {
             str(m): getattr(obj, m)
             for m in dir(obj)
-            if m not in (excl or [])
+            if (m in within if within else True)
             and not isinstance(getattr(obj, m), Callable)
+
+        }
+
+    @staticmethod
+    def methods_from_obj(
+        obj: Any, within: Optional[List[str]] = None
+    ) -> Dict[str, MethodType]:
+        """Utility to return attributes/properties from an object as a dictionary."""
+        return {
+            str(m): getattr(obj, m)
+            for m in dir(obj)
+            if (m in within if within else True)
+            and isinstance(getattr(obj, m), MethodType)
 
         }
 

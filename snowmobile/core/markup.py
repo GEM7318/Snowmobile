@@ -64,8 +64,6 @@ class Markup(Snowmobile):
         sn: Connector,
         path: Path,
         contents: Dict[int, Union[Statement, Marker]],
-        directory: Path = None,
-        file_nm: Optional[str] = None,
         alt_file_nm: Optional[str] = None,
         alt_file_prefix: Optional[str] = None,
         alt_file_suffix: Optional[str] = None,
@@ -88,26 +86,16 @@ class Markup(Snowmobile):
         self.incl_raw = incl_raw
         self.exported: List[Path] = list()
         self.created: List[Path] = list()
-
-        if path:
-            self.path = Path(str(path))
-        elif directory and file_nm:
-            if not directory.is_dir():
-                raise ValueError(
-                    f"`directory` argument must be a valid directory path.\n"
-                    f"Value provided was: '{directory}'"
-                )
-            self.path = directory / file_nm
-        else:
-            self.path: Path = Path()
+        self.path = Path(str(path)) if path else Path()
 
     @property
     def doc_root(self) -> Path:
         """Documentation sub-directory; `.snowmobile` by default."""
         return (
-            Path()
-            if not self.path.anchor
-            else self.path.parent / self.cfg.script.export_dir_nm
+            # Path()
+            # if not self.path.anchor
+            # else
+            self.path.parent / self.cfg.script.export_dir_nm
         )
 
     @property
@@ -137,7 +125,7 @@ class Markup(Snowmobile):
     def script_dir(self) -> Path:
         """Directory for all exports from specific _file_nm.."""
         stem, _, ext = self._file_nm.rpartition(".")
-        return Path() if not self.path.anchor else self.doc_root / stem
+        return self.doc_root / stem
 
     @property
     def path_md(self) -> Path:
@@ -214,15 +202,6 @@ class Markup(Snowmobile):
         """Utility to check if a given instance of contents is a statement."""
         return isinstance(s, (Statement, Diff, Empty))
 
-    @staticmethod
-    def _validate_directory(directory: Path) -> Tuple[bool, str]:
-        """Returns arguments to raise an exception if directory doesn't exist."""
-        return (
-            directory.is_dir(),
-            f"`directory` argument must be a valid directory path.\n"
-            f"Value provided was: '{directory}'",
-        )
-
     def _scaffolding(self) -> None:
         """Ensures directory scaffolding exists before attempting export."""
         if not self.script_dir.exists():
@@ -231,33 +210,16 @@ class Markup(Snowmobile):
 
     def _export(self, path: Path, val: str):
         """Ensure directory scaffolding exists and writes a string to a path (.sql or .md)."""
-        try:
-            self._scaffolding()
-            with open(path, "w") as f:
-                f.write(val)
-                self.exported.append(path)
-                self._stdout.offset_path(
-                    file_path=path,
-                    root_dir_nm=path.parent.name,
-                    indent="\t",
-                    output=True,
-                )
-        except IOError as e:
-            raise e
-
-    def _export_md(self):
-        """Exports markdown file."""
-        try:
-            self._export(path=self.path_md, val=self.markdown)
-        except IOError as e:
-            raise e
-
-    def _export_sql(self) -> None:
-        """Exports sql file."""
-        try:
-            self._export(path=self.path_sql, val=self.sql)
-        except IOError as e:
-            raise e
+        self._scaffolding()
+        with open(path, "w") as f:
+            f.write(val)
+            self.exported.append(path)
+            self._stdout.offset_path(
+                file_path=path,
+                root_dir_nm=path.parent.name,
+                indent="\t",
+                output=True,
+            )
 
     def export(self, md_only: bool = False, sql_only: bool = False) -> None:
         """Export files.
@@ -267,17 +229,18 @@ class Markup(Snowmobile):
             sql_only (bool): Export sql file only.
 
         """
-        try:
-            print(f"Exported:")
-            if md_only:
-                self._export_md()
-            elif sql_only:
-                self._export_sql()
-            else:
-                self._export_md()
-                self._export_sql()
-        except IOError as e:
-            raise IOError(e)
+        def _md():
+            self._export(path=self.path_md, val=self.markdown)
+        def _sql():
+            self._export(path=self.path_sql, val=self.sql)
+
+        if md_only:
+            _md()
+        elif sql_only:
+            _sql()
+        else:
+            _md()
+            _sql()
 
     def __call__(self, **kwargs):
         """Batch setattr function for all keywords matching Markup's attributes."""

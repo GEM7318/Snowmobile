@@ -107,7 +107,6 @@ class Statement(Tag, Snowmobile):
         Snowmobile.__init__(self)
 
         self._index: int = index
-        self._exclude_attrs = []
         self._outcome: int = int()
 
         self.outcome: bool = True
@@ -214,17 +213,15 @@ class Statement(Tag, Snowmobile):
             in **snowmobile.toml**.
 
         """
-
         current_namespace = {
-            **self.sn.cfg.attrs_from_obj(obj=self, excl=['attrs_total']),
-            **self.sn.cfg.methods_from_obj(obj=self, excl=['attrs_total']),
+            **self.sn.cfg.attrs_from_obj(obj=self, within=list(self.sn.cfg.attrs.from_namespace)),
+            **self.sn.cfg.methods_from_obj(obj=self, within=list(self.sn.cfg.attrs.from_namespace)),
         }
         namespace_overlap_with_config = (
             set(current_namespace)  # all from current namespace
             .intersection(self.sn.cfg.attrs.from_namespace)  # snowmobile.toml
-            .difference(self._exclude_attrs)  # testing purposes only
         )
-        attrs = {k: v for k, v in self.attrs_parsed.items()}
+        attrs = {k: v for k, v in self.attrs_parsed.items()}  # parsed from .sql
         for k in namespace_overlap_with_config:
             attr = current_namespace[k]
             attr_value = attr() if isinstance(attr, Callable) else attr
@@ -375,9 +372,7 @@ class Statement(Tag, Snowmobile):
             Statement object post-executing query.
 
         """
-
         self.e.set(ctx_id=(ctx_id or -1))
-
         try:
             if self:
                 self.start()
@@ -386,12 +381,10 @@ class Statement(Tag, Snowmobile):
                 self.e.set(outcome=2)
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             self.e.collect(e=e).set(outcome=1)
-
         finally:
             # only post-process when execution did not raise database error
             if self.e.outcome != 1:
                 self.process()
-
         # fmt: off
         # ---------------------------
         if (

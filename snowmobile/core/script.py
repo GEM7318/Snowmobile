@@ -261,11 +261,6 @@ class Script(Snowmobile):
         except Exception as e:
             raise e
 
-    @property
-    def _latest_scope_id(self) -> Any[int, str]:
-        """Utility property to fetch the ID of the last scope created."""
-        return list(self.filters)[-1]
-
     def _scope_from_id(self, _id: Any[int, str], pop: bool = True) -> Dict:
         """Returns dictionary of scope arguments given an ``_id``.
 
@@ -317,6 +312,7 @@ class Script(Snowmobile):
 
         """
         _id = _id or (len(self.filters) + 1)
+        # TODO: Remove this feature
         scope_to_update = (
             self._scope_from_id(_id=_id, pop=True)
             if _id in self.filters
@@ -377,7 +373,7 @@ class Script(Snowmobile):
             self.e.set(ctx_id=time.time_ns(), in_context=True)
 
             if last:
-                from_id, as_id = self._latest_scope_id, None
+                from_id, as_id = list(self.filters)[-1], None
 
             self._update_scope(
                 as_id=as_id,
