@@ -715,43 +715,6 @@ class Script(Snowmobile):
             )
             return [i for i in range(start, stop)]
 
-    def _run(
-        self,
-        _id: Optional[str, int] = None,
-        results: bool = True,
-        lower: bool = True,
-        render: bool = False,
-        **kwargs,
-    ) -> None:
-        """Runs a single statement given an `_id`.
-
-        Args:
-            _id (Union[str, int]):
-                `_id` of the Statement to run (index position or statement
-                name); default=`None` which will return all statement `_id`s
-                within the current scope.
-            results (bool):
-                Return results from executed statement; default=`True`.
-            lower (bool):
-                Lower case column-names if results are returned; default=`True`.
-            render (bool):
-                Render the sql executed in (notebook-specific); default=`True`.
-
-        """
-        s = self.statement(_id=_id)
-        try:
-            s.run(
-                results=results,
-                lower=lower,
-                render=render,
-                ctx_id=self.e.ctx_id,
-                **kwargs,
-            )
-        except Exception as e:
-            self.e.collect(e=e)
-            raise e
-        self._console.status(s)
-
     # DOCSTRING
     def run(
         self,
@@ -764,25 +727,32 @@ class Script(Snowmobile):
         render: bool = False,
         **kwargs,
     ):
+        def _run(_id: Optional[str, int] = None, **kwargs):
+            """Fetches a statement, runs it, prints outcome to console."""
+            s = self.s(_id)
+            s.run(**kwargs)
+            self._console.status(s)
+
         if not self.e.in_context:
             self.e.set(ctx_id=-1)
-
-        static_kwargs = {
-            "results": results,
-            "on_error": on_error,
-            "on_exception": on_exception,
-            "on_failure": on_failure,
-            "lower": lower,
-            "render": render,
+        total_kwargs = {
+            **{
+                "results": results,
+                "on_error": on_error,
+                "on_exception": on_exception,
+                "on_failure": on_failure,
+                "lower": lower,
+                "render": render,
+            },
+            **kwargs,
         }
-
         if isinstance(_id, (int, str)):
-            self._run(_id=_id, **{**static_kwargs, **kwargs})
+            _run(_id=_id, **total_kwargs)
         else:
             indices_to_execute = self.ids_from_iterable(_id=_id)
             self._console.display()
             for i in indices_to_execute:
-                self._run(_id=i, **{**static_kwargs, **kwargs})
+                _run(_id=i, **total_kwargs)
 
     @property
     def _console(self):

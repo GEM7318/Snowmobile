@@ -62,14 +62,19 @@ sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOL
 [tool.coverage]
 
 [tool.coverage.run]
-source = 'snowmobile'
+source = [
+    'snowmobile'
+]
+branch = true
+
+[tool.coverage.codecov]
+source = ['snowmobile']
 branch = '0.2.1'
 require_ci_to_pass = false
 
 [tool.coverage.report]
 fail_under = 85
 show_missing = true
-omit = 'tests/*'
-exclude_lines = [
-    'def __repr__'
-]
+include = ['snowmobile']
+omit = ['tests/*']
+exclude_lines = ['def __repr__']
