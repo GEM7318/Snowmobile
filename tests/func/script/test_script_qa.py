@@ -7,8 +7,6 @@ from tests import (
 
 QA_SCRIPT_NAME = 'tags_qa_statements.sql'
 
-# TODO: Docstrings/comments
-
 
 @pytest.fixture(scope='session')
 def setup_for_qa_statement_tests(sn):

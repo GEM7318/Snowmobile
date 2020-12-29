@@ -9,9 +9,7 @@ ANY_SCRIPT_NAME = 'tags_qa_statements.sql'
 
 
 @pytest.mark.script
-def test_providing_invalid_path_raises_correct_exception(
-    sn_delayed, any_invalid_file_path
-):
+def test_providing_invalid_path_raises_correct_exception(sn_delayed, any_invalid_file_path):
     """Verifies providing an invalid `path` argument raises FileNotFoundError."""
     from snowmobile import Script
     with pytest.raises(FileNotFoundError):

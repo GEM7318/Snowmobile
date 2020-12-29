@@ -235,7 +235,7 @@ class Connector(Snowmobile):
             raise e
 
     def __str__(self) -> str:
-        return f"snowmobile.Connect(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"
 
     def __repr__(self) -> str:
-        return f"snowmobile.Connect(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"

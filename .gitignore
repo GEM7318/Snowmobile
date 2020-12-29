@@ -61,6 +61,7 @@ _sandbox/*
 _runner/*
 _sandbox/*
 csv/*
+README.md
 
 # CREDENTIALS
 snowmobile.toml
