@@ -1,8 +1,8 @@
 
 [connection]
-    default-creds = ''
+    default-creds = ''  # will use first set of credentials below if left blank
 
-    [connection.credentials.credentials1]
+    [connection.credentials.credentials1]  # `credentials1` is a filler alias
         user = ''
         password = ''
         role = ''
@@ -11,20 +11,10 @@
         database = ''
         schema = ''
 
-    [connection.credentials.credentials2]
-        user = ''
-        password = ''
-        role = ''
-        account = ''
-        warehouse = ''
-        database = ''
-        schema = ''
-
-    [connection.default-settings]
+    [connection.default-arguments]
         autocommit = true
         authenticator = 'snowflake'
         timezone = 'America/Chicago'
-
 
 [loading-defaults]
     default-file-format = 'snowmobile_default_psv'

@@ -22,6 +22,7 @@ __all__ = [
     "Configuration",
     "Script",
     "Statement",
+    "export_config",
 ]
 
 from .core import (
@@ -35,3 +36,11 @@ from .core import (
     Statement,
     utils,
 )
+
+from pathlib import Path
+from typing import Optional, Union
+
+
+def export_config(target_dir: Optional[Union[str, Path]] = None):
+    """Exports template `snowmobile.toml` file."""
+    return Configuration(export_dir=(target_dir or Path.cwd()))

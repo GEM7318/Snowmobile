@@ -125,7 +125,7 @@ class Connection(Base):
     )
 
     defaults: Dict = Field(
-        default_factory=dict, alias="default-settings"
+        default_factory=dict, alias="default-arguments"
     )
     # fmt: on
 

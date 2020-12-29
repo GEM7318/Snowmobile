@@ -90,7 +90,7 @@ class Connector(Snowmobile):
             kwargs:
                 Optional keyword arguments to pass to
                 snowflake.connector.connect(); arguments passed here will
-                over-ride ``connection.default-settings`` specified in
+                over-ride ``connection.default-arguments`` specified in
                 ``snowmobile.toml``.
 
         """

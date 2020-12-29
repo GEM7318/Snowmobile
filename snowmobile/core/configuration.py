@@ -51,8 +51,8 @@ class Configuration(Snowmobile):
         self,
         config_file_nm: Optional[str] = None,
         creds: Optional[str] = None,
-        from_config: Path = None,
-        export_dir: Path = None,
+        from_config: Optional[Path] = None,
+        export_dir: Optional[Path] = None,
     ):
         """Instantiates instances of the needed params to locate creds file.
 
@@ -81,6 +81,10 @@ class Configuration(Snowmobile):
             export_dir = export_dir or Path.cwd()
             export_path = export_dir / self.file_nm
             template_path = paths.DIR_PKG_DATA / "snowmobile_TEMPLATE.toml"
+            if export_path.exists():
+                raise FileExistsError(
+                    f"Cannot overwrite existing `snowmobile.toml` at:\n\t{template_path}."
+                )
             shutil.copy(template_path, export_path)
             self._stdout.exported(file_path=export_path)
 
