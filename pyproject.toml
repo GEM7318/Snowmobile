@@ -62,9 +62,7 @@ sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOL
 [tool.coverage]
 
 [tool.coverage.run]
-source = [
-    'snowmobile'
-]
+source = ['snowmobile']
 branch = true
 
 [tool.coverage.codecov]
