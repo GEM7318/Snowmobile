@@ -188,15 +188,16 @@ pygments_style = 'sphinx'
 python_version = '.'.join(map(str, sys.version_info[0:2]))
 
 intersphinx_mapping = {
+    'sqlparse': ('https://sqlparse.readthedocs.io/en/latest/', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
+    'snowflake.connector': ('https://docs.snowflake.com/en/user-guide/python-connector.html', None),
+    'snowflake': ('https://docs.snowflake.com/en/user-guide/python-connector.html', None),
     'sphinx': ('http://www.sphinx-doc.org/en/stable', None),
     'python': ('https://docs.python.org/' + python_version, None),
     'matplotlib': ('https://matplotlib.org', None),
     'numpy': ('https://docs.scipy.org/doc/numpy', None),
     'sklearn': ('http://scikit-learn.org/stable', None),
-    'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
-    # 'pd': ('http://pandas.pydata.org/pandas-docs/stable', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
-    'sqlparse': ('https://sqlparse.readthedocs.io/en/latest/', None),
 }
 
 # Adding so that __init__ will be documented - source is from link below:

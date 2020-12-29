@@ -14,6 +14,7 @@ from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from snowmobile.core import sql
+from snowmobile.core import ExceptionHandler
 from snowmobile.core.snowframe import SnowFrame
 
 from . import Configuration
@@ -23,11 +24,54 @@ from . import Snowmobile
 class Connector(Snowmobile):
     """Wrapper around :class:`SnowFlakeConnection` object.
 
+    Args:
+
+        creds (Optional[str]):
+            Alias for the set of credentials to authenticate with; default
+            behavior will fall back to the ``connection.default-creds``
+            specified in `snowmobile.toml`, `or the first set of credentials
+            stored if this configuration option is left blank`.
+        delay (bool):
+            Optionally delay establishing a connection when the object is
+            instantiated, enabling access to the configuration object model
+            through the :attr:`Connector.cfg` attribute; defaults to `False`.
+        ensure_alive (bool):
+            Establishes a new connection if a method requiring a connection
+            against the database is called while :attr:`alive` is `False`;
+            defaults to `True`.
+        config_file_nm (Optional[str]):
+            Name of configuration file to use; defaults to `snowmobile.toml`.
+        from_config (Optional[str, Path]):
+            A full path to a specific configuration file to use; bypasses any
+            checks for a cached file location and can be useful for container-based
+            processes with restricted access to the local file system.
+        **connect_kwargs:
+            Additional arguments to provide to :meth:`snowflake.connector.connect()`;
+            arguments provided here will over-ride connection arguments specified
+            in `snowmobile.toml`, including:
+                *   Connection parameters in `connection.default-arguments`
+                *   Credentials parameters associated with a given alias
+                *   Connection parameters associated with a given alias
+
+
     Attributes:
 
-        cfg (:class:`snowmobile.core.configuration.Configuration`):
-            :class:`snowmobile.core.configuration.Configuration` object which
-            includes attributes for all values within the **snowmobile.toml**.
+        cfg (Configuration`):
+            :class:`snowmobile.Configuration` object, which represents a fully
+            parsed/validated `snowmobile.toml` file.
+        conn (SnowflakeConnection):
+            :class:`SnowflakeConnection` object; this attribute is populated
+            when a connection is established and can be `None` if the
+            :class:`Connector` object was instantiated with `delay=True`.
+        sql (SQL):
+            A :class:`snowmobile.SQL` object with the current connection
+            embedded; stores command sql commands as utility methods and is
+            heavily leveraged in `snowmobile`'s internals.
+        e (ExceptionHandler):
+            A :class:`snowmobile.ExceptionHandler` object for orchestrating
+            exceptions across objects; kept as a public attribute on the class
+            as examining its contents can be helpful in debugging database errors
+            during development.
 
     """
 
@@ -40,42 +84,27 @@ class Connector(Snowmobile):
     def __init__(
         self,
         creds: Optional[str] = None,
+        delay: bool = False,
+        ensure_alive: bool = True,
         config_file_nm: Optional[str] = None,
         from_config: Optional[str, Path] = None,
-        ensure_alive: bool = True,
-        delay: bool = False,
-        mode: Optional[str] = None,
-        **kwargs,
+        **connect_kwargs,
     ):
-        """
-
-        Args:
-            config_file_nm (str):
-                Name of configuration file; defaults to `snowmobile.toml`.
-            creds (str):
-                Name of the set of credentials to authenticate with;
-                defaults to what is specified in `default` within the
-                configuration file or uses the first set of credentials in
-                the file if neither is specified.
-            from_config (pathlib.Path):
-                Optionally specify a full path to the configuration file;
-                primarily included for usage within containers/deployment
-                with specific file-system configurations.
-
-        """
         super().__init__()
-        self.outcome: int = int()
         self.error: Optional[DatabaseError, pdDataBaseError] = None
+
+        self.outcome: int = int()
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
         self.ensure_alive = ensure_alive
         self.conn: Optional[SnowflakeConnection] = None
         self.sql: sql.SQL = sql.SQL(sn=self)
-        self.mode = mode or "e"
 
         if not delay:
-            self.connect(**kwargs)
+            self.connect(**connect_kwargs)
+
+        self.e: ExceptionHandler = ExceptionHandler(within=self)
 
     def connect(self, **kwargs) -> Connector:
         """Establishes connection to Snowflake.

@@ -22,7 +22,22 @@ from .cache import Cache
 
 
 class Configuration(Snowmobile):
-    """User-facing access point for a fully parsed ``snowmobile.toml`` file."""
+    """User-facing access point for a fully parsed ``snowmobile.toml`` file.
+
+
+    Args:
+        config_file_nm (str):
+            Name of .toml configuration file following the format of
+            ``snowmobile_SAMPLE.toml`` (defaults to `snowmobile.toml`).
+        creds (str):
+            Name of connection within [credentials] section of .toml file
+            to use, defaults to the first set of credentials if creds
+            isn't explicitly passed.
+        from_config (Union[str, Path]):
+            Optionally pass in a full pathlib.Path object to a specific
+            `.toml` configuration file matching the format of
+            `snowmobile_SAMPLE.toml`.
+    """
 
     # -- Statement components to be considered for scope.
     SCOPE_ATTRIBUTES = [
@@ -55,20 +70,6 @@ class Configuration(Snowmobile):
         export_dir: Optional[Path] = None,
     ):
         """Instantiates instances of the needed params to locate creds file.
-
-        Args:
-            config_file_nm (str):
-                Name of .toml configuration file following the format of
-                ``snowmobile_SAMPLE.toml`` (defaults to `snowmobile.toml`).
-            creds (str):
-                Name of connection within [credentials] section of .toml file
-                to use, defaults to the first set of credentials if creds
-                isn't explicitly passed.
-            from_config (Union[str, Path]):
-                Optionally pass in a full pathlib.Path object to a specific
-                `.toml` configuration file matching the format of
-                `snowmobile_SAMPLE.toml`.
-
         """
         super().__init__()
         self._stdout = self.Stdout()

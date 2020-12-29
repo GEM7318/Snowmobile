@@ -52,10 +52,12 @@ The first few lines of *snowmobile.toml* are represented in the below snippet.
 :lines: 5-8
 :lineno-start: 1
 ```
-```{warning}
-Potential errors that occur in this step are either:
-- `snowflake.errors.DataBaseError` due to invalid credentials or connection specifications provided (most common)
-- Type errors due to values entered in *snowmobile.toml* that cannot be coerced by [pydantic](https://pydantic-docs.helpmanual.io/) 
+```{admonition} Note
+- Any potential issues with validating `snowmobile.toml` or connecting to the warehouse
+should be apparent upon the attempted execution of line **3** in the above snippet.
+- Potential errors that occur in this step are either:
+    - `snowflake.errors.DataBaseError` due to invalid credentials or connection specifications provided (most common)
+    - Type errors due to values entered in *snowmobile.toml* that cannot be coerced by [pydantic](https://pydantic-docs.helpmanual.io/) 
 into their defined types 
 ```
 
