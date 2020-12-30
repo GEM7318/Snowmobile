@@ -84,7 +84,7 @@ def export_markup_combinations_from_script(
 
 @pytest.mark.markup
 def test_markup_with_results(sn):
-    """Unit test for markup export including results."""
+    """Unit test for markup export including as_df."""
     script = get_script('markup_with_results.sql')
 
     exported_paths_for_current_test = export_markup_combinations_from_script(
@@ -105,7 +105,7 @@ def test_markup_with_results(sn):
 
 @pytest.mark.markup
 def test_markup_no_results(sn):
-    """Unit test for markup export including results."""
+    """Unit test for markup export including as_df."""
     script = get_script('markup_no_results.sql')
 
     exported_paths_for_current_test = export_markup_combinations_from_script(

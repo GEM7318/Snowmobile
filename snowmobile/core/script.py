@@ -733,7 +733,7 @@ class Script(Snowmobile):
             self.e.set(ctx_id=-1)
         total_kwargs = {
             **{
-                "results": results,
+                "as_df": results,
                 "on_error": on_error,
                 "on_exception": on_exception,
                 "on_failure": on_failure,

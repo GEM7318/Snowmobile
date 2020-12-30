@@ -106,3 +106,32 @@ Its design is focused on enabling:
 - The use a single configuration file for credentials and other configuration options for all projects running on a given machine
 - Parsing 
 
+
+
+
+## 4. Basic Usage
+
+#### 4.1 Verify connection
+```{literalinclude} /examples/setup/test_connection.py
+:language: python
+:lines: 5-8
+:lineno-start: 1
+```
+```{admonition} Note
+- Any potential issues with validating `snowmobile.toml` or connecting to the warehouse
+should be apparent upon the attempted execution of line **3** in the above snippet.
+- Potential errors that occur in this step are either:
+    - `snowflake.errors.DataBaseError` due to invalid credentials or connection specifications provided (most common)
+    - Type errors due to values entered in *snowmobile.toml* that cannot be coerced by [pydantic](https://pydantic-docs.helpmanual.io/) 
+into their defined types 
+```
+
+
+#### 4.2: Composition context
+```{literalinclude} /examples/setup/test_connection.py
+:language: python
+:lines: 16-19
+:lineno-start: 12
+```
+The above statements give very brief context on the composition of `snowmobile.Connector`; please see
+___ for in-depth information on the `Connector`'s object model and usage.

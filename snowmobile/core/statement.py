@@ -38,7 +38,7 @@ class Statement(Tag, Snowmobile):
             :class:`config.Pattern` object for more succinct access to
             values specified in **snowmobile.toml**.
         results (pd.DataFrame):
-            The results of the statement if executed as a :class:`pandas.DataFrame`.
+            The as_df of the statement if executed as a :class:`pandas.DataFrame`.
         outcome (int):
             Numeric indicator of outcome; defaults to `0` and is modified
             based on the outcome of statement execution and/or QA validation
@@ -327,7 +327,7 @@ class Statement(Tag, Snowmobile):
         return self
 
     def process(self):
-        """Used by derived classes for post-processing the returned results."""
+        """Used by derived classes for post-processing the returned as_df."""
         return self
 
     def run(
@@ -344,10 +344,10 @@ class Statement(Tag, Snowmobile):
 
         Args:
             results (bool):
-                Store results of query in :attr:`results`.
+                Store as_df of query in :attr:`as_df`.
             lower (bool):
-                Lower case column names in :attr:`results` DataFrame if
-                `results=True`.
+                Lower case column names in :attr:`as_df` DataFrame if
+                `as_df=True`.
             render (bool):
                 Render the sql executed as markdown.
             on_error (str):
@@ -356,14 +356,14 @@ class Statement(Tag, Snowmobile):
                     * `c`: continue with execution
             on_exception (str):
                 Behavior if an exception is raised in the **post-processing**
-                of results from a derived class of :class:`Statement` (
+                of as_df from a derived class of :class:`Statement` (
                 :class:`Empty` and :class:`Diff`).
                     * `None`: default behavior, exception will be raised
                     * `c`: continue with execution
             on_failure (str):
                 Behavior if no error is encountered in execution or post-processing
                 but the result of the post-processing has turned the statement's
-                :attr:`outcome` attribute to False, indicating the results of
+                :attr:`outcome` attribute to False, indicating the as_df of
                 the statement have failed validation.
                     * `None`: default behavior, exception will be raised
                     * `c`: continue with execution
@@ -376,7 +376,7 @@ class Statement(Tag, Snowmobile):
         try:
             if self:
                 self.start()
-                self.results = self.sn.query(self.sql, results=results, lower=lower)
+                self.results = self.sn.query(self.sql, as_df=results, lower=lower)
                 self.end()
                 self.e.set(outcome=2)
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:

@@ -43,7 +43,7 @@ class Tag(Snowmobile):
             A straight partition of the provided tag name on the
             ``keyword-delimiter`` specified in **snowmobile.toml**.
         is_struct_anchor (bool):
-            Indicator of whether or :attr:`part_keyword` results in a tuple
+            Indicator of whether or :attr:`part_keyword` as_df in a tuple
             containing three items (e.g. if the statement tag is structured
             following the `keyword-object~description` taxonomy).
         kw_pr (str):
@@ -57,7 +57,7 @@ class Tag(Snowmobile):
                     is the `obj~description` portion of
                     `keyword-object~description`.
         is_struct_desc (bool):
-            Indicator of whether or not :attr:`part_description` results in a
+            Indicator of whether or not :attr:`part_description` as_df in a
             tuple containing three items (e.g. if the remainder of the
             statement tag outside of the keyword follows the pre-determined
             taxonomy).

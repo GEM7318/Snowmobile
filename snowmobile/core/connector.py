@@ -183,7 +183,7 @@ class Connector(Snowmobile):
     def query(
         self,
         sql: str,
-        results: bool = True,
+        as_df: bool = True,
         lower: bool = True,
         on_error: Optional[str] = None,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
@@ -196,7 +196,7 @@ class Connector(Snowmobile):
         Args:
             sql (str):
                 Raw SQL to execute.
-            results (bool):
+            as_df (bool):
                 Boolean value indicating whether or not to return results.
             lower (bool):
                 Boolean value indicating whether or not to return results
@@ -210,7 +210,7 @@ class Connector(Snowmobile):
             :class:`SnowflakeCursor` object if `results=False`.
 
         """
-        if not results:
+        if not as_df:
             return self.ex(sql=sql)
 
         try:

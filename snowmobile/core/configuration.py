@@ -181,9 +181,9 @@ class Configuration(Snowmobile):
                 self._stdout.file_located(file_path=self.location)
                 return self.location
 
-        except IOError as e:
+        except FileNotFoundError as e:
             self._stdout.cannot_find(self.file_nm)
-            raise IOError(e)
+            raise FileNotFoundError(e)
 
     @staticmethod
     def batch_set_attrs(obj: Any, attrs: dict, to_none: bool = False):

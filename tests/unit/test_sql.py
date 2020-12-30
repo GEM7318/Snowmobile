@@ -67,7 +67,7 @@ class SQLUnit(BaseTest):
         # get the method as a callable from its namespace
         method_to_run = self.cfg.methods_from_obj(obj=self.base)[self.method]
 
-        # call the method with the specified arguments and store results
+        # call the method with the specified arguments and store as_df
         self.value_returned = method_to_run(**self.method_args)
 
     def __repr__(self) -> str:

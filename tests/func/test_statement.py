@@ -59,7 +59,7 @@ def test_calling_render_on_a_valid_statement_does_not_cause_an_error(sample_stat
 # noinspection SqlResolve
 @pytest.mark.statement
 def test_calling_run_with_results_on_invalid_sql_raises_database_error(sample_statement_object):
-    """Tests `s.run(results=True)` raises an error when `s.sql` is not a valid statement."""
+    """Tests `s.run(as_df=True)` raises an error when `s.sql` is not a valid statement."""
     from pandas.io.sql import DatabaseError
     # given
     an_invalid_sql_statement = 'select * from *'

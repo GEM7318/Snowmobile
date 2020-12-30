@@ -44,10 +44,10 @@ class Scope(Snowmobile):
             last call to :meth:`eval()`; will use provided arguments if they
             exist and the arguments from :attr:`fallback_to` otherwise.
         is_included (bool):
-            Tag is included based on the results of the last call to
+            Tag is included based on the as_df of the last call to
             :meth:`eval()`.
         is_excluded (bool):
-            Tag is excluded based on the results of the last call to
+            Tag is excluded based on the as_df of the last call to
             :meth:`eval()`.
 
     """
@@ -112,7 +112,7 @@ class Scope(Snowmobile):
 
     @property
     def included(self):
-        """Tag is included based on results of last :meth:`eval()`."""
+        """Tag is included based on as_df of last :meth:`eval()`."""
         return self.is_included and not self.is_excluded
 
     def eval(self, **kwargs) -> bool:

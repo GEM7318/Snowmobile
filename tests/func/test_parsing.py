@@ -27,7 +27,7 @@ ids, test_cases = setup_schema_parsing_test()
     "names", test_cases, ids=ids
 )
 def test_parsing_schema_and_name_from_generic_nm(names):
-    """Test parsing.p() produces expected results given a nm (str)."""
+    """Test parsing.p() produces expected as_df given a nm (str)."""
     from snowmobile.core.utils.parsing import p
     nm, output_expected = names
     output_under_test = p(nm=nm)

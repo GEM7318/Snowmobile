@@ -1,22 +1,21 @@
-## 1. Installation
+## 1: Installation
 `pip install snowmobile`
 
-## 2. Export **snowmobile.toml**
-Provide a target directory to the **export_dir** argument of `snowmobile.Configuration`
-to export a default *snowmobile.toml* file.
+## 2: Setup
 
+### 2.1: Export **snowmobile.toml**
 ```python
 import snowmobile
 from pathlib import Path
 
 snowmobile.Configuration(export_dir=Path.cwd())
-
-# -- standalone example; should run 'as is' --
 ```
+Provide a target directory to the **export_dir** argument of `snowmobile.Configuration`
+to export a default *snowmobile.toml* file; the above snippet exports to the current
+working directory.
 
-## 3. Store Credentials
-The first few lines of *snowmobile.toml* are represented in the below snippet.
-
+### 2.2: Store Credentials
+The first few lines of *snowmobile.toml* are represented in the snippet below.
 ```{code-block} toml
 :lineno-start: 2
 :emphasize-lines: 4, 13
@@ -38,35 +37,53 @@ The first few lines of *snowmobile.toml* are represented in the below snippet.
         authenticator = 'snowflake'
         timezone = 'America/Chicago'
 ```
+All that's required for minimum configuration is:
+1. **Specify a valid set of credentials within the `[connection.credentials.credentials1]` block**
+2. **Modify or remove any unwanted arguments within the `[connection.default-arguments]` block**
 
-```{admonition} Minimum Configuration Requirements 
-1. Specify a valid set of credentials within the `[connection.credentials.credentials1]` block
-2. Modify or remove any unwanted arguments within the `[connection.default-arguments]` block
-```
-
-## 4. Basic Usage
-
-#### 4.1 Verify connection
+### 2.3: `import snowmobile` and verify connection
 ```{literalinclude} /examples/setup/test_connection.py
 :language: python
-:lines: 5-8
 :lineno-start: 1
-```
-```{admonition} Note
-- Any potential issues with validating `snowmobile.toml` or connecting to the warehouse
-should be apparent upon the attempted execution of line **3** in the above snippet.
-- Potential errors that occur in this step are either:
-    - `snowflake.errors.DataBaseError` due to invalid credentials or connection specifications provided (most common)
-    - Type errors due to values entered in *snowmobile.toml* that cannot be coerced by [pydantic](https://pydantic-docs.helpmanual.io/) 
-into their defined types 
+:lines: 5-8
 ```
 
+```{admonition} Notes On Initial Connection
+- Several things are happening behind the scenes upon execution of line **3** above:
 
-#### 4.2: Composition context
+    1.  *snowmobile* will traverse your file system from the ground up searching for a file called 
+        `snowmobile.toml`. Once found, it will cache this location for future reference and not repeat
+        this step unless the file is moved; *on-failure expects* `FileNotFoundError`
+    2.  It will then instantiate the contents of the configuration file as  [pydantic](https://pydantic-docs.helpmanual.io/) objects.
+        This ensures instant exceptions will be thrown if any required fields are omitted or unable to be coerced into their 
+        intended type; *on-failure expects* `ValidationError`
+    3.  Once validated, it will then pass the parsed arguments to the *snowflake.connector.connect()* method and instantiate the
+        `SnowflakeConnector` object as an attribute; *on-failure expects* `DataBaseError`
+```
+
+### 2.4: A quick introduction, `snowmobile.Connector`
+This **snowmobile.Connector** object, hereafter `sn` by convention, includes the standard Snowflake `Connector` and `Cursor` 
+objects in addition **snowmobile**'s own object model. 
+
+The below snippet outlines the attributes of `sn` touched on so far:
 ```{literalinclude} /examples/setup/test_connection.py
 :language: python
-:lines: 16-19
-:lineno-start: 12
-```
-The above statements give very brief context on the composition of `snowmobile.Connector`; please see
-___ for in-depth information on the `Connector`'s object model and usage.
+:lineno-start: 5
+:lines: 10-16
+``` 
+
+The `sn` object re-implements several forms query execution to minimize verbosity as well 
+as making the two most common methods of querying data available off the same object, demonstrated
+below:
+```{literalinclude} /examples/setup/test_connection.py
+:language: python
+:lineno-start: 13
+:lines: 18-22
+``` 
+
+These **snowmobile** methods and attributes can be utilized alongside or in-place of methods shipped with
+**SnowflakeConnection**; for example, the below snippet uses the 
+
+
+
+

@@ -25,9 +25,9 @@ def test_basic_query_via_ex(sn):
 
 @pytest.mark.connector
 def test_providing_results_equal_false_returns_cursor_not_a_df(sn):
-    """Verifies passing `results=False` to connector.query() returns a cursor."""
+    """Verifies passing `as_df=False` to connector.query() returns a cursor."""
     from snowflake.connector.connection import SnowflakeCursor
-    cur = sn.query("select 1", results=False)
+    cur = sn.query("select 1", as_df=False)
     assert isinstance(cur, SnowflakeCursor)
 
 

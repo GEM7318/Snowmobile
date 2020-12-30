@@ -328,15 +328,15 @@ is defined with the following arguments allowing for this flexibility.
 ```python
     def execute(self, results: bool = True, render: bool = False,
                 describe: bool = False) -> object:
-        """Executes sql with option to return results / render sql as Markup.
+        """Executes sql with option to return as_df / render sql as Markup.
 
         Args:
             results: Boolean indicating whether or not to
-            return results
+            return as_df
             render: Boolean indicating whether or not to render the
             raw sql as markdown
             describe: Boolean indicating whether or not to
-            print output of a pandas df.describe() on returned results (mostly
+            print output of a pandas df.describe() on returned as_df (mostly
             useful for QA sql that are expected to return null-sets)
         """
 ```

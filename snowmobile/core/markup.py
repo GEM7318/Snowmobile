@@ -26,7 +26,7 @@ Header-levels and formatting of tagged information is configured in the
         ----
 
         - **Tag1**: Value1       *[tags can also be validations arguments..
-        - **Arg1**: Val2          [that snowmobile will run on the sql results]
+        - **Arg1**: Val2          [that snowmobile will run on the sql as_df]
 
         **Description**          *[contents get one of these too]
 

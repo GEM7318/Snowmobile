@@ -34,29 +34,29 @@ group by 1
 having count(*) <> 1;
 
 /*-
-__name: select data~results testing
-__description*: Test of inserting results.
+__name: select data~as_df testing
+__description*: Test of inserting as_df.
 __another-bullet: This is a bullet
 __results*: true
 -*/
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select data~results testing2
+__name: select data~as_df testing2
 __description*: *Note*: This is a paragraph
 __results*_***: true
 -*/
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select data~results testing3
+__name: select data~as_df testing3
 __results*_***: true
 __sql*_***: true
 -*/
 select * from snowmobile_testing.sample_table st;
 
 /*-
-__name: select data~results testing4
+__name: select data~as_df testing4
 __sql*_***: true
 __results*_***: true
 -*/

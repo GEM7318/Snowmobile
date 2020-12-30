@@ -24,7 +24,7 @@ __description: This is a sample intra statement marker.
 
 /*-
 __name: select data~sample select statement
-__description: This is a sample select statement, including results
+__description: This is a sample select statement, including as_df
 __results*: true
 -*/
 select * from sample_table;

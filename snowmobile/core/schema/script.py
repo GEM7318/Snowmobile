@@ -298,7 +298,7 @@ class Markdown(Base):
         default_factory=bool, alias='include-statement-index-in-header'
     )
     result_limit: int = Field(
-        default_factory=int, alias="limit-query-results-to"
+        default_factory=int, alias="limit-query-as_df-to"
     )
     attrs: Attributes = Field(
         default_factory=Attributes, alias="attributes"
@@ -449,7 +449,7 @@ class Script(Base):
     @staticmethod
     def split_args(args_str: str) -> List[str]:
         """Returns a list of arguments based on splitting string on double
-        underscores and stripping results."""
+        underscores and stripping as_df."""
         matches = [s.strip() for s in re.split(r"\n*__", args_str)]
         return [s for s in matches if not s.isspace() and s]
 
