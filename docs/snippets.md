@@ -1,4 +1,4 @@
-# Examples
+# Snippets
 
 ## Quick Intro: snowmobile.Connector
 ```{literalinclude} /examples/setup/quick_intro_connector.py

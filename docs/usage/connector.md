@@ -1,5 +1,30 @@
 ## snowmobile.Connector
 
+### Background
+
+```{eval-rst} 
+:class:`snowmobile.Connector` is the core of ``snowmobile``'s object model and a given
+instance is often shared across multiple objects at once.
+
+It is the primary method of executing statements against the warehouse and
+it stores the fully parsed & validated ``snowmobile.toml`` file it was
+instantiated with as its :attr:`Connector.cfg` attribute.
+
+Within ``snowmobile``'s code and documentation, it is referred to as ``sn``
+for brevity.
+```
+
+### Working with multiple sets of credentials
+
+For the purposes of this section, let's assume that 
+```{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+:language: toml
+:lineno-start: 2
+:lines: 2-26
+:emphasize-lines: 4, 22 
+```
+
+
 ### .Connect()
 Let's start by establishing a new connection.
 ```{literalinclude} /examples/setup/quick_intro_connector.py
@@ -38,4 +63,4 @@ created by `sn.query()` above.
 :lines: 23-29
 ```
 
-The full script for this section can be found [here](../examples.md#quick-intro-snowmobileconnector)
+The full script for this section can be found [here](../snippets.md#quick-intro-snowmobileconnector)

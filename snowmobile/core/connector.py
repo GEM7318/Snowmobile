@@ -99,9 +99,11 @@ class Connector(Snowmobile):
         **connect_kwargs,
     ):
         super().__init__()
-        self.error: Optional[DatabaseError, pdDataBaseError] = None
 
+        # TODO: Remove these attributes
+        self.error: Optional[DatabaseError, pdDataBaseError] = None
         self.outcome: int = int()
+
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )

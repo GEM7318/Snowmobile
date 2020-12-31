@@ -10,9 +10,10 @@
 maxdepth: 3
 ---
 ./getting_started.md
-./using.md
+./usage/snowmobile_toml.md
+./usage.md
 ./modindex.md
-./examples.md
+./snippets.md
 ./authors.md
 ./changelog.md
 ./license.md

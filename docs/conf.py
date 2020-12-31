@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx_rtd_theme',
+    'autoapi.extension',
     # 'sphinx-pydantic',
     # 'sphinx.ext.autodoc.typehints',
     # 'sphinx_autodoc_typehints',
@@ -195,9 +196,6 @@ html_use_index = True
 # If true, the index is split into individual pages for each letter.
 # html_split_index = False
 
-# If true, links to the reST sources are added to the pages.
-html_show_sourcelink = True
-
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
 
@@ -235,16 +233,6 @@ intersphinx_mapping = {
 # Adding so that __init__ will be documented - source is from link below:
 # https://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
 
-autodoc_default_flags = ['members', 'private-members', 'special-members',
-                         #'undoc-members',
-                         'show-inheritance']
-
-
-# import json
-# to_export_to = Path('C:/Users/GEM7318/Documents/Github/Snowmobile/docs/skip_dtl.json')
-# export_dtl = {}
-# import re
-
 
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
@@ -259,35 +247,3 @@ def autoapi_skip_member(app, what, name, obj, skip, options):
 def setup(app):
     """Add autoapi-skip-member."""
     app.connect('autoapi-skip-member', autoapi_skip_member)
-
-# def autoapi_skip_member(app, what, name, obj, skip, options):
-#     exclude = (
-#         str(name).startswith('_')
-#         or 'stdout' in str(name).lower()
-#         or (hasattr(obj, '__name__') and str(obj.__name__).startswith('_'))
-#     )
-#     if not exclude:
-#         exclude = re.findall('\._.*', str(obj))
-#     startswith = (hasattr(obj, '__name__') and str(obj.__name__).startswith('_'))
-#     export_dtl[name] = (exclude, startswith)
-#     return skip or exclude
-
-# with open(to_export_to, 'w') as f:
-#     f.write(json.dumps(export_dtl))
-
-
-def setup(app):
-    """Add autoapi-skip-member."""
-    app.connect('autoapi-skip-member', autoapi_skip_member)
-
-
-
-# def skip(app, what, name, obj, skip, options):
-#     if name.startswith("_") or name == 'Stdout':
-#         return False
-#     return skip
-
-
-# def setup(app):
-#     app.connect("autoapi-skip-member", skip)
-
