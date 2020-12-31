@@ -1,13 +1,16 @@
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-
 import sys
 
 from pathlib import Path
+
+# import management
+sys.path.append('.')
 
 HERE = Path(__file__).absolute()
 ROOT = HERE.parent.parent
@@ -16,23 +19,25 @@ LINKS_DIR = DOCS_DIR / 'links'
 EXT_DIR = DOCS_DIR / 'ext'
 PACKAGE_DIR = ROOT / 'snowmobile'
 
-print(Path.cwd())
-print('DOCS_DIR', DOCS_DIR)
-print('LINKS_DIR', LINKS_DIR)
-print('EXT', EXT_DIR)
+to_insert = {
+    'DOCS_DIR': DOCS_DIR,
+    'LINKS_DIR': LINKS_DIR,
+    'EXT_DIR': EXT_DIR,
+    'PACKAGE_DIR': PACKAGE_DIR
+}
+for dir_name, dir_path in to_insert.items():
+    sys.path.insert(0, str(dir_path))
+    print(f"<added-to-path> {dir_name}")
 
-sys.path.append('.')
-sys.path.insert(0, str(EXT_DIR))
-sys.path.insert(0, str(DOCS_DIR))
-sys.path.insert(0, str(PACKAGE_DIR))
 
-
-# ==========
-# links xref
-# See docstring in ext/__init__.py for more info
-# ==========
+# =======================
+# hyperlink aliasing/xref
+# See docstring in ext/xref.py for more info
+# =======================
 # from .ext import xref  # imported by 'extensions' but included for clarity
+# noinspection PyUnresolvedReferences
 from links.link import *
+# noinspection PyUnresolvedReferences
 from links import *
 
 
@@ -50,18 +55,15 @@ extensions = [
     'sphinx.ext.napoleon',
     'autoapi.extension',
     'xref',
-    # 'sphinx.ext.extlinks',
-    # 'sphinx.ext.autodoc',
-    # 'sphinx_rtd_theme',
-    # 'sphinx-pydantic',
-    # 'sphinx.ext.autodoc.typehints',
-    # 'sphinx_autodoc_typehints',
 ]
 
 master_doc = 'index'
 default_role = None
 htmlhelp_basename = 'Recommonmarkdoc'
 source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
+language = 'python'
+templates_path = ['_templates']
+exclude_patterns = ['_build', '__main__.py', '__init__.py']
 
 
 # ====================
@@ -85,7 +87,7 @@ release = '0.1.15'
 # https://sphinx-panels.readthedocs.io/en/latest/
 # =============
 html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
-panels_add_bootstrap_css = False
+# panels_add_bootstrap_css = True
 
 
 # ===================
@@ -113,20 +115,10 @@ autoapi_ignore = [
     '**/.snowmobile/*',
 ]
 autoapi_python_class_content = 'class'  # 'both' if __init__ as well
-autoapi_member_order = 'bysource'  # 'bysource', 'groupwise'
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-
-
-# This is also used if you do content translation via gettext catalogs.
-# Usually you set "language" from the command line for these cases.
-language = 'python'
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '__main__.py', '__init__.py']
+autoapi_member_order = 'bysource'  # 'bysource' or 'groupwise'
+# ..note:
+#   'bysource' means 'by docstring order' for attributes and 'by actual source'
+#   for methods and properties.
 
 
 # ===================================
@@ -146,7 +138,6 @@ extensions.append("sphinx_material")
 html_theme_path = sphinx_material.html_theme_path()
 html_context = sphinx_material.get_html_context()
 html_theme = "sphinx_material"
-# html_theme = 'sphinx_rtd_theme'
 
 # Set link name generated in the top bar.
 html_title = 'Snowmobile'
@@ -162,8 +153,8 @@ html_theme_options = {
     'css_minify': True,
 
     'globaltoc_depth': 3,
-    'globaltoc_collapse': True,
-    # 'globaltoc_collapse': False,
+    # 'globaltoc_collapse': True,
+    'globaltoc_collapse': False,
     'globaltoc_includehidden': False,
 
     'repo_url': 'https://github.com/GEM7318/Snowmobile',

@@ -8,10 +8,6 @@
 ```{include} /getting_started.md
 ```
 
-{fa}`check,text-success mr-1` **Test check mark**
-: Maybe this requires text down here.
-
-
 ## Contents
 ```{toctree}
 ---

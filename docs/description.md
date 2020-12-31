@@ -1,20 +1,23 @@
 ```{eval-rst}
-Test linking the :xref:`snowflake.connector`
+A library focused on streamlining interaction with :xref:`snowflake` through Python for Data Scientists
+and Data Engineers.
+
+:xref:`snowmobile` wraps the :xref:`SnowflakeConnection` into an object model that is built around
+configuration management and evolving the implementation of common tasks executed against the warehouse,
+with its core features being:
 ```
 
-`snowmobile` bundles the [Snowflake Connector for Python's](https://docs.snowflake.com/en/user-guide/python-connector.html) `SnowflakeConnection` 
-class into an object model focused on streamlining interaction between Python and Snowflake largely through configuration-management.
-
-1. Configurations management, with emphasis on credentials, connection arguments, and data loading specifications
-2. Standardizing common querying methods and statements against the warehouse into one object
-3. Interacting with raw SQL scripts as objects in Python  
-
 At its core, `snowmobile` provides a single configuration file, **snowmobile.toml**, which can be accessed by any number of Python instances
-on a given machine. Internally, each component of this file is its own [pydantic](https://pydantic-docs.helpmanual.io/) object, which 
+on a given machine. Internally, each component of this file is its own [pydantic](https://pydantic-docs.helpmanual.io/) object, which
 performs type validation of all fields upon each instantiation.
 
-These specifications include credentials, connection arguments, loading specifications, in-warehouse file formats, mapping to local DDL, 
-and SQL parsing through the same Python API.
+Add features..
+
+{fa}`check,text-success mr-1` **no embedding of credentials within scripts;** `import snowmobile` is all that's required to establish a connection.
+
+{fa}`check,text-success mr-1` **rotate credentials and connection arguments on the fly;** accessed by assigned alias.
+
+{fa}`check,text-success mr-1` **map in-warehouse file formats to DDL and export options for standardized loading of data**
 
 
 
