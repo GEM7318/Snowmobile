@@ -31,7 +31,7 @@ with as many sets of credentials as needed
     "account": "",
     "warehouse": "warehouse #1",
     "database":	"database #1",
-    "schema": "schema #1"
+    "schema": "cfg #1"
   },
 "SANDBOX": {
     "user":	"",

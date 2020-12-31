@@ -41,7 +41,7 @@ class SQL(Base):
     # fmt: on
 
     def info_schema_loc(self, obj: str) -> str:
-        """Returns information schema location from an object."""
+        """Returns information cfg location from an object."""
         obj = obj.strip("s")
         default = f"{obj}s"  # 'table' -> 'tables'/'column' -> 'columns'
         return f"information_schema.{self.info_schema_exceptions.get(obj, default)}"

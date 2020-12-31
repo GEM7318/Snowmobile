@@ -192,7 +192,7 @@ class Loader(Snowmobile):
                 in from :meth:`table.load()` by default.
 
         """
-        self.error = None  # wipe prior validation as_df
+        self.error = None  # wipe prior validation results
         self._upload_validation_start = time.time()
 
         if not self.exists:  # no validation needed

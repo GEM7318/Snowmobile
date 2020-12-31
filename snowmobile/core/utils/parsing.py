@@ -92,7 +92,7 @@ def dict_flatten(
 
 
 def p(nm: str) -> Tuple[str, str]:
-    """Utility to parse schema from dot-prefixed object if included."""
+    """Utility to parse cfg from dot-prefixed object if included."""
     nm = nm or str()
     partitions = [p for p in nm.partition(".") if p]
     if len(partitions) == 3:

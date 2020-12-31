@@ -93,7 +93,7 @@ class SQL(Snowmobile):
                 Table name, including schema if creating a stage outside of the
                 current schema.
             fields (List[str]):
-                List of fields to include in returned as_df (e.g.
+                List of fields to include in returned results (e.g.
                 ['table_name', 'table_type', 'last_altered'])
             restrictions (List[str]):
                 List of conditionals typed as literal components of a `where`
@@ -101,7 +101,7 @@ class SQL(Snowmobile):
                 ["table_type = 'base table'", 'last_altered::date = current_date()']
                 ).
             order_by (List[str]):
-                List of fields or their ordinal positions to order the as_df by.
+                List of fields or their ordinal positions to order the results by.
             all_schemas (bool):
                 Include tables/views from all schemas; defaults to `False`.
             run (bool):
@@ -111,7 +111,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -160,13 +160,13 @@ class SQL(Snowmobile):
                 Table name, including schema if creating a stage outside of the
                 current schema.
             fields (List[str]):
-                List of fields to include in returned as_df (e.g.
+                List of fields to include in returned results (e.g.
                 ['ordinal_position', 'column_name', 'data_type'])
             restrictions (List[str]):
                 List of conditionals typed as literal components of a `where`
                 clause (e.g.["regexp_count(lower(column_name), 'tmstmp') = 0"]).
             order_by (List[str]):
-                List of fields or their ordinal positions to order the as_df by.
+                List of fields or their ordinal positions to order the results by.
             all_schemas (bool):
                 Include tables/views from all schemas; defaults to `False`.
             run (bool):
@@ -176,7 +176,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -221,7 +221,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -249,7 +249,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -282,7 +282,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -308,7 +308,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -394,7 +394,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -462,7 +462,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -514,7 +514,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -544,7 +544,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -568,7 +568,7 @@ class SQL(Snowmobile):
 
         Returns (str):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -603,7 +603,7 @@ class SQL(Snowmobile):
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -641,7 +641,7 @@ limit {n or 1}
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -673,7 +673,7 @@ limit {n or 1}
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """
@@ -715,7 +715,7 @@ limit {n or 1}
 
         Returns (Union[str, pd.DataFrame]):
             Either:
-                1.  The as_df of the query as a :class:`pandas.DataFrame`, or
+                1.  The results of the query as a :class:`pandas.DataFrame`, or
                 2.  The generated query as a :class:`str` of sql.
 
         """

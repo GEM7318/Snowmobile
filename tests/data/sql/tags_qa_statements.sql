@@ -230,7 +230,7 @@ union
 __name: qa-diff~verify an exception is thrown
 __partition-on: 'an_invalid_partition_field'
 __description*: Omitting all arguments except for intentionally specifying a
-`partition-on` column that doesn't exist in the as_df.
+`partition-on` column that doesn't exist in the results.
 -*/
 with original_testing_table as (
 	select 1 as end_index, 1 as metric_diff

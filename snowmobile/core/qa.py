@@ -50,11 +50,11 @@ class QA(Statement):
 
 
 class Empty(QA):
-    """QA class for as_df expected to be empty."""
+    """QA class for results expected to be empty."""
 
     MSG = (
         "a 'qa-empty' check did not pass its validation; this means that "
-        "a query you expected to return empty as_df returned a non-zero "
+        "a query you expected to return empty results returned a non-zero "
         "number of records."
     )
 
@@ -62,7 +62,7 @@ class Empty(QA):
         super().__init__(sn=sn, **kwargs)
 
     def process(self) -> QA:
-        """Over-ride method; checks if as_df are empty and updates outcome"""
+        """Over-ride method; checks if results are empty and updates outcome"""
         self.outcome = self.results.empty
         return self.set_outcome()
 
@@ -219,7 +219,7 @@ class Diff(QA):
             ).set(outcome=-1)
 
     def split_cols(self) -> Diff:
-        """Post-processes as_df returned from a ``qa-diff`` statement.
+        """Post-processes results returned from a ``qa-diff`` statement.
 
         Executes private methods to split columns into:
             * Index columns
@@ -293,7 +293,7 @@ class Diff(QA):
         return all(checks_for_equality)
 
     def process(self) -> Diff:
-        """Post-processing for :class:`Diff`-specific as_df.
+        """Post-processing for :class:`Diff`-specific results.
         """
         try:
             self.outcome = False

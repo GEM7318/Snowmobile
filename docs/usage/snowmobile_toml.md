@@ -2,13 +2,15 @@
 
 ```{admonition} Tip 
 :class: hint
-- **snowmobile.toml** is a deep set of configuration options and not one that should be digested
+- **snowmobile.toml** is a deep set of configuration options and not one that should be consumed
 all at once
 - The below information is best served as a reference throughout the rest of the documentation and
 on an as-needed basis as one becomes more familiar with the composition of **snowmobile**'s objects
 ```
 
 ---
+
+### Context
 
 **snowmobile.toml** is ground zero for `snowmobile`'s object model and is referenced heavily
 throughout the documentation.

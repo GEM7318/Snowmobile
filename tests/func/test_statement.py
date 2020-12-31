@@ -67,7 +67,7 @@ def test_calling_run_with_results_on_invalid_sql_raises_database_error(sample_st
 
     # then
     with pytest.raises(DatabaseError):
-        sample_statement_object.run(results=True)
+        sample_statement_object.run(as_df=True)
 
 
 @pytest.mark.statement

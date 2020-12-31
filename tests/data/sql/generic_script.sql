@@ -22,7 +22,7 @@ is being shaped how it's intended to be throughout a script/that new data has no
 the original code did not account for and relationships have broken (i.e. verifying the uniqueness of a table
 on a given field).
 1. How multi-line statement tags can be used to generate documentation and even to pass `snowmobile` arguments
-with which it will use to run validations on the as_df returned by the corresponding statement.
+with which it will use to run validations on the results returned by the corresponding statement.
 -*/
 
 
@@ -90,7 +90,7 @@ from snowmobile.dummy_table_1 a;
 -- script becomes deeper it get tougher to remember what level/in what form a given piece
 -- of data is intended to be at; passing `skip_qa` or 'silence_qa' to
 -- `Script.run()` will respectively result in the checks being skipped entirely or
--- the checks being run and their as_df piped to stdout.
+-- the checks being run and their results piped to stdout.
 --  :Note: In the case the latter, validations that fail will *not* break the script
 --    and execution will continue; however, if the table that is provided to them cannot
 --    be validated given the parameters, it *will* raise an exception and fail.

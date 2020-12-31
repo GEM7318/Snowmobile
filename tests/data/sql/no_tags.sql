@@ -1,6 +1,6 @@
 -- noinspection SqlResolveForFile
 
---| create/create or replace schema |------------------------------------------
+--| create/create or replace cfg |------------------------------------------
 
 /*-create schema~statement-*/
 create schema sample_schema
@@ -202,7 +202,7 @@ set sample_param = (select max(sample_col) from sample_table);
 unset sample_param;
 
 
---| use schema |---------------------------------------------------------------
+--| use cfg |---------------------------------------------------------------
 
 /*-use schema~statement-*/
 use schema identifier($schema_name);

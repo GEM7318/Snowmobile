@@ -29,7 +29,7 @@ from . import (
     Markup,
     Statement,
     errors,
-    schema,
+    cfg,
 )
 
 
@@ -53,7 +53,7 @@ class Script(Snowmobile):
         self._close = sn.cfg.script.patterns.core.to_close
 
         self.sn: Connector = sn
-        self.patterns: schema.Pattern = sn.cfg.script.patterns
+        self.patterns: cfg.Pattern = sn.cfg.script.patterns
         self.as_generic = as_generic
         self.filters: Dict[Any[str, int], Dict[str, Set]] = {
             int(): {k: v for k, v in self.sn.cfg.scopes.items() if v}
@@ -64,7 +64,7 @@ class Script(Snowmobile):
         self._intra_statement_marker_hashmap_idx: Dict = dict()
         self._intra_statement_marker_hashmap_txt: Dict = dict()
         self.all_marker_hashmap: Dict = dict()
-        self.markers: Dict[int, schema.Marker] = dict()
+        self.markers: Dict[int, cfg.Marker] = dict()
 
         if path:
             try:
@@ -715,7 +715,7 @@ class Script(Snowmobile):
     def run(
         self,
         _id: Optional[str, int, Tuple, List] = None,
-        results: bool = True,
+        as_df: bool = True,
         on_error: Optional[str] = None,
         on_exception: Optional[str] = None,
         on_failure: Optional[str] = None,
@@ -733,7 +733,7 @@ class Script(Snowmobile):
             self.e.set(ctx_id=-1)
         total_kwargs = {
             **{
-                "as_df": results,
+                "as_df": as_df,
                 "on_error": on_error,
                 "on_exception": on_exception,
                 "on_failure": on_failure,

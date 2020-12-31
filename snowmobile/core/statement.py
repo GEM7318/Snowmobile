@@ -12,7 +12,7 @@ from IPython.core.display import Markdown, display
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import ExceptionHandler, Section, Tag, errors, schema
+from . import ExceptionHandler, Section, Tag, errors, cfg
 from . import Snowmobile, Connector  # isort: skip
 
 
@@ -38,7 +38,7 @@ class Statement(Tag, Snowmobile):
             :class:`config.Pattern` object for more succinct access to
             values specified in **snowmobile.toml**.
         results (pd.DataFrame):
-            The as_df of the statement if executed as a :class:`pandas.DataFrame`.
+            The results of the statement if executed as a :class:`pandas.DataFrame`.
         outcome (int):
             Numeric indicator of outcome; defaults to `0` and is modified
             based on the outcome of statement execution and/or QA validation
@@ -117,7 +117,7 @@ class Statement(Tag, Snowmobile):
             statement
         )
 
-        self.patterns: schema.Pattern = sn.cfg.script.patterns
+        self.patterns: cfg.Pattern = sn.cfg.script.patterns
         self.results: pd.DataFrame = pd.DataFrame()
 
         self.start_time: int = int()
@@ -327,12 +327,12 @@ class Statement(Tag, Snowmobile):
         return self
 
     def process(self):
-        """Used by derived classes for post-processing the returned as_df."""
+        """Used by derived classes for post-processing the returned results."""
         return self
 
     def run(
         self,
-        results: bool = True,
+        as_df: bool = True,
         lower: bool = True,
         render: bool = False,
         on_error: Optional[str] = None,
@@ -343,10 +343,11 @@ class Statement(Tag, Snowmobile):
         """Run method for all statement objects.
 
         Args:
-            results (bool):
-                Store as_df of query in :attr:`as_df`.
+            as_df (bool):
+                Store results of query as :class:`pandas.DataFrame` or
+                :class:`SnowflakeCursor`.
             lower (bool):
-                Lower case column names in :attr:`as_df` DataFrame if
+                Lower case column names in :attr:`results` DataFrame if
                 `as_df=True`.
             render (bool):
                 Render the sql executed as markdown.
@@ -356,15 +357,15 @@ class Statement(Tag, Snowmobile):
                     * `c`: continue with execution
             on_exception (str):
                 Behavior if an exception is raised in the **post-processing**
-                of as_df from a derived class of :class:`Statement` (
+                of results from a derived class of :class:`Statement` (
                 :class:`Empty` and :class:`Diff`).
                     * `None`: default behavior, exception will be raised
                     * `c`: continue with execution
             on_failure (str):
                 Behavior if no error is encountered in execution or post-processing
                 but the result of the post-processing has turned the statement's
-                :attr:`outcome` attribute to False, indicating the as_df of
-                the statement have failed validation.
+                :attr:`outcome` attribute to False, indicating the results
+                returned by the statement have failed validation.
                     * `None`: default behavior, exception will be raised
                     * `c`: continue with execution
 
@@ -376,7 +377,7 @@ class Statement(Tag, Snowmobile):
         try:
             if self:
                 self.start()
-                self.results = self.sn.query(self.sql, as_df=results, lower=lower)
+                self.results = self.sn.query(self.sql, as_df=as_df, lower=lower)
                 self.end()
                 self.e.set(outcome=2)
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:

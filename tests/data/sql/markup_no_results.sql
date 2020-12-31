@@ -23,7 +23,7 @@ __description: This is a sample intra statement marker.
 
 /*-
 __name: select data~sample select statement
-__description: This is a sample select statement, excluding as_df
+__description: This is a sample select statement, excluding results
 -*/
 select * from sample_table;
 

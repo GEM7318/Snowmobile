@@ -26,7 +26,7 @@ Header-levels and formatting of tagged information is configured in the
         ----
 
         - **Tag1**: Value1       *[tags can also be validations arguments..
-        - **Arg1**: Val2          [that snowmobile will run on the sql as_df]
+        - **Arg1**: Val2          [that snowmobile will run on the sql results]
 
         **Description**          *[contents get one of these too]
 
@@ -51,7 +51,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from . import Snowmobile, Configuration, Connector, Diff, Empty, Section, Statement
 from .paths import DIR_PKG_DATA
-from .schema import Marker
+from .cfg import Marker
 from .utils import Console
 
 

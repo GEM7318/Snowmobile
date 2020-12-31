@@ -16,7 +16,7 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import toml
 from pydantic.json import pydantic_encoder
 
-from snowmobile.core import paths, schema, utils
+from snowmobile.core import paths, cfg, utils
 from .base import Snowmobile
 from .cache import Cache
 
@@ -101,24 +101,24 @@ class Configuration(Snowmobile):
             try:
                 path_to_config = self._get_path(is_provided=bool(from_config))
                 with open(path_to_config, "r") as r:
-                    cfg = toml.load(r)
+                    cfg_raw = toml.load(r)
 
                 if self.creds:
-                    cfg["connection"]["default-creds"] = self.creds
+                    cfg_raw["connection"]["default-creds"] = self.creds
 
                 # TODO: Add sql export disclaimer to this as well
-                if not cfg["external-file-locations"].get("ddl"):
-                    cfg["external-file-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
-                if not cfg["external-file-locations"].get("backend-ext"):
-                    cfg["external-file-locations"][
+                if not cfg_raw["external-file-locations"].get("ddl"):
+                    cfg_raw["external-file-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
+                if not cfg_raw["external-file-locations"].get("backend-ext"):
+                    cfg_raw["external-file-locations"][
                         "backend-ext"
                     ] = paths.EXTENSIONS_DEFAULT_PATH
                 # fmt: off
-                self.connection = schema.Connection(**cfg.get('connection', {}))
-                self.loading = schema.Loading(**cfg.get('loading-defaults', {}))
-                self.script = schema.Script(**cfg.get('script', {}))
-                self.sql = schema.SQL(**cfg.get('sql', {}))
-                self.ext_locations = schema.Location(**cfg.get('external-file-locations', {}))
+                self.connection = cfg.Connection(**cfg_raw.get('connection', {}))
+                self.loading = cfg.Loading(**cfg_raw.get('loading-defaults', {}))
+                self.script = cfg.Script(**cfg_raw.get('script', {}))
+                self.sql = cfg.SQL(**cfg_raw.get('sql', {}))
+                self.ext_locations = cfg.Location(**cfg_raw.get('external-file-locations', {}))
                 # fmt: on
 
                 with open(self.ext_locations.backend, "r") as r:
@@ -133,17 +133,17 @@ class Configuration(Snowmobile):
                 raise IOError(e)
 
     @property
-    def markdown(self) -> schema.Markdown:
+    def markdown(self) -> cfg.Markdown:
         """Accessor for cfg.script.markdown."""
         return self.script.markdown
 
     @property
-    def attrs(self) -> schema.Attributes:
+    def attrs(self) -> cfg.Attributes:
         """Accessor for cfg.script.markdown.attributes."""
         return self.script.markdown.attrs
 
     @property
-    def wildcards(self) -> schema.Wildcard:
+    def wildcards(self) -> cfg.Wildcard:
         """Accessor for cfg.script.patterns.wildcards."""
         return self.script.patterns.wildcards
 
@@ -264,7 +264,7 @@ class Configuration(Snowmobile):
         """Serialization method for core object model."""
         total = {}
         for k, v in vars(self).items():
-            if issubclass(type(v), schema.Base):
+            if issubclass(type(v), cfg.Base):
                 total = {**total, **v.as_serializable(by_alias=by_alias)}
         return json.dumps(obj=total, default=pydantic_encoder, **kwargs)
 

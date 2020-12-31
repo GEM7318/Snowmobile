@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import Optional, Set
 
 from . import Snowmobile, Configuration, Scope
-from .schema import Pattern
+from .cfg import Pattern
 
 
 class Tag(Snowmobile):
@@ -39,28 +39,6 @@ class Tag(Snowmobile):
                     `False` enables comparing generated to provided statement
                     tags without having to change the index position of the
                     hard-coded/provided statement tag when adding/removing tests.
-        part_keyword (tuple):
-            A straight partition of the provided tag name on the
-            ``keyword-delimiter`` specified in **snowmobile.toml**.
-        is_struct_anchor (bool):
-            Indicator of whether or :attr:`part_keyword` as_df in a tuple
-            containing three items (e.g. if the statement tag is structured
-            following the `keyword-object~description` taxonomy).
-        kw_pr (str):
-            The first item within :attr:`part_keyword` if :attr:`is_struct_anchor`
-            evaluates to `True`; empty string otherwise.
-        part_description (tuple):
-            A straight partition of the last item in :attr:`part_keyword` on
-            the ``name-delimiter`` specified in **snowmobile.toml**, assuming
-            :attr:`is_struct_anchor` evaluates to `True`; empty string otherwise.
-                *   In properly structure tags, the string being partitioned
-                    is the `obj~description` portion of
-                    `keyword-object~description`.
-        is_struct_desc (bool):
-            Indicator of whether or not :attr:`part_description` as_df in a
-            tuple containing three items (e.g. if the remainder of the
-            statement tag outside of the keyword follows the pre-determined
-            taxonomy).
         obj_pr (str):
             The statement's `object name` if :attr:`is_struct_desc` evaluates
             to `True`; empty string otherwise.
@@ -71,14 +49,6 @@ class Tag(Snowmobile):
             The statement's `anchor`.
         first_line (str):
             A raw string of the first line of sql associated with the statement.
-        incl_if_exists (bool):
-            Indicator of whether or not :attr:`first_line` contains the term
-            `if exists`; this is used for parsing purposes in the guts of the
-            class.
-        first_keyword (str):
-            The first keyword found by sqlparse.Statement object; this can be
-            multiple literal words in some cases (e.g. 'create table' as opposed
-            to just 'create').
         first_line_remainder (str):
             The remainder of the first line once excluding the
             :attr:`first_keyword` and stripping repeating whitespace.

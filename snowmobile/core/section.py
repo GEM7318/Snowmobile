@@ -26,7 +26,7 @@ Header-levels and formatting of tagged information is configured in the
         ----
 
         - **Tag1**: Value1       *[tags can also be validations arguments..
-        - **Arg1**: Val2          [that snowmobile will run on the sql as_df]
+        - **Arg1**: Val2          [that snowmobile will run on the sql results]
 
         **Description**          *[statements get one of these too]
 
@@ -51,7 +51,7 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 from . import Snowmobile, Configuration, errors
-from .schema import Markdown
+from .cfg import Markdown
 from .utils import parsing as p
 
 
@@ -81,7 +81,7 @@ class Name(Snowmobile):
 
         self.is_results = self.check_reserved_nm(
             attr_name=self.nm_stripped,
-            searching_for=cfg_md.attrs.reserved["query-as_df"].attr_nm,
+            searching_for=cfg_md.attrs.reserved["query-results"].attr_nm,
         )
         self.is_sql = self.check_reserved_nm(
             attr_name=self.nm_stripped,
@@ -111,7 +111,7 @@ class Name(Snowmobile):
             attr_name (str):
                 Attribute name that we are checking (e.g. 'Results\\*')
             searching_for (str):
-                Keyword we are searching for (e.g. 'as_df')
+                Keyword we are searching for (e.g. 'results')
 
         """
         attr_name, searching_for = attr_name.lower(), searching_for.lower()
@@ -180,7 +180,7 @@ class Item(Name):
 
     @staticmethod
     def as_results(results: pd.DataFrame, cfg_md: Markdown):
-        results_cfg = cfg_md.attrs.reserved["query-as_df"]
+        results_cfg = cfg_md.attrs.reserved["query-results"]
 
         display_record_limit = (
             cfg_md.result_limit if cfg_md.result_limit != -1 else results.shape[0]

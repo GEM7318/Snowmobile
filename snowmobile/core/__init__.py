@@ -12,7 +12,7 @@ from .section import Section
 from .scope import Scope
 from .tag import Tag
 from .statement import Statement
-from snowmobile.core import errors, schema, utils
+from snowmobile.core import errors, cfg, utils
 from .column import Column
 from .qa import Diff, Empty
 from .snowframe import SnowFrame

@@ -61,6 +61,9 @@ class Credentials(Base):
         default_factory=str, alias='database',
     )
 
+    # schema_name: str = Field(
+    #     default_factory=str, alias='cfg',
+    # )
     schema_name: str = Field(
         default_factory=str, alias='schema',
     )
