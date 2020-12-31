@@ -71,7 +71,7 @@ branch = '0.2.1'
 require_ci_to_pass = false
 
 [tool.coverage.report]
-fail_under = 85
+fail_under = 80
 show_missing = true
 include = ['snowmobile']
 omit = ['tests/*']

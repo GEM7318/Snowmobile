@@ -338,7 +338,7 @@ class Loader(Snowmobile):
     def _stdout_starting(self, verbose: bool):
         """Starting message."""
         if verbose:
-            schema = self.sql.sn.conn.schema.lower()
+            schema = self.sql.sn.con.schema.lower()
             print(f"Loading into '{schema}.{self.name}`..")
 
     @staticmethod

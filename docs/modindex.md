@@ -1,7 +1,8 @@
-[test link](README.md#snowmobile)
+# API Reference
 
-```{eval-rst}
-:ref:`modindex`
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+/autoapi/snowmobile/core/index
 ```
-
-

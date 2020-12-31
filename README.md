@@ -110,7 +110,7 @@ DDL in absence of a pre-existing table
 
 #### Back-end / supporting
 - `snowcreds` locates the credentials file on a user's local file system
-- `snowconn` establishes a connection to the database and returns a **conn** object
+- `snowconn` establishes a connection to the database and returns a **con** object
 
 A more in-depth description of of each module and its usage outlined below.
 

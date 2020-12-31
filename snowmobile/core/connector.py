@@ -59,7 +59,7 @@ class Connector(Snowmobile):
         cfg (Configuration`):
             :class:`snowmobile.Configuration` object, which represents a fully
             parsed/validated `snowmobile.toml` file.
-        conn (SnowflakeConnection):
+        con (SnowflakeConnection):
             :class:`SnowflakeConnection` object; this attribute is populated
             when a connection is established and can be `None` if the
             :class:`Connector` object was instantiated with `delay=True`.
@@ -98,7 +98,7 @@ class Connector(Snowmobile):
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
         self.ensure_alive = ensure_alive
-        self.conn: Optional[SnowflakeConnection] = None
+        self.con: Optional[SnowflakeConnection] = None
         self.sql: sql.SQL = sql.SQL(sn=self)
 
         if not delay:
@@ -124,7 +124,7 @@ class Connector(Snowmobile):
 
         """
         try:
-            self.conn = connect(
+            self.con = connect(
                 **{
                     **self.cfg.connection.defaults,  # defaults (from .toml)
                     **self.cfg.connection.current.credentials,  # credentials (from .toml)
@@ -140,23 +140,23 @@ class Connector(Snowmobile):
 
     def disconnect(self) -> Connector:
         """Disconnect from connection with which Connector() was instantiated."""
-        self.conn.close()
-        self.conn = None
+        self.con.close()
+        self.con = None
         return self
 
     @property
     def alive(self) -> bool:
         """Check if the connection is alive."""
-        if not isinstance(self.conn, SnowflakeConnection):
+        if not isinstance(self.con, SnowflakeConnection):
             return False
         return not self.cursor.is_closed()
 
     @property
-    def cursor(self) -> Union[SnowflakeCursor, None]:
+    def cursor(self) -> SnowflakeCursor:
         """:class:`SnowflakeCursor` accessor."""
-        if not isinstance(self.conn, SnowflakeConnection):
+        if not isinstance(self.con, SnowflakeConnection):
             self.connect()
-        return self.conn.cursor()
+        return self.con.cursor()
 
     def ex(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor:
         """Executes a command via :class:`SnowflakeCursor`.
@@ -219,7 +219,7 @@ class Connector(Snowmobile):
             if not self.alive and self.ensure_alive:
                 self.connect()
 
-            df = pd.read_sql(sql, con=self.conn)
+            df = pd.read_sql(sql, con=self.con)
             return df.snf.lower() if lower else df
 
         except (pdDataBaseError, DatabaseError) as e:

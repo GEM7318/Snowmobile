@@ -32,27 +32,27 @@ sys.path.insert(0, PACKAGE_DIR)
 
 # Auto-generating header anchors
 # https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html#syntax-header-anchors
-myst_heading_anchors = 3
+myst_heading_anchors = 5
 
 
 source_suffix = ['.rst', '.md']
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    # 'sphinx-pydantic',
-    'sphinx.ext.napoleon',
-    # 'sphinx.ext.autodoc.typehints',
-    # 'sphinx_autodoc_typehints',
-    'sphinx_rtd_theme',
+    # 'sphinx.ext.autodoc',
     'myst_parser',
-    # 'recommonmark',
     'autoapi.extension',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
+    'sphinx_rtd_theme',
+    # 'sphinx-pydantic',
+    # 'sphinx.ext.autodoc.typehints',
+    # 'sphinx_autodoc_typehints',
 ]
 
 autodoc_typehints = 'description'
 autosectionlabel_prefix_document = True
+autosectionlabel_max_depth = 4
 
 master_doc = 'index'
 default_role = None
@@ -76,19 +76,15 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
-autoapi_add_toctree_entry = True
-
+autoapi_add_toctree_entry = False
 autoapi_type = 'python'
-
-autoapi_dirs = [
-    '../snowmobile',
-]
-
+autoapi_dirs = ['../snowmobile']
 autoapi_ignore = [
     '__main__.py',
     '__init__.py',
     '**/stdout/*',
-    '**_runner/*'
+    '**_runner/*',
+    '**/.snowmobile/*',
 ]
 
 # Refers to dunder methods and regular methods
@@ -107,11 +103,47 @@ language = 'python'
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', '__main__.py', '__init__.py']
 
-# -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
+# -- HTML theme settings ------------------------------------------------------
+import sphinx_material
+
+html_show_sourcelink = True
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+
+extensions.append("sphinx_material")
+html_theme_path = sphinx_material.html_theme_path()
+html_context = sphinx_material.get_html_context()
+html_theme = "sphinx_material"
+# html_theme = 'sphinx_rtd_theme'
+
+# Set link name generated in the top bar.
+html_title = 'Snowmobile'
+
+# Material theme options (see theme.conf for more information)
+html_theme_options = {
+
+    # 'google_analytics_account': 'UA-XXXXX',
+    # 'logo_icon': '&#xe869',
+
+    'html_minify': False,
+    'html_prettify': True,
+    'css_minify': True,
+
+    'globaltoc_depth': 3,
+    'globaltoc_collapse': False,
+    'globaltoc_includehidden': False,
+
+    'repo_url': 'https://github.com/GEM7318/Snowmobile',
+    'repo_name': 'Snowmobile',
+    'nav_title': 'snowmobile',
+
+    'color_primary': 'blue',
+    'color_accent': 'cyan',
+    "theme_color": "#2196f3",
+}
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -215,14 +247,14 @@ def setup(app):
     app.connect("autodoc-skip-member", skip)
 
 
-autodoc_default_options = {
-    'members': 'var1, var2',
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
-    'exclude-members': '__weakref__',
-    'ignore-module-all': ['__main__.py'],
-    'autoclass_content': 'both',
-}
+# autodoc_default_options = {
+#     'members': 'var1, var2',
+#     'member-order': 'bysource',
+#     'special-members': '__init__',
+#     'undoc-members': False,
+#     'exclude-members': '__weakref__,__str__',
+#     'ignore-module-all': ['__main__.py'],
+#     'autoclass_content': 'class',
+# }
 
-add_module_names = False
+# add_module_names = False

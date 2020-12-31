@@ -1,25 +1,19 @@
 # snowmobile
 ```{include} /badges.md
 ```
-```{include} /intro.md
+```{include} /description.md
 ```
 
-# Quick-Start
+## Contents
+```{toctree}
 ---
-
-```{include} /quickstart.md
+maxdepth: 3
+---
+./getting_started.md
+./using.md
+./modindex.md
+./examples.md
+./authors.md
+./changelog.md
+./license.md
 ```
-
-
-## Resources
-    
-- [README](README.md)
-- [Core-API Reference](Core-API%20Reference.md)
-- [Authors](authors.md)
-- [License](license.md)
-- [Changelog](changelog.md)
-- [Creds](creds.md)
-
-## Other
-- [Module-Index](modindex.md)
-- [Index](genindex.md)

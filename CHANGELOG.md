@@ -48,7 +48,7 @@
         - Adding additional logic to strip comments from object such that script.run() only runs on executable sql
 * Version 0.1.12
         - Removing ``from_file`` argument from ``snowquery.query`` since that's can handled by ``snowscripter``
-        - Added `conn.commit()` statements to ``snowloader`` to ensure ddl execution is realized by the warehouse before data is attempted to load into table
+        - Added `con.commit()` statements to ``snowloader`` to ensure ddl execution is realized by the warehouse before data is attempted to load into table
 * Version 0.1.13
         - Addition of ``snowprocess`` background module (no user-facing changes)
         - Addition of IPython to project requirements to support ``.render()`` capabilities in ``snowscripter``

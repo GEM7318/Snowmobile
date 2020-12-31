@@ -1,5 +1,70 @@
 # snowmobile
 
+
+### 2.3: `import snowmobile` and verify connection
+```{literalinclude} /examples/setup/test_connection.py
+:language: python
+:lineno-start: 1
+:lines: 5-8
+```
+
+```{admonition} Notes On Initial Connection
+- Several things are happening behind the scenes upon execution of line **3** above:
+
+    1.  *snowmobile* will traverse your file system from the ground up searching for a file called 
+        `snowmobile.toml`. Once found, it will cache this location for future reference and not repeat
+        this step unless the file is moved; *on-failure expects* `FileNotFoundError`
+    2.  It will then instantiate the contents of the configuration file as  [pydantic](https://pydantic-docs.helpmanual.io/) objects.
+        This ensures instant exceptions will be thrown if any required fields are omitted or unable to be coerced into their 
+        intended type; *on-failure expects* `ValidationError`
+    3.  Once validated, it will then pass the parsed arguments to the *snowflake.connector.connect()* method and instantiate the
+        `SnowflakeConnector` object as an attribute; *on-failure expects* `DataBaseError`
+```
+
+
+
+## Admonitions
+
+```{admonition} Title 
+:class: note
+
+```
+
+```{admonition} TODO
+:class: todo
+This is a todo.
+```
+
+```{admonition} Danger
+:class: danger
+This is a danger.
+```
+
+```{admonition} Error
+:class: error
+This is a error.
+```
+
+```{admonition} Hint
+:class: hint
+This is a hint.
+```
+
+```{admonition} Important
+:class: important
+This is important.
+```
+
+```{admonition} Tip
+:class: tip
+This is a tip.
+```
+
+```{admonition} Warning
+:class: warning
+This is a tip.
+```
+
 ## Resources
 - Description
 
@@ -135,3 +200,22 @@ into their defined types
 ```
 The above statements give very brief context on the composition of `snowmobile.Connector`; please see
 ___ for in-depth information on the `Connector`'s object model and usage.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.SQL
+   snowmobile.Configuration
+   snowmobile.Connect
+   snowmobile.Connector
+   snowmobile.Loader
+   snowmobile.Script
+   snowmobile.Statement
+

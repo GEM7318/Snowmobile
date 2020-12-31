@@ -65,10 +65,10 @@ def test_alternate_kwarg_takes_precedent_over_configuration_file():
 
     assert (
         # verify `config.autocommit=True`
-        sn_as_from_config.conn._autocommit
+        sn_as_from_config.con._autocommit
 
         # verify `autocommit=False` kwarg took precedent over config
-        and not sn_with_a_conflicting_parameter.conn._autocommit
+        and not sn_with_a_conflicting_parameter.con._autocommit
     )
 
 
