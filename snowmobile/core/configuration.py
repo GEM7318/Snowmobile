@@ -99,7 +99,10 @@ class Configuration(Snowmobile):
             self.creds = creds.lower() if creds else ""
 
             try:
+                # fmt: off
+
                 path_to_config = self._get_path(is_provided=bool(from_config))
+
                 with open(path_to_config, "r") as r:
                     cfg_raw = toml.load(r)
 
@@ -110,24 +113,21 @@ class Configuration(Snowmobile):
                 if not cfg_raw["external-file-locations"].get("ddl"):
                     cfg_raw["external-file-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
                 if not cfg_raw["external-file-locations"].get("backend-ext"):
-                    cfg_raw["external-file-locations"][
-                        "backend-ext"
-                    ] = paths.EXTENSIONS_DEFAULT_PATH
-                # fmt: off
+                    cfg_raw["external-file-locations"]["backend-ext"] = paths.EXTENSIONS_DEFAULT_PATH
+
                 self.connection = cfg.Connection(**cfg_raw.get('connection', {}))
                 self.loading = cfg.Loading(**cfg_raw.get('loading-defaults', {}))
                 self.script = cfg.Script(**cfg_raw.get('script', {}))
                 self.sql = cfg.SQL(**cfg_raw.get('sql', {}))
                 self.ext_locations = cfg.Location(**cfg_raw.get('external-file-locations', {}))
-                # fmt: on
 
                 with open(self.ext_locations.backend, "r") as r:
                     backend = toml.load(r)
 
-                self.script.types = self.script.types.from_dict(
-                    backend["tag-to-type-xref"]
-                )
+                self.script.types = self.script.types.from_dict(backend["tag-to-type-xref"])
                 self.sql.from_dict(backend["sql"])
+
+                # fmt: on
 
             except IOError as e:
                 raise IOError(e)

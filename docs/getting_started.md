@@ -1,5 +1,3 @@
-# Getting Started
-
 ## 1. Installation
 `pip install snowmobile`
 
@@ -37,12 +35,8 @@ A connection to Snowflake can now be established with:
 :lines: 5-7
 ```
 
-With the expected console output looking something like the below.
+With the expected console output ending with something like the below:
 ```shell
->>> Locating credentials...
->>> (1 of 2) Checking for cached path...
->>> (2 of 2) Cached path not found
-
 >>> Looking for snowmobile.toml in local file system..
 >>> (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
 >>> ..connected: snowmobile.Connect(creds='creds1')

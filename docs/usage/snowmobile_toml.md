@@ -1,10 +1,10 @@
 ## snowmobile.toml
 
-```{admonition} Tip 
-:class: hint
+```{admonition} Heads Up 
+:class: warning
 - **snowmobile.toml** is a deep set of configuration options and not one that should be consumed
 all at once
-- The below information is best served as a reference throughout the rest of the documentation and
+- The below information serves best as a reference throughout the rest of the documentation and
 on an as-needed basis as one becomes more familiar with the composition of **snowmobile**'s objects
 ```
 
@@ -12,21 +12,37 @@ on an as-needed basis as one becomes more familiar with the composition of **sno
 
 ### Context
 
-**snowmobile.toml** is ground zero for `snowmobile`'s object model and is referenced heavily
-throughout the documentation.
-
-Except for some inherent crossover of certain sections (e.g. requiring `[credentials]` to execute 
-any command against Snowflake), most sections map squarely to a **snowmobile** object that most 
-heavily leverages its associated configuration options. 
-
 ```{eval-rst}
 The parsed and validated form of **snowmobile.toml** is a :class:`snowmobile.Configuration` object,
-which is accessible as a :class:`snowmobile.Connector` attribute, :attr:`snowmobile.Connector.cfg`. 
+which is accessible as a :class:`Connector` attribute, :attr:`snowmobile.Connector.cfg`.
+ 
+As a convenience, the `delay` keyword argument can be passed to :class:`snowmobile.Connector` which will 
+instantiate the object without calling the :meth:`snowflake.connector.connect()` method; this can be verified with:
+```
 
-It is intentional across the entire object model that the configuration & credentials
-are paired with :class:`snowmobile.Connector`, being the object that executes commands against Snowflake.
+```python
+import snowmobile
 
-The practical application of this will become significantly more clear with the examples starting in the next section. 
+sn = snowmobile.Connect(delay=True)
+
+sn.alive      #> False
+type(sn.con)  #> NoneType
+
+type(sn.cfg)  #> snowmobile.core.configuration.Configuration
+str(sn.cfg)   #> snowmobile.Configuration('snowmobile.toml')
+
+print(sn.cfg.location)  #> /path/to/your/snowmobile.toml
+
+sn.cfg.connection.default_alias  #> 'creds1'
+```
+
+```{eval-rst}
+The API Docs, :mod:`snowmobile.core.cfg` do a better job at articulating the composition
+of the object.
+
+Since these two objects come for free with almost every other, most sections map squarely to a 
+**snowmobile** object that is intuitively reliant on its contents, which will reference the
+below information in the rest of the documentation.
 ```
 
 ```{admonition} Note on *.toml* syntax 

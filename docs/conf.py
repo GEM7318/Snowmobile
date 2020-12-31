@@ -40,16 +40,20 @@ source_suffix = ['.rst', '.md']
 extensions = [
     # 'sphinx.ext.autodoc',
     'myst_parser',
+    "sphinx_panels",
     'autoapi.extension',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
-    'sphinx_rtd_theme',
     'autoapi.extension',
+    # 'sphinx_rtd_theme',
     # 'sphinx-pydantic',
     # 'sphinx.ext.autodoc.typehints',
     # 'sphinx_autodoc_typehints',
 ]
+
+html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
+# panels_add_bootstrap_css = False
 
 autodoc_typehints = 'description'
 autosectionlabel_prefix_document = True
@@ -133,6 +137,7 @@ html_theme_options = {
     'css_minify': True,
 
     'globaltoc_depth': 3,
+    # 'globaltoc_collapse': True,
     'globaltoc_collapse': False,
     'globaltoc_includehidden': False,
 
