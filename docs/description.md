@@ -1,3 +1,7 @@
+```{eval-rst}
+Test linking the :xref:`snowflake.connector`
+```
+
 `snowmobile` bundles the [Snowflake Connector for Python's](https://docs.snowflake.com/en/user-guide/python-connector.html) `SnowflakeConnection` 
 class into an object model focused on streamlining interaction between Python and Snowflake largely through configuration-management.
 

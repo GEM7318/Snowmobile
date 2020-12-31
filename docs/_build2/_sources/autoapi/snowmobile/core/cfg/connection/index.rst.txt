@@ -1,0 +1,191 @@
+:mod:`snowmobile.core.cfg.connection`
+=====================================
+
+.. py:module:: snowmobile.core.cfg.connection
+
+.. autoapi-nested-parse::
+
+   Module contains the object model for **snowmobile.toml**.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.cfg.connection.Credentials
+   snowmobile.core.cfg.connection.Connection
+
+
+
+.. py:class:: Credentials(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Represents a set of `Snowflake` credentials.
+
+   .. attribute:: user
+
+      Snowflake user.
+
+      :type: str
+
+   .. attribute:: password
+
+      Snowflake password.
+
+      :type: str
+
+   .. attribute:: role
+
+      Snowflake role.
+
+      :type: str
+
+   .. attribute:: account
+
+      Snowflake account.
+
+      :type: str
+
+   .. attribute:: warehouse
+
+      Warehouse.
+
+      :type: str
+
+   .. attribute:: database
+
+      Database.
+
+      :type: str
+
+   .. attribute:: schema_name
+
+      Schema.
+
+      :type: str
+
+   .. attribute:: user
+      :annotation: :str
+
+      
+
+   .. attribute:: password
+      :annotation: :str
+
+      
+
+   .. attribute:: role
+      :annotation: :str
+
+      
+
+   .. attribute:: account
+      :annotation: :str
+
+      
+
+   .. attribute:: warehouse
+      :annotation: :str
+
+      
+
+   .. attribute:: database
+      :annotation: :str
+
+      
+
+   .. attribute:: schema_name
+      :annotation: :str
+
+      
+
+   .. method:: as_nm(self, n: str)
+
+      Sets the credentials alias.
+
+
+   .. method:: credentials(self)
+      :property:
+
+      Returns namespace as a dictionary, excluding :attr:`_alias`.
+
+
+
+.. py:class:: Connection(**data)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Represents the full **[credentials]** block within **snowmobile.toml**.
+
+   This includes the :attr:`default_alias` which is the set of credentials
+   that :mod:`snowmobile` will authenticate with if :attr:`creds` is not
+   explicitly passed.
+
+   .. attribute:: default_alias
+
+      The set of credentials that is used if :attr:`creds` is not
+      explicitly passed to :class:`snowmobile.Connect` on
+      instantiation.
+
+      :type: str
+
+   .. attribute:: creds
+
+      The name given to the set of credentials within the
+      **credentials** block of the **snowmobile.toml** file (e.g.
+      [credentials.creds] assigns an :attr:`creds` to a given set of
+      credentials.
+
+      :type: str
+
+   .. attribute:: creds
+
+      A dictionary of :attr:`creds` to the associated
+      :class:`Creds` object containing its credentials.
+
+      :type: dict[str, Creds]
+
+   .. attribute:: default_alias
+      :annotation: :str
+
+      
+
+   .. attribute:: creds
+      :annotation: :str
+
+      
+
+   .. attribute:: credentials
+      :annotation: :Dict[str, Credentials]
+
+      
+
+   .. attribute:: defaults
+      :annotation: :Dict
+
+      
+
+   .. method:: get(self, creds: str) -> Credentials
+
+      Gets and sets a set of credentials given an creds.
+
+      :param creds: The name of the set of :attr:`Creds` to
+      :type creds: str
+      :param authenticate with.:
+
+      :returns: :class:`Creds` object for the creds provided.
+
+
+   .. method:: current(self)
+      :property:
+
+      Returns current credentials.
+
+
+

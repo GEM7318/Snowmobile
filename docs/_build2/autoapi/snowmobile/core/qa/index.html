@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../../../../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../../../../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../../../../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   snowmobile.core.qa — Snowmobile
+  </title>
+  <link href="../../../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js">
+  </script>
+  <script src="../../../../_static/jquery.js">
+  </script>
+  <script src="../../../../_static/underscore.js">
+  </script>
+  <script src="../../../../_static/doctools.js">
+  </script>
+  <script src="../../../../_static/language_data.js">
+  </script>
+  <link href="../../../../genindex.html" rel="index" title="Index"/>
+  <link href="../../../../search.html" rel="search" title="Search"/>
+  <link href="../scope/index.html" rel="next" title="snowmobile.core.scope"/>
+  <link href="../paths/index.html" rel="prev" title="snowmobile.core.paths"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#autoapi/snowmobile/core/qa/index" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        snowmobile.core.qa
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../../../../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../../../../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../modindex.html">
+        API Reference
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core
+         </span>
+        </code>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../../../../_static/" width="48"/>
+          </a>
+          <a href="../../../../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/snowmobile_toml.html">
+            snowmobile.toml
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage.html">
+            In-Depth Usage
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../modindex.html">
+            API Reference
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="../index.html">
+              <code class="xref py py-mod docutils literal notranslate">
+               <span class="pre">
+                snowmobile.core
+               </span>
+              </code>
+             </a>
+             <ul class="md-nav__list">
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#subpackages">
+                Subpackages
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#submodules">
+                Submodules
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#package-contents">
+                Package Contents
+               </a>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <label class="md-nav__title" for="__toc">
+          Contents
+         </label>
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="#autoapi-snowmobile-core-qa-index--page-root">
+            <code class="xref py py-mod docutils literal notranslate">
+             <span class="pre">
+              snowmobile.core.qa
+             </span>
+            </code>
+           </a>
+           <nav class="md-nav">
+            <ul class="md-nav__list">
+             <li class="md-nav__item">
+              <a class="md-nav__link" href="#module-contents">
+               Module Contents
+              </a>
+              <nav class="md-nav">
+               <ul class="md-nav__list">
+                <li class="md-nav__item">
+                 <a class="md-nav__link" href="#classes">
+                  Classes
+                 </a>
+                 <nav class="md-nav">
+                  <ul class="md-nav__list">
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.qa.QA">
+                     QA
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.QA.MSG">
+                        MSG
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.QA.set_outcome">
+                        set_outcome
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.qa.Empty">
+                     Empty
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Empty.MSG">
+                        MSG
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Empty.process">
+                        process
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.qa.Diff">
+                     Diff
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.partition_on">
+                        partition_on
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.end_index_at">
+                        end_index_at
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.compare_patterns">
+                        compare_patterns
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.ignore_patterns">
+                        ignore_patterns
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.generic_metric_col_nm">
+                        generic_metric_col_nm
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.compare_cols">
+                        compare_cols
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.drop_cols">
+                        drop_cols
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.idx_cols">
+                        idx_cols
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.ub_raw">
+                        ub_raw
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.ub_perc">
+                        ub_perc
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.MSG">
+                        MSG
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.split_cols">
+                        split_cols
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.partitioned_by">
+                        partitioned_by
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.partitions_are_equal">
+                        partitions_are_equal
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.qa.Diff.process">
+                        process
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                  </ul>
+                 </nav>
+                </li>
+               </ul>
+              </nav>
+             </li>
+            </ul>
+           </nav>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../../../../_sources/autoapi/snowmobile/core/qa/index.rst.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <span id="snowmobile-core-qa">
+       </span>
+       <h1 id="autoapi-snowmobile-core-qa-index--page-root">
+        <a class="reference internal" href="#autoapi-snowmobile-core-qa-index--page-root" title="snowmobile.core.qa">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           snowmobile.core.qa
+          </span>
+         </code>
+        </a>
+        <a class="headerlink" href="#autoapi-snowmobile-core-qa-index--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <p>
+        Module contains the
+        <code class="xref py py-class docutils literal notranslate">
+         <span class="pre">
+          statement.Diff
+         </span>
+        </code>
+        object, which is the class
+associated with all tags that have :attr:
+        <a href="#id1">
+         <span class="problematic" id="id2">
+          `
+         </span>
+        </a>
+        Tag.Name.anchor`='qa-diff'.
+       </p>
+       <h2 id="module-contents">
+        Module Contents
+        <a class="headerlink" href="#module-contents" title="Permalink to this headline">
+         ¶
+        </a>
+       </h2>
+       <h3 id="classes">
+        Classes
+        <a class="headerlink" href="#classes" title="Permalink to this headline">
+         ¶
+        </a>
+       </h3>
+       <table class="longtable docutils align-default">
+        <colgroup>
+         <col style="width: 10%"/>
+         <col style="width: 90%"/>
+        </colgroup>
+        <tbody>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.qa.QA" title="snowmobile.core.qa.QA">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               QA
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Base class for QA statements.
+           </p>
+          </td>
+         </tr>
+         <tr class="row-even">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.qa.Empty" title="snowmobile.core.qa.Empty">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Empty
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            QA class for results expected to be empty.
+           </p>
+          </td>
+         </tr>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.qa.Diff" title="snowmobile.core.qa.Diff">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Diff
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            QA class for comparison of values within a table based on
+           </p>
+          </td>
+         </tr>
+        </tbody>
+       </table>
+       <dl class="py class">
+        <dt id="snowmobile.core.qa.QA">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.qa.
+         </code>
+         <code class="sig-name descname">
+          QA
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           sn
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Connector
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="o">
+           **
+          </span>
+          <span class="n">
+           kwargs
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.qa.QA" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../index.html#snowmobile.core.Statement" title="snowmobile.core.Statement">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.Statement
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Base class for QA statements.
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.QA.MSG">
+           <code class="sig-name descname">
+            MSG
+           </code>
+           <em class="property">
+            = object-specific exception message goes here.
+           </em>
+           <a class="headerlink" href="#snowmobile.core.qa.QA.MSG" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.QA.set_outcome">
+           <code class="sig-name descname">
+            set_outcome
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.qa.QA.set_outcome" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Updates ._outcome upon completion of processing invoked by .process().
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+       <dl class="py class">
+        <dt id="snowmobile.core.qa.Empty">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.qa.
+         </code>
+         <code class="sig-name descname">
+          Empty
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           sn
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Connector
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="o">
+           **
+          </span>
+          <span class="n">
+           kwargs
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.qa.Empty" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="#snowmobile.core.qa.QA" title="snowmobile.core.qa.QA">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.qa.QA
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          QA class for results expected to be empty.
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Empty.MSG">
+           <code class="sig-name descname">
+            MSG
+           </code>
+           <em class="property">
+            = a 'qa-empty' check did not pass its validation; this means that a query you expected to return empty results returned a non-zero number of records.
+           </em>
+           <a class="headerlink" href="#snowmobile.core.qa.Empty.MSG" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.Empty.process">
+           <code class="sig-name descname">
+            process
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.qa.QA" title="snowmobile.core.qa.QA">
+            QA
+           </a>
+           <a class="headerlink" href="#snowmobile.core.qa.Empty.process" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Over-ride method; checks if results are empty and updates outcome
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+       <dl class="py class">
+        <dt id="snowmobile.core.qa.Diff">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.qa.
+         </code>
+         <code class="sig-name descname">
+          Diff
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           sn
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Connector
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           None
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="o">
+           **
+          </span>
+          <span class="n">
+           kwargs
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.qa.Diff" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="#snowmobile.core.qa.QA" title="snowmobile.core.qa.QA">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.qa.QA
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          QA class for comparison of values within a table based on
+partitioning on a field.
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.partition_on">
+           <code class="sig-name descname">
+            partition_on
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.partition_on" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Column name to partition data on before comparing the
+partitioned datasets; defaults to 'src_description`.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               str
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.end_index_at">
+           <code class="sig-name descname">
+            end_index_at
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.end_index_at" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Column name that marks the last column to use as an index column
+when joining the partitioned datasets back together.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               str
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.compare_patterns">
+           <code class="sig-name descname">
+            compare_patterns
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.compare_patterns" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Regex patterns to match columns on that should be
+            <em>
+             included
+            </em>
+            in
+comparison (numeric columns you're running QA on).
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)">
+               list
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.ignore_patterns">
+           <code class="sig-name descname">
+            ignore_patterns
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.ignore_patterns" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Regex patterns to match columns on that should be
+            <em>
+             ignored
+            </em>
+            both
+for the comparison and the index.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)">
+               list
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.generic_metric_col_nm">
+           <code class="sig-name descname">
+            generic_metric_col_nm
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.generic_metric_col_nm" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Column name to use for the melted field names; defaults to 'Metric'.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               str
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.compare_cols">
+           <code class="sig-name descname">
+            compare_cols
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.compare_cols" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Columns that are used in comparison once statement is executed
+and parsing is applied.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)">
+               list
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.drop_cols">
+           <code class="sig-name descname">
+            drop_cols
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.drop_cols" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Columns that are dropped once statement is executed and parsing
+is applied.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)">
+               list
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.idx_cols">
+           <code class="sig-name descname">
+            idx_cols
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.idx_cols" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Columns that are used for the index to join the data back
+together once statement is executed and parsing is applied.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)">
+               list
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.ub_raw">
+           <code class="sig-name descname">
+            ub_raw
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.ub_raw" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Maximum absolute raw difference (upper bound) that two fields
+that are being compared can differ from each other without
+causing a failure.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+               float
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.ub_perc">
+           <code class="sig-name descname">
+            ub_perc
+           </code>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.ub_perc" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Maximum absolute percentage difference (upper bound) that two
+comparison fields can differ from each other without causing a
+failure.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+               float
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.qa.Diff.MSG">
+           <code class="sig-name descname">
+            MSG
+           </code>
+           <em class="property">
+            = a 'qa-diff' check did not pass its validation; this means that the difference in the values compared did not fall within the specified threshold.
+           </em>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.MSG" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.Diff.split_cols">
+           <code class="sig-name descname">
+            split_cols
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.qa.Diff" title="snowmobile.core.qa.Diff">
+            Diff
+           </a>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.split_cols" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Post-processes results returned from a
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              qa-diff
+             </span>
+            </code>
+            statement.
+           </p>
+           <dl class="simple">
+            <dt>
+             Executes private methods to split columns into:
+            </dt>
+            <dd>
+             <ul class="simple">
+              <li>
+               <p>
+                Index columns
+               </p>
+              </li>
+              <li>
+               <p>
+                Drop columns
+               </p>
+              </li>
+              <li>
+               <p>
+                Comparison columns
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <p>
+            Then runs checks needed to ensure minimum requirements are met in order
+for a valid partition/comparison to be made.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.Diff.partitioned_by">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            partitioned_by
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Set
+           <span class="p">
+            [
+           </span>
+           Any
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.partitioned_by" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Distinct values within the
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              partition_on
+             </span>
+            </code>
+            column that data is
+partitioned by.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.Diff.partitions_are_equal">
+           <em class="property">
+            static
+           </em>
+           <code class="sig-name descname">
+            partitions_are_equal
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             partitions
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Dict
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ,
+             </span>
+             pd.DataFrame
+             <span class="p">
+              ]
+             </span>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             abs_tol
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             rel_tol
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.partitions_are_equal" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Evaluates if a dictionary of DataFrames are identical.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 partitions
+                </strong>
+                (
+                <em>
+                 Dict
+                </em>
+                <em>
+                 [
+                </em>
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                <em>
+                 ,
+                </em>
+                <em>
+                 pd.DataFrame
+                </em>
+                <em>
+                 ]
+                </em>
+                ) -- A dictionary of DataFrames returned by
+                <code class="xref py py-meth docutils literal notranslate">
+                 <span class="pre">
+                  snowmobile.DataFrame()
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 abs_tol
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+                 <em>
+                  float
+                 </em>
+                </a>
+                ) -- Absolute tolerance for difference in any value amongst the
+DataFrames being compared.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 rel_tol
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+                 <em>
+                  float
+                 </em>
+                </a>
+                ) -- Relative tolerance for difference in any value amongst the
+DataFrames being compared.
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (bool):
+            </dt>
+            <dd>
+             <p>
+              Indication of equality amongst all the DataFrames contained in
+              <code class="docutils literal notranslate">
+               <span class="pre">
+                partitions
+               </span>
+              </code>
+              .
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.qa.Diff.process">
+           <code class="sig-name descname">
+            process
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.qa.Diff" title="snowmobile.core.qa.Diff">
+            Diff
+           </a>
+           <a class="headerlink" href="#snowmobile.core.qa.Diff.process" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Post-processing for
+            <a class="reference internal" href="#snowmobile.core.qa.Diff" title="snowmobile.core.qa.Diff">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               Diff
+              </span>
+             </code>
+            </a>
+            -specific results.
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../paths/index.html" rel="prev" title="snowmobile.core.paths">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.paths
+         </span>
+        </code>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../scope/index.html" rel="next" title="snowmobile.core.scope">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.scope
+         </span>
+        </code>
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>

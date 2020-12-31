@@ -1,0 +1,72 @@
+:mod:`snowmobile.core.utils.parsing`
+====================================
+
+.. py:module:: snowmobile.core.utils.parsing
+
+.. autoapi-nested-parse::
+
+   Module contains parsing utilities used by :class:`Script`, :class:`Statement`,
+   :class:`Markup`, and :class:`Section`.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.utils.parsing.up
+   snowmobile.core.utils.parsing.strip
+   snowmobile.core.utils.parsing.dict_flatten
+   snowmobile.core.utils.parsing.p
+
+
+.. function:: up(nm: str)
+
+   Utility to truncate upper-casing strings as opposed to str.upper().
+
+
+.. function:: strip(val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False) -> str
+
+   Utility to strip a variety whitespace from a string.
+
+
+.. function:: dict_flatten(attrs: dict, delim: Optional[str] = None, indent_char: Optional[str] = None, bullet_char: Optional[str] = None) -> List[Tuple[str, str, str]]
+
+   Recursively flattens dictionary to its atomic elements.
+
+   Flattens a dictionary to its atomic state and performs parsing operations,
+   separating each child key with a `delim` relative to its parent key.
+
+   This flattening enables the parsing of a nested dictionary into a valid
+   string of markdown containing correspondingly nested bullets.
+
+   :param attrs: Dictionary of attributes; most likely the :attr:`attrs_parsed`
+                 from :class:`Statement`.
+   :type attrs: dict
+   :param delim: Delimiter to use for separating nested keys; defaults to '~';
+   :type delim: str
+   :param indent_char: Character to use for indents; defaults to a tab ('  ).
+   :type indent_char: str
+   :param bullet_char: Character to use for bullets/sub-bullets; defaults to '-'.
+   :type bullet_char: str
+
+   Returns (List[Tuple[str, str, str]]):
+       A list of tuples containing:
+           1.  A string of the indentation to use; for 1st-level attributes,
+               this will just be the `bullet_char`.
+           2.  The fully stratified key, including parents; for 1st-level
+               attributes this will mirror the original key that was provided.
+           3.  The value of the associated key; this will always mirror the
+               value that was provided.
+
+
+.. function:: p(nm: str) -> Tuple[str, str]
+
+   Utility to parse cfg from dot-prefixed object if included.
+
+

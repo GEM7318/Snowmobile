@@ -1,0 +1,92 @@
+:mod:`snowmobile.core.loader`
+=============================
+
+.. py:module:: snowmobile.core.loader
+
+.. autoapi-nested-parse::
+
+   Flexible loading of data from a local DataFrame into a table.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.loader.Loader
+
+
+
+.. py:class:: Loader(df: pd.DataFrame, table: str, sn: Connector, if_exists: Optional[str] = None, path_ddl: Optional[Path] = None, path_output: Optional[str, Path] = None, file_format: Optional[str] = None, incl_tmstmp: bool = True, tmstmp_col_nm: Optional[str] = None, reformat_cols: bool = True, validate_format: bool = True, upper_case_cols: bool = True, lower_case_table: Optional[bool] = False, keep_local: bool = False, on_error: Optional[str] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Generic dunder implementation for ``snowmobile`` objects.
+
+   Base class for all ``snowmobile`` objects that do **not** inherit from
+   pydantic's BaseModel or configuration class, :class:`Config`.
+
+   .. method:: exists(self)
+      :property:
+
+      Indicates if the target table exists.
+
+
+   .. method:: col_diff(self) -> Dict[int, bool]
+      :property:
+
+      Returns diff detail of local DataFrame to in-warehouse table.
+
+
+   .. method:: cols_match(self) -> bool
+      :property:
+
+      Indicates if columns match between DataFrame and table.
+
+
+   .. method:: load_statements(self, from_script: Path)
+
+      Generates exhaustive list of the statements to execute for a given
+      instance of loading a DataFrame.
+
+
+   .. method:: to_local(self, quote_all: bool = True)
+
+      Export to local file via configuration in ``snowmobile.toml``.
+
+
+   .. method:: tm_load(self) -> int
+      :property:
+
+      Seconds elapsed during loading.
+
+
+   .. method:: tm_validate_load(self) -> int
+      :property:
+
+      Seconds elapsed during validation.
+
+
+   .. method:: tm_total(self)
+      :property:
+
+      Total seconds elapsed for load.
+
+
+   .. method:: validate(self, if_exists: str) -> None
+
+      Validates load based on current state through a variety of operations.
+
+      :param if_exists: Desired behavior if table already exists; intended to be passed
+                        in from :meth:`table.load()` by default.
+      :type if_exists: str
+
+
+   .. method:: load(self, if_exists: Optional[str] = None, verbose: bool = True, from_script: Path = None, validate: bool = True, **kwargs) -> Loader
+
+
+

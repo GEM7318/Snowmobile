@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../../../../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../../../../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../../../../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   snowmobile.core.snowframe — Snowmobile
+  </title>
+  <link href="../../../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js">
+  </script>
+  <script src="../../../../_static/jquery.js">
+  </script>
+  <script src="../../../../_static/underscore.js">
+  </script>
+  <script src="../../../../_static/doctools.js">
+  </script>
+  <script src="../../../../_static/language_data.js">
+  </script>
+  <link href="../../../../genindex.html" rel="index" title="Index"/>
+  <link href="../../../../search.html" rel="search" title="Search"/>
+  <link href="../sql/index.html" rel="next" title="snowmobile.core.sql"/>
+  <link href="../section/index.html" rel="prev" title="snowmobile.core.section"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#autoapi/snowmobile/core/snowframe/index" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        snowmobile.core.snowframe
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../../../../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../../../../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../modindex.html">
+        API Reference
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core
+         </span>
+        </code>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../../../../_static/" width="48"/>
+          </a>
+          <a href="../../../../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/snowmobile_toml.html">
+            snowmobile.toml
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage.html">
+            In-Depth Usage
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../modindex.html">
+            API Reference
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="../index.html">
+              <code class="xref py py-mod docutils literal notranslate">
+               <span class="pre">
+                snowmobile.core
+               </span>
+              </code>
+             </a>
+             <ul class="md-nav__list">
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#subpackages">
+                Subpackages
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#submodules">
+                Submodules
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#package-contents">
+                Package Contents
+               </a>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <label class="md-nav__title" for="__toc">
+          Contents
+         </label>
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="#autoapi-snowmobile-core-snowframe-index--page-root">
+            <code class="xref py py-mod docutils literal notranslate">
+             <span class="pre">
+              snowmobile.core.snowframe
+             </span>
+            </code>
+           </a>
+           <nav class="md-nav">
+            <ul class="md-nav__list">
+             <li class="md-nav__item">
+              <a class="md-nav__link" href="#module-contents">
+               Module Contents
+              </a>
+              <nav class="md-nav">
+               <ul class="md-nav__list">
+                <li class="md-nav__item">
+                 <a class="md-nav__link" href="#classes">
+                  Classes
+                 </a>
+                 <nav class="md-nav">
+                  <ul class="md-nav__list">
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame">
+                     SnowFrame
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.shared_cols">
+                        shared_cols
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.series_max_diff_abs">
+                        series_max_diff_abs
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.series_max_diff_rel">
+                        series_max_diff_rel
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.df_max_diff_abs">
+                        df_max_diff_abs
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.df_max_diff_rel">
+                        df_max_diff_rel
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.df_diff">
+                        df_diff
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.partitions">
+                        partitions
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.ddl">
+                        ddl
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.lower">
+                        lower
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.upper">
+                        upper
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.reformat">
+                        reformat
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.to_list">
+                        to_list
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.add_tmstmp">
+                        add_tmstmp
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.original">
+                        original
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.cols_matching">
+                        cols_matching
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.snowframe.SnowFrame.cols_ending">
+                        cols_ending
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                  </ul>
+                 </nav>
+                </li>
+               </ul>
+              </nav>
+             </li>
+            </ul>
+           </nav>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../../../../_sources/autoapi/snowmobile/core/snowframe/index.rst.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <span id="snowmobile-core-snowframe">
+       </span>
+       <h1 id="autoapi-snowmobile-core-snowframe-index--page-root">
+        <a class="reference internal" href="#autoapi-snowmobile-core-snowframe-index--page-root" title="snowmobile.core.snowframe">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           snowmobile.core.snowframe
+          </span>
+         </code>
+        </a>
+        <a class="headerlink" href="#autoapi-snowmobile-core-snowframe-index--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <p>
+        Light extensions to pd.DataFrame object.
+       </p>
+       <h2 id="module-contents">
+        Module Contents
+        <a class="headerlink" href="#module-contents" title="Permalink to this headline">
+         ¶
+        </a>
+       </h2>
+       <h3 id="classes">
+        Classes
+        <a class="headerlink" href="#classes" title="Permalink to this headline">
+         ¶
+        </a>
+       </h3>
+       <table class="longtable docutils align-default">
+        <colgroup>
+         <col style="width: 10%"/>
+         <col style="width: 90%"/>
+        </colgroup>
+        <tbody>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.snowframe.SnowFrame" title="snowmobile.core.snowframe.SnowFrame">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               SnowFrame
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Light extension to
+            <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.2.0)">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               pandas.DataFrame
+              </span>
+             </code>
+            </a>
+            with a
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              snf
+             </span>
+            </code>
+            entry point.
+           </p>
+          </td>
+         </tr>
+        </tbody>
+       </table>
+       <dl class="py class">
+        <dt id="snowmobile.core.snowframe.SnowFrame">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.snowframe.
+         </code>
+         <code class="sig-name descname">
+          SnowFrame
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           df
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           pd.DataFrame
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../index.html#snowmobile.core.Snowmobile" title="snowmobile.core.Snowmobile">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.Snowmobile
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Light extension to
+          <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.2.0)">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             pandas.DataFrame
+            </span>
+           </code>
+          </a>
+          with a
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            snf
+           </span>
+          </code>
+          entry point.
+         </p>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.shared_cols">
+           <code class="sig-name descname">
+            shared_cols
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             df2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.DataFrame
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → List
+           <span class="p">
+            [
+           </span>
+           Tuple
+           <span class="p">
+            [
+           </span>
+           pd.Series
+           <span class="p">
+            ,
+           </span>
+           pd.Series
+           <span class="p">
+            ]
+           </span>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.shared_cols" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns list of tuples containing column pairs that are common between two DataFrames.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.series_max_diff_abs">
+           <em class="property">
+            static
+           </em>
+           <code class="sig-name descname">
+            series_max_diff_abs
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             col1
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.Series
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.Series
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             tolerance
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.series_max_diff_abs" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Determines if the max
+            <strong>
+             absolute
+            </strong>
+            difference between two
+            <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.2.0)">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               pandas.Series
+              </span>
+             </code>
+            </a>
+            is within a tolerance level.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.series_max_diff_rel">
+           <em class="property">
+            static
+           </em>
+           <code class="sig-name descname">
+            series_max_diff_rel
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             col1
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.Series
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.Series
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             tolerance
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.series_max_diff_rel" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Determines if the maximum
+            <strong>
+             relative
+            </strong>
+            difference between two
+            <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.2.0)">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               pandas.Series
+              </span>
+             </code>
+            </a>
+            is within a tolerance level.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.df_max_diff_abs">
+           <code class="sig-name descname">
+            df_max_diff_abs
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             df2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.DataFrame
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             tolerance
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.df_max_diff_abs" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Determines if the maximum
+            <strong>
+             absolute
+            </strong>
+            difference between any value
+in the shared columns of 2 DataFrames is within a tolerance level.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.df_max_diff_rel">
+           <code class="sig-name descname">
+            df_max_diff_rel
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             df2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.DataFrame
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             tolerance
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.df_max_diff_rel" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Determines if the maximum
+            <strong>
+             relative
+            </strong>
+            difference between any value
+in the shared columns of 2 DataFrames is within a tolerance level.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.df_diff">
+           <code class="sig-name descname">
+            df_diff
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             df2
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.DataFrame
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             abs_tol
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             rel_tol
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+              float
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.df_diff" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Determines if the column-wise difference between two DataFrames is
+within a relative
+            <strong>
+             or
+            </strong>
+            absolute tolerance level.
+           </p>
+           <div class="admonition note">
+            <p class="admonition-title">
+             Note
+            </p>
+            <ul class="simple">
+             <li>
+              <p>
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df1
+                </span>
+               </code>
+               and
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df2
+                </span>
+               </code>
+               are assumed to have a shared, pre-defined index.
+              </p>
+             </li>
+             <li>
+              <p>
+               Exactly
+               <strong>
+                one
+               </strong>
+               of
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 abs_tol
+                </span>
+               </code>
+               and
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 rel_tol
+                </span>
+               </code>
+               is expected to be a
+a valid float; the other is expected to be
+               <strong>
+                None
+               </strong>
+               .
+              </p>
+             </li>
+             <li>
+              <p>
+               If valid float values are provided for both
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 abs_tol
+                </span>
+               </code>
+               and
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 rel_tol
+                </span>
+               </code>
+               ,
+the outcome of the maximum
+               <strong>
+                absolute
+               </strong>
+               difference with respect to
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 abs_tol
+                </span>
+               </code>
+               will be returned regardless of the value of
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 rel_tol
+                </span>
+               </code>
+               .
+              </p>
+             </li>
+            </ul>
+           </div>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 df2
+                </strong>
+                (
+                <em>
+                 pd.DataFrame
+                </em>
+                ) -- 2nd DataFrame for comparison.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 abs_tol
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+                 <em>
+                  float
+                 </em>
+                </a>
+                ) -- Absolute tolerance; default is None.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 rel_tol
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)">
+                 <em>
+                  float
+                 </em>
+                </a>
+                ) -- Relative tolerance; default is None.
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (bool):
+            </dt>
+            <dd>
+             <p>
+              Boolean indicating whether or not difference is within tolerance.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.partitions">
+           <code class="sig-name descname">
+            partitions
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ,
+           </span>
+           pd.DataFrame
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.partitions" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns a dictionary of DataFrames given a DataFrame and a partition column.
+           </p>
+           <div class="admonition note">
+            <p class="admonition-title">
+             Note
+            </p>
+            <ul class="simple">
+             <li>
+              <p>
+               The number of distinct values within
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 partition_on
+                </span>
+               </code>
+               column will be
+1:1 with the number of partitions that are returned.
+              </p>
+             </li>
+             <li>
+              <p>
+               The
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 partition_on
+                </span>
+               </code>
+               column is dropped from the partitions that are returned.
+              </p>
+             </li>
+             <li>
+              <p>
+               The depth of a vertical concatenation of all partitions should equal the
+depth of the original DataFrame.
+              </p>
+             </li>
+            </ul>
+           </div>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <strong>
+               on
+              </strong>
+              (
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               <em>
+                str
+               </em>
+              </a>
+              ) -- The column name to use for partitioning the data.
+             </p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (Dict[str, pd.DataFrame]):
+            </dt>
+            <dd>
+             <p>
+              Dictionary of {(str) partition_value: (pd.DataFrame) associated subset of df}
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.ddl">
+           <code class="sig-name descname">
+            ddl
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             table
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.ddl" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns a string containing 'create table' DDL given a table name
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.lower">
+           <code class="sig-name descname">
+            lower
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → pd.DataFrame
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.lower" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Lower cases all column names
+            <strong>
+             or
+            </strong>
+            all values within
+            <cite>
+             col
+            </cite>
+            if provided.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.upper">
+           <code class="sig-name descname">
+            upper
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → pd.DataFrame
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.upper" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Upper cases all column names
+            <strong>
+             or
+            </strong>
+            all values within
+            <cite>
+             col
+            </cite>
+            if provided.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.reformat">
+           <code class="sig-name descname">
+            reformat
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.reformat" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Re-formats DataFrame's columns via
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              Column.reformat()
+             </span>
+            </code>
+            .
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.to_list">
+           <code class="sig-name descname">
+            to_list
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             n
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → List
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.to_list" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Succinctly retrieves a column as a list.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 col
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) -- Name of column.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 n
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+                 <em>
+                  int
+                 </em>
+                </a>
+                ) -- Number of records to return; defaults to full depth of column.
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.add_tmstmp">
+           <code class="sig-name descname">
+            add_tmstmp
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             col_nm
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → pd.DataFrame
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.add_tmstmp" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Adds a column containing the current timestamp to a DataFrame.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <strong>
+               col_nm
+              </strong>
+              (
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               <em>
+                str
+               </em>
+              </a>
+              ) -- Name for column; defaults to
+              <cite>
+               LOADED_TMSTMP
+              </cite>
+              .
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.original">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            original
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → pd.DataFrame
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.original" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns the DataFrame in its original form (drops columns added by
+            <a class="reference internal" href="#snowmobile.core.snowframe.SnowFrame" title="snowmobile.core.snowframe.SnowFrame">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               SnowFrame
+              </span>
+             </code>
+            </a>
+            and reverts to original column names).
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.cols_matching">
+           <code class="sig-name descname">
+            cols_matching
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             patterns
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             List
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             ignore_patterns
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             List
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → List
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.cols_matching" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns a list of columns given a list of patterns to find.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 patterns
+                </strong>
+                (
+                <em>
+                 List
+                </em>
+                <em>
+                 [
+                </em>
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                <em>
+                 ]
+                </em>
+                ) -- List of regex patterns to match columns on.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 ignore_patterns
+                </strong>
+                (
+                <em>
+                 List
+                </em>
+                <em>
+                 [
+                </em>
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                <em>
+                 ]
+                </em>
+                ) -- Optional list of regex patterns to exclude.
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (List[str]):
+            </dt>
+            <dd>
+             <p>
+              List of columns found/excluded.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.snowframe.SnowFrame.cols_ending">
+           <code class="sig-name descname">
+            cols_ending
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             nm
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             ignore_patterns
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → List
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.snowframe.SnowFrame.cols_ending" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Returns all columns up to
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              nm
+             </span>
+            </code>
+            in a DataFrame.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 nm
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) -- Name of column to end index at.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 ignore_patterns
+                </strong>
+                (
+                <em>
+                 List
+                </em>
+                <em>
+                 [
+                </em>
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                <em>
+                 ]
+                </em>
+                ) -- Optional list of regex patterns to exclude in the list that's
+returned; primarily used to for getting
+                <cite>
+                 end-index-at
+                </cite>
+                list
+while excluding
+                <cite>
+                 src_description
+                </cite>
+                .
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (List[str]):
+            </dt>
+            <dd>
+             <p>
+              List of column names matching criterion.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../section/index.html" rel="prev" title="snowmobile.core.section">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.section
+         </span>
+        </code>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../sql/index.html" rel="next" title="snowmobile.core.sql">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.sql
+         </span>
+        </code>
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>

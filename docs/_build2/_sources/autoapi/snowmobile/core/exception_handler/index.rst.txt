@@ -1,0 +1,90 @@
+:mod:`snowmobile.core.exception_handler`
+========================================
+
+.. py:module:: snowmobile.core.exception_handler
+
+.. autoapi-nested-parse::
+
+   Module contains the object model for **snowmobile.toml**.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.exception_handler.ExceptionHandler
+
+
+
+.. py:class:: ExceptionHandler(within: Optional[Any] = None, ctx_id: Optional[int] = None, in_context: bool = False, children: Dict[int, Any] = None, is_active_parent: bool = False, to_mirror: Optional[List[Any]] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Context management for snowmobile objects.
+
+   .. method:: ctx_id(self)
+      :property:
+
+      Current context id.
+
+
+   .. method:: set(self, ctx_id: Optional[int] = None, in_context: bool = False, outcome: Optional[int] = None)
+
+      **Set** attributes on self.
+
+
+   .. method:: set_from(self, other: ExceptionHandler) -> ExceptionHandler
+
+      Updates attributes from another ExceptionHandler object.
+
+
+   .. method:: reset(self, ctx_id: bool = False, in_context: bool = False, outcome: bool = False)
+
+      **Reset** attributes on self.
+
+
+   .. method:: current(self)
+      :property:
+
+      All exceptions in the current context.
+
+
+   .. method:: collect(self, e: Any[snowmobile_errors])
+
+      Stores an exception.
+
+
+   .. method:: first(self) -> Error
+      :property:
+
+      First exception encountered.
+
+
+   .. method:: last(self) -> Error
+      :property:
+
+      Last exception encountered.
+
+
+   .. method:: seen(self, from_ctx: Optional[int] = None, of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None, to_raise: Optional[bool] = None, with_ids: Optional[int, List[int], Set[int]] = None, all_time: bool = False) -> bool
+
+      Boolean indicator of if an exception has been seen.
+
+
+   .. method:: get(self, from_ctx: Optional[int] = None, of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None, to_raise: Optional[bool] = None, with_ids: Optional[int, List[int], Set[int]] = None, all_time: bool = False, last: bool = False, first: bool = False, _raise: bool = False)
+
+      Boolean indicator of if an exception has been seen.
+
+
+   .. method:: by_tmstmp(self)
+      :property:
+
+      All exceptions by timestamp, ordered by most to least recent.
+
+
+

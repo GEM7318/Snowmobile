@@ -5,40 +5,43 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 
-import os
-import subprocess
 import sys
 
 from pathlib import Path
 
-HERE = Path(__file__)
-ROOT = HERE.parent
+HERE = Path(__file__).absolute()
+ROOT = HERE.parent.parent
+DOCS_DIR = ROOT / 'docs'
+LINKS_DIR = DOCS_DIR / 'links'
+EXT_DIR = DOCS_DIR / 'ext'
 PACKAGE_DIR = ROOT / 'snowmobile'
-sys.path.insert(0, PACKAGE_DIR)
 
-# If extensions (or modules to markup with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-# sys.path.insert(
-#     0,
-#     os.path.join(
-#         os.path.abspath('source').split('docs')[0],
-#         'snowmobile'
-#     )
-# )
-# os.path.abspath('.')
+print(Path.cwd())
+print('DOCS_DIR', DOCS_DIR)
+print('LINKS_DIR', LINKS_DIR)
+print('EXT', EXT_DIR)
 
-# MyST Configuration ----------------------------------------------------------
-
-# Auto-generating header anchors
-# https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html#syntax-header-anchors
-myst_heading_anchors = 5
+sys.path.append('.')
+sys.path.insert(0, str(EXT_DIR))
+sys.path.insert(0, str(DOCS_DIR))
+sys.path.insert(0, str(PACKAGE_DIR))
 
 
+# ==========
+# links xref
+# See docstring in ext/__init__.py for more info
+# ==========
+# from .ext import xref  # imported by 'extensions' but included for clarity
+from links.link import *
+from links import *
+
+
+# ============================
+# staple configuration options
+# ============================
 source_suffix = ['.rst', '.md']
 
 extensions = [
-    # 'sphinx.ext.autodoc',
     'myst_parser',
     "sphinx_panels",
     'autoapi.extension',
@@ -46,42 +49,59 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'autoapi.extension',
+    'xref',
+    # 'sphinx.ext.extlinks',
+    # 'sphinx.ext.autodoc',
     # 'sphinx_rtd_theme',
     # 'sphinx-pydantic',
     # 'sphinx.ext.autodoc.typehints',
     # 'sphinx_autodoc_typehints',
 ]
 
-html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
-# panels_add_bootstrap_css = False
-
-autodoc_typehints = 'description'
-autosectionlabel_prefix_document = True
-autosectionlabel_max_depth = 4
-
 master_doc = 'index'
 default_role = None
 htmlhelp_basename = 'Recommonmarkdoc'
+source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
 
+
+# ====================
 # Project information
+# ====================
 project = 'snowmobile'
 copyright = '2020, Grant E Murray'
 author = 'Grant E Murray'
 
+release = '0.1.15'
 # The full version, including alpha/beta/rc tags
 # release = str(
 #     (
 #         subprocess.check_output(['git', 'describe']).strip()
 #     )
 # ).split('-')[0].replace("'", '').replace('b', '')
-release = '0.1.15'
 
 
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser',
-}
+# =============
+# sphinx panels
+# https://sphinx-panels.readthedocs.io/en/latest/
+# =============
+html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
+panels_add_bootstrap_css = False
 
+
+# ===================
+# MySt configurations
+# https://myst-parser.readthedocs.io/en/latest/
+# ===================
+myst_heading_anchors = 5  # auto generate anchor slugs for h1-h5
+
+autosectionlabel_prefix_document = True
+autosectionlabel_max_depth = 4
+
+
+# =====================
+# AutoAPI configuration
 # https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html
+# =====================
 autoapi_add_toctree_entry = False
 autoapi_type = 'python'
 autoapi_dirs = ['../snowmobile']
@@ -109,12 +129,17 @@ language = 'python'
 exclude_patterns = ['_build', '__main__.py', '__init__.py']
 
 
-# -- HTML theme settings ------------------------------------------------------
+# ===================================
+# sphinx material/html theme settings
+# https://bashtage.github.io/sphinx-material/
+# ===================================
 import sphinx_material
 
 html_show_sourcelink = True
 html_sidebars = {
-    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+    "**": [
+        "logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"
+    ]
 }
 
 extensions.append("sphinx_material")
@@ -137,8 +162,8 @@ html_theme_options = {
     'css_minify': True,
 
     'globaltoc_depth': 3,
-    # 'globaltoc_collapse': True,
-    'globaltoc_collapse': False,
+    'globaltoc_collapse': True,
+    # 'globaltoc_collapse': False,
     'globaltoc_includehidden': False,
 
     'repo_url': 'https://github.com/GEM7318/Snowmobile',

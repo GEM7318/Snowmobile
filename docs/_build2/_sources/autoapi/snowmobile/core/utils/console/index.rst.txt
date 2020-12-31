@@ -1,0 +1,44 @@
+:mod:`snowmobile.core.utils.console`
+====================================
+
+.. py:module:: snowmobile.core.utils.console
+
+.. autoapi-nested-parse::
+
+   Base class for all module-level Stdout objects.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.utils.console.Console
+
+
+
+.. py:class:: Console
+
+   .. method:: offset_path(file_path: Union[str, Path], root_dir_nm: Optional[str] = None, indent: Optional[str] = None, output: bool = False) -> str
+      :staticmethod:
+
+      Gets truncated string for file path relative to a root directory.
+
+      :param file_path: Full string or Path to the file.
+      :type file_path: Union[str, Path]
+      :param root_dir_nm: Directory name to anchor truncated file path to.
+      :type root_dir_nm: str
+      :param indent: Optional character to indent by (e.g. ' ')
+      :type indent: str
+      :param output: Option to print the string as well as return it.
+      :type output: bool
+
+      Returns (str):
+          Truncation of a path for console output.
+
+
+

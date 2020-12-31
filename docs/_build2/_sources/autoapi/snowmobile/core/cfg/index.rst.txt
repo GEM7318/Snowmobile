@@ -1,0 +1,903 @@
+:mod:`snowmobile.core.cfg`
+==========================
+
+.. py:module:: snowmobile.core.cfg
+
+.. autoapi-nested-parse::
+
+   Full configuration object model; represents a parsed ``snowmobile.toml`` file.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+   connection/index.rst
+   loading/index.rst
+   other/index.rst
+   script/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.cfg.Base
+   snowmobile.core.cfg.Connection
+   snowmobile.core.cfg.Credentials
+   snowmobile.core.cfg.Loading
+   snowmobile.core.cfg.SQL
+   snowmobile.core.cfg.Location
+   snowmobile.core.cfg.QA
+   snowmobile.core.cfg.Attributes
+   snowmobile.core.cfg.Markdown
+   snowmobile.core.cfg.Marker
+   snowmobile.core.cfg.Pattern
+   snowmobile.core.cfg.Script
+   snowmobile.core.cfg.Wildcard
+
+
+
+.. py:class:: Base(__pydantic_self__, **data: Any)
+
+   Bases: :class:`pydantic.BaseModel`, :class:`snowmobile.core.cfg.base.Config`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. method:: from_relative(self, obj: Any)
+
+      Updates current object's attributes with those from a different
+      instance of the same class.
+
+
+   .. method:: from_dict(self, args: Dict)
+
+      Accept a dictionary of arguments and updates the current object as if
+      it were instantiated with those arguments.
+
+
+   .. method:: as_serializable(self, by_alias: bool = False)
+
+      Returns a dictionary in serializable form.
+
+
+   .. method:: json(self, by_alias: bool = False, **kwargs) -> str
+
+      API-facing json serialization method.
+
+
+
+.. py:class:: Connection(**data)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Represents the full **[credentials]** block within **snowmobile.toml**.
+
+   This includes the :attr:`default_alias` which is the set of credentials
+   that :mod:`snowmobile` will authenticate with if :attr:`creds` is not
+   explicitly passed.
+
+   .. attribute:: default_alias
+
+      The set of credentials that is used if :attr:`creds` is not
+      explicitly passed to :class:`snowmobile.Connect` on
+      instantiation.
+
+      :type: str
+
+   .. attribute:: creds
+
+      The name given to the set of credentials within the
+      **credentials** block of the **snowmobile.toml** file (e.g.
+      [credentials.creds] assigns an :attr:`creds` to a given set of
+      credentials.
+
+      :type: str
+
+   .. attribute:: creds
+
+      A dictionary of :attr:`creds` to the associated
+      :class:`Creds` object containing its credentials.
+
+      :type: dict[str, Creds]
+
+   .. attribute:: default_alias
+      :annotation: :str
+
+      
+
+   .. attribute:: creds
+      :annotation: :str
+
+      
+
+   .. attribute:: credentials
+      :annotation: :Dict[str, Credentials]
+
+      
+
+   .. attribute:: defaults
+      :annotation: :Dict
+
+      
+
+   .. method:: get(self, creds: str) -> Credentials
+
+      Gets and sets a set of credentials given an creds.
+
+      :param creds: The name of the set of :attr:`Creds` to
+      :type creds: str
+      :param authenticate with.:
+
+      :returns: :class:`Creds` object for the creds provided.
+
+
+   .. method:: current(self)
+      :property:
+
+      Returns current credentials.
+
+
+
+.. py:class:: Credentials(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Represents a set of `Snowflake` credentials.
+
+   .. attribute:: user
+
+      Snowflake user.
+
+      :type: str
+
+   .. attribute:: password
+
+      Snowflake password.
+
+      :type: str
+
+   .. attribute:: role
+
+      Snowflake role.
+
+      :type: str
+
+   .. attribute:: account
+
+      Snowflake account.
+
+      :type: str
+
+   .. attribute:: warehouse
+
+      Warehouse.
+
+      :type: str
+
+   .. attribute:: database
+
+      Database.
+
+      :type: str
+
+   .. attribute:: schema_name
+
+      Schema.
+
+      :type: str
+
+   .. attribute:: user
+      :annotation: :str
+
+      
+
+   .. attribute:: password
+      :annotation: :str
+
+      
+
+   .. attribute:: role
+      :annotation: :str
+
+      
+
+   .. attribute:: account
+      :annotation: :str
+
+      
+
+   .. attribute:: warehouse
+      :annotation: :str
+
+      
+
+   .. attribute:: database
+      :annotation: :str
+
+      
+
+   .. attribute:: schema_name
+      :annotation: :str
+
+      
+
+   .. method:: as_nm(self, n: str)
+
+      Sets the credentials alias.
+
+
+   .. method:: credentials(self)
+      :property:
+
+      Returns namespace as a dictionary, excluding :attr:`_alias`.
+
+
+
+.. py:class:: Loading(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Default settings to use when loading data.
+
+   .. attribute:: default-file-format
+
+      Name of file-format to use when loading data into the warehouse;
+      default is ``snowmobile_default_csv``;
+      # TODO: See more on file formats ______
+      which will be created and
+      dropped afterwards if an existing file format is not specified;
+
+      :type: str
+
+   .. attribute:: include_index
+
+      Include the index of a DataFrame when loading it into a table;
+      default is ``False``.
+
+      :type: bool
+
+   .. attribute:: on_error
+
+      Action to take if an error is encountered when loading data into
+      the warehouse; default is ``continue``.
+
+      :type: bool
+
+   .. attribute:: keep_local
+
+      Option to keep the local file exported when loading into a
+      staging table; default is ``False``.
+
+      :type: bool
+
+   .. attribute:: include_loaded_tmstmp
+
+      Include a **loaded_tmstmp** column when loading a DataFrame into
+      the warehouse; default is ``True``.
+
+      :type: bool
+
+   .. attribute:: quote_char
+
+      Quote character to use for delimited files; default is double
+      quotes (``"``).
+
+      :type: str
+
+   .. attribute:: auto_compress
+
+      Auto-compress file when loading data; default is ``True``..
+
+      :type: bool
+
+   .. attribute:: overwrite_pre_existing_stage
+
+      Overwrite pre-existing staging table if data is being appended
+      into an existing table/the staging table already exists; default is
+      ``True``.
+
+      :type: bool
+
+   .. attribute:: default_file_format
+      :annotation: :str
+
+      
+
+   .. attribute:: default_if_exists
+      :annotation: :str
+
+      
+
+   .. attribute:: put
+      :annotation: :Put
+
+      
+
+   .. attribute:: copy_into
+      :annotation: :Copy
+
+      
+
+   .. attribute:: other
+      :annotation: :Other
+
+      
+
+   .. attribute:: export_options
+      :annotation: :Dict[str, Dict]
+
+      
+
+
+.. py:class:: SQL(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: generic_anchors
+      :annotation: :Dict
+
+      
+
+   .. attribute:: kw_exceptions
+      :annotation: :Dict
+
+      
+
+   .. attribute:: named_objects
+      :annotation: :List
+
+      
+
+   .. attribute:: info_schema_exceptions
+      :annotation: :Dict[str, str]
+
+      
+
+   .. method:: info_schema_loc(self, obj: str) -> str
+
+      Returns information cfg location from an object.
+
+
+   .. method:: objects_within(self, first_line: str)
+
+      Searches the first line of sql for matches to named objects.
+
+
+
+.. py:class:: Location(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: ddl
+      :annotation: :Path
+
+      
+
+   .. attribute:: backend
+      :annotation: :Path
+
+      
+
+
+.. py:class:: QA(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: partition_on
+      :annotation: :str
+
+      
+
+   .. attribute:: ignore_patterns
+      :annotation: :List
+
+      
+
+   .. attribute:: compare_patterns
+      :annotation: :List
+
+      
+
+   .. attribute:: end_index_at
+      :annotation: :str
+
+      
+
+   .. attribute:: tolerance
+      :annotation: :Tolerance
+
+      
+
+
+.. py:class:: Attributes(**data)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: excluded
+      :annotation: :List[str]
+
+      
+
+   .. attribute:: from_namespace
+      :annotation: :Dict[str, str]
+
+      
+
+   .. attribute:: groups
+      :annotation: :Dict
+
+      
+
+   .. attribute:: order
+      :annotation: :List[str]
+
+      
+
+   .. attribute:: reserved
+      :annotation: :Dict[str, Reserved]
+
+      
+
+   .. attribute:: markers
+      :annotation: :Dict[str, Marker]
+
+      
+
+   .. method:: exclude(self, item: str)
+
+
+   .. method:: get_marker(self, name: str)
+
+
+   .. method:: merge_markers(self, parsed_markers: Dict[int, Dict]) -> Dict[int, Marker]
+
+
+   .. method:: get_position(self, attr: str) -> int
+
+
+   .. method:: included(self, attrs: Dict) -> Dict
+
+
+   .. method:: group_parsed_attrs(self, parsed: Dict) -> Dict
+
+
+   .. method:: add_reserved_attrs(self, attrs: Dict, is_marker: bool = False)
+
+
+
+.. py:class:: Markdown(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Configuration for generated documentation from script/associated tags.
+
+   .. attribute:: hx_marker
+      :annotation: :str
+
+      
+
+   .. attribute:: hx_statement
+      :annotation: :str
+
+      
+
+   .. attribute:: bullet_char
+      :annotation: :str
+
+      
+
+   .. attribute:: attr_nm_wrap_char
+      :annotation: :str
+
+      
+
+   .. attribute:: attr_value_wrap_char
+      :annotation: :str
+
+      
+
+   .. attribute:: incl_index_in_sh
+      :annotation: :bool
+
+      
+
+   .. attribute:: result_limit
+      :annotation: :int
+
+      
+
+   .. attribute:: attrs
+      :annotation: :Attributes
+
+      
+
+   .. method:: pref_header(self, is_marker: bool = False, from_wc: Optional[str] = False) -> str
+
+      Creates header prefix based on specifications.
+
+
+
+.. py:class:: Marker(**data)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: nm
+      :annotation: :str
+
+      
+
+   .. attribute:: group
+      :annotation: :str
+
+      
+
+   .. attribute:: attrs
+      :annotation: :Dict
+
+      
+
+   .. attribute:: raw
+      :annotation: :str
+
+      
+
+   .. attribute:: index
+      :annotation: :int
+
+      
+
+   .. method:: add(self, attrs: Dict) -> Marker
+
+      Add to existing attributes.
+
+
+   .. method:: split_attrs(self, attrs: Dict)
+
+
+   .. method:: update(self, attrs: Dict) -> Marker
+
+      Merges parsed attributes with configuration attributes
+
+
+   .. method:: set_name(self, name: str, overwrite: bool = False) -> Marker
+
+      Sets the name attribute.
+
+
+   .. method:: as_args(self)
+
+      Returns a dictionary of arguments for :class:`Section`.
+
+
+
+.. py:class:: Pattern(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: core
+      :annotation: :Core
+
+      
+
+   .. attribute:: wildcards
+      :annotation: :Wildcard
+
+      
+
+
+.. py:class:: Script(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: patterns
+      :annotation: :Pattern
+
+      
+
+   .. attribute:: markdown
+      :annotation: :Markdown
+
+      
+
+   .. attribute:: qa
+      :annotation: :QA
+
+      
+
+   .. attribute:: types
+      :annotation: :Type
+
+      
+
+   .. attribute:: export_dir_nm
+      :annotation: :str
+
+      
+
+   .. method:: power_strip(val_to_strip: str, chars_to_strip: Iterable[str]) -> str
+      :staticmethod:
+
+      Exhaustively strips a string of specified leading/trailing characters.
+
+
+   .. method:: arg_to_string(self, arg_as_str: str) -> str
+
+      Strips an argument as a string down to its elemental form.
+
+
+   .. method:: arg_to_list(self, arg_as_str: str) -> List[str]
+
+      Converts a list as a string into a list.
+
+
+   .. method:: arg_to_float(self, arg_as_str: str) -> float
+
+      Strips a string down to its elemental form and converts to a float.
+
+
+   .. method:: arg_to_bool(self, arg_as_str: str) -> bool
+
+      Converts a boolean in string-form into a boolean value.
+
+
+   .. method:: parse_arg(self, arg_key: str, arg_value: str)
+
+      Parses an argument into its target data type based on its `arg_key`
+      and the ``script.tag-to-type-xref`` defined in **snowmobile.toml**.
+
+
+   .. method:: split_args(args_str: str) -> List[str]
+      :staticmethod:
+
+      Returns a list of arguments based on splitting string on double
+      underscores and stripping results.
+
+
+   .. method:: parse_split_arguments(self, splitter: List[str]) -> Dict
+
+      Returns a dictionary of argument-index to argument keys and values.
+
+
+   .. method:: parse_str(self, block: str, strip_blanks: bool = False, strip_trailing: bool = False) -> Dict
+
+      Parses a string of statement tags/arguments into a valid dictionary.
+
+      :param block: Raw string of all text found between a given open/close tag.
+      :type block: str
+      :param strip_blanks: Strip blank lines from string; defaults to `False`.
+      :type strip_blanks: bool
+      :param strip_trailing: Strip trailing whitespace from the string; defaults to `False`.
+      :type strip_trailing: bool
+
+      Returns (dict):
+          Dictionary of arguments.
+
+
+   .. method:: parse(self, raw: str, is_statement: Optional[bool] = None)
+
+
+   .. method:: as_parsable(self, raw: str, is_multiline: Optional[bool] = None, is_marker: Optional[bool] = None, lines: Optional[int] = None) -> str
+
+      Returns a raw string wrapped in open/close tags.
+
+      Used for taking a raw string of marker or statement attributes and
+      wrapping it in open/close tags before exporting, making the script
+      being exported re-parsable by `snowmobile`.
+
+
+   .. method:: find_spans(self, sql: str) -> Dict[int, Tuple[int, int]]
+
+      Finds indices of script tags given a sql script as a string and an
+      open and close pattern of the tags.
+
+
+   .. method:: find_tags(self, sql: str) -> Dict[int, str]
+
+      Finds indices of script tags given a sql script as a string and an
+      open and close pattern of the tags.
+
+
+   .. method:: find_block(self, sql: str, marker: str) -> str
+
+      Finds a block of arguments based on a marker.
+
+      Markers expected by default are the __script__ and __appendix__ markers.
+
+
+   .. method:: has_tag(self, s: sqlparse.sql.Statement) -> bool
+
+      Checks if a given statement has a tag that directly precedes the sql.
+
+
+   .. method:: is_marker(raw: str)
+      :staticmethod:
+
+      Checks if a raw string of arguments has a marker on the first line.
+
+
+   .. method:: is_valid_sql(s: sqlparse.sql.Statement) -> bool
+      :staticmethod:
+
+      Verifies that a given sqlparse.sql.Statement contains valid sql.
+
+
+   .. method:: isolate_sql(s: sqlparse.sql.Statement) -> str
+      :staticmethod:
+
+      Isolates just the sql within a :class:`sqlparse.sql.Statement` object.
+
+
+   .. method:: split_sub_blocks(self, s: sqlparse.sql.Statement) -> Tuple[List, str]
+
+      Breaks apart blocks of arguments within a :class:`sqlparse.sql.Statement`.
+
+      .. note::
+
+         *   :meth:`sqlparse.parsestream()` returns a list of
+             :class:`sqlparse.sql.Statement` objects, each of which includes
+             all text (comments) between the last character of the prior
+             statement and the first character of the current one.
+         *   :meth:`split_sub_blocks()` traverses that space and identifies
+             all spans of text wrapped in `open` (``/*-``) and `close`
+             (``-*/``) tags, storing their index positions relative to the
+             other statements & markers.
+         *   These are stored as :class:`snowmobile.core.Script` attributes
+             as statements are parsed and so that they can be exported in
+             the appropriate order to a markdown file.
+
+      :param s: :class:`sqlparse.sql.Statement` object.
+      :type s: sqlparse.sql.Statement
+
+      Returns (Tuple[List, str]):
+          A tuple containing:
+              1.  A list of __marker__ blocks if they exist; empty list otherwise
+              2.  The last tag/block before the start of the actual SQL (e.g. the
+                  tag/block that is associated with the statement passed to ``s``.
+
+
+   .. method:: name_from_marker(self, raw: str) -> str
+
+      Extracts a marker name (e.g. 'script' from within __script__).
+
+
+   .. method:: parse_name(self, raw: str, offset: Optional[int] = None, silence: bool = False) -> str
+
+      Parses name from a raw set of arguments if not given an explicit tag.
+
+
+   .. method:: add_name(nm_title: str, nm_marker: str, attrs: dict, overwrite: bool = False)
+      :staticmethod:
+
+      Adds a name to a set of parsed marker attributes.
+
+      Accepts a name and a dict of parsed attributes from a marker and:
+          1.  Checks to see if there's an explicit 'name' declared within the
+              attributes
+          2.  If not explicitely declared **or** explicitely declared and
+              `overwrite=False`, it will add the `nm` value to the attributes as 'name'.
+          3.  It will also add the 'nm' value to the attributes as 'marker-name'
+              to be used by the :class:`Marker` when cross-referencing the
+              __name__ with template markers in ``snowmobile.toml``.
+
+      :param nm_title:
+                       The name of the marker as either:
+                           1.  Returned value from :meth:`name_from_marker()`
+                           2.  Returned value from :meth:`parse_name()`
+                           3.  None if neither is provided
+      :type nm_title: str
+      :param nm_marker: The string value wrapped in ``__`` on the first line of the
+                        argument block.
+      :type nm_marker: str
+      :param attrs: A dictionary of parsed attributes as returned from :func:`parse_str()`.
+      :type attrs: dict
+      :param overwrite: Indicator of whether or not to overwrite a 'name' attribute declared
+                        within the .sql script.
+      :type overwrite: bool
+
+
+   .. method:: parse_marker(self, attrs_raw: str) -> Dict
+
+      Parses a raw string of __marker__ text between an open and a close pattern.
+
+
+   .. method:: ensure_sqlparse(sql: Union[sqlparse.sql.Statement, str]) -> sqlparse.sql.Statement
+      :staticmethod:
+
+      Accepts a string or a sqlparse.sql.Statement and returns a sqlparse.sql.Statement.
+
+      Necessary in order to accommodate the dynamic addition of statements as
+      strings to an existing :class:`Script` object which will instantiate
+      the new :class`Statement` objects from raw strings as opposed to from
+      :class:`sqlparse.sql.Statement` objects as is the case when read from
+      a source file.
+
+      :param sql: Either a string of sql or an already parsed
+                  sqlparse.sql.Statement object.
+      :type sql: Union[sqlparse.sql.Statement, str]
+
+      Returns (sqlparse.sql.Statement):
+          A parsed sql statement.
+
+
+
+.. py:class:: Wildcard(__pydantic_self__, **data: Any)
+
+   Bases: :class:`snowmobile.core.cfg.base.Base`
+
+   Base class for object model parsed from ``snowmobile.toml``.
+
+   .. attribute:: char_wc
+      :annotation: :str
+
+      
+
+   .. attribute:: char_sep
+      :annotation: :str
+
+      
+
+   .. attribute:: wc_paragraph
+      :annotation: :str
+
+      
+
+   .. attribute:: wc_as_is
+      :annotation: :str
+
+      
+
+   .. attribute:: wc_omit_attr_nm
+      :annotation: :str
+
+      
+
+   .. method:: find_first_wc_idx(self, attr_nm: str) -> int
+
+      Finds index of the first unescaped wildcard in an attribute name.
+
+      :param attr_nm: Attribute name to search through.
+      :type attr_nm: str
+
+      Returns (int):
+          Index position of first unescaped wildcard or 0 if one does not exist.
+
+
+   .. method:: partition_on_wc(self, attr_nm: str) -> Tuple[str, List[str]]
+
+      Parses attribute name into its display name and its wildcards.
+
+      Uses :meth:`Wildcard.find_first_wc_idx()` to determine if **attr_nm**
+      contains a valid wildcard.
+
+      :param attr_nm: Attribute name to parse.
+      :type attr_nm: str
+
+      Returns (Tuple[str, List[str]]):
+          Tuple containing the attribute display name and a list of its
+          wildcards if present and an empty list otherwise.
+
+
+

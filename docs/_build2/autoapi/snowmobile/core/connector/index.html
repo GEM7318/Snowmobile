@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../../../../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../../../../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../../../../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   snowmobile.core.connector — Snowmobile
+  </title>
+  <link href="../../../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js">
+  </script>
+  <script src="../../../../_static/jquery.js">
+  </script>
+  <script src="../../../../_static/underscore.js">
+  </script>
+  <script src="../../../../_static/doctools.js">
+  </script>
+  <script src="../../../../_static/language_data.js">
+  </script>
+  <link href="../../../../genindex.html" rel="index" title="Index"/>
+  <link href="../../../../search.html" rel="search" title="Search"/>
+  <link href="../errors/index.html" rel="next" title="snowmobile.core.errors"/>
+  <link href="../configuration/index.html" rel="prev" title="snowmobile.core.configuration"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#autoapi/snowmobile/core/connector/index" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        snowmobile.core.connector
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../../../../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../../../../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../modindex.html">
+        API Reference
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core
+         </span>
+        </code>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../../../../_static/" width="48"/>
+          </a>
+          <a href="../../../../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/snowmobile_toml.html">
+            snowmobile.toml
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage.html">
+            In-Depth Usage
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../modindex.html">
+            API Reference
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="../index.html">
+              <code class="xref py py-mod docutils literal notranslate">
+               <span class="pre">
+                snowmobile.core
+               </span>
+              </code>
+             </a>
+             <ul class="md-nav__list">
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#subpackages">
+                Subpackages
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#submodules">
+                Submodules
+               </a>
+              </li>
+              <li class="md-nav__item">
+               <a class="md-nav__link" href="../index.html#package-contents">
+                Package Contents
+               </a>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <label class="md-nav__title" for="__toc">
+          Contents
+         </label>
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="#autoapi-snowmobile-core-connector-index--page-root">
+            <code class="xref py py-mod docutils literal notranslate">
+             <span class="pre">
+              snowmobile.core.connector
+             </span>
+            </code>
+           </a>
+           <nav class="md-nav">
+            <ul class="md-nav__list">
+             <li class="md-nav__item">
+              <a class="md-nav__link" href="#module-contents">
+               Module Contents
+              </a>
+              <nav class="md-nav">
+               <ul class="md-nav__list">
+                <li class="md-nav__item">
+                 <a class="md-nav__link" href="#classes">
+                  Classes
+                 </a>
+                 <nav class="md-nav">
+                  <ul class="md-nav__list">
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.connector.Connector">
+                     Connector
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.cfg">
+                        cfg
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.con">
+                        con
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.sql">
+                        sql
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.e">
+                        e
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.connect">
+                        connect
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.disconnect">
+                        disconnect
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.alive">
+                        alive
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.cursor">
+                        cursor
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.ex">
+                        ex
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.query">
+                        query
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.connector.Connector.to_table">
+                        to_table
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                  </ul>
+                 </nav>
+                </li>
+               </ul>
+              </nav>
+             </li>
+            </ul>
+           </nav>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../../../../_sources/autoapi/snowmobile/core/connector/index.rst.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <span id="snowmobile-core-connector">
+       </span>
+       <h1 id="autoapi-snowmobile-core-connector-index--page-root">
+        <a class="reference internal" href="#autoapi-snowmobile-core-connector-index--page-root" title="snowmobile.core.connector">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           snowmobile.core.connector
+          </span>
+         </code>
+        </a>
+        <a class="headerlink" href="#autoapi-snowmobile-core-connector-index--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <p>
+        <a class="reference internal" href="../../index.html#snowmobile.Connector" title="snowmobile.Connector">
+         <code class="xref py py-class docutils literal notranslate">
+          <span class="pre">
+           snowmobile.Connector
+          </span>
+         </code>
+        </a>
+        is the core of
+        <code class="docutils literal notranslate">
+         <span class="pre">
+          snowmobile
+         </span>
+        </code>
+        's object model and a given
+instance is often shared across multiple objects at once.
+       </p>
+       <p>
+        It is the primary method of executing statements against the warehouse and
+it stores the fully parsed &amp; validated
+        <code class="docutils literal notranslate">
+         <span class="pre">
+          snowmobile.toml
+         </span>
+        </code>
+        file it was
+instantiated with as its
+        <code class="xref py py-attr docutils literal notranslate">
+         <span class="pre">
+          snowmobile.cfg
+         </span>
+        </code>
+        attribute.
+       </p>
+       <p>
+        Within
+        <code class="docutils literal notranslate">
+         <span class="pre">
+          snowmobile
+         </span>
+        </code>
+        's code and documentation, it is referred to as
+        <code class="docutils literal notranslate">
+         <span class="pre">
+          sn
+         </span>
+        </code>
+        for brevity.
+       </p>
+       <h2 id="module-contents">
+        Module Contents
+        <a class="headerlink" href="#module-contents" title="Permalink to this headline">
+         ¶
+        </a>
+       </h2>
+       <h3 id="classes">
+        Classes
+        <a class="headerlink" href="#classes" title="Permalink to this headline">
+         ¶
+        </a>
+       </h3>
+       <table class="longtable docutils align-default">
+        <colgroup>
+         <col style="width: 10%"/>
+         <col style="width: 90%"/>
+        </colgroup>
+        <tbody>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.connector.Connector" title="snowmobile.core.connector.Connector">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Connector
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Primary method of statement execution and configuration management.
+           </p>
+          </td>
+         </tr>
+        </tbody>
+       </table>
+       <dl class="py class">
+        <dt id="snowmobile.core.connector.Connector">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.connector.
+         </code>
+         <code class="sig-name descname">
+          Connector
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           creds
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Optional
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           None
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           delay
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           False
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           ensure_alive
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           True
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           config_file_nm
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Optional
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           None
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           from_config
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Optional
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ,
+           </span>
+           Path
+           <span class="p">
+            ]
+           </span>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           None
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="o">
+           **
+          </span>
+          <span class="n">
+           connect_kwargs
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.connector.Connector" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../index.html#snowmobile.core.Snowmobile" title="snowmobile.core.Snowmobile">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.Snowmobile
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Primary method of statement execution and configuration management.
+         </p>
+         <dl class="field-list simple">
+          <dt class="field-odd">
+           Parameters
+          </dt>
+          <dd class="field-odd">
+           <ul class="simple">
+            <li>
+             <p>
+              <strong>
+               creds
+              </strong>
+              (
+              <em>
+               Optional
+              </em>
+              <em>
+               [
+              </em>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               <em>
+                str
+               </em>
+              </a>
+              <em>
+               ]
+              </em>
+              ) -- Alias for the set of credentials to authenticate with; default
+behavior will fall back to the
+              <code class="docutils literal notranslate">
+               <span class="pre">
+                connection.default-creds
+               </span>
+              </code>
+              specified in
+              <cite>
+               snowmobile.toml
+              </cite>
+              ,
+              <cite>
+               or the first set of credentials
+stored if this configuration option is left blank
+              </cite>
+              .
+             </p>
+            </li>
+            <li>
+             <p>
+              <strong>
+               delay
+              </strong>
+              (
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               <em>
+                bool
+               </em>
+              </a>
+              ) -- Optionally delay establishing a connection when the object is
+instantiated, enabling access to the configuration object model
+through the
+              <a class="reference internal" href="#snowmobile.core.connector.Connector.cfg" title="snowmobile.core.connector.Connector.cfg">
+               <code class="xref py py-attr docutils literal notranslate">
+                <span class="pre">
+                 Connector.cfg
+                </span>
+               </code>
+              </a>
+              attribute; defaults to
+              <cite>
+               False
+              </cite>
+              .
+             </p>
+            </li>
+            <li>
+             <p>
+              <strong>
+               ensure_alive
+              </strong>
+              (
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               <em>
+                bool
+               </em>
+              </a>
+              ) -- Establishes a new connection if a method requiring a connection
+against the database is called while
+              <a class="reference internal" href="#snowmobile.core.connector.Connector.alive" title="snowmobile.core.connector.Connector.alive">
+               <code class="xref py py-attr docutils literal notranslate">
+                <span class="pre">
+                 alive
+                </span>
+               </code>
+              </a>
+              is
+              <cite>
+               False
+              </cite>
+              ;
+defaults to
+              <cite>
+               True
+              </cite>
+              .
+             </p>
+            </li>
+            <li>
+             <p>
+              <strong>
+               config_file_nm
+              </strong>
+              (
+              <em>
+               Optional
+              </em>
+              <em>
+               [
+              </em>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               <em>
+                str
+               </em>
+              </a>
+              <em>
+               ]
+              </em>
+              ) -- Name of configuration file to use; defaults to
+              <cite>
+               snowmobile.toml
+              </cite>
+              .
+             </p>
+            </li>
+            <li>
+             <p>
+              <strong>
+               from_config
+              </strong>
+              (
+              <em>
+               Optional
+              </em>
+              <em>
+               [
+              </em>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               <em>
+                str
+               </em>
+              </a>
+              <em>
+               ,
+              </em>
+              <em>
+               Path
+              </em>
+              <em>
+               ]
+              </em>
+              ) -- A full path to a specific configuration file to use; bypasses any
+checks for a cached file location and can be useful for container-based
+processes with restricted access to the local file system.
+             </p>
+            </li>
+            <li>
+             <p>
+              <strong>
+               **connect_kwargs
+              </strong>
+              --
+             </p>
+             <p>
+              Additional arguments to provide to
+              <code class="xref py py-meth docutils literal notranslate">
+               <span class="pre">
+                snowflake.connector.connect()
+               </span>
+              </code>
+              ;
+arguments provided here will over-ride connection arguments specified
+in
+              <cite>
+               snowmobile.toml
+              </cite>
+              , including:
+             </p>
+             <blockquote>
+              <div>
+               <ul>
+                <li>
+                 <p>
+                  Connection parameters in
+                  <cite>
+                   connection.default-arguments
+                  </cite>
+                 </p>
+                </li>
+                <li>
+                 <p>
+                  Credentials parameters associated with a given alias
+                 </p>
+                </li>
+                <li>
+                 <p>
+                  Connection parameters associated with a given alias
+                 </p>
+                </li>
+               </ul>
+              </div>
+             </blockquote>
+            </li>
+           </ul>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.connector.Connector.cfg">
+           <code class="sig-name descname">
+            cfg
+           </code>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.cfg" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            <a class="reference internal" href="../../index.html#snowmobile.Configuration" title="snowmobile.Configuration">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               snowmobile.Configuration
+              </span>
+             </code>
+            </a>
+            object, which represents a fully
+parsed/validated
+            <cite>
+             snowmobile.toml
+            </cite>
+            file.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              Configuration`
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.connector.Connector.con">
+           <code class="sig-name descname">
+            con
+           </code>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.con" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              SnowflakeConnection
+             </span>
+            </code>
+            object; this attribute is populated
+when a connection is established and can be
+            <cite>
+             None
+            </cite>
+            if the
+            <a class="reference internal" href="#snowmobile.core.connector.Connector" title="snowmobile.core.connector.Connector">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               Connector
+              </span>
+             </code>
+            </a>
+            object was instantiated with
+            <cite>
+             delay=True
+            </cite>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              SnowflakeConnection
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.connector.Connector.sql">
+           <code class="sig-name descname">
+            sql
+           </code>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.sql" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            A
+            <a class="reference internal" href="../../index.html#snowmobile.SQL" title="snowmobile.SQL">
+             <code class="xref py py-class docutils literal notranslate">
+              <span class="pre">
+               snowmobile.SQL
+              </span>
+             </code>
+            </a>
+            object with the current connection
+embedded; stores command sql commands as utility methods and is
+heavily leveraged in
+            <cite>
+             snowmobile
+            </cite>
+            's internals.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference internal" href="../cfg/index.html#snowmobile.core.cfg.SQL" title="snowmobile.core.cfg.SQL">
+               SQL
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.connector.Connector.e">
+           <code class="sig-name descname">
+            e
+           </code>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.e" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            A
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.ExceptionHandler
+             </span>
+            </code>
+            object for orchestrating
+exceptions across objects; kept as a public attribute on the class
+as examining its contents can be helpful in debugging database errors
+during development.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference internal" href="../exception_handler/index.html#snowmobile.core.exception_handler.ExceptionHandler" title="snowmobile.core.exception_handler.ExceptionHandler">
+               ExceptionHandler
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.connect">
+           <code class="sig-name descname">
+            connect
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="o">
+             **
+            </span>
+            <span class="n">
+             kwargs
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.connector.Connector" title="snowmobile.core.connector.Connector">
+            Connector
+           </a>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.connect" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Establishes connection to Snowflake.
+           </p>
+           <p>
+            Re-implements
+            <code class="xref py py-func docutils literal notranslate">
+             <span class="pre">
+              snowflake.connector.connect()
+             </span>
+            </code>
+            with connection
+arguments sourced from snowmobile's object model, specifically:
+           </p>
+           <blockquote>
+            <div>
+             <ul class="simple">
+              <li>
+               <p>
+                Credentials from
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  snowmobile.toml
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+              <li>
+               <p>
+                Default connection arguments from
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  snowmobile.toml
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+              <li>
+               <p>
+                Optional keyword arguments either passed to
+                <a class="reference internal" href="../../index.html#snowmobile.Connect" title="snowmobile.Connect">
+                 <code class="xref py py-class docutils literal notranslate">
+                  <span class="pre">
+                   snowmobile.Connect
+                  </span>
+                 </code>
+                </a>
+                or directly to this method.
+               </p>
+              </li>
+             </ul>
+             <dl class="simple">
+              <dt>
+               kwargs:
+              </dt>
+              <dd>
+               <p>
+                Optional keyword arguments to pass to
+snowflake.connector.connect(); arguments passed here will
+over-ride
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  connection.default-arguments
+                 </span>
+                </code>
+                specified in
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  snowmobile.toml
+                 </span>
+                </code>
+                .
+               </p>
+              </dd>
+             </dl>
+            </div>
+           </blockquote>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.disconnect">
+           <code class="sig-name descname">
+            disconnect
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.connector.Connector" title="snowmobile.core.connector.Connector">
+            Connector
+           </a>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.disconnect" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Disconnect from connection with which Connector() was instantiated.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.alive">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            alive
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.alive" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Check if the connection is alive.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.cursor">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            cursor
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → SnowflakeCursor
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.cursor" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              SnowflakeCursor
+             </span>
+            </code>
+            accessor.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.ex">
+           <code class="sig-name descname">
+            ex
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             sql
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_error
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="o">
+             **
+            </span>
+            <span class="n">
+             kwargs
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → SnowflakeCursor
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.ex" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Executes a command via
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              SnowflakeCursor
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 sql
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) --
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  sql
+                 </span>
+                </code>
+                command as a string.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 on_error
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) -- String value to impose a specific behavior if an error occurs
+during the execution of
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  sql
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 **kwargs
+                </strong>
+                -- Optional keyword arguments for
+                <code class="xref py py-meth docutils literal notranslate">
+                 <span class="pre">
+                  SnowflakeCursor.execute()
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (SnowflakeCursor):
+            </dt>
+            <dd>
+             <p>
+              <code class="xref py py-class docutils literal notranslate">
+               <span class="pre">
+                SnowflakeCursor
+               </span>
+              </code>
+              object that executed the command.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.query">
+           <code class="sig-name descname">
+            query
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             sql
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             as_df
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             lower
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_error
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Union
+           <span class="p">
+            [
+           </span>
+           pd.DataFrame
+           <span class="p">
+            ,
+           </span>
+           SnowflakeCursor
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.query" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Execute a query and return results.
+           </p>
+           <blockquote>
+            <div>
+             <p>
+              Default behavior of
+              <cite>
+               results=True
+              </cite>
+              will return results as a
+              <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.2.0)">
+               <code class="xref py py-class docutils literal notranslate">
+                <span class="pre">
+                 pandas.DataFrame
+                </span>
+               </code>
+              </a>
+              , otherwise will execute the sql provided
+with a
+              <code class="xref py py-class docutils literal notranslate">
+               <span class="pre">
+                SnowflakeCursor
+               </span>
+              </code>
+              and return the cursor object.
+             </p>
+            </div>
+           </blockquote>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 sql
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) -- Raw SQL to execute.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 as_df
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+                 <em>
+                  bool
+                 </em>
+                </a>
+                ) -- Boolean value indicating whether or not to return results.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 lower
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+                 <em>
+                  bool
+                 </em>
+                </a>
+                ) -- Boolean value indicating whether or not to return results
+with columns lower-cased.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 on_error
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                ) -- String value to impose a specific behavior if an error occurs
+during the execution of
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  sql
+                 </span>
+                </code>
+                .
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Returns (Union[pd.DataFrame, SnowflakeCursor]):
+            </dt>
+            <dd>
+             <p>
+              Results from
+              <code class="docutils literal notranslate">
+               <span class="pre">
+                sql
+               </span>
+              </code>
+              as a
+              <code class="xref py py-class docutils literal notranslate">
+               <span class="pre">
+                DataFrame
+               </span>
+              </code>
+              by default or the
+              <code class="xref py py-class docutils literal notranslate">
+               <span class="pre">
+                SnowflakeCursor
+               </span>
+              </code>
+              object if
+              <cite>
+               results=False
+              </cite>
+              .
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.connector.Connector.to_table">
+           <code class="sig-name descname">
+            to_table
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             df
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             pd.DataFrame
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             table
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             file_format
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_tmstmp
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_error
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             if_exists
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             as_is
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="o">
+             **
+            </span>
+            <span class="n">
+             kwargs
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.connector.Connector.to_table" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Table re-implementation.
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../configuration/index.html" rel="prev" title="snowmobile.core.configuration">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.configuration
+         </span>
+        </code>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../errors/index.html" rel="next" title="snowmobile.core.errors">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.errors
+         </span>
+        </code>
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>
