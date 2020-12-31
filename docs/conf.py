@@ -76,6 +76,7 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
+# https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html
 autoapi_add_toctree_entry = False
 autoapi_type = 'python'
 autoapi_dirs = ['../snowmobile']
@@ -86,9 +87,8 @@ autoapi_ignore = [
     '**_runner/*',
     '**/.snowmobile/*',
 ]
-
-# Refers to dunder methods and regular methods
-autoapi_python_class_content = 'both'
+autoapi_python_class_content = 'class'  # 'both' if __init__ as well
+autoapi_member_order = 'bysource'  # 'bysource', 'groupwise'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -235,26 +235,59 @@ intersphinx_mapping = {
 # Adding so that __init__ will be documented - source is from link below:
 # https://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
 
+autodoc_default_flags = ['members', 'private-members', 'special-members',
+                         #'undoc-members',
+                         'show-inheritance']
 
-def skip(app, what, name, obj, would_skip, options):
-    # if name == "__init__":
-    if name.startswith("_"):
-        return False
-    return would_skip
+
+# import json
+# to_export_to = Path('C:/Users/GEM7318/Documents/Github/Snowmobile/docs/skip_dtl.json')
+# export_dtl = {}
+# import re
+
+
+def autoapi_skip_member(app, what, name, obj, skip, options):
+    """Exclude all private attributes, methods, and dunder methods from Sphinx."""
+    import re
+    exclude = (
+        re.findall('\._.*', str(obj))
+        or 'stdout' in str(obj).lower()
+    )
+    return skip or exclude
 
 
 def setup(app):
-    app.connect("autodoc-skip-member", skip)
+    """Add autoapi-skip-member."""
+    app.connect('autoapi-skip-member', autoapi_skip_member)
+
+# def autoapi_skip_member(app, what, name, obj, skip, options):
+#     exclude = (
+#         str(name).startswith('_')
+#         or 'stdout' in str(name).lower()
+#         or (hasattr(obj, '__name__') and str(obj.__name__).startswith('_'))
+#     )
+#     if not exclude:
+#         exclude = re.findall('\._.*', str(obj))
+#     startswith = (hasattr(obj, '__name__') and str(obj.__name__).startswith('_'))
+#     export_dtl[name] = (exclude, startswith)
+#     return skip or exclude
+
+# with open(to_export_to, 'w') as f:
+#     f.write(json.dumps(export_dtl))
 
 
-# autodoc_default_options = {
-#     'members': 'var1, var2',
-#     'member-order': 'bysource',
-#     'special-members': '__init__',
-#     'undoc-members': False,
-#     'exclude-members': '__weakref__,__str__',
-#     'ignore-module-all': ['__main__.py'],
-#     'autoclass_content': 'class',
-# }
+def setup(app):
+    """Add autoapi-skip-member."""
+    app.connect('autoapi-skip-member', autoapi_skip_member)
 
-# add_module_names = False
+
+
+# def skip(app, what, name, obj, skip, options):
+#     if name.startswith("_") or name == 'Stdout':
+#         return False
+#     return skip
+
+
+# def setup(app):
+#     app.connect("autoapi-skip-member", skip)
+

@@ -1,6 +1,14 @@
 """
-``snowmobile.Connect`` class; bundles together configuration object and
-SnowflakeConnection for query/statement execution.
+:class:`snowmobile.Connector` is the core of ``snowmobile``'s object model and a given
+instance is often shared across multiple objects at once.
+
+It is the primary method of executing statements against the warehouse and
+it stores the fully parsed & validated ``snowmobile.toml`` file it was
+instantiated with as its :attr:`snowmobile.cfg` attribute.
+
+Within ``snowmobile``'s code and documentation, it is referred to as ``sn``
+for brevity.
+
 """
 from __future__ import annotations
 
@@ -22,7 +30,7 @@ from . import Snowmobile
 
 
 class Connector(Snowmobile):
-    """Wrapper around :class:`SnowFlakeConnection` object.
+    """Primary method of statement execution and configuration management.
 
     Args:
 
