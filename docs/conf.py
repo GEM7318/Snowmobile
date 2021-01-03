@@ -30,10 +30,10 @@ for dir_name, dir_path in to_insert.items():
     print(f"<added-to-path> {dir_name}")
 
 
-# =======================
-# hyperlink aliasing/xref
-# See docstring in ext/xref.py for more info
-# =======================
+
+# -- hyperlink aliasing/xref --------------------------------------------------
+# note:
+#   See docstring in ext/xref.py for more info
 # from .ext import xref  # imported by 'extensions' but included for clarity
 # noinspection PyUnresolvedReferences
 from links.link import *
@@ -48,13 +48,15 @@ source_suffix = ['.rst', '.md']
 
 extensions = [
     'myst_parser',
-    "sphinx_panels",
-    'autoapi.extension',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'autoapi.extension',
     'xref',
+    "sphinx_panels",
+    'autoapi.extension',
+    "nbsphinx",
+    "sphinx_copybutton",
 ]
 
 master_doc = 'index'
@@ -66,38 +68,62 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', '__main__.py', '__init__.py']
 
 
-# ====================
-# Project information
-# ====================
+nbsphinx_execute = "never"
+nbsphinx_kernel_name = "snowmobile3"
+
+
+# Project Information ---------------------------------------------------------
+# from snowmobile import __version__
+version = '0.0.15'
+
 project = 'snowmobile'
 copyright = '2020, Grant E Murray'
 author = 'Grant E Murray'
 
-release = '0.1.15'
-# The full version, including alpha/beta/rc tags
-# release = str(
-#     (
-#         subprocess.check_output(['git', 'describe']).strip()
-#     )
-# ).split('-')[0].replace("'", '').replace('b', '')
+# version = __version__
+# release = __version__
+
+release = version
 
 
-# =============
-# sphinx panels
+# Sphinx Panels ---------------------------------------------------------------
 # https://sphinx-panels.readthedocs.io/en/latest/
-# =============
+
 html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
-# panels_add_bootstrap_css = True
+panels_add_bootstrap_css = True  # required for color in icons/etc
+panels_add_fontawesome_latex = True
 
+panels_css_variables = {
+    "tabs-color-label-active": "hsla(231, 99%, 66%, 1)",
+    "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
+    "tabs-color-overline": "rgb(207, 236, 238)",
+    "tabs-color-underline": "rgb(207, 236, 238)",
 
-# ===================
-# MySt configurations
+    # "tabs-size-label": "1rem",
+    "tabs-size-label": "0.75rem",
+}
+
+# MySt ------------------------------------------------------------------------
 # https://myst-parser.readthedocs.io/en/latest/
-# ===================
+
 myst_heading_anchors = 5  # auto generate anchor slugs for h1-h5
 
 autosectionlabel_prefix_document = True
 autosectionlabel_max_depth = 4
+
+from markdown_it.extensions import deflist
+myst_enable_extensions = [
+    "dollarmath",
+    "amsmath",
+    "deflist",
+    "html_image",
+    "colon_fence",
+    "smartquotes",
+    "replacements",
+    "linkify",
+    "substitution",
+]
+myst_url_schemes = ("http", "https", "mailto")
 
 
 # =====================
@@ -130,7 +156,7 @@ import sphinx_material
 html_show_sourcelink = True
 html_sidebars = {
     "**": [
-        "logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"
+        "globaltoc.html", "localtoc.html", "searchbox.html"
     ]
 }
 
@@ -164,6 +190,8 @@ html_theme_options = {
     'color_primary': 'blue',
     'color_accent': 'cyan',
     "theme_color": "#2196f3",
+
+    'body_max_width': None
 }
 
 

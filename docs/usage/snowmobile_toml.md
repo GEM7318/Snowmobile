@@ -1,11 +1,12 @@
 ## snowmobile.toml
 
-```{admonition} Heads Up 
-:class: warning
-- **snowmobile.toml** is a deep set of configuration options and not one that should be consumed
-all at once
-- The below information serves best as a reference throughout the rest of the documentation and
-on an as-needed basis as one becomes more familiar with the composition of **snowmobile**'s objects
+```{admonition} Tip  
+:class: tip
+**snowmobile.toml** is a deep set of configuration options.
+
+The intent of this section is to:
+   1. Outline how it integrates with {xref}```snowmobile```s API and the best ways to access it 
+   2. Store [Field Definitions](#glossary-snowmobiletoml) for reference throughout the rest of the documentation
 ```
 
 ---
@@ -51,6 +52,9 @@ below information in the rest of the documentation.
 that the parent sections below are broken up into
 - See [here](https://github.com/toml-lang/toml) if unfamiliar with *.toml* syntax
 ```
+
+
+### Glossary: `snowmobile.toml`
 
 ### `[connection]`
 This section stores all configuration specs for establishing a connection to the warehouse.

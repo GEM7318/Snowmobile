@@ -723,11 +723,12 @@ class Script(Snowmobile):
         render: bool = False,
         **kwargs,
     ):
-        def _run(_id: Optional[str, int] = None, **kwargs):
+        def _run(_id: Optional[str, int] = None, v: bool = True, **kwargs):
             """Fetches a statement, runs it, prints outcome to console."""
             s = self.s(_id)
             s.run(**kwargs)
-            self._console.status(s)
+            if v:
+                self._console.status(s)
 
         if not self.e.in_context:
             self.e.set(ctx_id=-1)
@@ -743,12 +744,12 @@ class Script(Snowmobile):
             **kwargs,
         }
         if isinstance(_id, (int, str)):
-            _run(_id=_id, **total_kwargs)
+            _run(_id=_id, v=not render, **total_kwargs)
         else:
             indices_to_execute = self.ids_from_iterable(_id=_id)
             self._console.display()
             for i in indices_to_execute:
-                _run(_id=i, **total_kwargs)
+                _run(_id=i, v=not render, **total_kwargs)
 
     @property
     def _console(self):

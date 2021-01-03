@@ -1,4 +1,130 @@
-# snowmobile
+# Sandbox
+
+## Core Features
+
+{fa}`check,text-success mr-1` **No embedding credentials within scripts** 
+- *`import snowmobile` is all that's required to connect*
+
+{fa}`check,text-success mr-1` **Access multiple sets of connection parameters, credentials, and other configuration options**
+- *Accessed by user-assigned alias*
+
+{fa}`check,text-success mr-1` **Map in-warehouse file formats to stored DDL and export options**
+- *Enables flexible, controlled loading of data*
+
+{fa}`check,text-success mr-1` **Manipulate .sql scripts as Python objects**
+- *Queue scripts across sessions*
+- *Tag and access individual statements as a dictionary off a [Script](./_build/autoapi/snowmobile/core/script/index.html) object*
+- *Document scripts with a sql-compliant markup syntax that exports as markdown*
+- *Work with partitions of scripts based on assigned tags and other metadata parsed by [snowmobile](https://pypi.org/project/snowmobile/)*
+
+{fa}`check,text-success mr-1` **Access a single configuration file, [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml), across any number of Python instances on a given machine**
+- *Location tracking of [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml) is handled by [snowmobile](https://pypi.org/project/snowmobile/)*
+- *A path to a specific [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml) file can be specified for long-standing or containerized processes*
+
+{fa}`check,text-success mr-1` **Use a single method to return query results in a [SnowflakeCursor](https://docs.snowflake.com/en/user-guide/python-connector-api.html) 
+or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)**
+
+{fa}`check,text-success mr-1` **Built-in methods to run common information schema and administrative commands**
+
+
+## A collapsible section with markdown
+
+<details>
+  <summary>Notes</summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
+
+
+<details>
+  <p>More Info</p> 
+<h2>Heading</h2>
+<p>
+    1. A numbered
+    2. list
+     * With some
+     * Sub bullets
+</p>
+</details>
+
+<details>
+  <p>More Info</p> 
+<p>
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</p>
+</details>
+
+## Definition List Ish
+
+:fa:`check,text-success mr-1` **No embedding credentials within scripts**
+: ``import snowmobile`` *is all that's required to connect*
+
+```{eval-rst}
+
+:fa:`check,text-success mr-1` **No embedding credentials within scripts**
+    *`import snowmobile` is all that's required to connect*
+    
+:fa:`check,text-success mr-1` **No embedding credentials within scripts**
+: ``import snowmobile`` *is all that's required to connect*
+
+```
+
+```{eval-rst}
+
+what
+  Definition lists associate a term with a definition.
+
+*how*
+  The term is a one-line phrase, and the definition is one or more
+  paragraphs or body elements, indented relative to the term.
+  Blank lines are not allowed between term and definition.
+
+```
+
+At its core, `snowmobile` provides a single configuration file, **snowmobile.toml**, which can be accessed by any number of Python instances
+on a given machine. Internally, each component of this file is its own [pydantic](https://pydantic-docs.helpmanual.io/) object, which
+performs type validation of all fields upon each instantiation.
+
+
+-   Use keyword arguments to alter control-flow of database errors, post-processing errors, and post-processing failures 
+    (assertions called on expected results of post-processing)
+-   Tag certain statements to have stored post-processing and assertions run on their results before continuing 
+    execution of the script
+
+## sphinx tabs
+
+```{eval-rst}
+.. tabbed:: Tab 1
+
+    Tab 1 content
+
+.. tabbed:: Tab 2
+    :class-content: pl-1 bg-primary
+
+    Tab 2 content
+
+.. tabbed:: Tab 3
+    :new-group:
+
+    .. code-block:: python
+
+        import pip
+
+.. tabbed:: Tab 4
+    :selected:
+
+    .. dropdown:: Nested Dropdown
+
+        Some content
+```
 
 
 ### 2.3: `import snowmobile` and verify connection
@@ -20,7 +146,6 @@
     3.  Once validated, it will then pass the parsed arguments to the *snowflake.connector.connect()* method and instantiate the
         `SnowflakeConnector` object as an attribute; *on-failure expects* `DataBaseError`
 ```
-
 
 
 ## Admonitions
@@ -65,57 +190,51 @@ This is a tip.
 This is a tip.
 ```
 
-## Resources
-- Description
 
 
-- Quick Start
-    - Installation
-    - Basic Usage
+## Dropdown attempt
 
-    
-- `snowmobile.toml`
-    - Description / validation
-    - Caching
-    - Minimum configuration
-    - Structure
-      - Connection
-        - Credentials
-        - Default-settings
-      - Loading
-        - file-format
-        - if-exists-behavior
-        - put, copy
-        - export-options
-      - External files
-      - Query
-      - Script
-        - export-dir-name
-        - patterns
-        - qa
-        - markdown
-    
-    
-- `snowmobile` API
-    - connector
-        - arguments
-            - delay
-            - creds
-            - config_file_nm
-            - from_config
-        - attributes
-            - snowflake.connector
-            - cfg
-            - sql
-        - methods
-            - connect/disconnect/query/ex
-    - loader
-    - statement
-      - extended classes
-    - script
-      - statements
-      - markup
+```{eval-rst}
 
+.. dropdown:: Click on me to see my content!
+
+    I'm the content which can be anything:
+
+```
+
+## HTML Details
+
+<html>
+<style>
+details > summary {
+  padding: 4px;
+  width: 200px;
+  background-color: #eeeeee;
+  border: none;
+  box-shadow: 1px 1px 2px #bbbbbb;
+  cursor: pointer;
+}
+
+details > p {
+  background-color: #eeeeee;
+  padding: 4px;
+  margin: 0;
+  box-shadow: 1px 1px 2px #bbbbbb;
+}
+</style>
+<body>
+
+<details>
+  <summary>Epcot Center</summary>
+  <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+</details>
+
+</body>
+</html>
+
+
+
+## Links
     
 - [README](README.md)
 - [Core-API Reference](Core-API%20Reference.md)
@@ -129,7 +248,9 @@ This is a tip.
 - [Index](genindex.md)
 
 
+## Free Text
 
+### snowmobile.toml
 
 this file is parsed into a `snowmobile.Configuration` object using [pydantic's](https://pydantic-docs.helpmanual.io/) every piece the parsing and validation of `snowmobile` objects from this file is done each component of this file is its own  
 

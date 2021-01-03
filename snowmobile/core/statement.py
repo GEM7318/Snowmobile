@@ -244,7 +244,7 @@ class Statement(Tag, Snowmobile):
 
     def render(self) -> None:
         """Renders the statement's sql as markdown in Notebook/IPython environments."""
-        display((Markdown(self.as_section().sql_md),))
+        display((Markdown(self.as_section().sql_md)))
 
     @property
     def is_derived(self):
