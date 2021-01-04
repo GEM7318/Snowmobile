@@ -4,7 +4,7 @@ Establish an initial connection and explore :class:`Connector` attributes.
 """
 import snowmobile
 
-sn = snowmobile.Connect()  # == `snowmobile.Connect(creds='creds1')`
+sn = snowmobile.Connect()  # equivalent to snowmobile.Connect(creds='creds1')
 
 type(sn)         #> snowmobile.core.connector.Connector
 

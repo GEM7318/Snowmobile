@@ -12,15 +12,16 @@ Its primary purpose is to provide an entry point that will:
 Most often an instance of {class}`snowmobile.Connector` represents a distinct [session](https://docs.snowflake.com/en/sql-reference/sql/alter-session.html) 
 along with the contents of [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) that it was instantiated with. 
 
+{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary text-white,Related: snowmobile.core.connector API Reference,tooltip=Documentation parsed from module docstring`
 ```` 
 
 ```{admonition} Note
 :class: note
 
 The below assumes the following about the contents of [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml):
-1. The **[connection.default-creds]** has been left blank
-2. The alias for the first set of credentials is *creds1*
-3. The alias for the second set of credentials is *creds2*
+1.  The **[connection.default-creds]** has been left blank
+1.  The required fields for *creds1* and *creds2* are populated with valid credentials 
+1.  The aliases have been left as *creds1* and *creds2*
 ```
 
 ### 1. Establishing a connection
@@ -46,7 +47,7 @@ including in method signatures:
 
 ````
 
-````{tabbed} Background / Trouble Shooting
+````{tabbed} Context / Trouble Shooting
 
 Several things are happening behind the scenes upon execution of line **3** in the provided snippet and any exceptions that are raised
 should provide direct feedback as to what's causing them.
@@ -110,6 +111,3 @@ created by `sn.query()` above.
 ```
 
 The full script for this section can be found [here](../snippets.md#quick_intro_connectorpy).
-
-
-{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-primary text-white,(related) snowmobile.core.connector API Reference,tooltip=Documentation parsed from module docstring`
