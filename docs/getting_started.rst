@@ -4,22 +4,14 @@
 
 ``pip install snowmobile``
 
-**2. Export snowmobile.toml**
+**2. Export a snowmobile.toml file**
 
-.. tabbed:: From API
+.. tabbed:: Download File
 
-    Specify a target directory and export a default **snowmobile.toml** file.
+    .. only:: builder_html
 
-    .. code-block:: python
-       :lineno-start: 1
-
-        from pathlib import Path
-
-        from snowmobile import export_config
-
-        export_config(export_dir=Path.cwd())
-
-    The above snippet exports the configuration file to the current working directory.
+       :download:`Download <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` this file and
+       remove the `_TEMPLATE` portion of the file name so that it's saved as **snowmobile.toml**.
 
 .. tabbed:: Copy File Contents
 

@@ -19,6 +19,7 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector import connect
 from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
+from snowflake.connector import DictCursor
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from snowmobile.core import sql
@@ -136,8 +137,7 @@ class Connector(Snowmobile):
         try:
             self.con = connect(
                 **{
-                    **self.cfg.connection.defaults,  # defaults (from .toml)
-                    **self.cfg.connection.current.credentials,  # credentials (from .toml)
+                    **self.cfg.connection.connect_kwargs,  # snowmobile.toml
                     **kwargs,  # .toml over-rides/additional
                 },
             )
@@ -168,6 +168,14 @@ class Connector(Snowmobile):
             self.connect()
         return self.con.cursor()
 
+    # noinspection PydanticTypeChecker,PyTypeChecker
+    @property
+    def dictcursor(self) -> DictCursor:
+        """:class:`DictCursor` accessor."""
+        if not isinstance(self.con, SnowflakeConnection):
+            self.connect()
+        return self.con.cursor(cursor_class=DictCursor)
+
     def ex(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor:
         """Executes a command via :class:`SnowflakeCursor`.
 
@@ -190,6 +198,29 @@ class Connector(Snowmobile):
         except ProgrammingError as e:
             self._exception(e=e, _id=1, _raise=on_error != "c")
 
+    def exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor:
+        """Executes a command via :class:`SnowflakeCursor`.
+
+        Args:
+            sql (str):
+                ``sql`` command as a string.
+            on_error (str):
+                String value to impose a specific behavior if an error occurs
+                during the execution of ``sql``.
+            **kwargs:
+                Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
+
+        Returns (SnowflakeCursor):
+            :class:`SnowflakeCursor` object that executed the command.
+
+        """
+        try:
+            self.outcome = 2
+            return self.dictcursor.execute(command=sql, **kwargs)
+        except ProgrammingError as e:
+            self._exception(e=e, _id=1, _raise=on_error != "c")
+
+    # TODO: Change as_df to 'as' where default = 'df' and options are 'cur', 'dcur'
     def query(
         self,
         sql: str,

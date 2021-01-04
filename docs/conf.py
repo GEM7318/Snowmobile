@@ -101,6 +101,7 @@ panels_css_variables = {
 
     # "tabs-size-label": "1rem",
     "tabs-size-label": "0.85rem",
+    # "tabs-size-label": "0.75rem",
 }
 
 # MySt ------------------------------------------------------------------------
@@ -181,7 +182,8 @@ html_theme_options = {
     'globaltoc_depth': 3,
     # 'globaltoc_collapse': True,
     'globaltoc_collapse': False,
-    'globaltoc_includehidden': False,
+    # 'globaltoc_includehidden': False,
+    'globaltoc_includehidden': True,
 
     'repo_url': 'https://github.com/GEM7318/Snowmobile',
     'repo_name': 'Snowmobile',

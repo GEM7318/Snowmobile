@@ -78,14 +78,10 @@ class Credentials(Base):
 
     def __str__(self):
         """Altering inherited str method to mask credentials detail."""
-        attrs = "\n".join(
-            f"\t\t{k}='{'*' * len(v) if k != 'alias' else v}'"
-            for k, v in vars(self).items()
-        )
-        return f"Credentials(\n{attrs}\n)"
+        return f"Credentials('{self._alias}')"
 
     def __repr__(self):
-        return self.__str__()
+        return f"Credentials('{self._alias}')"
 
 
 class Connection(Base):
@@ -160,3 +156,8 @@ class Connection(Base):
     def current(self):
         """Returns current credentials."""
         return self.get(self.creds)
+
+    @property
+    def connect_kwargs(self) -> Dict:
+        """Arguments from snowmobile.toml for snowflake.connector.connect()."""
+        return {**self.defaults, **self.current.credentials}

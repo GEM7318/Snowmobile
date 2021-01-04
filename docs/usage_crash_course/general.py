@@ -23,4 +23,6 @@ import snowmobile
 
 sn: snowmobile.Connector = snowmobile.Connect(creds='sandbox')
 
+type(sn.cursor)
 
+type(sn.con.cursor())

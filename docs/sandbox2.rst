@@ -35,3 +35,21 @@ Sandbox2
     .. dropdown:: Nested Dropdown
 
         Some content
+
+
+
+
+.. tabbed:: From API
+
+    Specify a target directory and export a default **snowmobile.toml** file.
+
+    .. code-block:: python
+       :lineno-start: 1
+
+        from pathlib import Path
+
+        from snowmobile import export_config
+
+        export_config(export_dir=Path.cwd())
+
+    The above snippet exports the configuration file to the current working directory.
