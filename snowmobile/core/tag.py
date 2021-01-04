@@ -185,7 +185,7 @@ class Tag(Snowmobile):
         """Generated `object` for statement."""
         return (
             self.matched_terms[min(self.matched_terms)] if self.matched_terms
-            else self.cfg.DEF_OBJ
+            else str()
         )
 
     @property
@@ -200,7 +200,7 @@ class Tag(Snowmobile):
         generalized_anchor = self.cfg.sql.generic_anchors.get(self.kw_ge)
         if (
             generalized_anchor
-            and self.obj_ge == self.cfg.DEF_OBJ
+            and self.obj_ge == str()
         ):
             return generalized_anchor
         s = ' ' if self.kw_ge and self.obj_ge else ''

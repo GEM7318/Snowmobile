@@ -30,13 +30,14 @@ or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pand
 ## A collapsible section with markdown
 
 <details>
+
   <summary>Notes</summary>
-  
-  ## Heading
+
   1. A numbered
   2. list
      * With some
      * Sub bullets
+    
 </details>
 
 
@@ -124,6 +125,17 @@ performs type validation of all fields upon each instantiation.
     .. dropdown:: Nested Dropdown
 
         Some content
+```
+
+```{eval-rst}
+.. dropdown:: Example
+
+   .. tabbed:: Script
+
+      .. literalinclude:: ../../snowmobile/core/cfg/script.py
+         :language: python
+         :lineno-start: 1
+
 ```
 
 
@@ -303,14 +315,7 @@ Its design is focused on enabling:
 :lines: 5-8
 :lineno-start: 1
 ```
-```{admonition} Note
-- Any potential issues with validating `snowmobile.toml` or connecting to the warehouse
-should be apparent upon the attempted execution of line **3** in the above snippet.
-- Potential errors that occur in this step are either:
-    - `snowflake.errors.DataBaseError` due to invalid credentials or connection specifications provided (most common)
-    - Type errors due to values entered in *snowmobile.toml* that cannot be coerced by [pydantic](https://pydantic-docs.helpmanual.io/) 
-into their defined types 
-```
+
 
 
 #### 4.2: Composition context
@@ -340,3 +345,30 @@ Classes
    snowmobile.Script
    snowmobile.Statement
 
+
+
+
+```{admonition} Note  
+:class: Note
+
+[snowmobile.toml](#snowmobiletoml) contains configuration options for the majority of {xref}`snowmobile`'s object model and shouldn't be digested all at once. The intent 
+of this section is to:
+   1. Outline how it integrates with {xref}```snowmobile```s API and the best ways to access it 
+   2. Store [Field Definitions](#snowmobile_definitions) for reference throughout the rest of the documentation
+```
+
+
+
+
+```{admonition} See Related: API Reference
+:class: tip
+
+{mod}`snowmobile.core.connector`
+
+{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-primary text-white,related: API Reference,tooltip=a tooltip`
+
+```
+
+
+{class}`snowmobile.Connector` ({class}`sn`) is used across the majority of {ref}`snowmobile`'s object model since its attributes include the 
+[snowmobile.Configuration](./snowmobile_toml.md#snowmobiletoml) object ({attr}`sn.cfg`) as well as the {xref}`SnowflakeConnection` object ({attr}`sn.con`).

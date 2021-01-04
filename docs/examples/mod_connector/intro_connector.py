@@ -1,10 +1,10 @@
 """
 Establish an initial connection and explore :class:`Connector` attributes.
-../docs/examples/setup/test_connection.py
+../examples/mod_connector/intro_connector.py
 """
 import snowmobile
 
-sn = snowmobile.Connect()  # equivalent to snowmobile.Connect(creds='creds1')
+sn = snowmobile.Connect()  # == `snowmobile.Connect(creds='creds1')`
 
 type(sn)         #> snowmobile.core.connector.Connector
 

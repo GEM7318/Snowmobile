@@ -19,5 +19,6 @@ __all__ = [
 from .base import Base
 from .connection import Connection, Credentials
 from .loading import Loading
-from .other import SQL, Location
+from .sql import SQL
+from .extensions import Location
 from .script import QA, Attributes, Markdown, Marker, Pattern, Script, Wildcard

@@ -43,7 +43,6 @@ class Loading(Base):
         default-file-format (str):
             Name of file-format to use when loading data into the warehouse;
             default is ``snowmobile_default_csv``;
-            # TODO: See more on file formats ______
             which will be created and
             dropped afterwards if an existing file format is not specified;
         include_index (bool):

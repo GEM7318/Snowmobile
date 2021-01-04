@@ -11,9 +11,9 @@
 
     .. toctree::
       :maxdepth: 3
-
+      
+      ./usage/connector.md
       ./usage/snowmobile_toml.md
-      ./usage.md
       ./modindex.md
       ./snippets.md
       ./extensions.md

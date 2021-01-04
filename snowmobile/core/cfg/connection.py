@@ -61,9 +61,6 @@ class Credentials(Base):
         default_factory=str, alias='database',
     )
 
-    # schema_name: str = Field(
-    #     default_factory=str, alias='cfg',
-    # )
     schema_name: str = Field(
         default_factory=str, alias='schema',
     )
@@ -92,7 +89,7 @@ class Credentials(Base):
 
 
 class Connection(Base):
-    """Represents the full **[credentials]** block within **snowmobile.toml**.
+    """Represents the full **[connection]** block within **snowmobile.toml**.
 
     This includes the :attr:`default_alias` which is the set of credentials
     that :mod:`snowmobile` will authenticate with if :attr:`creds` is not

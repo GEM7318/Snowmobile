@@ -5,23 +5,11 @@ from __future__ import annotations
 
 import re
 
-from pathlib import Path
 from typing import Dict, List
 
 from pydantic import Field
 
 from .base import Base
-
-
-class Location(Base):
-    # fmt: off
-    ddl: Path = Field(
-        default_factory=Path, alias="ddl"
-    )
-    backend: Path = Field(
-        default_factory=Path, alias="backend-ext"
-    )
-    # fmt: on
 
 
 class SQL(Base):

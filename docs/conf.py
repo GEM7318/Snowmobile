@@ -100,7 +100,7 @@ panels_css_variables = {
     "tabs-color-underline": "rgb(207, 236, 238)",
 
     # "tabs-size-label": "1rem",
-    "tabs-size-label": "0.75rem",
+    "tabs-size-label": "0.85rem",
 }
 
 # MySt ------------------------------------------------------------------------

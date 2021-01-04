@@ -1,9 +1,9 @@
 """
 Module handles:
-    * Exporting an initial configuration file
-    * Locating a populated configuration file
-    * Caching of this location
-    * Parsing/instantiating the full configuration object
+* Locating a populated configuration file
+* Caching of this location
+* Parsing/instantiating the full configuration object
+* Exporting a template configuration file
 """
 from __future__ import annotations
 
@@ -26,17 +26,41 @@ class Configuration(Snowmobile):
 
 
     Args:
-        config_file_nm (str):
-            Name of .toml configuration file following the format of
-            ``snowmobile_SAMPLE.toml`` (defaults to `snowmobile.toml`).
-        creds (str):
-            Name of connection within [credentials] section of .toml file
-            to use, defaults to the first set of credentials if creds
-            isn't explicitly passed.
-        from_config (Union[str, Path]):
-            Optionally pass in a full pathlib.Path object to a specific
-            `.toml` configuration file matching the format of
-            `snowmobile_SAMPLE.toml`.
+        config_file_nm (Optional[str]):
+            Name of configuration file to use; defaults to `snowmobile.toml`.
+        creds (Optional[str]):
+            Alias for the set of credentials to authenticate with; default
+            behavior will fall back to the ``connection.default-creds``
+            specified in `snowmobile.toml`, `or the first set of credentials
+            stored if this configuration option is left blank`.
+        from_config (Optional[str, Path]):
+            A full path to a specific configuration file to use; bypasses any
+            checks for a cached file location and can be useful for container-based
+            processes with restricted access to the local file system.
+        export_dir(Optional[Path]):
+            Path to export a template ``snowmobile.toml`` file to; if provided,
+            the file will be exported within the __init__ method and nothing
+            else will be instantiated.
+
+    Attributes:
+        file_nm (str):
+            Name of configuration file provided; defaults to `snowmobile.toml`.
+        cache (Cache):
+            :class:`snowmobile.core.Cache` object for tracking the location
+            of ``snowmobile.toml`` across ``snowmobile`` instances.
+        location (Path):
+            Path to configuration file used to instantiate the instance with.
+        connection (snowmobile.core.cfg.Connection):
+            **[connection]** section of ``snowmobile.toml``.
+        loading (snowmobile.core.cfg.Loading):
+            **[loading]** section of ``snowmobile.toml``.
+        script (snowmobile.core.cfg.Script):
+            **[script]** section of ``snowmobile.toml``.
+        sql (snowmobile.core.cfg.SQL):
+            **[sql]** section of ``snowmobile.toml``.
+        ext_locations (snowmobile.core.cfg.Locations):
+            **[extension-paths]** section of ``snowmobile.toml``.
+
     """
 
     # -- Statement components to be considered for scope.
@@ -52,8 +76,7 @@ class Configuration(Snowmobile):
         "excl",
     ]
 
-    # -- e.g. populates associated parts of 'insert into-unknown~statement #2'
-    DEF_OBJ = ""
+    # -- e.g. populates associated parts of 'insert into~statement #2'
     DEF_DESC = "statement"
 
     # -- Anchors to associate with QA statements.
@@ -66,8 +89,8 @@ class Configuration(Snowmobile):
         self,
         config_file_nm: Optional[str] = None,
         creds: Optional[str] = None,
-        from_config: Optional[Path] = None,
-        export_dir: Optional[Path] = None,
+        from_config: Optional[Path, str] = None,
+        export_dir: Optional[Path, str] = None,
     ):
         """Instantiates instances of the needed params to locate creds file.
         """

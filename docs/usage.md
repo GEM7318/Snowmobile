@@ -1,4 +1,9 @@
-# In-Depth Usage
+# Overview
 
-```{include} ./usage/connector.md
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+./usage/snowmobile_toml.md
+./usage/connector.md
 ```
