@@ -1,6 +1,10 @@
 
 - name: Codecov
   on: [push]
-  - uses: codecov/codecov-action@v1.1.1
-#  steps:
-#  - uses: actions/checkout@0.2.1
+  steps:
+  - uses: actions/checkout@0.2.1
+#  - uses: actions/checkout@master
+  - uses: codecov/codecov-action@v1
+    with:
+      files: ./coverage.xml # optional
+      name: codecov-umbrella # optional'

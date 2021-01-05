@@ -105,4 +105,3 @@ exclude_lines = ['def __repr__']
 
 [tool.coverage.html]
 directory = 'htmlcov'
-

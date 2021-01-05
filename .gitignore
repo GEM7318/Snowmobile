@@ -32,7 +32,7 @@ htmlcov/*
 .coverage
 .tox
 junit.xml
-coverage.xml
+#coverage.xml
 .pytest_cache/
 
 # Build and docs folder/files
