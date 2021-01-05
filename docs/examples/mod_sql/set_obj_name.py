@@ -4,12 +4,14 @@ Setting attributes on a SQL object.
 """
 import snowmobile
 
-sn = snowmobile.Connect(creds='sandbox')  # establish a connection
+sn = snowmobile.Connect()  # establish a connection
+
 sn.sql.auto_run = False  # turn off sql.auto_run
+
 sn.query(
     'create temp table demo_table as select 1 as sample_column;'  # demo table
 )
-# /end setup/
+
 
 try:
     sql = sn.sql.drop()  # requires table='demo_table'

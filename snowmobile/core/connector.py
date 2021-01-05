@@ -198,8 +198,8 @@ class Connector(Snowmobile):
         except ProgrammingError as e:
             self._exception(e=e, _id=1, _raise=on_error != "c")
 
-    def exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor:
-        """Executes a command via :class:`SnowflakeCursor`.
+    def exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> DictCursor:
+        """Executes a command via :class:`DictCursor`.
 
         Args:
             sql (str):
@@ -210,8 +210,8 @@ class Connector(Snowmobile):
             **kwargs:
                 Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
 
-        Returns (SnowflakeCursor):
-            :class:`SnowflakeCursor` object that executed the command.
+        Returns (DictCursor):
+            :class:`DictCursor` object that executed the command.
 
         """
         try:

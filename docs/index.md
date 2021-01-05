@@ -12,10 +12,11 @@
   :hidden:
   
   ./usage/connector.md
+  ./usage/sql.md
   ./usage/snowmobile_toml.md
   ./modindex.md
-  ./snippets.md
   ./extensions.md
+  ./snippets.md
   ./authors.md
   ./changelog.md
   ./license.md

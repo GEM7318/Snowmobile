@@ -1,2 +1,0 @@
-# Using {class}`Connector.sql`
-

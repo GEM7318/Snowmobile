@@ -1,12 +1,10 @@
-
-
 **1. Installation**
 
 ``pip install snowmobile``
 
-**2. Export a snowmobile.toml file**
+**2. Save a snowmobile.toml file**
 
-.. tabbed:: Download File
+.. tabbed:: Download
 
     .. only:: builder_html
 
@@ -42,15 +40,19 @@ The first few lines of **snowmobile.toml** are outlined below; **for minimum con
                      for *creds1* under the alias *creds2* as well
 
 
-**4.** ``import snowmobile`` **and verify connection**
+**4.** Connect to :xref:`snowflake`
 
-.. literalinclude:: ./examples/setup/quick_intro_connector.py
- :language: python
- :lineno-start: 1
- :lines: 5-7
+.. code-block:: python
+
+    import snowmobile
+
+    sn = snowmobile.Connector()
 
 Successful setup and connection results in ending console output similar to:
     >>>
     Looking for snowmobile.toml in local file system..
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
     ..connected: snowmobile.Connect(creds='creds1')
+
+
+:link-badge:`./usage/connector_basics.html#connecting-to-snowflake,cls=badge-primary text-white,Related: Connecting to Snowflake,tooltip=Usage Documentation on Connecting to Snowflake`

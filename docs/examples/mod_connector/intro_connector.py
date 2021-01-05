@@ -19,14 +19,14 @@ str(sn.cfg)      #> snowmobile.Configuration('snowmobile.toml')
 type(sn.con)     #> snowflake.connector.connection.SnowflakeConnection
 type(sn.cursor)  #> snowflake.connector.cursor.SnowflakeCursor
 
-df1 = sn.query('select 1')                 #  == pd.read_sql()
-type(df1)                                  #> pandas.core.frame.DataFrame
+df1 = sn.query('select 1')  #  == pd.read_sql()
+type(df1)                   #> pandas.core.frame.DataFrame
 
-cur1 = sn.ex('select 1')                   #  == SnowflakeConnection.cursor().execute()
-type(cur1)                                 #> snowflake.connector.cursor.SnowflakeCursor
+cur1 = sn.ex('select 1')    #  == SnowflakeConnection.cursor().execute()
+type(cur1)                  #> snowflake.connector.cursor.SnowflakeCursor
 
-dcur1 = sn.exd('select 1')                 #  == SnowflakeConnection.cursor(DictCursor).execute()
-type(dcur1)                                #> snowflake.connector.DictCursor
+dcur1 = sn.exd('select 1')  #  == SnowflakeConnection.cursor(DictCursor).execute()
+type(dcur1)                 #> snowflake.connector.DictCursor
 
 
 import pandas as pd

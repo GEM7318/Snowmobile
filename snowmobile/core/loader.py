@@ -87,7 +87,7 @@ class Loader(Snowmobile):
             ]
             if not format_exists_in_schema:  # read from source file otherwise
                 if not self.path_ddl.exists():
-                    raise IOError(f"`{self.path_ddl}` does not exist.")
+                    raise FileNotFoundError(f"`{self.path_ddl}` does not exist.")
                 ddl = Script(sn=self.sql.sn, path=self.path_ddl)
                 st_name = f"create-file format~{self.file_format}"
                 args = {  # only used if exception is thrown below

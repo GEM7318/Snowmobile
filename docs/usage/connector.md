@@ -1,13 +1,4 @@
-# snowmobile.Connector
-
-```{toctree}
-:maxdepth: 3
-:hidden:
-
-./connector_basics.md
-./connector_delayed.md
-./connector_sql.md
-```
+# {class}`snowmobile.Connector`
 
 ````{tabbed} Context
 The attributes of {class}`snowmobile.Connector` ({class}`sn`) include the [snowmobile.Configuration](./snowmobile_toml.md#snowmobiletoml) object
@@ -23,3 +14,12 @@ along with the contents of [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml
 
 {link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary text-white,Related: snowmobile.core.connector API Reference,tooltip=Documentation parsed from module docstring`
 ```` 
+
+```{toctree}
+:maxdepth: 3
+:hidden:
+
+./connector_basics.md
+./connector_aliases.md
+./connector_sql.md
+```

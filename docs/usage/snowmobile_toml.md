@@ -1,4 +1,4 @@
-# snowmobile.toml
+# **snowmobile.toml**
 
 ```{toctree}
 :maxdepth: 3
@@ -19,7 +19,6 @@ and population of required fields each time a {ref}`snowmobile` object is create
 
 Once validated, the {class}`Configuration` object serves as a namespace for the contents/structure of the configuration file and utility methods
 implemented on top of them, with the rest of the API accessing it as the {attr}`~snowmobile.Connector.cfg` attribute of {class}`snowmobile.Connector`.
-
 ````
 
 ````{tabbed} Usage

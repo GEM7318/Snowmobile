@@ -84,7 +84,7 @@ class SQL(Snowmobile):
         restrictions: Dict[str, str] = None,
         order_by: List[Optional[str, int]] = None,
         all_schemas: bool = False,
-        run: bool = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Query ``information_schema.tables`` for a given table or view.
 
@@ -151,7 +151,7 @@ class SQL(Snowmobile):
         restrictions: Optional[Dict] = None,
         order_by: Optional[List] = None,
         all_schemas: bool = False,
-        run: bool = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Query ``information_schema.columns`` for a given table or view.
 
@@ -208,7 +208,7 @@ class SQL(Snowmobile):
 
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def cnt_records(self, nm: Optional[str] = None, run: bool = None):
+    def cnt_records(self, nm: Optional[str] = None, run: Optional[bool] = None):
         """Number of records within a table or view.
 
         Args:
@@ -235,7 +235,7 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def table_last_altered(
-        self, nm: Optional[str] = None, run: bool = None,
+        self, nm: Optional[str] = None, run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Last altered timestamp for a table or view.
 
@@ -262,7 +262,7 @@ class SQL(Snowmobile):
             raise e
 
     def create_stage(
-        self, nm_stage: str, nm_format: str, replace: bool = False, run: bool = None,
+        self, nm_stage: str, nm_format: str, replace: bool = False, run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Create a staging table.
 
@@ -292,7 +292,7 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def drop(
-        self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,
+        self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Drop a ``Snowflake`` object.
 
@@ -340,7 +340,7 @@ class SQL(Snowmobile):
         nm: Optional[str] = None,
         to: Optional[str] = None,
         obj: Optional[str] = None,
-        run: bool = None,
+        run: Optional[bool] = None,
         replace: bool = False,
     ) -> Union[str, pd.DataFrame]:
         """Clone a ``Snowflake`` object.
@@ -440,7 +440,7 @@ class SQL(Snowmobile):
         nm_stage: str,
         options: Optional[Dict] = None,
         ignore_defaults: bool = False,
-        run: bool = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Generates a 'put' command into a staging table from a local file.
 
@@ -491,7 +491,7 @@ class SQL(Snowmobile):
         nm_stage: str,
         options: Optional[Dict] = None,
         ignore_defaults: bool = False,
-        run: bool = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Generates a command to copy data into a table from a staging table.
 
@@ -534,7 +534,7 @@ class SQL(Snowmobile):
         sql = strip(_sql, trailing=False, whitespace=False, blanks=True)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def show_file_formats(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def show_file_formats(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Lists all file formats in the current schema.
 
         Args:
@@ -552,7 +552,7 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def ddl(
-        self, nm: Optional[str] = None, obj: Optional[str] = None, run: bool = None,
+        self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None,
     ) -> str:
         """Query the DDL for an in-warehouse object.
 
@@ -586,7 +586,7 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql).snf.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
-        self, nm: Optional[str] = None, n: Optional[int] = None, run: bool = None,
+        self, nm: Optional[str] = None, n: Optional[int] = None, run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Select `n` sample records from a table.
 
@@ -628,7 +628,7 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def truncate(self, nm: str, run: bool = None) -> Union[str, pd.DataFrame]:
+    def truncate(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Truncate a table.
 
         Args:
@@ -661,7 +661,7 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def current(self, obj: str, run: bool = None):
+    def current(self, obj: str, run: Optional[bool] = None):
         """Generic implementation of 'select current' for session-based objects.
 
         Args:
@@ -681,27 +681,27 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def current_session(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def current_session(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current session."""
         return self.current(obj="session", run=run)
 
-    def current_schema(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def current_schema(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current schema."""
         return self.current(obj="schema", run=run)
 
-    def current_database(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def current_database(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current database."""
         return self.current(obj="database", run=run)
 
-    def current_warehouse(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def current_warehouse(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current warehouse."""
         return self.current(obj="warehouse", run=run)
 
-    def current_role(self, run: bool = None) -> Union[str, pd.DataFrame]:
+    def current_role(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current role."""
         return self.current(obj="role", run=run)
 
-    def use(self, nm: str, obj: str, run: bool = None):
+    def use(self, nm: str, obj: str, run: Optional[bool] = None):
         """Generic implementation of 'use' command for in-warehouse objects.
 
         Args:
@@ -732,25 +732,25 @@ limit {n or 1}
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def use_schema(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, pd.DataFrame]:
         """Use schema command."""
         return self.use(obj="schema", nm=nm, run=run)
 
     def use_database(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, pd.DataFrame]:
         """Use database command."""
         return self.use(obj="database", nm=nm, run=run)
 
     def use_warehouse(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, pd.DataFrame]:
         """Use warehouse command."""
         return self.use(obj="warehouse", nm=nm, run=run)
 
     def use_role(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, pd.DataFrame]:
         """Use role command."""
         return self.use(obj="role", nm=nm, run=run)
@@ -759,7 +759,7 @@ limit {n or 1}
         self,
         nm: Optional[str] = None,
         from_info_schema: bool = False,
-        run: bool = None,
+        run: Optional[bool] = None,
     ) -> Union[str, List]:
         """Returns an ordered list of columns for a table or view.
 
@@ -815,7 +815,7 @@ limit {n or 1}
             return False
 
     def _columns_from_info_schema(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, List]:
         """Retrieves list of columns for a table or view **from information schema**.
 
@@ -840,7 +840,7 @@ limit {n or 1}
         return self.sn.query(sql).snf.to_list(col="column_name") if run else sql
 
     def _columns_from_sample(
-        self, nm: Optional[str] = None, run: bool = None
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, List]:
         """Retrieves a list of columns for a table or view from **sampling table**.
 
