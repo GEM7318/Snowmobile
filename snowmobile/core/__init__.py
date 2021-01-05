@@ -19,7 +19,7 @@ from .snowframe import SnowFrame
 from .sql import SQL
 from .markup import Markup
 from .script import Script
-from .loader import Loader
+from .table import Table
 from .paths import DDL_DEFAULT_PATH, DIR_MODULES, DIR_PKG_DATA, EXTENSIONS_DEFAULT_PATH
 
 
@@ -29,7 +29,7 @@ __all__ = [
     "Configuration",
     "Connector",
     "Connect",
-    "Loader",
+    "Table",
     "Script",
     "SQL",
     "Scope",
@@ -43,7 +43,7 @@ __all__ = [
     "Tag",
 
     # parsed `snowmobile.toml` objects
-    "schema",
+    "cfg",
 
     # error/exception handling
     "ExceptionHandler",

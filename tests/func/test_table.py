@@ -1,18 +1,22 @@
 """Test loader"""
 import pytest
 
+from tests import (
+    CONFIG_FILE_NM,
+    CREDS,
+)
 
-@pytest.mark.loading
-def test_loader():
+
+@pytest.mark.table
+def test_table(sn):
     """Temporary - verify the most basic operations of a loader object."""
     import snowmobile
     table_name = 'test_snowmobile_upload'
-    sn1 = snowmobile.Connect(creds='snowmobile_testing')
-    df = sn1.query('select 1 as sample_column')
-    table = snowmobile.Loader(
+    df = sn.query('select 1 as sample_column')
+    table = snowmobile.Table(
         df=df,
         table=table_name,
-        sn=sn1,
+        sn=sn,
     )
     loaded = table.load(if_exists='replace')
     assert loaded

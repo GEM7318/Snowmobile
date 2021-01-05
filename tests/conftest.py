@@ -13,9 +13,12 @@ from tests import (
 def sn():
     """Returns a standard `Connector` object."""
     import snowmobile
-    return snowmobile.Connect(
+    sn = snowmobile.Connect(
         creds=CREDS, config_file_nm=CONFIG_FILE_NM
     )
+    sn.ex('create schema TESTING_SNOWMOBILE')
+    yield sn
+    sn.ex('drop schema TESTING_SNOWMOBILE')
 
 
 @pytest.fixture(scope='session')

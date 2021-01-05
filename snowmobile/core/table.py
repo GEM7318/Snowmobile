@@ -17,9 +17,9 @@ from . import Snowmobile, SQL, Connector, Script, errors
 from .paths import DDL_DEFAULT_PATH
 
 
-# TODO: (rename) Loader -> Table
-class Loader(Snowmobile):
-
+class Table(Snowmobile):
+    """Represents a DataFrame and a Table to be loaded into.
+    """
 
     def __init__(
         self,
@@ -95,7 +95,7 @@ class Loader(Snowmobile):
                     "statements": list(ddl.contents(by_index=False)),
                 }
                 try:
-                    ddl.run(st_name, results=False)
+                    ddl.run(st_name, as_df=False)
                 except errors.StatementNotFoundError(**args) as e:
                     raise errors.FileFormatNameError(**args) from e
 
@@ -263,7 +263,7 @@ class Loader(Snowmobile):
         from_script: Path = None,
         validate: bool = True,
         **kwargs,
-    ) -> Loader:
+    ) -> Table:
 
         if_exists = if_exists or self.if_exists
         if if_exists not in ("fail", "replace", "append", "truncate"):
@@ -358,7 +358,7 @@ class Loader(Snowmobile):
             print(f"..completed: {self.df.shape[0]} rows in {self.tm_total} seconds")
 
     def __str__(self) -> str:
-        return f"snowmobile.Loader(table='{self.name}')"
+        return f"snowmobile.Table(table='{self.name}')"
 
     def __repr__(self) -> str:
-        return f"snowmobile.Loader(table='{self.name}')"
+        return f"snowmobile.Table(table='{self.name}')"

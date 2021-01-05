@@ -102,11 +102,21 @@ def test_invalid_sql_passed_to_ex_raises_exception(sn):
         sn.ex('select * from *')  # <-- an invalid sql statement
 
 
+# noinspection SqlResolve
 @pytest.mark.connector
-def test_invalid_credentials_alias_raises_exception(sn):
+def test_invalid_sql_passed_to_exd_raises_exception(sn):
+    """Tests that invalid sql passed to connector.ex() raises ProgrammingError."""
+    from snowflake.connector.errors import ProgrammingError
+    with pytest.raises(ProgrammingError):
+        sn.exd('select * from *')  # <-- an invalid sql statement
+
+
+@pytest.mark.connector
+def test_invalid_credentials_alias_raises_exception():
     """Tests that an invalid credentials name creds raises KeyError."""
+    from snowmobile import Connector
     with pytest.raises(KeyError):
-        sn.cfg.connection.get(creds='name_for_a_nonexistent_set_of_creds')
+        Connector(creds='name_for_a_nonexistent_set_of_creds')
 
 
 @pytest.mark.connector

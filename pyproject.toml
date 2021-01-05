@@ -59,20 +59,50 @@ include_trailing_comma = true
 float_to_top = true
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOLDER']
 
+[tool.pytest.ini_options]
+testpaths = 'tests'
+python_files = 'test_*.py'
+python_functions = 'test_*'
+
+#to run tests for only or excluding a given marker, run statements like
+#'pytest -m script' or 'pytest -m 'not script')
+markers =[
+    'script',
+    'tags',
+    'markers',
+    'connector',
+    'qa',
+    'table',
+    'markup',
+    'configuration',
+    'sql',
+    'parsing',
+    'cache',
+    'statement',
+    'scope',
+    'exceptions',
+    'exception_handler',
+]
+
+
 [tool.coverage]
 
 [tool.coverage.run]
+omit = ['tests/**/.*','_*.py']
 source = ['snowmobile']
+include = ['snowmobile']
 branch = true
 
-[tool.coverage.codecov]
-source = ['snowmobile']
-branch = '0.2.1'
-require_ci_to_pass = false
+#[tool.coverage.codecov]
+#source = ['snowmobile']
+#branch = '0.2.1'
+#require_ci_to_pass = false
 
 [tool.coverage.report]
 fail_under = 80
 show_missing = true
-include = ['snowmobile']
-omit = ['tests/*']
 exclude_lines = ['def __repr__']
+
+[tool.coverage.html]
+directory = 'htmlcov'
+

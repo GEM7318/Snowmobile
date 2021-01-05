@@ -9,5 +9,5 @@
    snowmobile.SQL
    snowmobile.Script
    snowmobile.Statement
-   snowmobile.Loader
+   snowmobile.Table
 ```

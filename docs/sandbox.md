@@ -341,7 +341,7 @@ Classes
    snowmobile.Configuration
    snowmobile.Connect
    snowmobile.Connector
-   snowmobile.Loader
+   snowmobile.Table
    snowmobile.Script
    snowmobile.Statement
 

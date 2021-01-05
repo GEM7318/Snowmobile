@@ -284,10 +284,10 @@ class Connector(Snowmobile):
         **kwargs,
     ):
         """Table re-implementation."""
-        from snowmobile.core import Loader  # isort:skip
+        from snowmobile.core import Table  # isort:skip
 
         try:
-            table = Loader(
+            table = Table(
                 sn=self,
                 df=df,
                 table=table,

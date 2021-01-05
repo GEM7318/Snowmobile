@@ -139,8 +139,8 @@ class Connection(Base):
         """Gets and sets a set of credentials given an creds.
 
         Args:
-            creds (str): The name of the set of :attr:`Creds` to
-            authenticate with.
+            creds (str):
+                The name of the set of :attr:`Creds` to authenticate with.
 
         Returns:
             :class:`Creds` object for the creds provided.
