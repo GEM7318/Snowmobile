@@ -1,10 +1,10 @@
 # =============================================================================
 # ../snowmobile_ext.toml
 #   DO NOT DELETE UNLESS INTENTIONALLY SPECIFYING ALTERNATE EXTENSIONS LOCATION
-#   IN snowmobile.toml.
+#   IN SNOWMOBILE.TOML.
 # =============================================================================
 
-# -- Type mapping of how attribute values should be parsed based attr name ----
+# -- Type mapping of how attribute values should be parsed based on attr name -
 [script.tag-to-type-xref]
     string = [
         'name', 'partition-on', 'end-index-at', 'description'
@@ -43,4 +43,3 @@
 
     [sql.information-schema-exceptions]
         schema = "schemata"
-

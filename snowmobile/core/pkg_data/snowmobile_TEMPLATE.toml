@@ -25,7 +25,6 @@
         authenticator = 'snowflake'
         timezone = 'America/Chicago'
 
-# TODO: Change to just 'loading'
 [loading]
 
     [loading.default-table-kwargs]

@@ -24,10 +24,10 @@ implemented on top of them, with the rest of the API accessing it as the {attr}`
 ````{tabbed} Usage
 :new-group:
 
-{class}`snowmobile.Configuration` doesn't need to be directly instantiated since it's accessible through the {attr}`~snowmobile.Connector.cfg` 
+{class}`snowmobile.Configuration` doesn't need to be directly instantiated since it's accessible through the {attr}`~snowmobile.Connector.cfg`
 attribute of {class}`snowmobile.Connector`.
 
-We can create an instance of {class}`snowmobile.Connector` without connecting to {xref}`snowflake` by providing it with the convenience argument 
+We can create an instance of {class}`snowmobile.Connector` without connecting to {xref}`snowflake` by providing it with the convenience argument
 `delay=True`, which will omit connecting to {xref}`snowflake` when the object is created.
 
 ```{literalinclude} ../examples/configuration/instantiate_connector.py

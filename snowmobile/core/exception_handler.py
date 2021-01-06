@@ -73,7 +73,7 @@ class ExceptionHandler(Snowmobile):
         return self
 
     def reset(
-        self, ctx_id: bool = False, in_context: bool = False, outcome: bool = False,
+        self, ctx_id: bool = False, in_context: bool = False, outcome: bool = False
     ):
         """**Reset** attributes on self."""
         if ctx_id:
@@ -96,7 +96,7 @@ class ExceptionHandler(Snowmobile):
             raise InternalError(
                 nm="ExceptionalHandler.current",
                 msg=f"""
-A call was made to `.current` while the current value of '_ctx_id` is None.                 
+A call was made to `.current` while the current value of '_ctx_id` is None.
 """.strip(
                     "\n"
                 ),
@@ -254,4 +254,3 @@ exceptions in current context are:\n\t{list(self.current.values())}
             f"ExceptionHandler(within={self.within}, contexts={len(self.by_ctx)}, "
             f"cnt={len(self)}, to_raise: {bool(self)}"
         )
-

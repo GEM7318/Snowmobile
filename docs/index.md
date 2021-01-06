@@ -17,7 +17,7 @@ A library built to streamline interacting with {xref}`snowflake` through Python.
 .. toctree::
   :maxdepth: 3
   :hidden:
-  
+
   ./usage/connector.md
   ./usage/script1.md
   ./usage/sql.md

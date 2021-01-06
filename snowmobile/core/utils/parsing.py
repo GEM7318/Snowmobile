@@ -17,9 +17,9 @@ def rmerge_dicts(d1: Dict, d2: Dict) -> Dict:
     merged.update(
         {
             key: rmerge_dicts(merged[key], d2[key])
-            if (
-                isinstance(merged.get(key), dict) and isinstance(d2[key], dict)
-            ) else d2[key] for key in d2.keys()
+            if (isinstance(merged.get(key), dict) and isinstance(d2[key], dict))
+            else d2[key]
+            for key in d2.keys()
         }
     )
     return merged
@@ -31,7 +31,7 @@ def up(nm: str):
 
 
 def strip(
-    val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False,
+    val: str, trailing: bool = True, blanks: bool = True, whitespace: bool = False
 ) -> str:
     """Utility to strip a variety whitespace from a string."""
     splitter = val.split("\n")

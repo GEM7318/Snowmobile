@@ -12,6 +12,7 @@ from .base import Base
 
 class SQL(Base):
     """[sql] (**snowmobile_ext.toml**)"""
+
     # fmt: off
     generic_anchors: Dict = Field(
         default_factory=dict, alias="generic-anchors"

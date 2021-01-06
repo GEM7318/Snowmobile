@@ -36,10 +36,7 @@ from . import (
 class Script(Snowmobile):
 
     # Maps statement anchors to alternate base class.
-    _ANCHOR_TO_QA_BASE_MAP = {
-        "qa-diff": Diff,
-        "qa-empty": Empty,
-    }
+    _ANCHOR_TO_QA_BASE_MAP = {"qa-diff": Diff, "qa-empty": Empty}
 
     def __init__(
         self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
@@ -191,10 +188,7 @@ class Script(Snowmobile):
         """
         # generic case
         statement: Any[Statement, Empty, Diff] = Statement(
-            sn=self.sn,
-            statement=s,
-            index=index,
-            attrs_raw=attrs_raw,
+            sn=self.sn, statement=s, index=index, attrs_raw=attrs_raw
         )
         if not statement.is_derived or self.as_generic:
             self._statements_all[index] = statement
@@ -295,9 +289,7 @@ class Script(Snowmobile):
                 A full set of scope arguments.
         """
         for s in self._statements_all.values():
-            s.set_state(
-                ctx_id=self.e.ctx_id, in_context=True, filters=scope_to_set,
-            )
+            s.set_state(ctx_id=self.e.ctx_id, in_context=True, filters=scope_to_set)
 
     def _update_scope_script(self, _id: Any[int, str], **kwargs) -> Dict:
         """Returns a valid set of scope args from an ``_id`` and the scope kwargs.
@@ -776,7 +768,7 @@ class Script(Snowmobile):
         """Console output."""
 
         def __init__(
-            self, name: str, statements: Dict[int, Statement], verbose: bool = True,
+            self, name: str, statements: Dict[int, Statement], verbose: bool = True
         ):
             self.name: str = name
             self.statements = statements

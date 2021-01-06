@@ -178,8 +178,8 @@ class SnowFrame(Snowmobile):
         for dupe_col in cols[cols.duplicated()].unique():
             dupe_indices = cols[cols == dupe_col].index.values.tolist()
             cols[dupe_indices] = [
-                f"{dupe_col}_{i}" if i != 0
-                else dupe_col for i in range(sum(cols == dupe_col))
+                f"{dupe_col}_{i}" if i != 0 else dupe_col
+                for i in range(sum(cols == dupe_col))
             ]
         self._obj.columns = cols
 

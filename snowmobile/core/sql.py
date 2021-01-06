@@ -139,7 +139,7 @@ class SQL(Snowmobile):
             _ = restrictions.pop("lower(table_schema)")
 
         sql = self._info_schema_generic(
-            obj="table", fields=fields, restrictions=restrictions, order_by=order_by,
+            obj="table", fields=fields, restrictions=restrictions, order_by=order_by
         )
 
         return self.sn.query(sql=sql) if self._run(run) else sql
@@ -203,7 +203,7 @@ class SQL(Snowmobile):
             restrictions.pop("lower(table_schema)")
 
         sql = self._info_schema_generic(
-            obj="column", fields=fields, restrictions=restrictions, order_by=order_by,
+            obj="column", fields=fields, restrictions=restrictions, order_by=order_by
         )
 
         return self.sn.query(sql=sql) if self._run(run) else sql
@@ -235,7 +235,7 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def table_last_altered(
-        self, nm: Optional[str] = None, run: Optional[bool] = None,
+        self, nm: Optional[str] = None, run: Optional[bool] = None
     ) -> Union[str, pd.DataFrame]:
         """Last altered timestamp for a table or view.
 
@@ -255,14 +255,18 @@ class SQL(Snowmobile):
         """
         try:
             sql = self.info_schema_tables(
-                nm=nm, fields=["table_name", "table_schema", "last_altered"],
+                nm=nm, fields=["table_name", "table_schema", "last_altered"]
             )
             return self.sn.query(sql=sql) if self._run(run) else sql
         except AssertionError as e:
             raise e
 
     def create_stage(
-        self, nm_stage: str, nm_format: str, replace: bool = False, run: Optional[bool] = None,
+        self,
+        nm_stage: str,
+        nm_format: str,
+        replace: bool = False,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Create a staging table.
 
@@ -292,7 +296,10 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def drop(
-        self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None,
+        self,
+        nm: Optional[str] = None,
+        obj: Optional[str] = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Drop a ``Snowflake`` object.
 
@@ -524,10 +531,7 @@ class SQL(Snowmobile):
             if not ignore_defaults
             else dict()
         )
-        options = {
-            **defaults,
-            **(options or dict()),
-        }
+        options = {**defaults, **(options or dict())}
         for k, v in options.items():
             statement.append(f"\t{k} = {v}")
         _sql = "\n".join(statement)
@@ -552,7 +556,10 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def ddl(
-        self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None,
+        self,
+        nm: Optional[str] = None,
+        obj: Optional[str] = None,
+        run: Optional[bool] = None,
     ) -> str:
         """Query the DDL for an in-warehouse object.
 
@@ -586,7 +593,10 @@ class SQL(Snowmobile):
         return self.sn.query(sql=sql).snf.to_list(n=1) if self._run(run) else sql
 
     def table_sample(
-        self, nm: Optional[str] = None, n: Optional[int] = None, run: Optional[bool] = None,
+        self,
+        nm: Optional[str] = None,
+        n: Optional[int] = None,
+        run: Optional[bool] = None,
     ) -> Union[str, pd.DataFrame]:
         """Select `n` sample records from a table.
 
@@ -628,7 +638,9 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def truncate(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
+    def truncate(
+        self, nm: Optional[str] = None, run: Optional[bool] = None
+    ) -> Union[str, pd.DataFrame]:
         """Truncate a table.
 
         Args:
@@ -835,7 +847,7 @@ limit {n or 1}
 
         """
         sql = self.info_schema_columns(
-            nm=nm, fields=["ordinal_position", "column_name"], order_by=[1], run=False,
+            nm=nm, fields=["ordinal_position", "column_name"], order_by=[1], run=False
         )
         return self.sn.query(sql).snf.to_list(col="column_name") if run else sql
 
@@ -915,7 +927,7 @@ limit {n or 1}
         order_by = self.order(by=order_by)
 
         sql = f"""
-select 
+select
 {fields}
 from {info_schema_loc}
 {where}
@@ -1015,7 +1027,7 @@ from {info_schema_loc}
 
     def __copy__(self) -> SQL:
         """Dunder copy method."""
-        return type(self)(sn=self.sn, nm=f"{self.schema}.{self.nm}", obj=self.obj,)
+        return type(self)(sn=self.sn, nm=f"{self.schema}.{self.nm}", obj=self.obj)
 
     def __call__(self, *args, **kwargs) -> SQL:
         for k, v in kwargs.items():

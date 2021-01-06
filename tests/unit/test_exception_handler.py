@@ -47,7 +47,7 @@ def test_exception_handler_core(
     any_exception_marked_not_to_be_raised1,
     any_exception_marked_not_to_be_raised2,
     to_be_raised_exception1,
-    to_be_raised_exception2
+    to_be_raised_exception2,
 ):
     """Kitchen sink testing of ExceptionHandler functionality.."""
     e = snowmobile_test_exception_handler
@@ -137,9 +137,3 @@ def test_exception_handler_core(
     with_an_additional_exception_to_be_raised()
     with_a_new_ctx_id_and_an_exception_to_be_raised()
     core_exception_querying_across_two_ctx_ids()
-
-
-
-
-
-

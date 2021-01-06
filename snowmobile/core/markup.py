@@ -95,7 +95,8 @@ class Markup(Snowmobile):
             # Path()
             # if not self.path.anchor
             # else
-            self.path.parent / self.cfg.script.export_dir_nm
+            self.path.parent
+            / self.cfg.script.export_dir_nm
         )
 
     @property
@@ -185,11 +186,9 @@ class Markup(Snowmobile):
     def sql(self):
         """SQL for export."""
         to_export = [
-            s.trim() if self._is_statement(s)
-            else self.cfg.script.as_parsable(
-                raw=s.raw,
-                is_marker=True
-            )
+            s.trim()
+            if self._is_statement(s)
+            else self.cfg.script.as_parsable(raw=s.raw, is_marker=True)
             for i, s in self.contents.items()
             if i in self.included
         ]
@@ -215,10 +214,7 @@ class Markup(Snowmobile):
             f.write(val)
             self.exported.append(path)
             self._stdout.offset_path(
-                file_path=path,
-                root_dir_nm=path.parent.name,
-                indent="\t",
-                output=True,
+                file_path=path, root_dir_nm=path.parent.name, indent="\t", output=True
             )
 
     def export(self, md_only: bool = False, sql_only: bool = False) -> None:
@@ -229,8 +225,10 @@ class Markup(Snowmobile):
             sql_only (bool): Export sql file only.
 
         """
+
         def _md():
             self._export(path=self.path_md, val=self.markdown)
+
         def _sql():
             self._export(path=self.path_sql, val=self.sql)
 

@@ -57,4 +57,3 @@ Successful setup and connection results in ending console output similar to:.
 
 :link-badge:`./usage/connector_basics.html#executing-raw-sql,cls=badge-primary badge-pill text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
 :link-badge:`./usage/connector_basics.html#connecting-to-snowflake,cls=badge-danger text-white,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
-

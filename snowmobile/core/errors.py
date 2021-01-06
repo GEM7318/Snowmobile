@@ -41,7 +41,7 @@ class Error(Exception):
         to_raise: Optional[bool] = False,
     ):
         self.tmstmp: int = int(time.time())
-        self.msg = (msg or str()).strip('\n')
+        self.msg = (msg or str()).strip("\n")
         self.errno = errno
         self.nm = nm
         self.to_raise: bool = to_raise
@@ -127,7 +127,7 @@ class InternalError(Error):
         """InternalError message."""
         str_args = self.format_error_args(
             _filter=True,
-            **{"name": f"'{self.nm}'", "msg": self.msg, "errno": self.errno,},
+            **{"name": f"'{self.nm}'", "msg": self.msg, "errno": self.errno},
         ).strip("\n")
         return f"""
 An internal exception was raised.
@@ -267,7 +267,7 @@ class SnowFrameInternalError(InternalError):
     def __str__(self):
         """SnowFrameInternalError message."""
         str_args = self.format_error_args(
-            _filter=True, **{"name": self.nm, "msg": self.msg,},
+            _filter=True, **{"name": self.nm, "msg": self.msg}
         ).strip("\n")
         return f"""
 {str_args}
@@ -346,7 +346,7 @@ class LoadingInternalError(InternalError):
     def __str__(self):
         """LoadingInternalError message."""
         str_args = self.format_error_args(
-            _filter=True, **{"name": self.nm, "msg": self.msg,},
+            _filter=True, **{"name": self.nm, "msg": self.msg}
         ).strip("\n")
         return f"""
 An internal exception was encountered in `snowmobile.Table`.

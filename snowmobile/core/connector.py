@@ -18,9 +18,13 @@ from typing import Any, Dict, Optional, Tuple, Union
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector import connect
-from snowflake.connector.connection import SnowflakeConnection, SnowflakeCursor
-from snowflake.connector import DictCursor
-from snowflake.connector.errors import DatabaseError, ProgrammingError
+from snowflake.connector.connection import SnowflakeCursor
+from snowflake.connector import (
+    DictCursor,
+    SnowflakeConnection,
+    DatabaseError,
+    ProgrammingError,
+)
 
 from snowmobile.core import sql
 from snowmobile.core import ExceptionHandler
@@ -31,7 +35,7 @@ from . import Snowmobile
 
 
 class Connector(Snowmobile):
-    """Primary method of statement execution and configuration management.
+    """Primary method of statement execution and accessor to parsed snowmobile.toml.
 
     Args:
 
@@ -139,7 +143,7 @@ class Connector(Snowmobile):
                 **{
                     **self.cfg.connection.connect_kwargs,  # snowmobile.toml
                     **kwargs,  # .toml over-rides/additional
-                },
+                }
             )
             self.sql = sql.SQL(sn=self)
             print(f"..connected: {str(self)}")

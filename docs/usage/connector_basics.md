@@ -17,7 +17,7 @@ The below assumes the following about the contents of [snowmobile.toml](./snowmo
 
 ````{tabbed} Content
 
-Once a valid set of credentials has been stored in 
+Once a valid set of credentials has been stored in
 [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml), a connection can be made with:
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python
@@ -29,27 +29,27 @@ Once a valid set of credentials has been stored in
 
 ````{tabbed} Info / Errors
 
-Several things are happening behind the scenes upon execution of line **7** in 
+Several things are happening behind the scenes upon execution of line **7** in
 the provided snippet and any exceptions that are raised
 should provide direct feedback as to what's causing them.
 
 ---
 
-1.  {xref}`snowmobile` will traverse your file system from the ground up 
-    searching for a file called [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml). 
+1.  {xref}`snowmobile` will traverse your file system from the ground up
+    searching for a file called [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml).
     Once found, it will cache this location for future reference and not repeat
     this step unless the file is moved.
     -   *on-failure expects* `FileNotFoundError`
-2.  It will then instantiate the contents of the configuration file as 
-    {xref}`pydantic` objects. This ensures instant exceptions will be thrown 
+2.  It will then instantiate the contents of the configuration file as
+    {xref}`pydantic` objects. This ensures instant exceptions will be thrown
     if any required fields are omitted or unable to be coerced into their intended type.
     -   *on-failure expects* `ValidationError`
-3.  Once validated, it will then pass the parsed arguments to the 
+3.  Once validated, it will then pass the parsed arguments to the
     {meth}`snowflake.connector.connect()` method and instantiate the
     {xref}`SnowflakeConnection` object.
-    -   *on-failure expects* `DataBaseError` 
+    -   *on-failure expects* `DataBaseError`
 ````
- 
+
 Since *creds1* is the first set of credentials stored in
 [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) and the
 {ref}`default-creds<connection.default-creds>` field has been left blank
@@ -60,7 +60,7 @@ Since *creds1* is the first set of credentials stored in
 :lines: 8-8
 ```
 
-Here's some context on how we should think about these two 
+Here's some context on how we should think about these two
 {class}`~snowmobile.core.Connector` objects:
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python
@@ -70,7 +70,7 @@ Here's some context on how we should think about these two
 
 ### 2. Executing raw SQL
 
-**Executing raw SQL directly off the {class}`~snowmobile.core.Connector` 
+**Executing raw SQL directly off the {class}`~snowmobile.core.Connector`
 can be done in the following three ways**:
 
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
@@ -91,13 +91,13 @@ can be done in the following three ways**:
 :lines: 28-29
 ```
 
-Alternatively, the attributes/properties of the {xref}`snowflake.connector` 
-remain public so that no functionality is lost from it or supporting libraries. 
+Alternatively, the attributes/properties of the {xref}`snowflake.connector`
+remain public so that no functionality is lost from it or supporting libraries.
 
-Said another way, the three statements below manually implement the execution 
-component of the three methods called on lines **22**, **25**, and **28** above, 
-using {xref}`snowmobile` **only** as a parameter and an accessor to methods 
-from the {any}`pandas` and {xref}`snowflake.connector2` APIs: 
+Said another way, the three statements below manually implement the execution
+component of the three methods called on lines **22**, **25**, and **28** above,
+using {xref}`snowmobile` **only** as a parameter and an accessor to methods
+from the {any}`pandas` and {xref}`snowflake.connector2` APIs:
 
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python
@@ -131,20 +131,20 @@ Which can be directly compared to our original **df1**, **cur1**, and **dcur1**:
 
 .. tabbed:: Note
 
-   The :attr:`snowmobile.Connector.cursor` and 
-   :attr:`snowmobile.Connector.dictcursor` are **properties** of 
-   :attr:`snowmobile.Connector` that return a new instance each time they are accessed. 
-   
-   Depending on the desired behavior of a :xref:`SnowflakeCursor` or 
+   The :attr:`snowmobile.Connector.cursor` and
+   :attr:`snowmobile.Connector.dictcursor` are **properties** of
+   :attr:`snowmobile.Connector` that return a new instance each time they are accessed.
+
+   Depending on the desired behavior of a :xref:`SnowflakeCursor` or
    :xref:`DictCursor`, it could be better to store an instance for re-referencing
-   as opposed to repeatedly instantiate new instances of it off :class:`~snowmobile.Connector`. 
-   
+   as opposed to repeatedly instantiate new instances of it off :class:`~snowmobile.Connector`.
+
 .. tabbed:: In Code
 
-   The below demonstrates the difference between calling two methods on 
-   the :meth:`snowmobile.Connector.cursor` property compared to on the same 
+   The below demonstrates the difference between calling two methods on
+   the :meth:`snowmobile.Connector.cursor` property compared to on the same
    instance of :xref:`SnowflakeCursor`.
- 
+
    .. literalinclude:: ../examples/mod_connector/intro_connector.py
       :language: python
       :lineno-start: 46
@@ -157,18 +157,18 @@ Which can be directly compared to our original **df1**, **cur1**, and **dcur1**:
 
 ````{admonition} Tip: Naming Convention
 :class: tip
- 
-The following mapping of variable or attribute name to associated object is 
+
+The following mapping of variable or attribute name to associated object is
 applied throughout {ref}`snowmobile`'s documentation and source code,
 including in method signatures:
-- **`sn`**: {class}`snowmobile.Connector` 
-- **`cfg`**: {class}`snowmobile.Configuration` 
+- **`sn`**: {class}`snowmobile.Connector`
+- **`cfg`**: {class}`snowmobile.Configuration`
 - **`con`**: {xref}`snowflake.connector.SnowflakeConnection`
 - **`cursor`**: {xref}`snowflake.connector.cursor.SnowflakeCursor`
 
 ---
 
-These are some of attributes/properties on the 
+These are some of attributes/properties on the
 {class}`~snowmobile.core.Connector` we just created:
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python

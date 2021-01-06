@@ -7,6 +7,5 @@ import snowmobile
 
 cfg = snowmobile.Configuration()
 
-type(cfg)  #> snowmobile.core.configuration.Configuration
+type(cfg)  # > snowmobile.core.configuration.Configuration
 vars(cfg)
-

@@ -60,12 +60,7 @@ class Name(Snowmobile):
 
     """
 
-    def __init__(
-            self,
-            nm: str,
-            cfg: Configuration,
-            is_title: Optional[bool] = None
-    ):
+    def __init__(self, nm: str, cfg: Configuration, is_title: Optional[bool] = None):
         super().__init__()
 
         cfg_md = cfg.script.markdown
@@ -96,10 +91,7 @@ class Name(Snowmobile):
         elif self.nm_stripped in cfg_md.attrs.from_namespace:
             self.nm_adj = cfg_md.attrs.from_namespace.get(self.nm_stripped)
         else:
-            self.nm_adj = (
-                self.nm_stripped.title() if not is_title
-                else self.nm_stripped
-            )
+            self.nm_adj = self.nm_stripped.title() if not is_title else self.nm_stripped
 
         self.specified_position = cfg_md.attrs.get_position(attr=self.nm_stripped)
 
@@ -373,8 +365,8 @@ class Section(Snowmobile):
     def sql_md(self) -> str:
         """Returns renderable sql or an empty string if script-level section."""
         sql = self.cfg.script.power_strip(
-            val_to_strip=('' if self.is_marker else self.sql),
-            chars_to_strip=[";", " ", "\n"]
+            val_to_strip=("" if self.is_marker else self.sql),
+            chars_to_strip=[";", " ", "\n"],
         )
         if self.incl_raw:
             raw = self.cfg.script.as_parsable(self.raw, self.is_multiline)
@@ -383,7 +375,7 @@ class Section(Snowmobile):
             sql = f"{sql};"
         if self.is_marker and not self.incl_raw:
             return str()
-        char = '\n'
+        char = "\n"
         return f"```sql\n{sql.strip(char)}\n```"
 
     @property
@@ -408,7 +400,7 @@ Multiple sets of wildcards detected in the below statement or marker title; only
 a single set of unescaped wildcards is permitted.
 ```
 {raw}
-```       
+```
 """
 
     def __repr__(self):

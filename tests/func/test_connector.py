@@ -3,10 +3,7 @@ import pytest
 
 import snowmobile
 
-from tests import (
-    CONFIG_FILE_NM,
-    CREDS,
-)
+from tests import CONFIG_FILE_NM, CREDS
 
 
 @pytest.mark.connector
@@ -27,6 +24,7 @@ def test_basic_query_via_ex(sn):
 def test_providing_results_equal_false_returns_cursor_not_a_df(sn):
     """Verifies passing `as_df=False` to connector.query() returns a cursor."""
     from snowflake.connector.connection import SnowflakeCursor
+
     cur = sn.query("select 1", as_df=False)
     assert isinstance(cur, SnowflakeCursor)
 
@@ -53,20 +51,16 @@ def test_alive_evaluates_to_false_post_disconnect(sn):
 @pytest.mark.connector
 def test_alternate_kwarg_takes_precedent_over_configuration_file():
     """Tests over-riding configuration file with alternate connection kwargs."""
-    sn_as_from_config = snowmobile.Connect(
-        creds=CREDS,
-        config_file_nm=CONFIG_FILE_NM
-    )
+    sn_as_from_config = snowmobile.Connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM)
     sn_with_a_conflicting_parameter = snowmobile.Connect(
         creds=CREDS,
         config_file_nm=CONFIG_FILE_NM,
-        autocommit=False  # <-- explicit kwarg that also exists in snowmobile.toml
+        autocommit=False,  # <-- explicit kwarg that also exists in snowmobile.toml
     )
 
     assert (
         # verify `config.autocommit=True`
         sn_as_from_config.con._autocommit
-
         # verify `autocommit=False` kwarg took precedent over config
         and not sn_with_a_conflicting_parameter.con._autocommit
     )
@@ -76,11 +70,12 @@ def test_alternate_kwarg_takes_precedent_over_configuration_file():
 def test_providing_invalid_credentials_raises_exception(sn):
     """Verify an invalid set of credentials raises DatabaseError."""
     from snowflake.connector.errors import DatabaseError
+
     with pytest.raises(DatabaseError):
         snowmobile.Connect(
             creds=CREDS,
             config_file_nm=CONFIG_FILE_NM,
-            user='invalid@invalid.com'  # <-- a set of invalid credentials
+            user="invalid@invalid.com",  # <-- a set of invalid credentials
         )
 
 
@@ -89,8 +84,9 @@ def test_providing_invalid_credentials_raises_exception(sn):
 def test_invalid_sql_passed_to_query_raises_exception(sn):
     """Tests that invalid sql passed to connector.query() raises DatabaseError."""
     from pandas.io.sql import DatabaseError
+
     with pytest.raises(DatabaseError):
-        sn.query('select * from *')  # <-- an invalid sql statement
+        sn.query("select * from *")  # <-- an invalid sql statement
 
 
 # noinspection SqlResolve
@@ -98,8 +94,9 @@ def test_invalid_sql_passed_to_query_raises_exception(sn):
 def test_invalid_sql_passed_to_ex_raises_exception(sn):
     """Tests that invalid sql passed to connector.ex() raises ProgrammingError."""
     from snowflake.connector.errors import ProgrammingError
+
     with pytest.raises(ProgrammingError):
-        sn.ex('select * from *')  # <-- an invalid sql statement
+        sn.ex("select * from *")  # <-- an invalid sql statement
 
 
 # noinspection SqlResolve
@@ -107,25 +104,27 @@ def test_invalid_sql_passed_to_ex_raises_exception(sn):
 def test_invalid_sql_passed_to_exd_raises_exception(sn):
     """Tests that invalid sql passed to connector.ex() raises ProgrammingError."""
     from snowflake.connector.errors import ProgrammingError
+
     with pytest.raises(ProgrammingError):
-        sn.exd('select * from *')  # <-- an invalid sql statement
+        sn.exd("select * from *")  # <-- an invalid sql statement
 
 
 @pytest.mark.connector
 def test_invalid_credentials_alias_raises_exception():
     """Tests that an invalid credentials name creds raises KeyError."""
     from snowmobile import Connector
+
     with pytest.raises(KeyError):
-        Connector(creds='name_for_a_nonexistent_set_of_creds')
+        Connector(creds="name_for_a_nonexistent_set_of_creds")
 
 
 @pytest.mark.connector
 def test_masked_dunder_str_method_for_sets_of_credentials(sn):
     """Verifies that the __str()__ method for a set of credentials is masked."""
     assert all(
-        not line.split('=')[-1].strip("'").replace('*', '')
-        for line in str(sn.cfg.connection.credentials).split('\n')
-        if str(line).startswith('  ')
+        not line.split("=")[-1].strip("'").replace("*", "")
+        for line in str(sn.cfg.connection.credentials).split("\n")
+        if str(line).startswith("  ")
     )
 
 

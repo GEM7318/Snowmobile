@@ -10,9 +10,12 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 
-version_str = \
-    str((subprocess.check_output(['git', 'describe']).strip())).\
-    split('-')[0].replace("'", '').replace('b', '')
+version_str = (
+    str((subprocess.check_output(["git", "describe"]).strip()))
+    .split("-")[0]
+    .replace("'", "")
+    .replace("b", "")
+)
 
 # This call to setup() does all the work
 setup(
@@ -33,11 +36,12 @@ setup(
     # packages=["snowmobile"],
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
-    install_requires=['pandas', 'snowflake-connector-python', 'sqlparse',
-                      'fcache', 'ipython'],
-    entry_points={
-        "console_scripts": [
-            "snowmobile=snowmobile.__main__:main",
-        ]
-    },
+    install_requires=[
+        "pandas",
+        "snowflake-connector-python",
+        "sqlparse",
+        "fcache",
+        "ipython",
+    ],
+    entry_points={"console_scripts": ["snowmobile=snowmobile.__main__:main"]},
 )

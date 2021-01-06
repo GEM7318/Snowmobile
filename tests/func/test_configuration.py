@@ -8,11 +8,11 @@ from tests import CONFIG_FILE_NM
 
 from snowmobile import Connector
 
-CACHE_TESTING_ITEM_NAME1 = 'test-path'
-CACHE_TESTING_ITEM_NAME2 = 'test-path2'
+CACHE_TESTING_ITEM_NAME1 = "test-path"
+CACHE_TESTING_ITEM_NAME2 = "test-path2"
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def cache_with_a_testing_value_saved(sn_delayed) -> Tuple[Connector, str]:
     """Performs setup for cache testing.
 
@@ -32,10 +32,7 @@ def cache_with_a_testing_value_saved(sn_delayed) -> Tuple[Connector, str]:
 
     # save two values to cache under the testing item names
     for name in [CACHE_TESTING_ITEM_NAME1, CACHE_TESTING_ITEM_NAME2]:
-        sn_delayed.cfg.cache.save_item(
-            item_name=name,
-            item_value=value_to_cache
-        )
+        sn_delayed.cfg.cache.save_item(item_name=name, item_value=value_to_cache)
 
     return sn_delayed, value_to_cache
 
@@ -117,23 +114,26 @@ def test_export_configuration(tmpdir):
     """Test basic behavior of ``snowmobile.toml`` file export."""
     from pathlib import Path
     from snowmobile import Configuration
+
     tmpdir = Path(tmpdir)
     Configuration(export_dir=tmpdir)
-    assert (tmpdir / 'snowmobile.toml').exists()
+    assert (tmpdir / "snowmobile.toml").exists()
 
 
 @pytest.mark.configuration
 def test_error_on_no_configuration_file_found():
     """Test basic behavior of ``snowmobile.toml`` file export."""
     from snowmobile import Configuration
+
     with pytest.raises(Exception):
-        _ = Configuration(config_file_nm='_an_invalid_snowmobile_test_file.txt')
+        _ = Configuration(config_file_nm="_an_invalid_snowmobile_test_file.txt")
 
 
 @pytest.mark.configuration
 def test_finds_a_valid_configuration_file():
     """"""
     from snowmobile import Configuration
+
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
     cfg.cache.clear(CONFIG_FILE_NM)
 
@@ -145,6 +145,7 @@ def test_finds_a_valid_configuration_file():
 def test_configuration_json_serialization():
     """Testing serialization methods of configuration objects."""
     from snowmobile import Configuration
+
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
 
     assert cfg.json(by_alias=True) == cfg.__json__(by_alias=True)
@@ -155,6 +156,7 @@ def test_configuration_json_serialization():
 def test_base_json_serialization():
     """Testing serialization methods of pydantic-derived objects."""
     from snowmobile import Configuration
+
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
 
     assert cfg.script.json(by_alias=True) == cfg.script.__json__(by_alias=True)
@@ -168,6 +170,7 @@ def test_get_attrs_from_obj():
     # noinspection PyMissingOrEmptyDocstring
     class AnyClass:
         """Example class with an attribute, a method, and a property."""
+
         def __init__(self):
             self.any_attr = 1
 
@@ -186,9 +189,9 @@ def test_get_attrs_from_obj():
     attributes = cfg.attrs_from_obj(obj=any_instance_of_any_class)
     methods = cfg.methods_from_obj(obj=any_instance_of_any_class)
 
-    assert attributes['any_attr'] == 1
-    assert methods['any_callable_method']() == 2
-    assert attributes['any_property_as_well'] == 3
+    assert attributes["any_attr"] == 1
+    assert methods["any_callable_method"]() == 2
+    assert attributes["any_property_as_well"] == 3
 
 
 @pytest.mark.configuration
@@ -199,7 +202,9 @@ def test_configuration_dunder_methods():
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
 
     assert str(cfg) == f"snowmobile.Configuration('{CONFIG_FILE_NM}')"
-    assert str(repr(cfg)) == f"snowmobile.Configuration(config_file_nm='{CONFIG_FILE_NM}')"
+    assert (
+        str(repr(cfg)) == f"snowmobile.Configuration(config_file_nm='{CONFIG_FILE_NM}')"
+    )
 
 
 @pytest.mark.configuration
@@ -209,6 +214,6 @@ def test_set_item_on_base_class():
 
     cfg = Configuration(config_file_nm=CONFIG_FILE_NM)
     cfg.script.any_arbitrary_attribute = 1  # cfg.script derives from Base, cfg does not
-    cfg.script['tw'] = 1
+    cfg.script["tw"] = 1
     assert cfg.script.any_arbitrary_attribute
     assert cfg.script.tw

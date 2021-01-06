@@ -18,7 +18,7 @@ The first few lines of *snowmobile.toml* are represented in the snippet below.
 :language: toml
 :lineno-start: 2
 :lines: 2-26
-:emphasize-lines: 4, 22 
+:emphasize-lines: 4, 22
 ```
 
 ```{admonition} Note
@@ -42,7 +42,7 @@ With the expected console output ending with something like the below:
 >>> ..connected: snowmobile.Connect(creds='creds1')
 ```
 
-```{admonition} Related 
+```{admonition} Related
 :class: tip
 See [**In-Depth Usage -> snowmobile.connector.Connect()**](./using/connector.md#connect) for more information
 about what's happening behind the scenes on line **3** above.

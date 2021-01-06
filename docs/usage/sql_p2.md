@@ -1,7 +1,7 @@
 ##### Using {attr}`~snowmobile.SQL.nm` and {attr}`~snowmobile.SQL.obj`
 
-Many {class}`snowmobile.SQL` methods need to know an in-warehouse object's name and type 
-(i.e. *dummy_table* and *table* or *sandbox* and *schema*). 
+Many {class}`snowmobile.SQL` methods need to know an in-warehouse object's name and type
+(i.e. *dummy_table* and *table* or *sandbox* and *schema*).
 
 These are typically passed to methods as keyword arguments, but there are times
 when setting these as attributes on the {class}`snowmobile.SQL` object itself can keep code
@@ -23,8 +23,8 @@ The below setup code does the following:
 1.  Explicitly sets the following on the second instances of {class}`~snowmobile.Connector`:
     1.  {attr}`~snowmobile.SQL.nm` to *sample_table*
     1.  {attr}`~snowmobile.SQL.obj` to *table*
-    
-The default {attr}`~snowmobile.SQL.obj` is *table* so this isn't necessary but included for clarity of how it should be used for other object types. 
+
+The default {attr}`~snowmobile.SQL.obj` is *table* so this isn't necessary but included for clarity of how it should be used for other object types.
 
 ```{literalinclude} ../examples/mod_sql/sql_working_example2.py
 :language: python

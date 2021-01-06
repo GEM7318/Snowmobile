@@ -117,11 +117,11 @@ class Tag(Snowmobile):
                 if self.cfg.script.power_strip(v, " ")
             ]
             self.anchor_pr = " ".join(anchor_vf)  # 'create table'
-            self.kw_pr = anchor_vf[0]             # 'create'
-            self.obj_pr = (                       # 'table'
+            self.kw_pr = anchor_vf[0]  # 'create'
+            self.obj_pr = (  # 'table'
                 " ".join(anchor_vf[1:]) if len(anchor_vf) > 2 else str()
             )
-            self.desc_pr = " ".join(              # 'sample records'
+            self.desc_pr = " ".join(  # 'sample records'
                 self.cfg.script.power_strip(v, " ")
                 for v in self.part_desc[-1].split(" ")
                 if self.cfg.script.power_strip(v, " ")
@@ -130,21 +130,21 @@ class Tag(Snowmobile):
         # sql parsing
         # -----------
         stripped_sql = self.cfg.script.power_strip(
-            val_to_strip=sql,
-            chars_to_strip="\n ",  # trailing lines and whitespace
+            val_to_strip=sql, chars_to_strip="\n "  # trailing lines and whitespace
         )
         self.first_line = self.cfg.script.power_strip(
-            val_to_strip=stripped_sql.split('\n')[0].lower(),
-            chars_to_strip='\n ',  # same for first line only
+            val_to_strip=stripped_sql.split("\n")[0].lower(),
+            chars_to_strip="\n ",  # same for first line only
         )
         self.words_in_first_line = [
             self.cfg.script.arg_to_string(v)
-            for v in self.first_line.split(' ')
+            for v in self.first_line.split(" ")
             if self.cfg.script.arg_to_string(v)
         ]
         self.first_line_remainder = " ".join(
             self.words_in_first_line[1:]
-            if len(self.words_in_first_line) >= 2 else str()
+            if len(self.words_in_first_line) >= 2
+            else str()
         )
 
         # set 'combined` attributes
@@ -184,8 +184,7 @@ class Tag(Snowmobile):
     def obj_ge(self):
         """Generated `object` for statement."""
         return (
-            self.matched_terms[min(self.matched_terms)] if self.matched_terms
-            else str()
+            self.matched_terms[min(self.matched_terms)] if self.matched_terms else str()
         )
 
     @property
@@ -198,12 +197,9 @@ class Tag(Snowmobile):
     def anchor_ge(self):
         """Generated `anchor` for statement."""
         generalized_anchor = self.cfg.sql.generic_anchors.get(self.kw_ge)
-        if (
-            generalized_anchor
-            and self.obj_ge == str()
-        ):
+        if generalized_anchor and self.obj_ge == str():
             return generalized_anchor
-        s = ' ' if self.kw_ge and self.obj_ge else ''
+        s = " " if self.kw_ge and self.obj_ge else ""
         return f"{self.kw_ge}{s}{self.obj_ge}"
 
     @property

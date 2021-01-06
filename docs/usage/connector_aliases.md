@@ -11,9 +11,9 @@ specified in the optional `creds` argument of {class}`snowmobile.Connector`.
 ```
 
 ````{tabbed} Setting Default Credentials
- 
+
 Currently `creds1` is used by default since it's the first set of credentials stored and no other alias is specified;
-by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) to the below spec, we're telling  {xref}`snowmobile` 
+by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) to the below spec, we're telling  {xref}`snowmobile`
 to use `creds2` for authentication regardless of where it falls relative to all the other credentials stored:
 
 ```{literalinclude} ../examples/mod_connector/snowmobile_set_default_creds.toml
@@ -51,10 +51,10 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 # Delaying Connection
 
 Sometimes it can be helpful to create a {class}`snowmobile.Connector` object without establishing a connection. This is
-accomplished by providing it with the convenience argument `delay=True`, which omits connecting to {xref}`snowflake` 
+accomplished by providing it with the convenience argument `delay=True`, which omits connecting to {xref}`snowflake`
 when the object is created.
 
-In these instances, the {attr}`~snowmobile.Connector.con` attribute will be null until a method is called on the 
+In these instances, the {attr}`~snowmobile.Connector.con` attribute will be null until a method is called on the
 {class}`~snowmobile.Connector` that requires a connection to {xref}`snowflake` at which point a call is made to
 {meth}`snowflake.connector.connect()`, the connection established, and the attribute set.
 

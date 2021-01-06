@@ -1,6 +1,6 @@
 """
-All modules housed in ``snowmobile.core`` to keep from cluttering intellisense
-completion when interacting with the user-facing API.
+``snowmobile`` lives in ``snowmobile.core`` to keep from cluttering
+intellisense/autocomplete while interacting with the API.
 """
 # isort: skip_file
 from .base import Snowmobile
@@ -49,19 +49,15 @@ __all__ = [
     "SnowFrame",
     "Column",
     "Tag",
-
     # parsed `snowmobile.toml` objects
     "cfg",
-
     # error/exception handling
     "ExceptionHandler",
     "errors",
-
     # file paths
     "DIR_PKG_DATA",
     "DDL_DEFAULT_PATH",
     "EXTENSIONS_DEFAULT_PATH",
-
     # other
     "utils",
 ]

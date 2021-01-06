@@ -1,9 +1,9 @@
-## Contents 
+## Contents
 
 ```{admonition} Tip
 :class: tip
 
-See [here](https://github.com/toml-lang/toml) if unfamiliar with *.toml* syntax 
+See [here](https://github.com/toml-lang/toml) if unfamiliar with *.toml* syntax
 ```
 
 ````{tabbed} snowmobile.toml

@@ -2,5 +2,3 @@ Changelog
 =========
 ```{include} ../CHANGELOG.md
 ```
-
-

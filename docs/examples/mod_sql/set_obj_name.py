@@ -8,9 +8,7 @@ sn = snowmobile.Connect()  # establish a connection
 
 sn.sql.auto_run = False  # turn off sql.auto_run
 
-sn.query(
-    'create temp table demo_table as select 1 as sample_column;'  # demo table
-)
+sn.query("create temp table demo_table as select 1 as sample_column;")  # demo table
 
 
 try:
@@ -20,8 +18,8 @@ except ValueError as e:
 # > ValueError: Value provided for 'table' is not valid..
 
 try:
-    sn.sql.obj_name = 'demo_table'  # set 'obj_name' attribute of SQL object
-    sql = sn.sql.drop()             # will now fallback to attribute if omitted
+    sn.sql.obj_name = "demo_table"  # set 'obj_name' attribute of SQL object
+    sql = sn.sql.drop()  # will now fallback to attribute if omitted
     print(sql)
 except ValueError as e:
     raise

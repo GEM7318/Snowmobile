@@ -21,12 +21,12 @@ from docutils import nodes
 from sphinx.util import caption_ref_re
 
 
-def xref( typ, rawtext, text, lineno, inliner, options={}, content=[] ):
+def xref(typ, rawtext, text, lineno, inliner, options={}, content=[]):
 
     title = target = text
     titleistarget = True
     # look if explicit title and target are given with `foo <bar>` syntax
-    brace = text.find('<')
+    brace = text.find("<")
     if brace != -1:
         titleistarget = False
         m = caption_ref_re.match(text)
@@ -35,7 +35,7 @@ def xref( typ, rawtext, text, lineno, inliner, options={}, content=[] ):
             title = m.group(1)
         else:
             # fallback: everything after '<' is the target
-            target = text[brace+1:]
+            target = text[brace + 1 :]
             title = text[:brace]
 
     link = xref.links[target]
@@ -47,12 +47,14 @@ def xref( typ, rawtext, text, lineno, inliner, options={}, content=[] ):
 
     return [pnode], []
 
+
 def get_refs(app):
 
     xref.links = app.config.xref_links
 
+
 def setup(app):
 
-    app.add_config_value('xref_links', {}, True)
-    app.add_role('xref', xref)
+    app.add_config_value("xref_links", {}, True)
+    app.add_role("xref", xref)
     app.connect("builder-inited", get_refs)

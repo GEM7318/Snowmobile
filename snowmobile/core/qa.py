@@ -112,9 +112,7 @@ class Diff(QA):
         "specified threshold."
     )
 
-    def __init__(
-        self, sn: Connector = None, **kwargs,
-    ):
+    def __init__(self, sn: Connector = None, **kwargs):
         """Instantiates a ``qa-diff`` statement.
 
         Args:
@@ -197,7 +195,7 @@ class Diff(QA):
                         f"on which to join DataFrame's partitions."
                     ),
                     to_raise=True,
-                ),
+                )
             ).set(outcome=-1)
 
     def _drop(self) -> None:
@@ -308,7 +306,7 @@ class Diff(QA):
             except Exception as e:
                 self.e.collect(
                     e=errors.StatementPostProcessingError(
-                        msg=(e.args[0]), to_raise=True,
+                        msg=(e.args[0]), to_raise=True
                     )
                 ).set(outcome=-1)
 

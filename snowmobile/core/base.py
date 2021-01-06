@@ -1,6 +1,6 @@
 """
-Base class for user-facing objects (i.e. classes that are **not** derived from
-pydantic's BaseModel).
+Base class for non-configuration objects (i.e. for all classes that are **not**
+derived from pydantic's BaseModel).
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ class Snowmobile(object):
     pydantic's BaseModel or configuration class, :class:`Config`.
 
     """
+
     def __init__(self):
         pass
 

@@ -41,51 +41,51 @@ class Table(Snowmobile):
         on_error: Optional[str] = None,
         check_dupes: Optional[bool] = None,
         load_copy: Optional[bool] = None,
-
     ):
         super().__init__()
 
         # combine kwargs + snowmobile.toml
         # --------------------------------
         if_exists = sn.cfg.loading.kwarg(
-            arg_nm='if_exists', arg_val=if_exists, arg_typ=str,
+            arg_nm="if_exists", arg_val=if_exists, arg_typ=str
         )
         file_format = sn.cfg.loading.kwarg(
-            arg_nm='file_format', arg_val=file_format, arg_typ=str,
+            arg_nm="file_format", arg_val=file_format, arg_typ=str
         )
         incl_tmstmp = sn.cfg.loading.kwarg(
-            arg_nm='incl_tmstmp', arg_val=incl_tmstmp, arg_typ=bool,
+            arg_nm="incl_tmstmp", arg_val=incl_tmstmp, arg_typ=bool
         )
-        tmstmp_col_nm = sn.cfg.loading.kwarg(
-            arg_nm='tmstmp_col_nm', arg_val=tmstmp_col_nm, arg_typ=str,
-        ) or 'loaded_tmstmp'
+        tmstmp_col_nm = (
+            sn.cfg.loading.kwarg(
+                arg_nm="tmstmp_col_nm", arg_val=tmstmp_col_nm, arg_typ=str
+            )
+            or "loaded_tmstmp"
+        )
         reformat_cols = sn.cfg.loading.kwarg(
-            arg_nm='reformat_cols', arg_val=reformat_cols, arg_typ=bool,
+            arg_nm="reformat_cols", arg_val=reformat_cols, arg_typ=bool
         )
         validate_format = sn.cfg.loading.kwarg(
-            arg_nm='validate_format', arg_val=validate_format, arg_typ=bool,
+            arg_nm="validate_format", arg_val=validate_format, arg_typ=bool
         )
         validate_table = sn.cfg.loading.kwarg(
-            arg_nm='validate_table', arg_val=validate_table, arg_typ=bool,
+            arg_nm="validate_table", arg_val=validate_table, arg_typ=bool
         )
         upper_case_cols = sn.cfg.loading.kwarg(
-            arg_nm='upper_case_cols', arg_val=upper_case_cols, arg_typ=bool,
+            arg_nm="upper_case_cols", arg_val=upper_case_cols, arg_typ=bool
         )
         lower_case_table = sn.cfg.loading.kwarg(
-            arg_nm='lower_case_table', arg_val=lower_case_table, arg_typ=bool,
+            arg_nm="lower_case_table", arg_val=lower_case_table, arg_typ=bool
         )
         keep_local = sn.cfg.loading.kwarg(
-            arg_nm='keep_local', arg_val=keep_local, arg_typ=bool,
+            arg_nm="keep_local", arg_val=keep_local, arg_typ=bool
         )
         on_error = sn.cfg.loading.kwarg(
-            arg_nm='on_error', arg_val=on_error, arg_typ=str,
+            arg_nm="on_error", arg_val=on_error, arg_typ=str
         )
         check_dupes = sn.cfg.loading.kwarg(
-            arg_nm='check_dupes', arg_val=check_dupes, arg_typ=bool,
+            arg_nm="check_dupes", arg_val=check_dupes, arg_typ=bool
         )
-        copy = sn.cfg.loading.kwarg(
-            arg_nm='load_copy', arg_val=load_copy, arg_typ=bool,
-        )
+        copy = sn.cfg.loading.kwarg(arg_nm="load_copy", arg_val=load_copy, arg_typ=bool)
 
         # sql generation and execution
         # ----------------------------

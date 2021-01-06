@@ -211,5 +211,3 @@ select * from snowmobile_testing.sample_table st;
 
 /*-drop-schema~snowmobile_testing-*/
 drop schema if exists snowmobile_testing;
-
-

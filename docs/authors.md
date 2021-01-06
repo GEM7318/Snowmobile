@@ -2,5 +2,3 @@ Authors
 =======
 ```{include} ../AUTHORS.md
 ```
-
-

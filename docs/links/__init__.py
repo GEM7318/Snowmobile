@@ -13,11 +13,12 @@ https://sublime-and-sphinx-guide.readthedocs.io/en/latest/references.html
 # __all__ = modules
 # print(__all__)
 
-__name__ = 'links'
+__name__ = "links"
 
 from os.path import dirname, basename, isfile
 
 import glob
-modules = glob.glob(dirname(__file__)+"/*.py")
 
-__all__ = [ basename(f)[:-3] for f in modules if isfile(f)]
+modules = glob.glob(dirname(__file__) + "/*.py")
+
+__all__ = [basename(f)[:-3] for f in modules if isfile(f)]

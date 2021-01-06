@@ -32,7 +32,7 @@ class Cache(Snowmobile):
         self.location = self.cache_dir / self.file_nm
         self.contents: Dict = dict()
         if self.location.exists():
-            with open(self.location, 'r') as r:
+            with open(self.location, "r") as r:
                 self.contents = json.load(r)
 
     @contextmanager
@@ -43,14 +43,16 @@ class Cache(Snowmobile):
         except Exception as e:
             raise e
         finally:
-            with open(self.location, 'w') as f:
+            with open(self.location, "w") as f:
                 f.write(json.dumps(self.contents, indent=2))
 
     def save_item(self, item_name: str, item_value):
         """Caches `item_value` to be retrieved by `item_name`."""
+
         def to_str(item: Any):
             """Returns a pathlib.Path object as a serializable string."""
             return item.as_posix() if isinstance(item, Path) else item
+
         with self.save() as s:
             s.contents[to_str(item_name)] = to_str(item_value)
         return self
@@ -71,9 +73,7 @@ class Cache(Snowmobile):
         with self.save() as s:
             if isinstance(item, str):
                 item = [item]
-            to_clear = (
-                list(s) if not item else set(s.contents).intersection(set(item))
-            )
+            to_clear = list(s) if not item else set(s.contents).intersection(set(item))
             for k in to_clear:
                 s.contents.pop(k)
         return self
@@ -90,4 +90,3 @@ class Cache(Snowmobile):
 
     def __str__(self) -> str:
         return f"Cache(application='{application}', items={len(self.contents)})"
-

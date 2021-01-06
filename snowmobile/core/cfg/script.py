@@ -17,6 +17,7 @@ from .base import Base
 
 class Wildcard(Base):
     """[script.patterns.wildcards]"""
+
     # fmt: off
     char_wc: str = Field(
         default_factory=str, alias="wildcard-character"
@@ -82,6 +83,7 @@ class Wildcard(Base):
 
 class Reserved(Base):
     """[script.markdown.attributes.reserved]"""
+
     # fmt: off
     include_by_default: bool = Field(
         default_factory=bool, alias="include-by-default"
@@ -100,6 +102,7 @@ class Reserved(Base):
 
 class Marker(Base):
     """[script.markdown.attributes.markers]"""
+
     # fmt: off
     nm: str = Field(
         default_factory=str, alias="name"
@@ -179,6 +182,7 @@ class Marker(Base):
 
 class Attributes(Base):
     """[script.markdown.attributes]"""
+
     # fmt: off
     excluded: List[str] = Field(
         default_factory=list, alias='exclude'
@@ -315,6 +319,7 @@ class Attributes(Base):
 
 class Core(Base):
     """[script.patterns.core]"""
+
     # fmt: off
     to_open: str = Field(
         default_factory=str, alias='open-tag'
@@ -362,20 +367,19 @@ class Markdown(Base):
     # fmt: on
 
     def pref_header(
-            self,
-            is_marker: bool = False,
-            from_wc: Optional[str] = False,
+        self, is_marker: bool = False, from_wc: Optional[str] = False
     ) -> str:
         """Creates header prefix based on specifications."""
         h_level = self.hx_marker if is_marker else self.hx_statement
         if not from_wc:
-            return int(h_level.strip()[1:]) * '#'
-        wc_only = ''.join(c for c in from_wc if c == '*')
-        return len(wc_only) * '#'
+            return int(h_level.strip()[1:]) * "#"
+        wc_only = "".join(c for c in from_wc if c == "*")
+        return len(wc_only) * "#"
 
 
 class Pattern(Base):
     """[script.patterns]"""
+
     # fmt: off
     core: Core = Field(
         default_factory=Core, alias="core"
@@ -388,6 +392,7 @@ class Pattern(Base):
 
 class Tolerance(Base):
     """[script.qa.default-tolerance]"""
+
     # fmt: off
     relative: float = Field(
         default_factory=float, alias="relative"
@@ -403,6 +408,7 @@ class Tolerance(Base):
 
 class QA(Base):
     """[script.qa]"""
+
     # fmt: off
     partition_on: str = Field(
         default_factory=str, alias="partition-on"
@@ -424,6 +430,7 @@ class QA(Base):
 
 class Type(Base):
     """snowmobile_ext.toml: [tag-to-type-xref]"""
+
     # fmt: off
     as_str: List = Field(
         default_factory=list, alias="string"
@@ -442,6 +449,7 @@ class Type(Base):
 
 class Script(Base):
     """[script]"""
+
     # fmt: off
     patterns: Pattern = Field(
         default_factory=Pattern, alias="patterns"
@@ -470,16 +478,13 @@ class Script(Base):
 
     def arg_to_string(self, arg_as_str: str) -> str:
         """Strips an argument as a string down to its elemental form."""
-        return self.power_strip(
-            val_to_strip=arg_as_str,
-            chars_to_strip=["'", '"', ' ']
-        )
+        return self.power_strip(val_to_strip=arg_as_str, chars_to_strip=["'", '"', " "])
 
     def arg_to_list(self, arg_as_str: str) -> List[str]:
         """Converts a list as a string into a list."""
         return [
             self.power_strip(v, chars_to_strip=['"', "'", "[", "]", " "])
-            for v in arg_as_str.split(',')
+            for v in arg_as_str.split(",")
         ]
 
     def arg_to_float(self, arg_as_str: str) -> float:
@@ -488,10 +493,7 @@ class Script(Base):
 
     def arg_to_bool(self, arg_as_str: str) -> bool:
         """Converts a boolean in string-form into a boolean value."""
-        str_replacements = {
-            "true": True,
-            "false": False,
-        }
+        str_replacements = {"true": True, "false": False}
         return str_replacements[self.arg_to_string(arg_as_str).lower()]
 
     def parse_arg(self, arg_key: str, arg_value: str):
@@ -526,7 +528,7 @@ class Script(Base):
         return args_parsed
 
     def parse_str(
-        self, block: str, strip_blanks: bool = False, strip_trailing: bool = False,
+        self, block: str, strip_blanks: bool = False, strip_trailing: bool = False
     ) -> Dict:
         """Parses a string of statement tags/arguments into a valid dictionary.
 
@@ -547,11 +549,11 @@ class Script(Base):
         return self.parse_split_arguments(splitter=splitter)
 
     def as_parsable(
-            self,
-            raw: str,
-            is_multiline: Optional[bool] = None,
-            is_marker: Optional[bool] = None,
-            lines: Optional[int] = None,
+        self,
+        raw: str,
+        is_multiline: Optional[bool] = None,
+        is_marker: Optional[bool] = None,
+        lines: Optional[int] = None,
     ) -> str:
         """Returns a raw string wrapped in open/close tags.
 
@@ -564,7 +566,7 @@ class Script(Base):
         _open = self.patterns.core.to_open
         _close = self.patterns.core.to_close
         if is_marker:
-            lines = (0 if lines == -1 else lines or 1) * '\n'
+            lines = (0 if lines == -1 else lines or 1) * "\n"
             return f"{_open}\n{raw}\n{_close}{lines}"
         elif is_multiline:
             return f"{_open}\n{raw}\n{_close}"
@@ -601,7 +603,7 @@ class Script(Base):
         try:
             bounded_arg_spans_by_idx = self.find_spans(sql=sql)
             return {
-                i: sql[span[0]: span[1]]
+                i: sql[span[0] : span[1]]
                 for i, span in bounded_arg_spans_by_idx.items()
             }
         except AssertionError as e:
@@ -706,21 +708,18 @@ class Script(Base):
         return splitter[0]
 
     def parse_name(
-            self,
-            raw: str,
-            offset: Optional[int] = None,
-            silence: bool = False,
+        self, raw: str, offset: Optional[int] = None, silence: bool = False
     ) -> str:
         """Parses name from a raw set of arguments if not given an explicit tag."""
-        by_line = raw.strip('\n').split('\n')
+        by_line = raw.strip("\n").split("\n")
         offset = offset or 0
-        if by_line[offset].startswith('__'):
+        if by_line[offset].startswith("__"):
             e = errors.InvalidTagsError(
                 msg=f"""
-invalid statement tags provided. 
-multi-line statement tags without an explicit `__name` attribute must include 
+invalid statement tags provided.
+multi-line statement tags without an explicit `__name` attribute must include
 a name not beginning with '__' on the first line within the open & closing tag;
-first line found is:\n```\n{raw}\n```. 
+first line found is:\n```\n{raw}\n```.
 """
             )
             if silence:
@@ -767,16 +766,12 @@ first line found is:\n```\n{raw}\n```.
     def parse_marker(self, attrs_raw: str) -> Dict:
         """Parses a raw string of __marker__ text between an open and a close pattern."""
         parsed = self.parse_str(attrs_raw)
-        nm_title = (
-            parsed.get('name')
-            or self.parse_name(raw=attrs_raw, offset=1, silence=True)
+        nm_title = parsed.get("name") or self.parse_name(
+            raw=attrs_raw, offset=1, silence=True
         )
         marker_nm = self.name_from_marker(attrs_raw)
         self.add_name(
-            nm_title=nm_title,
-            nm_marker=marker_nm,
-            attrs=parsed,
-            overwrite=False
+            nm_title=nm_title, nm_marker=marker_nm, attrs=parsed, overwrite=False
         )
         parsed["raw-text"] = attrs_raw
         return parsed

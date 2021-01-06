@@ -10,22 +10,18 @@ from tests import script as get_script
 def _setup_for_test_tag_from_stripped_line():
     """Gets test cases and generates IDs for statement tags."""
     # get script with tag test cases
-    script = get_script(script_name='no_tags.sql')
+    script = get_script(script_name="no_tags.sql")
 
     # remove index from generated tag
     for s in script._statements_all.values():
         s.incl_idx_in_desc = False
 
     # generate test cases
-    test_cases = [
-        (s.nm_ge, s.nm_pr)
-        for s in script.statements.values()
-    ]
+    test_cases = [(s.nm_ge, s.nm_pr) for s in script.statements.values()]
 
     # generate IDs test cases/console output
     ids = [
-        f"FirstLine='{s.first_line}',Tag='{s.nm}'"
-        for s in script.statements.values()
+        f"FirstLine='{s.first_line}',Tag='{s.nm}'" for s in script.statements.values()
     ]
 
     return ids, test_cases
@@ -35,9 +31,7 @@ ids, test_cases = _setup_for_test_tag_from_stripped_line()
 
 
 @pytest.mark.tags
-@pytest.mark.parametrize(
-    "tags", test_cases, ids=ids,
-)
+@pytest.mark.parametrize("tags", test_cases, ids=ids)
 def test_tag_from_stripped_line(sn, tags):
     """Testing tag generation from sql statements in no_tags.sql."""
     tag_generated, tag_expected = tags
@@ -52,8 +46,8 @@ def a_sample_tag(sn):
     # noinspection SqlResolve
     return Tag(
         configuration=sn.cfg,
-        nm_pr='test-tag',
-        sql='select * from sample_table',
+        nm_pr="test-tag",
+        sql="select * from sample_table",
         index=1,
     )
 
@@ -62,7 +56,7 @@ def a_sample_tag(sn):
 def test_set_item_on_tag(a_sample_tag):
     """Testing __setattr__ and __bool__ on Tag.."""
     a_sample_tag.is_included = False
-    a_sample_tag.__setitem__('is_included', False)
+    a_sample_tag.__setitem__("is_included", False)
     assert not a_sample_tag.is_included
     assert not a_sample_tag
 

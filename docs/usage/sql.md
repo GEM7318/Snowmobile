@@ -10,8 +10,8 @@ from within Python without embedding SQL in docstrings and cluttering code/destr
 ```{admonition} Be Mindful
 :class: warning
 
-This object should be used thoughtfully; it will not ask twice before dropping a {xref}`snowflake` object, and isolated 
-testing to ensure certain methods are understood before using them is **strongly** recommended. 
+This object should be used thoughtfully; it will not ask twice before dropping a {xref}`snowflake` object, and isolated
+testing to ensure certain methods are understood before using them is **strongly** recommended.
 ```
 
 ```{toctree}

@@ -22,7 +22,7 @@
 
 ## Core Features
 
-{fa}`check,text-success mr-1` **No embedding credentials within scripts** 
+{fa}`check,text-success mr-1` **No embedding credentials within scripts**
 - *`import snowmobile` is all that's required to connect*
 
 {fa}`check,text-success mr-1` **Access multiple sets of connection parameters, credentials, and other configuration options**
@@ -41,7 +41,7 @@
 - *Location tracking of [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml) is handled by [snowmobile](https://pypi.org/project/snowmobile/)*
 - *A path to a specific [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml) file can be specified for long-standing or containerized processes*
 
-{fa}`check,text-success mr-1` **Use a single method to return query results in a [SnowflakeCursor](https://docs.snowflake.com/en/user-guide/python-connector-api.html) 
+{fa}`check,text-success mr-1` **Use a single method to return query results in a [SnowflakeCursor](https://docs.snowflake.com/en/user-guide/python-connector-api.html)
 or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)**
 
 {fa}`check,text-success mr-1` **Built-in methods to run common information schema and administrative commands**
@@ -57,12 +57,12 @@ or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pand
   2. list
      * With some
      * Sub bullets
-    
+
 </details>
 
 
 <details>
-  <p>More Info</p> 
+  <p>More Info</p>
 <h2>Heading</h2>
 <p>
     1. A numbered
@@ -73,7 +73,7 @@ or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pand
 </details>
 
 <details>
-  <p>More Info</p> 
+  <p>More Info</p>
 <p>
   ## Heading
   1. A numbered
@@ -92,7 +92,7 @@ or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pand
 
 :fa:`check,text-success mr-1` **No embedding credentials within scripts**
     *`import snowmobile` is all that's required to connect*
-    
+
 :fa:`check,text-success mr-1` **No embedding credentials within scripts**
 : ``import snowmobile`` *is all that's required to connect*
 
@@ -115,9 +115,9 @@ on a given machine. Internally, each component of this file is its own [pydantic
 performs type validation of all fields upon each instantiation.
 
 
--   Use keyword arguments to alter control-flow of database errors, post-processing errors, and post-processing failures 
+-   Use keyword arguments to alter control-flow of database errors, post-processing errors, and post-processing failures
     (assertions called on expected results of post-processing)
--   Tag certain statements to have stored post-processing and assertions run on their results before continuing 
+-   Tag certain statements to have stored post-processing and assertions run on their results before continuing
     execution of the script
 
 ## sphinx tabs
@@ -169,11 +169,11 @@ performs type validation of all fields upon each instantiation.
 ```{admonition} Notes On Initial Connection
 - Several things are happening behind the scenes upon execution of line **3** above:
 
-    1.  *snowmobile* will traverse your file system from the ground up searching for a file called 
+    1.  *snowmobile* will traverse your file system from the ground up searching for a file called
         `snowmobile.toml`. Once found, it will cache this location for future reference and not repeat
         this step unless the file is moved; *on-failure expects* `FileNotFoundError`
     2.  It will then instantiate the contents of the configuration file as  [pydantic](https://pydantic-docs.helpmanual.io/) objects.
-        This ensures instant exceptions will be thrown if any required fields are omitted or unable to be coerced into their 
+        This ensures instant exceptions will be thrown if any required fields are omitted or unable to be coerced into their
         intended type; *on-failure expects* `ValidationError`
     3.  Once validated, it will then pass the parsed arguments to the *snowflake.connector.connect()* method and instantiate the
         `SnowflakeConnector` object as an attribute; *on-failure expects* `DataBaseError`
@@ -182,7 +182,7 @@ performs type validation of all fields upon each instantiation.
 
 ## Admonitions
 
-```{admonition} Title 
+```{admonition} Title
 :class: note
 
 ```
@@ -267,7 +267,7 @@ details > p {
 
 
 ## Links
-    
+
 - [README](README.md)
 - [Core-API Reference](Core-API%20Reference.md)
 - [Authors](authors.md)
@@ -284,7 +284,7 @@ details > p {
 
 ### snowmobile.toml
 
-this file is parsed into a `snowmobile.Configuration` object using [pydantic's](https://pydantic-docs.helpmanual.io/) every piece the parsing and validation of `snowmobile` objects from this file is done each component of this file is its own  
+this file is parsed into a `snowmobile.Configuration` object using [pydantic's](https://pydantic-docs.helpmanual.io/) every piece the parsing and validation of `snowmobile` objects from this file is done each component of this file is its own
 
 - Aliasing multiple credentials and connection options for easy access through the same Python API
 - Specifying global connection options, credentials-specific over-rides, or over-riding both with keyword arguments passed directly to the API
@@ -309,7 +309,7 @@ Its core functionality includes:
 
 
 `snowmobile` caches its location so that users have access to  to consistent functionality across projects and environments without , which is able to be accessed by
-other projects or environments on a given machine; `snowmobile` caches its location and the first time this file is found, `snowmobile` keeps track of the location of this file 
+other projects or environments on a given machine; `snowmobile` caches its location and the first time this file is found, `snowmobile` keeps track of the location of this file
 
 will locate the first time a `snowmobile` will cache its
 location From this, `snowmobile`'s object
@@ -317,12 +317,12 @@ model is instantiated which in which credentials, connection arguments,
 and other configurations are stored that all projects and environments have access to.
 
 
-intended to be unique for a given operating system or container which is then cached   
+intended to be unique for a given operating system or container which is then cached
 
 Its design is focused on enabling:
 
 - The use a single configuration file for credentials and other configuration options for all projects running on a given machine
-- Parsing 
+- Parsing
 
 
 
@@ -368,12 +368,12 @@ Classes
 
 
 
-```{admonition} Note  
+```{admonition} Note
 :class: Note
 
-[snowmobile.toml](#snowmobiletoml) contains configuration options for the majority of {xref}`snowmobile`'s object model and shouldn't be digested all at once. The intent 
+[snowmobile.toml](#snowmobiletoml) contains configuration options for the majority of {xref}`snowmobile`'s object model and shouldn't be digested all at once. The intent
 of this section is to:
-   1. Outline how it integrates with {xref}```snowmobile```s API and the best ways to access it 
+   1. Outline how it integrates with {xref}```snowmobile```s API and the best ways to access it
    2. Store [Field Definitions](#snowmobile_definitions) for reference throughout the rest of the documentation
 ```
 
@@ -390,5 +390,5 @@ of this section is to:
 ```
 
 
-{class}`snowmobile.Connector` ({class}`sn`) is used across the majority of {ref}`snowmobile`'s object model since its attributes include the 
+{class}`snowmobile.Connector` ({class}`sn`) is used across the majority of {ref}`snowmobile`'s object model since its attributes include the
 [snowmobile.Configuration](./snowmobile_toml.md#snowmobiletoml) object ({attr}`sn.cfg`) as well as the {xref}`SnowflakeConnection` object ({attr}`sn.con`).

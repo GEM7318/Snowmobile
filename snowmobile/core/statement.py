@@ -126,17 +126,13 @@ class Statement(Tag, Snowmobile):
         self.execution_time_txt: str = str()
 
         self.attrs_raw = attrs_raw or str()
-        self.is_multiline = '\n' in self.attrs_raw
+        self.is_multiline = "\n" in self.attrs_raw
         self.is_tagged: bool = bool(self.attrs_raw)
         self.sql = sn.cfg.script.isolate_sql(s=self.statement)
         self.attrs_parsed, nm = self.parse()
 
         Tag.__init__(
-            self,
-            index=index,
-            sql=self.sql,
-            nm_pr=nm,
-            configuration=self.sn.cfg,
+            self, index=index, sql=self.sql, nm_pr=nm, configuration=self.sn.cfg
         )
 
         self.e = e or ExceptionHandler(within=self)
@@ -164,8 +160,8 @@ class Statement(Tag, Snowmobile):
 
         if self.is_multiline:
             attrs_parsed = self.sn.cfg.script.parse_str(block=self.attrs_raw)
-            if 'name' in attrs_parsed:
-                name = attrs_parsed.pop('name')
+            if "name" in attrs_parsed:
+                name = attrs_parsed.pop("name")
             else:
                 try:
                     name = self.sn.cfg.script.parse_name(raw=self.attrs_raw)
@@ -214,13 +210,18 @@ class Statement(Tag, Snowmobile):
 
         """
         current_namespace = {
-            **self.sn.cfg.attrs_from_obj(obj=self, within=list(self.sn.cfg.attrs.from_namespace)),
-            **self.sn.cfg.methods_from_obj(obj=self, within=list(self.sn.cfg.attrs.from_namespace)),
+            **self.sn.cfg.attrs_from_obj(
+                obj=self, within=list(self.sn.cfg.attrs.from_namespace)
+            ),
+            **self.sn.cfg.methods_from_obj(
+                obj=self, within=list(self.sn.cfg.attrs.from_namespace)
+            ),
         }
-        namespace_overlap_with_config = (
-            set(current_namespace)  # all from current namespace
-            .intersection(self.sn.cfg.attrs.from_namespace)  # snowmobile.toml
-        )
+        namespace_overlap_with_config = set(
+            current_namespace
+        ).intersection(  # all from current namespace
+            self.sn.cfg.attrs.from_namespace
+        )  # snowmobile.toml
         attrs = {k: v for k, v in self.attrs_parsed.items()}  # parsed from .sql
         for k in namespace_overlap_with_config:
             attr = current_namespace[k]

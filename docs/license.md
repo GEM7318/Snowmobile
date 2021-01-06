@@ -2,7 +2,3 @@ License
 =======
 ```{include} ../LICENSE.txt
 ```
-
-
-
-

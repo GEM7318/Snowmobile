@@ -65,26 +65,14 @@ class Configuration(Snowmobile):
     """
 
     # -- Statement components to be considered for scope.
-    SCOPE_ATTRIBUTES = [
-        "kw",
-        "obj",
-        "desc",
-        "anchor",
-        "nm",
-    ]
-    SCOPE_TYPES = [
-        "incl",
-        "excl",
-    ]
+    SCOPE_ATTRIBUTES = ["kw", "obj", "desc", "anchor", "nm"]
+    SCOPE_TYPES = ["incl", "excl"]
 
     # -- e.g. populates associated parts of 'insert into~statement #2'
     DEF_DESC = "statement"
 
     # -- Anchors to associate with QA statements.
-    QA_ANCHORS = {
-        "qa-diff",
-        "qa-empty",
-    }
+    QA_ANCHORS = {"qa-diff", "qa-empty"}
 
     def __init__(
         self,
@@ -235,7 +223,6 @@ class Configuration(Snowmobile):
             for m in dir(obj)
             if (m in within if within else True)
             and not isinstance(getattr(obj, m), Callable)
-
         }
 
     @staticmethod
@@ -248,7 +235,6 @@ class Configuration(Snowmobile):
             for m in dir(obj)
             if (m in within if within else True)
             and isinstance(getattr(obj, m), MethodType)
-
         }
 
     # TODO: Stick somewhere that makes sense

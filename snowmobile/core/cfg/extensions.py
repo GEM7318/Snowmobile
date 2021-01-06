@@ -12,6 +12,7 @@ from .base import Base
 
 class Location(Base):
     """[external-sources]"""
+
     # fmt: off
     ddl: Path = Field(
         default_factory=Path, alias="ddl"

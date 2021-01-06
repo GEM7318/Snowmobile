@@ -1,4 +1,3 @@
-
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -10,25 +9,24 @@ import sys
 from pathlib import Path
 
 # import management
-sys.path.append('.')
+sys.path.append(".")
 
 HERE = Path(__file__).absolute()
 ROOT = HERE.parent.parent
-DOCS_DIR = ROOT / 'docs'
-LINKS_DIR = DOCS_DIR / 'links'
-EXT_DIR = DOCS_DIR / 'ext'
-PACKAGE_DIR = ROOT / 'snowmobile'
+DOCS_DIR = ROOT / "docs"
+LINKS_DIR = DOCS_DIR / "links"
+EXT_DIR = DOCS_DIR / "ext"
+PACKAGE_DIR = ROOT / "snowmobile"
 
 to_insert = {
-    'DOCS_DIR': DOCS_DIR,
-    'LINKS_DIR': LINKS_DIR,
-    'EXT_DIR': EXT_DIR,
-    'PACKAGE_DIR': PACKAGE_DIR
+    "DOCS_DIR": DOCS_DIR,
+    "LINKS_DIR": LINKS_DIR,
+    "EXT_DIR": EXT_DIR,
+    "PACKAGE_DIR": PACKAGE_DIR,
 }
 for dir_name, dir_path in to_insert.items():
     sys.path.insert(0, str(dir_path))
     print(f"<added-to-path> {dir_name}")
-
 
 
 # -- hyperlink aliasing/xref --------------------------------------------------
@@ -37,6 +35,7 @@ for dir_name, dir_path in to_insert.items():
 # from .ext import xref  # imported by 'extensions' but included for clarity
 # noinspection PyUnresolvedReferences
 from links.link import *
+
 # noinspection PyUnresolvedReferences
 from links import *
 
@@ -44,28 +43,28 @@ from links import *
 # ============================
 # staple configuration options
 # ============================
-source_suffix = ['.rst', '.md']
+source_suffix = [".rst", ".md"]
 
 extensions = [
-    'myst_parser',
-    'sphinx.ext.autosectionlabel',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.napoleon',
-    'autoapi.extension',
-    'xref',
+    "myst_parser",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "autoapi.extension",
+    "xref",
     "sphinx_panels",
-    'autoapi.extension',
+    "autoapi.extension",
     "nbsphinx",
     "sphinx_copybutton",
 ]
 
-master_doc = 'index'
+master_doc = "index"
 default_role = None
-htmlhelp_basename = 'Recommonmarkdoc'
-source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
-language = 'python'
-templates_path = ['_templates']
-exclude_patterns = ['_build', '__main__.py', '__init__.py']
+htmlhelp_basename = "Recommonmarkdoc"
+source_parsers = {".md": "recommonmark.parser.CommonMarkParser"}
+language = "python"
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "__main__.py", "__init__.py"]
 
 
 nbsphinx_execute = "never"
@@ -74,11 +73,11 @@ nbsphinx_kernel_name = "snowmobile3"
 
 # Project Information ---------------------------------------------------------
 # from snowmobile import __version__
-version = '0.0.15'
+version = "0.0.15"
 
-project = 'snowmobile'
-copyright = '2020, Grant E Murray'
-author = 'Grant E Murray'
+project = "snowmobile"
+copyright = "2020, Grant E Murray"
+author = "Grant E Murray"
 
 # version = __version__
 # release = __version__
@@ -89,7 +88,9 @@ release = version
 # Sphinx Panels ---------------------------------------------------------------
 # https://sphinx-panels.readthedocs.io/en/latest/
 
-html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
+html_css_files = [
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+]
 panels_add_bootstrap_css = True  # required for color in icons/etc
 panels_add_fontawesome_latex = True
 
@@ -98,7 +99,6 @@ panels_css_variables = {
     "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
     "tabs-color-overline": "rgb(207, 236, 238)",
     "tabs-color-underline": "rgb(207, 236, 238)",
-
     # "tabs-size-label": "1rem",
     "tabs-size-label": "0.85rem",
     # "tabs-size-label": "0.75rem",
@@ -113,6 +113,7 @@ autosectionlabel_prefix_document = True
 autosectionlabel_max_depth = 4
 
 from markdown_it.extensions import deflist
+
 myst_enable_extensions = [
     "dollarmath",
     "amsmath",
@@ -132,17 +133,17 @@ myst_url_schemes = ("http", "https", "mailto")
 # https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html
 # =====================
 autoapi_add_toctree_entry = False
-autoapi_type = 'python'
-autoapi_dirs = ['../snowmobile']
+autoapi_type = "python"
+autoapi_dirs = ["../snowmobile"]
 autoapi_ignore = [
-    '__main__.py',
-    '__init__.py',
-    '**/stdout/*',
-    '**_runner/*',
-    '**/.snowmobile/*',
+    "__main__.py",
+    "__init__.py",
+    "**/stdout/*",
+    "**_runner/*",
+    "**/.snowmobile/*",
 ]
-autoapi_python_class_content = 'class'  # 'both' if __init__ as well
-autoapi_member_order = 'bysource'  # 'bysource' or 'groupwise'
+autoapi_python_class_content = "class"  # 'both' if __init__ as well
+autoapi_member_order = "bysource"  # 'bysource' or 'groupwise'
 # ..note:
 #   'bysource' means 'by docstring order' for attributes and 'by actual source'
 #   for methods and properties.
@@ -155,11 +156,7 @@ autoapi_member_order = 'bysource'  # 'bysource' or 'groupwise'
 import sphinx_material
 
 html_show_sourcelink = True
-html_sidebars = {
-    "**": [
-        "globaltoc.html", "localtoc.html", "searchbox.html"
-    ]
-}
+html_sidebars = {"**": ["globaltoc.html", "localtoc.html", "searchbox.html"]}
 
 extensions.append("sphinx_material")
 html_theme_path = sphinx_material.html_theme_path()
@@ -167,38 +164,32 @@ html_context = sphinx_material.get_html_context()
 html_theme = "sphinx_material"
 
 # Set link name generated in the top bar.
-html_title = 'Snowmobile'
+html_title = "Snowmobile"
 
 # Material theme options (see theme.conf for more information)
 html_theme_options = {
-
     # 'google_analytics_account': 'UA-XXXXX',
     # 'logo_icon': '&#xe869',
-
-    'html_minify': False,
-    'html_prettify': True,
-    'css_minify': True,
-
-    'globaltoc_depth': 2,
-    'globaltoc_collapse': True,
-    'globaltoc_includehidden': True,
-
-    'repo_url': 'https://github.com/GEM7318/Snowmobile',
-    'repo_name': 'Snowmobile',
-    'nav_title': 'snowmobile',
-
-    'color_primary': 'blue',
-    'color_accent': 'cyan',
+    "html_minify": False,
+    "html_prettify": True,
+    "css_minify": True,
+    "globaltoc_depth": 2,
+    "globaltoc_collapse": True,
+    "globaltoc_includehidden": True,
+    "repo_url": "https://github.com/GEM7318/Snowmobile",
+    "repo_name": "Snowmobile",
+    "nav_title": "snowmobile",
+    "color_primary": "blue",
+    "color_accent": "cyan",
     "theme_color": "#2196f3",
-
-    'body_max_width': None
+    "body_max_width": None,
 }
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Napoleon settings
 napoleon_google_docstring = True
@@ -217,7 +208,7 @@ napoleon_use_ivar = False
 napoleon_use_rtype = False
 napoleon_use_keyword = True
 
-napoleon_custom_sections = 'Attributes'
+napoleon_custom_sections = "Attributes"
 
 # Scaffolding paste from here down ============================================
 
@@ -261,22 +252,28 @@ html_show_copyright = False
 
 # Highlighting for code blocks
 # https://sublime-and-sphinx-guide.readthedocs.io/en/latest/code_blocks.html
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # -- External mapping ------------------------------------------------------------
-python_version = '.'.join(map(str, sys.version_info[0:2]))
+python_version = ".".join(map(str, sys.version_info[0:2]))
 
 intersphinx_mapping = {
-    'sqlparse': ('https://sqlparse.readthedocs.io/en/latest/', None),
-    'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
-    'snowflake.connector': ('https://docs.snowflake.com/en/user-guide/python-connector.html', None),
-    'snowflake': ('https://docs.snowflake.com/en/user-guide/python-connector.html', None),
-    'sphinx': ('http://www.sphinx-doc.org/en/stable', None),
-    'python': ('https://docs.python.org/' + python_version, None),
-    'matplotlib': ('https://matplotlib.org', None),
-    'numpy': ('https://docs.scipy.org/doc/numpy', None),
-    'sklearn': ('http://scikit-learn.org/stable', None),
-    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
+    "sqlparse": ("https://sqlparse.readthedocs.io/en/latest/", None),
+    "pandas": ("http://pandas.pydata.org/pandas-docs/stable", None),
+    "snowflake.connector": (
+        "https://docs.snowflake.com/en/user-guide/python-connector.html",
+        None,
+    ),
+    "snowflake": (
+        "https://docs.snowflake.com/en/user-guide/python-connector.html",
+        None,
+    ),
+    "sphinx": ("http://www.sphinx-doc.org/en/stable", None),
+    "python": ("https://docs.python.org/" + python_version, None),
+    "matplotlib": ("https://matplotlib.org", None),
+    "numpy": ("https://docs.scipy.org/doc/numpy", None),
+    "sklearn": ("http://scikit-learn.org/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
 }
 
 # Adding so that __init__ will be documented - source is from link below:
@@ -286,13 +283,11 @@ intersphinx_mapping = {
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
     import re
-    exclude = (
-        re.findall('\._.*', str(obj))
-        or 'stdout' in str(obj).lower()
-    )
+
+    exclude = re.findall("\._.*", str(obj)) or "stdout" in str(obj).lower()
     return skip or exclude
 
 
 def setup(app):
     """Add autoapi-skip-member."""
-    app.connect('autoapi-skip-member', autoapi_skip_member)
+    app.connect("autoapi-skip-member", autoapi_skip_member)

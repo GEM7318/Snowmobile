@@ -52,9 +52,7 @@ class Scope(Snowmobile):
 
     """
 
-    def __init__(
-        self, arg: str, base: str,
-    ):
+    def __init__(self, arg: str, base: str):
         """Instantiates a :class:`Scope` object."""
         super().__init__()
         self.component: str = arg  # 'kw'

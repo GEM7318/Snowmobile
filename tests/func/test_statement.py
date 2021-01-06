@@ -9,19 +9,17 @@ def sample_statement_object(sn):
     from snowmobile import Statement
 
     # creating an example table
-    sn.ex('drop table if exists an_example_table')
-    sn.ex('create temp table an_example_table as select 1 as sample_col')
+    sn.ex("drop table if exists an_example_table")
+    sn.ex("create temp table an_example_table as select 1 as sample_col")
 
     # sql for statement object
     sql = """
 select
     *
-from an_example_table a;    
+from an_example_table a;
 """
     return Statement(
-        sn=sn,
-        statement=sn.cfg.script.ensure_sqlparse(sql=sql.strip('\n')),
-        index=1
+        sn=sn, statement=sn.cfg.script.ensure_sqlparse(sql=sql.strip("\n")), index=1
     )
 
 
@@ -37,7 +35,7 @@ def test_multiline_attributes_without_a_name_causes_error(sample_statement_objec
     from snowmobile.core.errors import InvalidTagsError
 
     multiline_tag_without_a_name_argument = """
-__description: This is an example of a multiline tag that will cause an error.    
+__description: This is an example of a multiline tag that will cause an error.
 """
 
     # given
@@ -51,18 +49,23 @@ __description: This is an example of a multiline tag that will cause an error.
 
 
 @pytest.mark.statement
-def test_calling_render_on_a_valid_statement_does_not_cause_an_error(sample_statement_object):
+def test_calling_render_on_a_valid_statement_does_not_cause_an_error(
+    sample_statement_object
+):
     """Tests statement.render() method does not cause an error."""
     sample_statement_object.run(render=True)
 
 
 # noinspection SqlResolve
 @pytest.mark.statement
-def test_calling_run_with_results_on_invalid_sql_raises_database_error(sample_statement_object):
+def test_calling_run_with_results_on_invalid_sql_raises_database_error(
+    sample_statement_object
+):
     """Tests `s.run(as_df=True)` raises an error when `s.sql` is not a valid statement."""
     from pandas.io.sql import DatabaseError
+
     # given
-    an_invalid_sql_statement = 'select * from *'
+    an_invalid_sql_statement = "select * from *"
     sample_statement_object.sql = an_invalid_sql_statement
 
     # then
@@ -73,7 +76,9 @@ def test_calling_run_with_results_on_invalid_sql_raises_database_error(sample_st
 @pytest.mark.statement
 def test_statement_dunder_getitem(sample_statement_object):
     """Verifies `s.__getitem__()`."""
-    assert sample_statement_object.__getitem__(item='sql') == sample_statement_object.sql
+    assert (
+        sample_statement_object.__getitem__(item="sql") == sample_statement_object.sql
+    )
 
 
 @pytest.mark.statement
@@ -85,5 +90,5 @@ def test_statement_dunder_str(sample_statement_object):
 @pytest.mark.statement
 def test_statement_dunder_setitem(sample_statement_object):
     """Verifies `s.__str__()`."""
-    sample_statement_object.__setitem__('sql', '')
-    assert sample_statement_object.sql == ''
+    sample_statement_object.__setitem__("sql", "")
+    assert sample_statement_object.sql == ""
