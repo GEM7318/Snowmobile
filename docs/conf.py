@@ -179,10 +179,8 @@ html_theme_options = {
     'html_prettify': True,
     'css_minify': True,
 
-    'globaltoc_depth': 3,
-    # 'globaltoc_collapse': True,
-    'globaltoc_collapse': False,
-    # 'globaltoc_includehidden': False,
+    'globaltoc_depth': 2,
+    'globaltoc_collapse': True,
     'globaltoc_includehidden': True,
 
     'repo_url': 'https://github.com/GEM7318/Snowmobile',

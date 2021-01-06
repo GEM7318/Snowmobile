@@ -16,6 +16,6 @@ class Location(Base):
         default_factory=Path, alias="ddl"
     )
     backend: Path = Field(
-        default_factory=Path, alias="backend-ext"
+        default_factory=Path, alias="extension"
     )
     # fmt: on

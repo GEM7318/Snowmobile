@@ -1,5 +1,25 @@
 # Sandbox
 
+## 1. Default
+
+````{tabbed} .sql (original)
+```{literalinclude} ../tests/data/sql/markup_with_results.sql
+:language: sql
+```
+````
+
+````{tabbed} stripped .sql (.snowmobile)
+```{literalinclude} ../tests/data/sql/.snowmobile/markup_with_results/(default) markup_with_results.sql
+:language: sql
+```
+````
+
+````{tabbed} generated .md (.snowmobile)
+```{include} ../tests/data/sql/.snowmobile/markup_with_results/(default) markup_with_results.md
+```
+````
+
+
 ## Core Features
 
 {fa}`check,text-success mr-1` **No embedding credentials within scripts** 

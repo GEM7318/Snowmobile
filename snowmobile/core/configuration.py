@@ -133,16 +133,16 @@ class Configuration(Snowmobile):
                     cfg_raw["connection"]["default-creds"] = self.creds
 
                 # TODO: Add sql export disclaimer to this as well
-                if not cfg_raw["external-file-locations"].get("ddl"):
-                    cfg_raw["external-file-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
-                if not cfg_raw["external-file-locations"].get("backend-ext"):
-                    cfg_raw["external-file-locations"]["backend-ext"] = paths.EXTENSIONS_DEFAULT_PATH
+                if not cfg_raw["external-locations"].get("ddl"):
+                    cfg_raw["external-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
+                if not cfg_raw["external-locations"].get("extension"):
+                    cfg_raw["external-locations"]["extension"] = paths.EXTENSIONS_DEFAULT_PATH
 
                 self.connection = cfg.Connection(**cfg_raw.get('connection', {}))
-                self.loading = cfg.Loading(**cfg_raw.get('loading-defaults', {}))
+                self.loading = cfg.Loading(**cfg_raw.get('loading', {}))
                 self.script = cfg.Script(**cfg_raw.get('script', {}))
                 self.sql = cfg.SQL(**cfg_raw.get('sql', {}))
-                self.ext_locations = cfg.Location(**cfg_raw.get('external-file-locations', {}))
+                self.ext_locations = cfg.Location(**cfg_raw.get('external-locations', {}))
 
                 with open(self.ext_locations.backend, "r") as r:
                     backend = toml.load(r)

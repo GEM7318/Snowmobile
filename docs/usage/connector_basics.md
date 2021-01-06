@@ -44,9 +44,11 @@ should provide direct feedback as to what's causing them.
     {xref}`SnowflakeConnection` object.
     -   *on-failure expects* `DataBaseError` 
 ````
-
-Given the {ref}`Section Assumptions<assumptions>` outlined above, creating another {class}`~snowmobile.core.Connector` with the
-same set of credentials can be done with:
+ 
+Since *creds1* is the first set of credentials stored in
+[snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) and the
+{ref}`default-creds<connection.default-creds>` field has been left blank
+(re: {ref}`Section Assumptions<assumptions>`), line **7** is implicitly invoking:
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python
 :lineno-start: 8
@@ -102,10 +104,13 @@ These are some of attributes/properties on the {class}`~snowmobile.core.Connecto
 :lines: 28-29
 ```
 
-Alternatively, the attributes/properties of the {xref}`snowflake.connector` remain public so that no functionality is lost from it 
-or supporting libraries. For example, the three statements below manually implement the execution component of the three methods 
-called on lines 22, 25, and 28 above, using {xref}`snowmobile` **only** as a parameter and an accessor to methods from the 
-{any}`pandas` and {xref}`snowflake.connector2` APIs: 
+Alternatively, the attributes/properties of the {xref}`snowflake.connector` 
+remain public so that no functionality is lost from it or supporting libraries. 
+
+Said another way, the three statements below manually implement the execution 
+component of the three methods called on lines **22**, **25**, and **28** above, 
+using {xref}`snowmobile` **only** as a parameter and an accessor to methods 
+from the {any}`pandas` and {xref}`snowflake.connector2` APIs: 
 
 ```{literalinclude} ../examples/mod_connector/intro_connector.py
 :language: python
@@ -140,7 +145,7 @@ Which can be directly compared to our original **df1**, **cur1**, and **dcur1**:
 .. tabbed:: Context
 
    The :attr:`snowmobile.Connector.cursor` and :attr:`snowmobile.Connector.dictcursor` are **properties**
-   of :attr:`snowmobile.Connector` and return a new instance each time they are accessed. 
+   of :attr:`snowmobile.Connector` that return a new instance each time they are accessed. 
    
    Depending on the desired behavior of a :xref:`SnowflakeCursor` or 
    :xref:`DictCursor`, it it's sometimes better be store and re-referenced

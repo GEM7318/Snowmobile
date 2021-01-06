@@ -12,6 +12,7 @@
   :hidden:
   
   ./usage/connector.md
+  ./usage/script1.md
   ./usage/sql.md
   ./usage/snowmobile_toml.md
   ./modindex.md

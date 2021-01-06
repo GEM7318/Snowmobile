@@ -8,7 +8,7 @@
 
     .. only:: builder_html
 
-       :download:`Download <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` this file and
+       Download :download:`this <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` file and
        remove the `_TEMPLATE` portion of the file name so that it's saved as **snowmobile.toml**.
 
 .. tabbed:: Copy File Contents
@@ -48,11 +48,13 @@ The first few lines of **snowmobile.toml** are outlined below; **for minimum con
 
     sn = snowmobile.Connector()
 
-Successful setup and connection results in ending console output similar to:
+Successful setup and connection results in ending console output similar to:.
+
     >>>
     Looking for snowmobile.toml in local file system..
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
     ..connected: snowmobile.Connect(creds='creds1')
 
+:link-badge:`./usage/connector_basics.html#executing-raw-sql,cls=badge-primary badge-pill text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
+:link-badge:`./usage/connector_basics.html#connecting-to-snowflake,cls=badge-warning text-dark,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
 
-:link-badge:`./usage/connector_basics.html#connecting-to-snowflake,cls=badge-primary text-white,Related: Connecting to Snowflake,tooltip=Usage Documentation on Connecting to Snowflake`

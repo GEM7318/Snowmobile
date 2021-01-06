@@ -454,7 +454,7 @@ class SQL(Snowmobile):
                 default is `True`.
             options (dict):
                 Optional arguments to add to `put` statement in addition to
-                the values specified in the ``loading-defaults.put`` section
+                the values specified in the ``loading.put`` section
                 of **snowmobile.toml**.
             ignore_defaults (bool):
                 Option to ignore the values specified in **snowmobile.toml**;
@@ -506,7 +506,7 @@ class SQL(Snowmobile):
                 default is `True`.
             options (dict):
                 Optional arguments to add to `put` statement in addition to
-                the values specified in the ``loading-defaults.put`` section
+                the values specified in the ``loading.put`` section
                 of **snowmobile.toml**.
             ignore_defaults (bool):
                 Option to ignore the values specified in **snowmobile.toml**;

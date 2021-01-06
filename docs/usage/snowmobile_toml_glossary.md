@@ -70,7 +70,7 @@ This is similar to the {ref}`connection.default-creds<connection.default-creds>`
 except that instead of referring to a **credentials** alias, it's grouping 
 together aliases/names of:
 1.  An **in-warehouse** file format
-2.  A set of **[loading-defaults.export-options]** (below)
+2.  A set of **[loading.export-options]** (below)
 3.  A statement tag associated with the DDL that **creates** this file format 
     (to be fetched by {xref}`snowmobile` if it's called on and doesn't yet 
     exist in the current schema)

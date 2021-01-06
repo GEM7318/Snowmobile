@@ -26,9 +26,9 @@
         timezone = 'America/Chicago'
 
 # TODO: Change to just 'loading'
-[loading-defaults]
+[loading]
 
-    [loading-defaults.default-table-kwargs]
+    [loading.default-table-kwargs]
         file_format = 'snowmobile_default_psv'
         validate_table = true
         validate_format = true
@@ -39,19 +39,19 @@
         check_dupes = true
         load_copy = true
 
-    [loading-defaults.put]
+    [loading.put]
         auto_compress = true
 
-    [loading-defaults.copy-into]
+    [loading.copy-into]
         on_error = 'continue'
 
-    [loading-defaults.export-options]
-        [loading-defaults.export-options."snowmobile_default_csv"]
+    [loading.export-options]
+        [loading.export-options."snowmobile_default_csv"]
             index = false
             header = false
             quotechar = '"'
             sep = ","
-        [loading-defaults.export-options."snowmobile_default_psv"]
+        [loading.export-options."snowmobile_default_psv"]
             index = false
             header = false
             quotechar = '"'
@@ -150,9 +150,9 @@
                 'results'
             ]
 
-[external-file-locations]
+[external-locations]
     ddl = ''
-    backend-ext = ''
+    extension = ''
 
 [query]
     result-limit = -1

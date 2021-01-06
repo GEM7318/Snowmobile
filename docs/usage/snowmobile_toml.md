@@ -43,8 +43,13 @@ The attributes that map to different sections of [snowmobile.toml](#snowmobileto
 :lines: 16-20
 :lineno-start: 10
 ```
+
+```{admonition} Tip
+:class: tip
+Each section of [snowmobile.toml](#snowmobiletoml) and attribute of {attr}`~snowmobile.Connector.cfg` outlined in lines 10-14 above maps squarely to a
+specific class of {xref}`snowmobile`, the documentation for which contains more detailed information on its use.
+```
+
 *The full script for this section can be found [here](../snippets.md#instantiate_connectorpy).*
 
 ````
-Each section of [snowmobile.toml](#snowmobiletoml) and attribute of {attr}`~snowmobile.Connector.cfg` outlined in lines 10-14 above maps squarely to a
-specific class of {xref}`snowmobile`, for which the documentation contains more detailed information on its use.
