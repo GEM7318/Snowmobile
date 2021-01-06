@@ -1,6 +1,4 @@
-"""
-Module contains the object model for **snowmobile.toml**.
-"""
+"""[sql] (**snowmobile_ext.toml**)"""
 from __future__ import annotations
 
 import re
@@ -13,6 +11,7 @@ from .base import Base
 
 
 class SQL(Base):
+    """[sql] (**snowmobile_ext.toml**)"""
     # fmt: off
     generic_anchors: Dict = Field(
         default_factory=dict, alias="generic-anchors"
@@ -29,9 +28,15 @@ class SQL(Base):
     # fmt: on
 
     def info_schema_loc(self, obj: str) -> str:
-        """Returns information cfg location from an object."""
+        """Returns information schema table for object if other than making plural.
+
+        i.e.:
+            *   'table' --> 'tables'
+            *   'schema' --> 'schemata'
+
+        """
         obj = obj.strip("s")
-        default = f"{obj}s"  # 'table' -> 'tables'/'column' -> 'columns'
+        default = f"{obj}s"  # 'table' -> 'tables' / 'column' -> 'columns'
         return f"information_schema.{self.info_schema_exceptions.get(obj, default)}"
 
     def objects_within(self, first_line: str):

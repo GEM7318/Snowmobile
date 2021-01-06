@@ -5,7 +5,7 @@
 # =============================================================================
 
 # -- Type mapping of how attribute values should be parsed based attr name ----
-[tag-to-type-xref]
+[script.tag-to-type-xref]
     string = [
         'name', 'partition-on', 'end-index-at', 'description'
     ]
@@ -43,5 +43,4 @@
 
     [sql.information-schema-exceptions]
         schema = "schemata"
-        pipe = "core"
 

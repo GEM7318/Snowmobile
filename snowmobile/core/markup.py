@@ -164,7 +164,7 @@ class Markup(Snowmobile):
     @property
     def _export_disclaimer(self) -> str:
         """Block comment disclaimer of export at top of exported sql file."""
-        path_to_sql_txt = self.pkg_data_dir / "exported_sql_heading.txt"
+        path_to_sql_txt = self.pkg_data_dir / "sql_export_heading.txt"
         with open(path_to_sql_txt, "r") as r:
             header = r.read()
         return f"{header}" if self.sql_incl_export_disclaimer else str()

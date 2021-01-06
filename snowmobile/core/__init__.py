@@ -20,7 +20,15 @@ from .sql import SQL
 from .markup import Markup
 from .script import Script
 from .table import Table
-from .paths import DDL_DEFAULT_PATH, DIR_MODULES, DIR_PKG_DATA, EXTENSIONS_DEFAULT_PATH
+from .paths import (
+    # directories
+    DIR_MODULES,
+    DIR_PKG_DATA,
+    # files
+    DDL_DEFAULT_PATH,
+    EXTENSIONS_DEFAULT_PATH,
+    SQL_EXPORT_HEADING_DEFAULT_PATH,
+)
 
 
 __all__ = [

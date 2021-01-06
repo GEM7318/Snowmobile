@@ -1,5 +1,5 @@
 """
-Module contains the object model for **snowmobile.toml**.
+[external-sources] from **snowmobile.toml**.
 """
 from __future__ import annotations
 
@@ -11,11 +11,15 @@ from .base import Base
 
 
 class Location(Base):
+    """[external-sources]"""
     # fmt: off
     ddl: Path = Field(
         default_factory=Path, alias="ddl"
     )
-    backend: Path = Field(
-        default_factory=Path, alias="extension"
+    extensions: Path = Field(
+        default_factory=Path, alias="snowmobile_ext"
+    )
+    sql_export_heading: Path = Field(
+        default_factory=Path, alias="sql-export-heading"
     )
     # fmt: on

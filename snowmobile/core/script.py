@@ -257,7 +257,9 @@ class Script(Snowmobile):
         try:
             self._parse_statements()
             self._parse_markers()
-            self._merge_markers()
+            self.markers = self.sn.cfg.script.markdown.attrs.merge_markers(
+                parsed_markers=self._parsed_markers
+            )
         except Exception as e:
             raise e
 
@@ -627,12 +629,6 @@ class Script(Snowmobile):
             i: self.sn.cfg.script.parse_marker(attrs_raw=block)
             for i, block in self._ordered_markers.items()
         }
-
-    def _merge_markers(self):
-        """Merges parsed markers/attributes with presets in ``snowmobile.toml``."""
-        self.markers = self.sn.cfg.script.markdown.attrs.merge_markers(
-            parsed_markers=self._parsed_markers
-        )
 
     @property
     def _marker_counter(self):

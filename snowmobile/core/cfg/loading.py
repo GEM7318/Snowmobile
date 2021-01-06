@@ -1,5 +1,5 @@
 """
-Module contains the object model for **snowmobile.toml**.
+[loading] section from **snowmobile.toml**, including subsections.
 """
 from __future__ import annotations
 
@@ -11,33 +11,22 @@ from .base import Base
 
 
 class Put(Base):
-    """Default 'put' statement arguments."""
+    """[loading.put]"""
 
     auto_compress: bool = Field(default_factory=bool, alias="auto_compress")
 
 
 class Copy(Base):
-    """Default 'copy into' statement arguments"""
+    """[loading.copy]"""
 
     on_error: str = Field(default_factory=str, alias="on_error")
 
 
-class Other(Base):
-    """Default output-file options"""
-
-    # fmt: off
-    keep_local: bool = Field(
-        default_factory=bool, alias="keep-local-file"
-    )
-    include_loaded_tmstmp: bool = Field(
-        default_factory=bool, alias="include-loaded-timestamp"
-    )
-    # fmt: on
-
-
 # noinspection PyUnresolvedReferences
 class Loading(Base):
-    """Default settings to use when loading data.
+    """[loading]
+
+    Default settings to use when loading data
 
     Attributes:
         default-file-format (str):
@@ -78,9 +67,6 @@ class Loading(Base):
     )
     copy_into: Copy = Field(
         default_factory=Copy, alias="copy-into"
-    )
-    other: Other = Field(
-        default_factory=Other, alias="other"
     )
     export_options: Dict[str, Dict] = Field(
         default_factory=dict, alias="export-options"

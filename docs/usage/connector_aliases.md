@@ -2,7 +2,7 @@
 # Credential Aliases
 
 The below line in [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) denotes the set of credentials to authenticate with if one isn't
-specified in the optional {any}`creds` argument of {class}`snowmobile.Connector`.
+specified in the optional `creds` argument of {class}`snowmobile.Connector`.
 
 ```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
 :language: toml

@@ -150,7 +150,7 @@
                 'results'
             ]
 
-[external-locations]
+[external-sources]
     ddl = ''
     extension = ''
 

@@ -17,7 +17,7 @@ type(sn.cfg.connection)     #> snowmobile.core.cfg.connection.Connection
 type(sn.cfg.loading)        #> snowmobile.core.cfg.loading.Loading
 type(sn.cfg.script)         #> snowmobile.core.cfg.script.Script
 type(sn.cfg.sql)            #> snowmobile.core.cfg.other.SQL
-type(sn.cfg.ext_locations)  #> snowmobile.core.cfg.other.Location
+type(sn.cfg.ext_sources)  #> snowmobile.core.cfg.other.Location
 
 # --/ stand-alone example; should run 'as is' /--
 

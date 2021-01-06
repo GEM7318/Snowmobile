@@ -11,14 +11,14 @@ __all__ = [
     "Markdown",
     "QA",
     "Wildcard",
-    "Loading",
+    "Loading", "Put", "Copy",
     "SQL",
     "Location",
     "Attributes",
 ]
 from .base import Base
 from .connection import Connection, Credentials
-from .loading import Loading
+from .loading import Loading, Put, Copy
 from .sql import SQL
 from .extensions import Location
 from .script import QA, Attributes, Markdown, Marker, Pattern, Script, Wildcard

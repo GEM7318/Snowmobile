@@ -1,5 +1,5 @@
 """
-Module contains the object model for **snowmobile.toml**.
+[connection] section from **snowmobile.toml**, including subsections.
 """
 from __future__ import annotations
 
@@ -10,28 +10,8 @@ from pydantic import Field
 from .base import Base
 
 
-# TODO: type hints/updated docstrings
-# noinspection PyUnresolvedReferences
 class Credentials(Base):
-    """Represents a set of `Snowflake` credentials.
-
-    Attributes:
-        user (str):
-            Snowflake user.
-        password (str):
-            Snowflake password.
-        role (str):
-            Snowflake role.
-        account (str):
-            Snowflake account.
-        warehouse(str):
-            Warehouse.
-        database (str):
-            Database.
-        schema_name (str):
-            Schema.
-
-    """
+    """[connection.credentials.credentials_alias]"""
 
     # fmt: off
     _alias: str = Field(
@@ -85,7 +65,7 @@ class Credentials(Base):
 
 
 class Connection(Base):
-    """Represents the full **[connection]** block within **snowmobile.toml**.
+    """[connection]
 
     This includes the :attr:`default_alias` which is the set of credentials
     that :mod:`snowmobile` will authenticate with if :attr:`creds` is not
@@ -111,15 +91,15 @@ class Connection(Base):
     default_alias: str = Field(
         default_factory=str, alias='default-creds'
     )
-
-    creds: str = Field(
-        default_factory=str, alias='creds'
+    provided_alias: str = Field(
+        default_factory=str, alias='provided-creds'
     )
-
+    # creds: str = Field(
+    #     default_factory=str, alias='creds'
+    # )
     credentials: Dict[str, Credentials] = Field(
         default_factory=dict, alias="stored-credentials"
     )
-
     defaults: Dict = Field(
         default_factory=dict, alias="default-arguments"
     )
@@ -135,29 +115,21 @@ class Connection(Base):
         if not self.default_alias:
             self.default_alias = list(self.credentials)[0]
 
-    def get(self, creds: str) -> Credentials:
-        """Gets and sets a set of credentials given an creds.
-
-        Args:
-            creds (str):
-                The name of the set of :attr:`Creds` to authenticate with.
-
-        Returns:
-            :class:`Creds` object for the creds provided.
-
-        """
-        self.creds = creds or self.default_alias
-        try:
-            return self.credentials[self.creds]
-        except KeyError as e:
-            raise e
+    @property
+    def creds(self):
+        """Credentials alias used by current Connector."""
+        return self.provided_alias or self.default_alias
 
     @property
     def current(self):
         """Returns current credentials."""
-        return self.get(self.creds)
+        try:
+            return self.credentials[self.creds]
+        except KeyError as e:
+            raise e
+        # return self.get(self.creds)
 
     @property
     def connect_kwargs(self) -> Dict:
-        """Arguments from snowmobile.toml for snowflake.connector.connect()."""
+        """Arguments from snowmobile.toml for :meth:`snowflake.connector.connect()`."""
         return {**self.defaults, **self.current.credentials}

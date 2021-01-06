@@ -1,5 +1,5 @@
 """
-Module contains the object model for **snowmobile.toml**.
+[script] section from **snowmobile.toml**, including subsections.
 """
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from .base import Base
 
 
 class Wildcard(Base):
+    """[script.patterns.wildcards]"""
     # fmt: off
     char_wc: str = Field(
         default_factory=str, alias="wildcard-character"
@@ -80,6 +81,7 @@ class Wildcard(Base):
 
 
 class Reserved(Base):
+    """[script.markdown.attributes.reserved]"""
     # fmt: off
     include_by_default: bool = Field(
         default_factory=bool, alias="include-by-default"
@@ -97,6 +99,7 @@ class Reserved(Base):
 
 
 class Marker(Base):
+    """[script.markdown.attributes.markers]"""
     # fmt: off
     nm: str = Field(
         default_factory=str, alias="name"
@@ -128,7 +131,17 @@ class Marker(Base):
             self.attrs[k] = v
         return self
 
-    def split_attrs(self, attrs: Dict):
+    def split_attrs(self, attrs: Dict) -> Tuple[Dict, Dict]:
+        """Splits attributes into user-defined-only and shared with snowmobile.toml.
+
+        Args:
+            attrs (Dict):
+                Dictionary of parsed arguments.
+
+        Returns (Tuple[Dict, Dict]):
+            Tuple of (shared_with_snowmobile_toml_attrs, new_attrs)
+
+        """
         shared = {k: v for k, v in attrs.items() if k in self.attrs}
         new = {k: attrs[k] for k, v in attrs.items() if k not in self.attrs}
         return shared, new
@@ -165,6 +178,7 @@ class Marker(Base):
 
 
 class Attributes(Base):
+    """[script.markdown.attributes]"""
     # fmt: off
     excluded: List[str] = Field(
         default_factory=list, alias='exclude'
@@ -201,14 +215,36 @@ class Attributes(Base):
             self.markers[marker] = Marker(**marker_attrs).set_name(name=marker)
 
     def exclude(self, item: str):
+        """Adds an item (argument name) to list of exclusions."""
         if item not in self.excluded:
             self.excluded.append(item)
         return self
 
     def get_marker(self, name: str):
+        """Fetches a template marker from :attr:`markers`."""
         return self.markers.get(f"__{name}__")
 
     def merge_markers(self, parsed_markers: Dict[int, Dict]) -> Dict[int, Marker]:
+        """Merges markers parsed from script with template markers in snowmobile.toml.
+
+        Does the following:
+            *   Consumes all parsed attributes from markers found in a script
+            *   Tries to pull a pre-configured marker based on its time and
+                updates its pre-configured values with those provided in the
+                script if so
+            *   If it doesn't find a pre-configured marker based on the marker
+                name, it will instantiate a new marker instance from the
+                arguments provided in the script.
+
+        Args:
+            parsed_markers (Dict[int, Dict]):
+                All parsed raw marker arguments from a script by index position.
+
+        Returns (Dict[int, Marker]):
+            Instantiated markers for all attributes, merging those with
+            matching names to pre-configured markers in snowmobile.toml.
+
+        """
         total = {}
         for i, ms in parsed_markers.items():
             m = self.get_marker(name=ms["marker-name"])
@@ -217,6 +253,11 @@ class Attributes(Base):
         return total
 
     def get_position(self, attr: str) -> int:
+        """Returns the position for an attribute based on snowmobile_ext.toml.
+
+        Will return 0 if not included in order-by configuration.
+
+        """
         attr = attr.lower()
         ordered = [w.lower() for w in self.order]
         if attr not in ordered:
@@ -226,9 +267,13 @@ class Attributes(Base):
                 return i
 
     def included(self, attrs: Dict) -> Dict:
+        """Checks if an attribute has been marked for exclusion from render.
+        """
         return {k: v for k, v in attrs.items() if k not in self.excluded}
 
     def group_parsed_attrs(self, parsed: Dict) -> Dict:
+        """Nests attributes into dictionaries that are configured as groups.
+        """
         grouped = {}
         attrs = self.included(parsed)
         for parent, child_attrs in self.groups.items():
@@ -240,6 +285,16 @@ class Attributes(Base):
         return {**grouped, **attrs}
 
     def _add_reserved(self, nm: str, attrs: Dict, is_marker: bool = False):
+        """Adds a single reserved attr's configuration to attrs.
+
+        Args:
+            nm: Attribute name.
+            attrs: Full dictionary of attributes.
+            is_marker: Dictionary of attributes is for a marker.
+
+        Returns: Revised attrs.
+
+        """
         reserved_attr = self.reserved[nm]
         reserved_nm = reserved_attr.attr_nm
         if is_marker:
@@ -251,14 +306,15 @@ class Attributes(Base):
         return attrs
 
     def add_reserved_attrs(self, attrs: Dict, is_marker: bool = False):
-        attrs = {k: v for k, v in attrs.items()}
+        """Batch modifies all reserved attributes to their configuration."""
+        attrs = {k: v for k, v in attrs.items()}  # work on a copy of attrs
         for nm in self.reserved:
             attrs = self._add_reserved(nm=nm, attrs=attrs, is_marker=is_marker)
         return attrs
 
 
-
 class Core(Base):
+    """[script.patterns.core]"""
     # fmt: off
     to_open: str = Field(
         default_factory=str, alias='open-tag'
@@ -276,7 +332,7 @@ class Core(Base):
 
 
 class Markdown(Base):
-    """Configuration for generated documentation from script/associated tags."""
+    """[script.markdown]"""
 
     # fmt: off
     hx_marker: str = Field(
@@ -319,6 +375,7 @@ class Markdown(Base):
 
 
 class Pattern(Base):
+    """[script.patterns]"""
     # fmt: off
     core: Core = Field(
         default_factory=Core, alias="core"
@@ -330,6 +387,7 @@ class Pattern(Base):
 
 
 class Tolerance(Base):
+    """[script.qa.default-tolerance]"""
     # fmt: off
     relative: float = Field(
         default_factory=float, alias="relative"
@@ -344,6 +402,7 @@ class Tolerance(Base):
 
 
 class QA(Base):
+    """[script.qa]"""
     # fmt: off
     partition_on: str = Field(
         default_factory=str, alias="partition-on"
@@ -364,6 +423,7 @@ class QA(Base):
 
 
 class Type(Base):
+    """snowmobile_ext.toml: [tag-to-type-xref]"""
     # fmt: off
     as_str: List = Field(
         default_factory=list, alias="string"
@@ -381,6 +441,7 @@ class Type(Base):
 
 
 class Script(Base):
+    """[script]"""
     # fmt: off
     patterns: Pattern = Field(
         default_factory=Pattern, alias="patterns"
@@ -484,9 +545,6 @@ class Script(Base):
         stripped = p.strip(block, blanks=strip_blanks, trailing=strip_trailing)
         splitter = self.split_args(args_str=stripped)
         return self.parse_split_arguments(splitter=splitter)
-
-    def parse(self, raw: str, is_statement: Optional[bool] = None):
-        pass
 
     def as_parsable(
             self,

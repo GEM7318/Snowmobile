@@ -2,7 +2,27 @@
 Module contains parsing utilities used by :class:`Script`, :class:`Statement`,
 :class:`Markup`, and :class:`Section`.
 """
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict
+
+
+def rmerge_dicts(d1: Dict, d2: Dict) -> Dict:
+    """Recursively merges d1 & d2 dictionaries.
+
+    Used for combining contents of **snowmobile.toml** and
+    **snowmobile_ext.toml** at the appropriate level within a pair of nested
+    dictionaries.
+
+    """
+    merged = d1.copy()
+    merged.update(
+        {
+            key: rmerge_dicts(merged[key], d2[key])
+            if (
+                isinstance(merged.get(key), dict) and isinstance(d2[key], dict)
+            ) else d2[key] for key in d2.keys()
+        }
+    )
+    return merged
 
 
 def up(nm: str):

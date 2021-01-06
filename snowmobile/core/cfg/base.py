@@ -1,7 +1,6 @@
 """
-Configuration and Base classes from which all objects in snowmobile's
-configuration model are derived (i.e. ``snowmobile.toml`` and
-``snowmobile_ext.toml``.)
+pydantic Config and Base class for snowmobile.toml and snowmobile_ext.toml
+objects.
 """
 from __future__ import annotations
 

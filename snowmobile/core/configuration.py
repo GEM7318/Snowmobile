@@ -11,12 +11,13 @@ import json
 import shutil
 from pathlib import Path
 from types import MethodType
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union, Tuple
 
 import toml
 from pydantic.json import pydantic_encoder
 
 from snowmobile.core import paths, cfg, utils
+from snowmobile.core.utils.parsing import rmerge_dicts
 from .base import Snowmobile
 from .cache import Cache
 
@@ -58,7 +59,7 @@ class Configuration(Snowmobile):
             **[script]** section of ``snowmobile.toml``.
         sql (snowmobile.core.cfg.SQL):
             **[sql]** section of ``snowmobile.toml``.
-        ext_locations (snowmobile.core.cfg.Locations):
+        ext_sources (snowmobile.core.cfg.Locations):
             **[extension-paths]** section of ``snowmobile.toml``.
 
     """
@@ -119,37 +120,32 @@ class Configuration(Snowmobile):
                 else Path(str(self.cache.get(self.file_nm)))
             )
 
-            self.creds = creds.lower() if creds else ""
-
             try:
                 # fmt: off
-
                 path_to_config = self._get_path(is_provided=bool(from_config))
-
                 with open(path_to_config, "r") as r:
                     cfg_raw = toml.load(r)
 
-                if self.creds:
-                    cfg_raw["connection"]["default-creds"] = self.creds
+                cfg_raw['connection']['provided-creds'] = creds.lower() if creds else ""
+                ext_sources = cfg_raw["external-sources"]
+                for src in [
+                    ("snowmobile_ext", paths.EXTENSIONS_DEFAULT_PATH),
+                    ("ddl", paths.DDL_DEFAULT_PATH),
+                    ("sql-export-heading", paths.SQL_EXPORT_HEADING_DEFAULT_PATH),
+                ]:
+                    if not ext_sources.get(src[0]):
+                        ext_sources[src[0]] = src[1]
 
-                # TODO: Add sql export disclaimer to this as well
-                if not cfg_raw["external-locations"].get("ddl"):
-                    cfg_raw["external-locations"]["ddl"] = paths.DDL_DEFAULT_PATH
-                if not cfg_raw["external-locations"].get("extension"):
-                    cfg_raw["external-locations"]["extension"] = paths.EXTENSIONS_DEFAULT_PATH
+                path_ext = ext_sources['snowmobile_ext']
+                with open(path_ext, 'r') as r:
+                    snowmobile_ext = toml.load(r)
+                merged = rmerge_dicts(d1=cfg_raw, d2=snowmobile_ext)
 
-                self.connection = cfg.Connection(**cfg_raw.get('connection', {}))
-                self.loading = cfg.Loading(**cfg_raw.get('loading', {}))
-                self.script = cfg.Script(**cfg_raw.get('script', {}))
-                self.sql = cfg.SQL(**cfg_raw.get('sql', {}))
-                self.ext_locations = cfg.Location(**cfg_raw.get('external-locations', {}))
-
-                with open(self.ext_locations.backend, "r") as r:
-                    backend = toml.load(r)
-
-                self.script.types = self.script.types.from_dict(backend["tag-to-type-xref"])
-                self.sql.from_dict(backend["sql"])
-
+                self.connection = cfg.Connection(**merged.get('connection', {}))
+                self.loading = cfg.Loading(**merged.get('loading', {}))
+                self.script = cfg.Script(**merged.get('script', {}))
+                self.sql = cfg.SQL(**merged.get('sql', {}))
+                self.ext_sources = cfg.Location(**merged.get('external-sources', {}))
                 # fmt: on
 
             except IOError as e:
