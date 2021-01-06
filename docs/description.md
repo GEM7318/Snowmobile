@@ -1,11 +1,9 @@
-A library built to streamline interacting with {xref}`snowflake` through Python.
-
 {xref}`snowmobile` wraps the {xref}`SnowflakeConnection` class into an object model focused on configuration 
 management and evolving the way Python is used to interact with the {xref}`snowflakedb`, its core features being:
 
 {fa}`check,text-success mr-1` **Use a single configuration file, [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml), for any number of Python instances on a machine**
 
-{fa}`check,text-success mr-1` **Alias different sets of credentials and connection parameters**
+{fa}`check,text-success mr-1` **Alias different sets of credentials, connection parameters and loading specifications**
 
 {fa}`check,text-success mr-1` **Work with sql scripts as Python objects**
 

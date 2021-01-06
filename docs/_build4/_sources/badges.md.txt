@@ -1,0 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/snowmobile.svg)](https://badge.fury.io/py/snowmobile)
+[![codecov](https://codecov.io/gh/GEM7318/Snowmobile/branch/0.2.1/graph/badge.svg?token=UCMCWRIIJ8)](https://codecov.io/gh/GEM7318/Snowmobile)
+[![Documentation Status](https://readthedocs.org/projects/snowmobile/badge/?version=latest)](https://snowmobile.readthedocs.io/en/latest/?badge=latest#)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/GEM7318/Snowmobile/blob/master/LICENSE.txt)

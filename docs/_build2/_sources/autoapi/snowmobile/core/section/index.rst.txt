@@ -1,0 +1,211 @@
+:mod:`snowmobile.core.section`
+==============================
+
+.. py:module:: snowmobile.core.section
+
+.. autoapi-nested-parse::
+
+   Module for post-processing attributes of ``snowmobile.Script`` in conjunction
+   with configuration options stored in *snowmobile.toml*.
+
+   These result in two files being exported into a `.snowmobile` folder in the
+   same directory as the .sql file that ``snowmobile.Script`` was instantiated
+   with.
+
+   Header-levels and formatting of tagged information is configured in the
+   *snowmobile.toml* file, with defaults resulting in the following structure::
+
+           ```md
+
+           # Script Name.sql         *[script name gets an 'h1' header]
+           ----
+
+           - **Tag1**: Value1         [tags are bolded, associated values are not]
+           - **Tag2**: Value2         [same for all tags/attributes found]
+           - ...
+
+           **Description**           *[except for the 'Description' section]
+                                     *[this is just a blank canvas of markdown..]
+                                     *[..but this is configurable]
+
+           ## (1) create-table~dummy_name *[statements get 'h2' level headers]
+           ----
+
+           - **Tag1**: Value1       *[tags can also be validations arguments..
+           - **Arg1**: Val2          [that snowmobile will run on the sql results]
+
+           **Description**          *[statements get one of these too]
+
+           **SQL**                  *[their rendered sql does as well]
+               ...sql
+                   ...
+                   ...
+               ...
+
+
+           ## (2) update-table~dummy_name2
+           ----
+           [structure repeats for all statements in the script]
+
+           ```
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.section.Name
+   snowmobile.core.section.Item
+   snowmobile.core.section.Section
+
+
+
+.. py:class:: Name(nm: str, cfg: Configuration, is_title: Optional[bool] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Handles attribute-name parsing including identification of wildcards.
+
+
+   .. method:: check_reserved_nm(attr_name: str, searching_for: str) -> bool
+      :staticmethod:
+
+      Safely checks for key terms within attribute names.
+
+      :param attr_name: Attribute name that we are checking (e.g. 'Results\*')
+      :type attr_name: str
+      :param searching_for: Keyword we are searching for (e.g. 'results')
+      :type searching_for: str
+
+
+
+.. py:class:: Item(index: int, flattened_attrs: Tuple, cfg: Configuration, results: Optional[pd.DataFrame] = None, sql_md: Optional[str] = None)
+
+   Bases: :class:`snowmobile.core.section.Name`
+
+   Represents a piece of text/content within a header section.
+
+   .. method:: is_sibling(self, other: Item) -> bool
+
+
+   .. method:: update(self, items: List[Item])
+
+
+   .. method:: as_results(results: pd.DataFrame, cfg_md: Markdown)
+      :staticmethod:
+
+
+   .. method:: md(self)
+      :property:
+
+
+
+.. py:class:: Section(cfg: Configuration, is_marker: bool = None, h_contents: Optional[str] = None, index: Optional[int] = None, parsed: Optional[Dict] = None, raw: Optional[str] = None, sql: Optional[str] = None, results: Optional[pd.DataFrame] = None, incl_raw: bool = False, is_multiline: bool = False)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Represents any (1-6 level) header section within `Script Name (doc).md`.
+
+
+   This class is intended to be accessed as an attribute of
+   `snowmobile.Script` and shouldn't need to be instantiated directly.
+
+   In order to keep the core parsing functionality available without
+   requiring execution of any statements in the script but also including
+   execution data if available, the current implementation is heavily
+   reliant on properties over attributes to reconcile what's populated in
+   the `statements' and `executed` attributes of the `Script` object.
+
+
+
+   .. attribute:: hx
+
+      String form of the markdown header tag (e.g. '#' for h1),
+      based on the script/statement header-level specifications in
+      `snowmobile.toml`.
+
+      :type: str
+
+   .. attribute:: h_contents
+
+      Text to place in the header.
+
+      :type: str
+
+   .. attribute:: index
+
+      The index position of the associated information, which
+      indicates the statement number and is left as `None' for a script
+      section.
+
+      :type: int
+
+   .. attribute:: parsed
+
+      Parsed arguments from within the sql script, returned
+      from ``utils.parsing.parse_multiline()``.
+
+      :type: dict
+
+   .. attribute:: sql
+
+      Raw sql, will be `None` in the case of the top-level
+      script-section if included.
+
+      :type: str
+
+   .. attribute:: is_marker
+
+      Indicating of whether the section metadata is
+      script-level (as opposed to statement-level).
+
+      :type: bool
+
+   .. method:: reorder_attrs(self, parsed: dict, cfg: Configuration) -> Dict
+
+      Re-orders parsed attributes based on configuration.
+
+
+   .. method:: parse_contents(self, cfg: Configuration) -> List[Item]
+
+      Unpacks sorted dictionary of parsed attributes into formatted Items.
+
+
+   .. method:: header(self) -> str
+      :property:
+
+      Constructs the header for a section.
+
+      Uses specifications in `snowmobile.toml` to determine:
+          (1) The level of the header depending on whether it's a
+              statement section or a script section.
+          (2) Whether or not to include the statement index as part of the
+              header.
+
+      :returns: Formatted header line as a string.
+
+
+   .. method:: sql_md(self) -> str
+      :property:
+
+      Returns renderable sql or an empty string if script-level section.
+
+
+   .. method:: body(self)
+      :property:
+
+
+   .. method:: md(self) -> str
+      :property:
+
+      Constructs a full section as a string from various components.
+
+      :returns: Renderable string of the section.
+
+
+

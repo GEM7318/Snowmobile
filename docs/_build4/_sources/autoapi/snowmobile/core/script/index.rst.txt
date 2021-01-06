@@ -1,0 +1,203 @@
+:mod:`snowmobile.core.script`
+=============================
+
+.. py:module:: snowmobile.core.script
+
+.. autoapi-nested-parse::
+
+   Class for intraacting with Script objects.
+
+   These are intended to be instantiated from a local *.sql* file or a readable
+   text file containing sql code. The :meth:`Script.read(from_str=True)` option
+   was included for the purposes of creating easily reproducible examples of how a
+   script is parsed.
+
+   # TODO: Add an example of how to re-implement the execute_stream() method from
+   #   snowflake.Connector for documentation.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.script.Script
+
+
+
+.. py:class:: Script(sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   .. method:: read(self, path: Path = None) -> Script
+
+      Runs quick path validation and reads in a sql file as a string.
+
+      A valid `path` must be provided if the `script.path` attribute hasn't
+      been set; ``ValueErrors`` will be thrown if neither is valid.
+
+      :param path: Full path to a sql object.
+      :type path: pathlib.Path
+
+
+   .. method:: from_str(self, sql: str, name: str, directory: Path = Path.cwd()) -> Script
+
+      Instantiates a raw string of sql as a script.
+
+
+   .. method:: source_stream(self) -> sqlparse.sql.Statement
+      :property:
+
+      Parses source sql into individual statements.
+
+
+   .. method:: add_statement(self, s: Optional[sqlparse.sql.Statement, str], index: Optional[int] = None) -> None
+
+      Adds a statement object to the script.
+
+      Default behavior will only add ``sqlparse.sql.Statement`` objects
+      returned from ``script.source_stream``.
+
+      ``clean_parse()`` utility function is utilized so that generated sql
+      within Python can be inserted back into the script as raw strings.
+
+      :param s: A sqlparse.sql.Statement object or a raw string of SQL for an
+                individual statement.
+      :type s: Union[sqlparse.sql.Statement, str]
+      :param index: Index position of the statement within the script; defaults
+                    to ``n + 1`` if index is not provided where ``n`` is the number
+                    of statements within the script at the time ``add_statement()``
+                    is called.
+      :type index: int
+
+
+   .. method:: filter(self, as_id: Optional[Union[str, int]] = None, from_id: Optional[Union[str, int]] = None, incl_kw: Optional[List] = None, incl_obj: Optional[List] = None, incl_desc: Optional[List] = None, incl_anchor: Optional[List] = None, incl_nm: Optional[List] = None, excl_kw: Optional[List] = None, excl_obj: Optional[List] = None, excl_desc: Optional[List] = None, excl_anchor: Optional[List] = None, excl_nm: Optional[List] = None, last: bool = False) -> ContextManager[Script]
+
+
+   .. method:: depth(self) -> int
+      :property:
+
+      Count of statements in the script.
+
+
+   .. method:: lines(self) -> int
+      :property:
+
+      Number of lines in the script
+
+
+   .. method:: statements(self) -> Dict[int, Statement]
+      :property:
+
+      All statements by index position included in the current context.
+
+
+   .. method:: excluded(self)
+      :property:
+
+      All statements by index position excluded from the current context.
+
+
+   .. method:: executed(self) -> Dict[int, Statement]
+      :property:
+
+      Executed statements by index position included in the current context.
+
+
+   .. method:: statement(self, _id: Optional[str, int] = None) -> Any[Statement, Empty, Diff]
+
+      Fetch a single statement by _id.
+
+
+   .. method:: reset(self, index: bool = False, ctx_id: bool = False, in_context: bool = False, scope: bool = False, _filter: bool = False) -> Script
+
+      Resets indices and scope on all statements to their state as read from source.
+
+      Invoked before exiting :meth:`filter()` context manger to reverse
+      the revised indices set by :meth:`index_to()` and inclusion/
+      exclusion scope set by :meth:`Statement.Tag.scope()`.
+
+
+   .. method:: duplicates(self) -> Dict[str, int]
+      :property:
+
+      Dictionary of indistinct statement names/tags within script.
+
+
+   .. method:: contents(self, by_index: bool = True, ignore_scope: bool = False, markers: bool = False, validate: bool = True) -> Dict[Union[int, str], Statement]
+
+      Dictionary of all executed statements with option to ignore current
+      scope.
+
+
+   .. method:: dtl(self, full: bool = False) -> None
+
+      Prints summary of statements within the current scope to console.
+
+
+   .. method:: first_s(self)
+      :property:
+
+      First statement by index position.
+
+
+   .. method:: last_s(self)
+      :property:
+
+      Last statement by index position
+
+
+   .. method:: first(self) -> Union[Statement, Empty, Diff]
+      :property:
+
+      First statement executed.
+
+
+   .. method:: last(self) -> Union[Statement, Empty, Diff]
+      :property:
+
+      Last statement executed.
+
+
+   .. method:: doc(self, alt_file_nm: Optional[str] = None, alt_file_prefix: Optional[str] = None, alt_file_suffix: Optional[str] = None, incl_markers: Optional[bool] = True, incl_sql: Optional[bool] = True, sql_incl_export_disclaimer: Optional[bool] = True) -> Markup
+
+      Markup object based on current context.
+
+
+   .. method:: ids_from_iterable(self, _id: Optional[Union[Tuple, List]] = None) -> List[int]
+
+      Utility function to get a list of statement IDs given an `_id`.
+
+      Invoked within script.run() if the `_id` parameter is either a:
+          (1) tuple of integers (lower and upper bound of statement indices
+              to run)
+          (2) list of integers or strings (statement names or indices to run)
+          (3) default=None; returns all statement indices within scope if so
+
+      :param _id Union[Tuple: _id field provided to script.run() if it's neither an integer
+                              or a string.
+      :param List]: _id field provided to script.run() if it's neither an integer
+                    or a string.
+
+      :returns: *List[int]* --     A list of statement indices to run.
+
+
+   .. method:: run(self, _id: Optional[str, int, Tuple, List] = None, as_df: bool = True, on_error: Optional[str] = None, on_exception: Optional[str] = None, on_failure: Optional[str] = None, lower: bool = True, render: bool = False, **kwargs)
+
+
+   .. method:: s(self, _id) -> Statement
+
+      Accessor for :meth:`statement`.
+
+
+   .. method:: st(self) -> Dict[Union[int, str], Statement]
+      :property:
+
+      Accessor for :attr:`statements`.
+
+
+

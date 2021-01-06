@@ -1,6 +1,13 @@
 # snowmobile
+
 ```{include} /badges.md
 ```
+---
+
+A library built to streamline interacting with {xref}`snowflake` through Python.
+
+---
+
 ```{include} /description.md
 ```
 ---

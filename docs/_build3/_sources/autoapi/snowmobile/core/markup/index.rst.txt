@@ -1,0 +1,142 @@
+:mod:`snowmobile.core.markup`
+=============================
+
+.. py:module:: snowmobile.core.markup
+
+.. autoapi-nested-parse::
+
+   Module for post-processing attributes of ``snowmobile.Script`` in conjunction
+   with configuration options stored in *snowmobile.toml*.
+
+   These result in two files being exported into a `.snowmobile` folder in the
+   same directory as the .sql file that ``snowmobile.Script`` was instantiated
+   with.
+
+   Header-levels and formatting of tagged information is configured in the
+   *snowmobile.toml* file, with defaults resulting in the following structure::
+
+           ```md
+
+           # Script Name.sql         *[script name gets an 'h1' header]
+           ----
+
+           - **Tag1**: Value1         [tags are bolded, associated values are not]
+           - **Tag2**: Value2         [same for all tags/attributes found]
+           - ...
+
+           **Description**           *[except for the 'Description' section]
+                                     *[this is just a blank canvas of markdown..]
+                                     *[..but this is configurable]
+
+           ## (1) create-table~dummy_name *[contents get 'h2' level headers]
+           ----
+
+           - **Tag1**: Value1       *[tags can also be validations arguments..
+           - **Arg1**: Val2          [that snowmobile will run on the sql results]
+
+           **Description**          *[contents get one of these too]
+
+           **SQL**                  *[their rendered sql does as well]
+               ...sql
+                   ...
+                   ...
+               ...
+
+
+           ## (2) update-table~dummy_name2
+           ----
+           [structure repeats for all contents in the script]
+
+           ```
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.markup.Markup
+
+
+
+.. py:class:: Markup(sn: Connector, path: Path, contents: Dict[int, Union[Statement, Marker]], alt_file_nm: Optional[str] = None, alt_file_prefix: Optional[str] = None, alt_file_suffix: Optional[str] = None, incl_sql: bool = True, incl_markers: bool = True, incl_raw: bool = False, sql_incl_export_disclaimer: bool = True)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Markup document from SQL script.
+
+   .. method:: doc_root(self) -> Path
+      :property:
+
+      Documentation sub-directory; `.snowmobile` by default.
+
+
+   .. method:: file_nm_sql(self) -> str
+      :property:
+
+      Adjusted file name of the exported sql script.
+
+
+   .. method:: file_nm_md(self) -> str
+      :property:
+
+      Adjusted file name of the exported markdown.
+
+
+   .. method:: script_dir(self) -> Path
+      :property:
+
+      Directory for all exports from specific _file_nm..
+
+
+   .. method:: path_md(self) -> Path
+      :property:
+
+      Full path to write markdown to.
+
+
+   .. method:: path_sql(self) -> Path
+      :property:
+
+      Full path to write sql
+
+
+   .. method:: sections(self) -> Dict[int, Section]
+      :property:
+
+      All header sections of markdown file as a dictionary.
+
+
+   .. method:: markdown(self) -> str
+      :property:
+
+      Full markdown file as a string.
+
+
+   .. method:: included(self)
+      :property:
+
+      All included indices based on incl_ attributes.
+
+
+   .. method:: sql(self)
+      :property:
+
+      SQL for export.
+
+
+   .. method:: export(self, md_only: bool = False, sql_only: bool = False) -> None
+
+      Export files.
+
+      :param md_only: Export markdown file only.
+      :type md_only: bool
+      :param sql_only: Export sql file only.
+      :type sql_only: bool
+
+
+

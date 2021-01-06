@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   Glossary — Snowmobile
+  </title>
+  <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/copybutton.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../_static/panels-variables.15f6f9acc56a35a3d31e1c44b578b17b.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js">
+  </script>
+  <script src="../_static/jquery.js">
+  </script>
+  <script src="../_static/underscore.js">
+  </script>
+  <script src="../_static/doctools.js">
+  </script>
+  <script src="../_static/clipboard.min.js">
+  </script>
+  <script src="../_static/copybutton.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
+  </script>
+  <link href="../genindex.html" rel="index" title="Index"/>
+  <link href="../search.html" rel="search" title="Search"/>
+  <link href="snowmobile_toml_raw.html" rel="next" title="Contents"/>
+  <link href="snowmobile_toml.html" rel="prev" title="snowmobile.toml"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#usage/snowmobile_toml_glossary" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        Glossary
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="snowmobile_toml.html">
+        <strong>
+         snowmobile.toml
+        </strong>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../_static/" width="48"/>
+          </a>
+          <a href="../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="connector.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Connector
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="script1.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Script
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="script1.html#markup-no-results-sql">
+            markup_no_results.sql
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="script1.html#intra-statement-marker">
+            intra-statement-marker
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="script1.html#appendix">
+            Appendix
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="sql.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.SQL
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="snowmobile_toml.html">
+            <strong>
+             snowmobile.toml
+            </strong>
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <input class="md-toggle md-nav__toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+             <label class="md-nav__link md-nav__link--active" for="__toc">
+              Glossary
+             </label>
+             <a class="md-nav__link md-nav__link--active" href="#">
+              Glossary
+             </a>
+             <nav class="md-nav md-nav--secondary">
+              <ul class="md-nav__list" data-md-scrollfix="">
+               <li class="md-nav__item">
+                <a class="md-nav__extra_link" href="../_sources/usage/snowmobile_toml_glossary.md.txt">
+                 Show Source
+                </a>
+               </li>
+              </ul>
+             </nav>
+            </li>
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="snowmobile_toml_raw.html">
+              Contents
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../modindex.html">
+            API Reference
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../_sources/usage/snowmobile_toml_glossary.md.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <h1 id="usage-snowmobile-toml-glossary--page-root">
+        Glossary
+        <a class="headerlink" href="#usage-snowmobile-toml-glossary--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="05027f95-210a-49f2-99c5-14fb8d82165f" name="10dd6baa-df15-43ef-a65e-a38375aed907" type="radio"/>
+        <label class="tabbed-label" for="05027f95-210a-49f2-99c5-14fb8d82165f">
+         [connection]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           All configuration options for establishing connections to
+           <a class="reference external" href="https://www.snowflake.com/">
+            Snowflake
+           </a>
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="9ca63ad9-37f2-4320-b184-616d129022e5" name="10591b9e-41bd-494d-bac9-a94cf47f46fb" type="radio"/>
+        <label class="tabbed-label" for="9ca63ad9-37f2-4320-b184-616d129022e5">
+         default-creds
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           The credentials (alias) to use by default if not specified in
+           <a href="#id1">
+            <span class="problematic" id="id2">
+             :arg:`snowmobile.Connector.creds`
+            </span>
+           </a>
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="e59c135d-5570-4070-a29a-eca21829c4ba" name="6bfa2ad5-08af-499c-9534-7d909a90a68c" type="radio"/>
+        <label class="tabbed-label" for="e59c135d-5570-4070-a29a-eca21829c4ba">
+         [connection.credentials]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Groups subsections of credentials, each declared with the structure of
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             [connection.credentials.credentials_alias]
+            </span>
+           </code>
+          </em>
+         </p>
+        </div>
+        <input id="940ef73d-d22a-40d8-b946-b7c2a629467b" name="6bfa2ad5-08af-499c-9534-7d909a90a68c" type="radio"/>
+        <label class="tabbed-label" for="940ef73d-d22a-40d8-b946-b7c2a629467b">
+         +
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          The value of
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            credentials_alias
+           </span>
+          </code>
+          is the literal string to pass to the
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            creds
+           </span>
+          </code>
+          argument of
+          <a class="reference internal" href="../autoapi/snowmobile/index.html#snowmobile.Connector" title="snowmobile.Connector">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.Connector
+            </span>
+           </code>
+          </a>
+          to establish the
+          <a class="reference external" href="https://www.snowflake.com/">
+           Snowflake
+          </a>
+          connection with those credentials.
+         </p>
+         <p>
+          Additional keyword-arguments can be specified in an aliased section so long
+as they are provided
+          <strong>
+           verbatim
+          </strong>
+          as they should be passed to the
+          <code class="xref py py-meth docutils literal notranslate">
+           <span class="pre">
+            snowflake.connector.connect()
+           </span>
+          </code>
+          method; this can be used to to map
+a specific timezone or transaction mode (for example) to a specific set of
+credentials.
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="6c6c1644-e8a5-4801-8045-12f190699a57" name="6ed7325c-8391-44f7-b379-7a2ad00439ef" type="radio"/>
+        <label class="tabbed-label" for="6c6c1644-e8a5-4801-8045-12f190699a57">
+         [connection.credentials.creds1]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Store your first set of credentials here
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="d9168d6e-d8ac-4d39-b677-60d55dc304e7" name="76172945-4212-4b0e-bbc1-ff8877c6ddc6" type="radio"/>
+        <label class="tabbed-label" for="d9168d6e-d8ac-4d39-b677-60d55dc304e7">
+         [connection.credentials.creds2]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Store as many more credentials as you want following this format
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="50338750-ad27-46c4-b002-b01f9c40e897" name="5b425f06-8f4a-4bc6-908d-e952b4667241" type="radio"/>
+        <label class="tabbed-label" for="50338750-ad27-46c4-b002-b01f9c40e897">
+         [connection.default-arguments]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Staple keyword arguments to pass to
+           <code class="xref py py-meth docutils literal notranslate">
+            <span class="pre">
+             snowflake.connector.connect()
+            </span>
+           </code>
+          </em>
+         </p>
+        </div>
+        <input id="3aea7d7c-b421-4ace-a36f-7d1b3a47ae33" name="5b425f06-8f4a-4bc6-908d-e952b4667241" type="radio"/>
+        <label class="tabbed-label" for="3aea7d7c-b421-4ace-a36f-7d1b3a47ae33">
+         +
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          Any arguments in this section that overlap with those stored in an aliased
+credentials block will be superceded by those associated with the credentials.
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="67d4fecd-8e51-4c1b-ad1d-1ab5b9e326a2" name="2c441feb-d640-492a-afba-c3a9fec39bcd" type="radio"/>
+        <label class="tabbed-label" for="67d4fecd-8e51-4c1b-ad1d-1ab5b9e326a2">
+         [loading]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           All configurations relating to loading data
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="b940057a-fcff-42a7-8050-be7c9cf425c8" name="00d80bcc-135e-4eb0-9f3d-d0dd96aeced0" type="radio"/>
+        <label class="tabbed-label" for="b940057a-fcff-42a7-8050-be7c9cf425c8">
+         default-file-format
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Default
+           <strong>
+            file format
+           </strong>
+           to use when loading local data into the warehouse
+          </em>
+         </p>
+        </div>
+        <input id="40731fbc-450c-482c-912c-e806fdc8df4d" name="00d80bcc-135e-4eb0-9f3d-d0dd96aeced0" type="radio"/>
+        <label class="tabbed-label" for="40731fbc-450c-482c-912c-e806fdc8df4d">
+         +
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          This is similar to the
+          <a class="reference internal" href="#connection-default-creds">
+           <span class="std std-ref">
+            connection.default-creds
+           </span>
+          </a>
+          except that instead of referring to a
+          <strong>
+           credentials
+          </strong>
+          alias, it's grouping
+together aliases/names of:
+         </p>
+         <ol class="simple">
+          <li>
+           <p>
+            An
+            <strong>
+             in-warehouse
+            </strong>
+            file format
+           </p>
+          </li>
+          <li>
+           <p>
+            A set of
+            <strong>
+             [loading.export-options]
+            </strong>
+            (below)
+           </p>
+          </li>
+          <li>
+           <p>
+            A statement tag associated with the DDL that
+            <strong>
+             creates
+            </strong>
+            this file format
+(to be fetched by
+            <a class="reference external" href="https://pypi.org/project/snowmobile/">
+             snowmobile
+            </a>
+            if it's called on and doesn't yet
+exist in the current schema)
+           </p>
+          </li>
+         </ol>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="1eedb0d3-0941-4282-b301-8eb9cd74d289" name="c2d3dbda-eb81-4344-b128-189153d0a18a" type="radio"/>
+        <label class="tabbed-label" for="1eedb0d3-0941-4282-b301-8eb9cd74d289">
+         [loading.put]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Default arguments to include in
+           <a class="reference external" href="https://www.snowflake.com/">
+            Snowflake
+           </a>
+           <code class="xref py py-meth docutils literal notranslate">
+            <span class="pre">
+             put()
+            </span>
+           </code>
+           statement
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="df788ea9-1ff9-4100-9e6c-c514bc595e63" name="9fb14d67-b16b-4546-8021-1a8d383ccd1c" type="radio"/>
+        <label class="tabbed-label" for="df788ea9-1ff9-4100-9e6c-c514bc595e63">
+         [loading.copy-into]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Default arguments to include in
+           <a class="reference external" href="https://www.snowflake.com/">
+            Snowflake
+           </a>
+           <code class="xref py py-meth docutils literal notranslate">
+            <span class="pre">
+             copy
+            </span>
+            <span class="pre">
+             into()
+            </span>
+           </code>
+           statement
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="12dbf94e-04c0-463e-a2dd-e0ded0d42130" name="0377b4ee-9356-470b-9e57-958c0fa1f973" type="radio"/>
+        <label class="tabbed-label" for="12dbf94e-04c0-463e-a2dd-e0ded0d42130">
+         [loading.export-options]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Groups subsections of export-options
+          </em>
+         </p>
+        </div>
+       </div>
+       <div class="tabbed-set docutils">
+        <input checked="checked" id="f8026740-3a0a-4033-9fc2-a847f85d5535" name="8e401c69-e221-4381-8b0b-9ab5ecc69faf" type="radio"/>
+        <label class="tabbed-label" for="f8026740-3a0a-4033-9fc2-a847f85d5535">
+         [loading.export-options."snowmobile_default_psv"]
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          <em>
+           Default file-export options for
+           <strong>
+            snowmobile_default_csv
+           </strong>
+          </em>
+         </p>
+        </div>
+        <input id="4d90a50c-6c33-4ccf-bd0e-883ea772ca1d" name="8e401c69-e221-4381-8b0b-9ab5ecc69faf" type="radio"/>
+        <label class="tabbed-label" for="4d90a50c-6c33-4ccf-bd0e-883ea772ca1d">
+         +
+        </label>
+        <div class="tabbed-content docutils">
+         <p>
+          This defines a set of keyword arguments associated with
+          <strong>
+           snowmobile_default_psv
+          </strong>
+          to be passed directly to the
+          <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html#pandas.DataFrame.to_csv" title="(in pandas v1.2.0)">
+           <code class="xref py py-meth docutils literal notranslate">
+            <span class="pre">
+             pandas.DataFrame.to_csv()
+            </span>
+           </code>
+          </a>
+          method when exporting
+data to a local file before loading into a staging table via
+          <a class="reference external" href="https://www.snowflake.com/">
+           Snowflake
+          </a>
+          's
+          <code class="xref py py-meth docutils literal notranslate">
+           <span class="pre">
+            put
+           </span>
+           <span class="pre">
+            file
+           </span>
+           <span class="pre">
+            from
+           </span>
+           <span class="pre">
+            stage()
+           </span>
+          </code>
+          statement.
+         </p>
+        </div>
+       </div>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="snowmobile_toml.html" rel="prev" title="snowmobile.toml">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <strong>
+         snowmobile.toml
+        </strong>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="snowmobile_toml_raw.html" rel="next" title="Contents">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        Contents
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>

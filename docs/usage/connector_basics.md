@@ -62,26 +62,6 @@ Here's some context on how we should think about these two {class}`~snowmobile.c
 :lines: 10-12
 ```
 
-````{admonition} Tip: Naming Convention
-:class: tip
- 
-The following mapping of variable or attribute name to associated object is applied throughout {ref}`snowmobile`'s documentation and source code,
-including in method signatures:
-- **`sn`**: {class}`snowmobile.Connector` 
-- **`cfg`**: {class}`snowmobile.Configuration` 
-- **`con`**: {xref}`snowflake.connector.SnowflakeConnection`
-- **`cursor`**: {xref}`snowflake.connector.cursor.SnowflakeCursor`
-
----
-
-These are some of attributes/properties on the {class}`~snowmobile.core.Connector` we just created:
-```{literalinclude} ../examples/mod_connector/intro_connector.py
-:language: python
-:lineno-start: 14
-:lines: 14-20
-```
-````
-
 ### 2. Executing raw SQL
 
 **Executing raw SQL directly off the {class}`~snowmobile.core.Connector` can be done in the following three ways**:
@@ -137,26 +117,25 @@ Which can be directly compared to our original **df1**, **cur1**, and **dcur1**:
 :lines: 42-44
 ```
 
-````{admonition} Final Note (sn.cursor / sn.dictcursor)
+````{admonition} SnowflakeCursor / DictCursor
 :class: note
 
 ```{eval-rst}
 
-.. tabbed:: Context
+.. tabbed:: Note
 
    The :attr:`snowmobile.Connector.cursor` and :attr:`snowmobile.Connector.dictcursor` are **properties**
    of :attr:`snowmobile.Connector` that return a new instance each time they are accessed. 
    
    Depending on the desired behavior of a :xref:`SnowflakeCursor` or 
-   :xref:`DictCursor`, it it's sometimes better be store and re-referenced
-   as opposed to instantiating new instances off the 
-   :class:`~snowmobile.Connector` object with each statement executed.
+   :xref:`DictCursor`, it could be better to store an instance for re-referencing
+   as opposed to repeatedly instantiate new instances of it off :class:`~snowmobile.Connector`. 
    
-.. tabbed:: Illustration
+.. tabbed:: In Code
 
-   The below demonstrates the difference between executing two statements from 
-   the :meth:`~snowmobile.Connector.cursor` property compared to calling them from the same 
-   instance of :attr:`cursor`.
+   The below demonstrates the difference between calling two methods on 
+   the :meth:`snowmobile.Connector.cursor` property compared to on the same 
+   instance of :xref:`SnowflakeCursor`.
  
    .. literalinclude:: ../examples/mod_connector/intro_connector.py
       :language: python
@@ -166,5 +145,27 @@ Which can be directly compared to our original **df1**, **cur1**, and **dcur1**:
 ```
 
 ````
+
+
+````{admonition} Tip: Naming Convention
+:class: tip
+ 
+The following mapping of variable or attribute name to associated object is applied throughout {ref}`snowmobile`'s documentation and source code,
+including in method signatures:
+- **`sn`**: {class}`snowmobile.Connector` 
+- **`cfg`**: {class}`snowmobile.Configuration` 
+- **`con`**: {xref}`snowflake.connector.SnowflakeConnection`
+- **`cursor`**: {xref}`snowflake.connector.cursor.SnowflakeCursor`
+
+---
+
+These are some of attributes/properties on the {class}`~snowmobile.core.Connector` we just created:
+```{literalinclude} ../examples/mod_connector/intro_connector.py
+:language: python
+:lineno-start: 14
+:lines: 14-20
+```
+````
+
 +++
 The full script for this section can be found [here](../snippets.md#quick_intro_connectorpy).

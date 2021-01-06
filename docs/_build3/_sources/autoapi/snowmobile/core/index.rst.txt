@@ -1,0 +1,2563 @@
+:mod:`snowmobile.core`
+======================
+
+.. py:module:: snowmobile.core
+
+.. autoapi-nested-parse::
+
+   All modules housed in ``snowmobile.core`` to keep from cluttering intellisense
+   completion when interacting with the user-facing API.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   cfg/index.rst
+   utils/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+   cache/index.rst
+   column/index.rst
+   configuration/index.rst
+   connector/index.rst
+   errors/index.rst
+   exception_handler/index.rst
+   markup/index.rst
+   paths/index.rst
+   qa/index.rst
+   scope/index.rst
+   script/index.rst
+   section/index.rst
+   snowframe/index.rst
+   sql/index.rst
+   statement/index.rst
+   table/index.rst
+   tag/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snowmobile.core.Snowmobile
+   snowmobile.core.ExceptionHandler
+   snowmobile.core.Configuration
+   snowmobile.core.Connector
+   snowmobile.core.Connect
+   snowmobile.core.Section
+   snowmobile.core.Scope
+   snowmobile.core.Tag
+   snowmobile.core.Statement
+   snowmobile.core.Column
+   snowmobile.core.Diff
+   snowmobile.core.Empty
+   snowmobile.core.SnowFrame
+   snowmobile.core.SQL
+   snowmobile.core.Markup
+   snowmobile.core.Script
+   snowmobile.core.Table
+
+
+
+.. py:class:: Snowmobile
+
+   Bases: :class:`object`
+
+   Generic dunder implementation for ``snowmobile`` objects.
+
+   Base class for all ``snowmobile`` objects that do **not** inherit from
+   pydantic's BaseModel or configuration class, :class:`Config`.
+
+
+.. py:class:: ExceptionHandler(within: Optional[Any] = None, ctx_id: Optional[int] = None, in_context: bool = False, children: Dict[int, Any] = None, is_active_parent: bool = False, to_mirror: Optional[List[Any]] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Context management for snowmobile objects.
+
+   .. method:: ctx_id(self)
+      :property:
+
+      Current context id.
+
+
+   .. method:: set(self, ctx_id: Optional[int] = None, in_context: bool = False, outcome: Optional[int] = None)
+
+      **Set** attributes on self.
+
+
+   .. method:: set_from(self, other: ExceptionHandler) -> ExceptionHandler
+
+      Updates attributes from another ExceptionHandler object.
+
+
+   .. method:: reset(self, ctx_id: bool = False, in_context: bool = False, outcome: bool = False)
+
+      **Reset** attributes on self.
+
+
+   .. method:: current(self)
+      :property:
+
+      All exceptions in the current context.
+
+
+   .. method:: collect(self, e: Any[snowmobile_errors])
+
+      Stores an exception.
+
+
+   .. method:: first(self) -> Error
+      :property:
+
+      First exception encountered.
+
+
+   .. method:: last(self) -> Error
+      :property:
+
+      Last exception encountered.
+
+
+   .. method:: seen(self, from_ctx: Optional[int] = None, of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None, to_raise: Optional[bool] = None, with_ids: Optional[int, List[int], Set[int]] = None, all_time: bool = False) -> bool
+
+      Boolean indicator of if an exception has been seen.
+
+
+   .. method:: get(self, from_ctx: Optional[int] = None, of_type: Optional[Any[snowmobile_errors], List[snowmobile_errors]] = None, to_raise: Optional[bool] = None, with_ids: Optional[int, List[int], Set[int]] = None, all_time: bool = False, last: bool = False, first: bool = False, _raise: bool = False)
+
+      Boolean indicator of if an exception has been seen.
+
+
+   .. method:: by_tmstmp(self)
+      :property:
+
+      All exceptions by timestamp, ordered by most to least recent.
+
+
+
+.. py:class:: Configuration(config_file_nm: Optional[str] = None, creds: Optional[str] = None, from_config: Optional[Path, str] = None, export_dir: Optional[Path, str] = None)
+
+   Bases: :class:`snowmobile.core.base.Snowmobile`
+
+   User-facing access point for a fully parsed ``snowmobile.toml`` file.
+
+
+   :param config_file_nm: Name of configuration file to use; defaults to `snowmobile.toml`.
+   :type config_file_nm: Optional[str]
+   :param creds: Alias for the set of credentials to authenticate with; default
+                 behavior will fall back to the ``connection.default-creds``
+                 specified in `snowmobile.toml`, `or the first set of credentials
+                 stored if this configuration option is left blank`.
+   :type creds: Optional[str]
+   :param from_config: A full path to a specific configuration file to use; bypasses any
+                       checks for a cached file location and can be useful for container-based
+                       processes with restricted access to the local file system.
+   :type from_config: Optional[str, Path]
+   :param export_dir: Path to export a template ``snowmobile.toml`` file to; if provided,
+                      the file will be exported within the __init__ method and nothing
+                      else will be instantiated.
+   :type export_dir: Optional[Path]
+
+   .. attribute:: file_nm
+
+      Name of configuration file provided; defaults to `snowmobile.toml`.
+
+      :type: str
+
+   .. attribute:: cache
+
+      :class:`snowmobile.core.Cache` object for tracking the location
+      of ``snowmobile.toml`` across ``snowmobile`` instances.
+
+      :type: Cache
+
+   .. attribute:: location
+
+      Path to configuration file used to instantiate the instance with.
+
+      :type: Path
+
+   .. attribute:: connection
+
+      **[connection]** section of ``snowmobile.toml``.
+
+      :type: snowmobile.core.cfg.Connection
+
+   .. attribute:: loading
+
+      **[loading]** section of ``snowmobile.toml``.
+
+      :type: snowmobile.core.cfg.Loading
+
+   .. attribute:: script
+
+      **[script]** section of ``snowmobile.toml``.
+
+      :type: snowmobile.core.cfg.Script
+
+   .. attribute:: sql
+
+      **[sql]** section of ``snowmobile.toml``.
+
+      :type: snowmobile.core.cfg.SQL
+
+   .. attribute:: ext_locations
+
+      **[extension-paths]** section of ``snowmobile.toml``.
+
+      :type: snowmobile.core.cfg.Locations
+
+   .. attribute:: SCOPE_ATTRIBUTES
+      :annotation: = ['kw', 'obj', 'desc', 'anchor', 'nm']
+
+      
+
+   .. attribute:: SCOPE_TYPES
+      :annotation: = ['incl', 'excl']
+
+      
+
+   .. attribute:: DEF_DESC
+      :annotation: = statement
+
+      
+
+   .. attribute:: QA_ANCHORS
+      
+
+      
+
+   .. method:: markdown(self) -> cfg.Markdown
+      :property:
+
+      Accessor for cfg.script.markdown.
+
+
+   .. method:: attrs(self) -> cfg.Attributes
+      :property:
+
+      Accessor for cfg.script.markdown.attributes.
+
+
+   .. method:: wildcards(self) -> cfg.Wildcard
+      :property:
+
+      Accessor for cfg.script.patterns.wildcards.
+
+
+   .. method:: batch_set_attrs(obj: Any, attrs: dict, to_none: bool = False)
+      :staticmethod:
+
+      Batch sets attributes on an object from a dictionary.
+
+      :param obj: Object to set attributes on.
+      :type obj: Any
+      :param attrs: Dictionary containing attributes.
+      :type attrs: dict
+      :param to_none: Set all of the object's attributes batching a key in ``attrs``
+                      to `None`; defaults ot `False`.
+      :type to_none: bool
+
+      Returns (Any):
+          Object post-setting attributes.
+
+
+   .. method:: attrs_from_obj(obj: Any, within: Optional[List[str]] = None) -> Dict[str, MethodType]
+      :staticmethod:
+
+      Utility to return attributes/properties from an object as a dictionary.
+
+
+   .. method:: methods_from_obj(obj: Any, within: Optional[List[str]] = None) -> Dict[str, MethodType]
+      :staticmethod:
+
+      Utility to return attributes/properties from an object as a dictionary.
+
+
+   .. method:: scopes(self)
+      :property:
+
+      All combinations of scope type and scope attribute.
+
+
+   .. method:: scopes_from_kwargs(self, only_populated: bool = False, **kwargs) -> Dict
+
+      Turns filter arguments into a valid set of kwargs for :class:`Scope`.
+
+      Returns dictionary of all combinations of 'arg' ("kw", "obj", "desc",
+      "anchor" and "nm"), including empty sets for any 'arg' not included
+      in the keyword arguments provided.
+
+
+   .. method:: scopes_from_tag(self, t: Any)
+
+      Generates list of keyword arguments to instantiate all scopes for a tag.
+
+
+   .. method:: json(self, by_alias: bool = False, **kwargs)
+
+      Serialization method for core object model.
+
+
+
+.. py:class:: Connector(creds: Optional[str] = None, delay: bool = False, ensure_alive: bool = True, config_file_nm: Optional[str] = None, from_config: Optional[str, Path] = None, **connect_kwargs)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Primary method of statement execution and configuration management.
+
+   :param creds: Alias for the set of credentials to authenticate with; default
+                 behavior will fall back to the ``connection.default-creds``
+                 specified in `snowmobile.toml`, `or the first set of credentials
+                 stored if this configuration option is left blank`.
+   :type creds: Optional[str]
+   :param delay: Optionally delay establishing a connection when the object is
+                 instantiated, enabling access to the configuration object model
+                 through the :attr:`Connector.cfg` attribute; defaults to `False`.
+   :type delay: bool
+   :param ensure_alive: Establishes a new connection if a method requiring a connection
+                        against the database is called while :attr:`alive` is `False`;
+                        defaults to `True`.
+   :type ensure_alive: bool
+   :param config_file_nm: Name of configuration file to use; defaults to `snowmobile.toml`.
+   :type config_file_nm: Optional[str]
+   :param from_config: A full path to a specific configuration file to use; bypasses any
+                       checks for a cached file location and can be useful for container-based
+                       processes with restricted access to the local file system.
+   :type from_config: Optional[str, Path]
+   :param \*\*connect_kwargs: Additional arguments to provide to :meth:`snowflake.connector.connect()`;
+                              arguments provided here will over-ride connection arguments specified
+                              in `snowmobile.toml`, including:
+                                  *   Connection parameters in `connection.default-arguments`
+                                  *   Credentials parameters associated with a given alias
+                                  *   Connection parameters associated with a given alias
+
+   .. attribute:: cfg
+
+      :class:`snowmobile.Configuration` object, which represents a fully
+      parsed/validated `snowmobile.toml` file.
+
+      :type: Configuration`
+
+   .. attribute:: con
+
+      :class:`SnowflakeConnection` object; this attribute is populated
+      when a connection is established and can be `None` if the
+      :class:`Connector` object was instantiated with `delay=True`.
+
+      :type: SnowflakeConnection
+
+   .. attribute:: sql
+
+      A :class:`snowmobile.SQL` object with the current connection
+      embedded; stores command sql commands as utility methods and is
+      heavily leveraged in `snowmobile`'s internals.
+
+      :type: SQL
+
+   .. attribute:: e
+
+      A :class:`snowmobile.ExceptionHandler` object for orchestrating
+      exceptions across objects; kept as a public attribute on the class
+      as examining its contents can be helpful in debugging database errors
+      during development.
+
+      :type: ExceptionHandler
+
+   .. method:: connect(self, **kwargs) -> Connector
+
+      Establishes connection to Snowflake.
+
+      Re-implements :func:`snowflake.connector.connect()` with connection
+      arguments sourced from snowmobile's object model, specifically:
+          *   Credentials from ``snowmobile.toml``.
+          *   Default connection arguments from ``snowmobile.toml``.
+          *   Optional keyword arguments either passed to
+              :class:`snowmobile.Connect` or directly to this method.
+
+          kwargs:
+              Optional keyword arguments to pass to
+              snowflake.connector.connect(); arguments passed here will
+              over-ride ``connection.default-arguments`` specified in
+              ``snowmobile.toml``.
+
+
+   .. method:: disconnect(self) -> Connector
+
+      Disconnect from connection with which Connector() was instantiated.
+
+
+   .. method:: alive(self) -> bool
+      :property:
+
+      Check if the connection is alive.
+
+
+   .. method:: cursor(self) -> SnowflakeCursor
+      :property:
+
+      :class:`SnowflakeCursor` accessor.
+
+
+   .. method:: dictcursor(self) -> DictCursor
+      :property:
+
+      :class:`DictCursor` accessor.
+
+
+   .. method:: ex(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor
+
+      Executes a command via :class:`SnowflakeCursor`.
+
+      :param sql: ``sql`` command as a string.
+      :type sql: str
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+      :param \*\*kwargs: Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
+
+      Returns (SnowflakeCursor):
+          :class:`SnowflakeCursor` object that executed the command.
+
+
+   .. method:: exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> DictCursor
+
+      Executes a command via :class:`DictCursor`.
+
+      :param sql: ``sql`` command as a string.
+      :type sql: str
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+      :param \*\*kwargs: Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
+
+      Returns (DictCursor):
+          :class:`DictCursor` object that executed the command.
+
+
+   .. method:: query(self, sql: str, as_df: bool = True, lower: bool = True, on_error: Optional[str] = None) -> Union[pd.DataFrame, SnowflakeCursor]
+
+      Execute a query and return results.
+
+       Default behavior of `results=True` will return results as a
+       :class:`pandas.DataFrame`, otherwise will execute the sql provided
+       with a :class:`SnowflakeCursor` and return the cursor object.
+
+      :param sql: Raw SQL to execute.
+      :type sql: str
+      :param as_df: Boolean value indicating whether or not to return results.
+      :type as_df: bool
+      :param lower: Boolean value indicating whether or not to return results
+                    with columns lower-cased.
+      :type lower: bool
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+
+      Returns (Union[pd.DataFrame, SnowflakeCursor]):
+          Results from ``sql`` as a :class:`DataFrame` by default or the
+          :class:`SnowflakeCursor` object if `results=False`.
+
+
+   .. method:: to_table(self, df: pd.DataFrame, table: str, file_format: Optional[str] = None, incl_tmstmp: Optional[bool] = None, on_error: Optional[str] = None, if_exists: Optional[str] = None, as_is: bool = False, **kwargs)
+
+      Table re-implementation.
+
+
+
+.. py:class:: Connect(creds: Optional[str] = None, delay: bool = False, ensure_alive: bool = True, config_file_nm: Optional[str] = None, from_config: Optional[str, Path] = None, **connect_kwargs)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Primary method of statement execution and configuration management.
+
+   :param creds: Alias for the set of credentials to authenticate with; default
+                 behavior will fall back to the ``connection.default-creds``
+                 specified in `snowmobile.toml`, `or the first set of credentials
+                 stored if this configuration option is left blank`.
+   :type creds: Optional[str]
+   :param delay: Optionally delay establishing a connection when the object is
+                 instantiated, enabling access to the configuration object model
+                 through the :attr:`Connector.cfg` attribute; defaults to `False`.
+   :type delay: bool
+   :param ensure_alive: Establishes a new connection if a method requiring a connection
+                        against the database is called while :attr:`alive` is `False`;
+                        defaults to `True`.
+   :type ensure_alive: bool
+   :param config_file_nm: Name of configuration file to use; defaults to `snowmobile.toml`.
+   :type config_file_nm: Optional[str]
+   :param from_config: A full path to a specific configuration file to use; bypasses any
+                       checks for a cached file location and can be useful for container-based
+                       processes with restricted access to the local file system.
+   :type from_config: Optional[str, Path]
+   :param \*\*connect_kwargs: Additional arguments to provide to :meth:`snowflake.connector.connect()`;
+                              arguments provided here will over-ride connection arguments specified
+                              in `snowmobile.toml`, including:
+                                  *   Connection parameters in `connection.default-arguments`
+                                  *   Credentials parameters associated with a given alias
+                                  *   Connection parameters associated with a given alias
+
+   .. attribute:: cfg
+
+      :class:`snowmobile.Configuration` object, which represents a fully
+      parsed/validated `snowmobile.toml` file.
+
+      :type: Configuration`
+
+   .. attribute:: con
+
+      :class:`SnowflakeConnection` object; this attribute is populated
+      when a connection is established and can be `None` if the
+      :class:`Connector` object was instantiated with `delay=True`.
+
+      :type: SnowflakeConnection
+
+   .. attribute:: sql
+
+      A :class:`snowmobile.SQL` object with the current connection
+      embedded; stores command sql commands as utility methods and is
+      heavily leveraged in `snowmobile`'s internals.
+
+      :type: SQL
+
+   .. attribute:: e
+
+      A :class:`snowmobile.ExceptionHandler` object for orchestrating
+      exceptions across objects; kept as a public attribute on the class
+      as examining its contents can be helpful in debugging database errors
+      during development.
+
+      :type: ExceptionHandler
+
+   .. method:: connect(self, **kwargs) -> Connector
+
+      Establishes connection to Snowflake.
+
+      Re-implements :func:`snowflake.connector.connect()` with connection
+      arguments sourced from snowmobile's object model, specifically:
+          *   Credentials from ``snowmobile.toml``.
+          *   Default connection arguments from ``snowmobile.toml``.
+          *   Optional keyword arguments either passed to
+              :class:`snowmobile.Connect` or directly to this method.
+
+          kwargs:
+              Optional keyword arguments to pass to
+              snowflake.connector.connect(); arguments passed here will
+              over-ride ``connection.default-arguments`` specified in
+              ``snowmobile.toml``.
+
+
+   .. method:: disconnect(self) -> Connector
+
+      Disconnect from connection with which Connector() was instantiated.
+
+
+   .. method:: alive(self) -> bool
+      :property:
+
+      Check if the connection is alive.
+
+
+   .. method:: cursor(self) -> SnowflakeCursor
+      :property:
+
+      :class:`SnowflakeCursor` accessor.
+
+
+   .. method:: dictcursor(self) -> DictCursor
+      :property:
+
+      :class:`DictCursor` accessor.
+
+
+   .. method:: ex(self, sql: str, on_error: Optional[str] = None, **kwargs) -> SnowflakeCursor
+
+      Executes a command via :class:`SnowflakeCursor`.
+
+      :param sql: ``sql`` command as a string.
+      :type sql: str
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+      :param \*\*kwargs: Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
+
+      Returns (SnowflakeCursor):
+          :class:`SnowflakeCursor` object that executed the command.
+
+
+   .. method:: exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> DictCursor
+
+      Executes a command via :class:`DictCursor`.
+
+      :param sql: ``sql`` command as a string.
+      :type sql: str
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+      :param \*\*kwargs: Optional keyword arguments for :meth:`SnowflakeCursor.execute()`.
+
+      Returns (DictCursor):
+          :class:`DictCursor` object that executed the command.
+
+
+   .. method:: query(self, sql: str, as_df: bool = True, lower: bool = True, on_error: Optional[str] = None) -> Union[pd.DataFrame, SnowflakeCursor]
+
+      Execute a query and return results.
+
+       Default behavior of `results=True` will return results as a
+       :class:`pandas.DataFrame`, otherwise will execute the sql provided
+       with a :class:`SnowflakeCursor` and return the cursor object.
+
+      :param sql: Raw SQL to execute.
+      :type sql: str
+      :param as_df: Boolean value indicating whether or not to return results.
+      :type as_df: bool
+      :param lower: Boolean value indicating whether or not to return results
+                    with columns lower-cased.
+      :type lower: bool
+      :param on_error: String value to impose a specific behavior if an error occurs
+                       during the execution of ``sql``.
+      :type on_error: str
+
+      Returns (Union[pd.DataFrame, SnowflakeCursor]):
+          Results from ``sql`` as a :class:`DataFrame` by default or the
+          :class:`SnowflakeCursor` object if `results=False`.
+
+
+   .. method:: to_table(self, df: pd.DataFrame, table: str, file_format: Optional[str] = None, incl_tmstmp: Optional[bool] = None, on_error: Optional[str] = None, if_exists: Optional[str] = None, as_is: bool = False, **kwargs)
+
+      Table re-implementation.
+
+
+
+.. py:class:: Section(cfg: Configuration, is_marker: bool = None, h_contents: Optional[str] = None, index: Optional[int] = None, parsed: Optional[Dict] = None, raw: Optional[str] = None, sql: Optional[str] = None, results: Optional[pd.DataFrame] = None, incl_raw: bool = False, is_multiline: bool = False)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Represents any (1-6 level) header section within `Script Name (doc).md`.
+
+
+   This class is intended to be accessed as an attribute of
+   `snowmobile.Script` and shouldn't need to be instantiated directly.
+
+   In order to keep the core parsing functionality available without
+   requiring execution of any statements in the script but also including
+   execution data if available, the current implementation is heavily
+   reliant on properties over attributes to reconcile what's populated in
+   the `statements' and `executed` attributes of the `Script` object.
+
+
+
+   .. attribute:: hx
+
+      String form of the markdown header tag (e.g. '#' for h1),
+      based on the script/statement header-level specifications in
+      `snowmobile.toml`.
+
+      :type: str
+
+   .. attribute:: h_contents
+
+      Text to place in the header.
+
+      :type: str
+
+   .. attribute:: index
+
+      The index position of the associated information, which
+      indicates the statement number and is left as `None' for a script
+      section.
+
+      :type: int
+
+   .. attribute:: parsed
+
+      Parsed arguments from within the sql script, returned
+      from ``utils.parsing.parse_multiline()``.
+
+      :type: dict
+
+   .. attribute:: sql
+
+      Raw sql, will be `None` in the case of the top-level
+      script-section if included.
+
+      :type: str
+
+   .. attribute:: is_marker
+
+      Indicating of whether the section metadata is
+      script-level (as opposed to statement-level).
+
+      :type: bool
+
+   .. method:: reorder_attrs(self, parsed: dict, cfg: Configuration) -> Dict
+
+      Re-orders parsed attributes based on configuration.
+
+
+   .. method:: parse_contents(self, cfg: Configuration) -> List[Item]
+
+      Unpacks sorted dictionary of parsed attributes into formatted Items.
+
+
+   .. method:: header(self) -> str
+      :property:
+
+      Constructs the header for a section.
+
+      Uses specifications in `snowmobile.toml` to determine:
+          (1) The level of the header depending on whether it's a
+              statement section or a script section.
+          (2) Whether or not to include the statement index as part of the
+              header.
+
+      :returns: Formatted header line as a string.
+
+
+   .. method:: sql_md(self) -> str
+      :property:
+
+      Returns renderable sql or an empty string if script-level section.
+
+
+   .. method:: body(self)
+      :property:
+
+
+   .. method:: md(self) -> str
+      :property:
+
+      Constructs a full section as a string from various components.
+
+      :returns: Renderable string of the section.
+
+
+
+.. py:class:: Scope(arg: str, base: str)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Handles the scope/context for :class:`Statement` objects and derived classes.
+
+   Should never be interacted with from the user-facing API.
+
+   .. attribute:: base
+
+      The left-most word within a statement tag. For **generic**
+      statements this will be the `keyword` and for **QA** statements
+      this will be the literal word ``qa``.
+
+      :type: str
+
+   .. attribute:: component
+
+      The component within a given tag that is being evaluated; this will
+      be exactly **one** of `kw`, `obj`, `anchor`, `desc`, or `nm`.
+
+      :type: str
+
+   .. attribute:: incl_arg
+
+      The keyword argument that would be used to exclude a given
+      component;
+          *   e.g. if :attr:`component` is `kw`, :attr:`incl_arg` would
+              be ``incl_kw``.
+
+      :type: str
+
+   .. attribute:: excl_arg
+
+      The keyword argument that would be used to exclude a given
+      component; this would be the same as the above example except
+      the value would be ``excl_kw`` as opposed to ``incl_kw``.
+
+      :type: str
+
+   .. attribute:: fallback_to
+
+      The default values to fall back to for :attr:`incl_arg` and
+      :attr:`excl_arg` if they are not passed as a keyword argument
+      by the user in :class:`Script`; defaults to including the
+      :attr:`base` and excluding an empty list.
+
+      :type: dict
+
+   .. attribute:: provided_args
+
+      The set of keyword arguments provided at the time of the last call
+      to :meth:`eval()`.
+
+      :type: dict
+
+   .. attribute:: check_against_args
+
+      The set of keyword arguments checked against at the time of the
+      last call to :meth:`eval()`; will use provided arguments if they
+      exist and the arguments from :attr:`fallback_to` otherwise.
+
+      :type: dict
+
+   .. attribute:: is_included
+
+      Tag is included based on the results of the last call to
+      :meth:`eval()`.
+
+      :type: bool
+
+   .. attribute:: is_excluded
+
+      Tag is excluded based on the results of the last call to
+      :meth:`eval()`.
+
+      :type: bool
+
+   .. method:: parse_kwargs(self, **kwargs) -> None
+
+      Parses all filter arguments looking for those that match its base.
+
+      Looks for include/exclude arguments within kwargs, populating
+      :attr:`provided_args` with those that were provided and populates
+      :attr:`check_against_args` with the same values if they were provided
+      and fills in defaults from :attr:`fallback_to` otherwise.
+
+      :param \*\*kwargs: Keyword arguments passed to :class:`Script.filter()` (e.g.
+                         `incl_kw`, `excl_kw`, ..)
+
+
+   .. method:: matches_patterns(self, arg: str) -> bool
+
+      Returns indication of if :attr:`base` matches a given set of patterns.
+
+      :param arg: Will either be the value of :attr:`incl_arg` or
+                  :attr:`exclude_arg`.
+      :type arg: str
+
+      Returns (bool):
+          Indication of whether any matches were found.
+
+
+   .. method:: included(self)
+      :property:
+
+      Tag is included based on results of last :meth:`eval()`.
+
+
+   .. method:: eval(self, **kwargs) -> bool
+
+      Evaluates filter arguments and updates context accordingly.
+
+      Updates the values of :attr:`is_included`, :attr:`is_excluded`, and
+      :attr:`included`.
+
+      :param \*\*kwargs: Keyword arguments passed to :class:`Script.filter()` (e.g.
+                         `incl_kw`, `excl_kw`, ..)
+
+      Returns (bool):
+          Indicator of whether or not the statement should be
+          included/excluded based on the context/keyword arguments provided.
+
+
+
+.. py:class:: Tag(configuration: Configuration, nm_pr: Optional[str] = None, sql: Optional[str] = None, index: Optional[int] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Handles the decomposition/parsing of statement tags.
+
+   Should never be instantiated directly by the user-facing API but its
+   attributes are likely to be accessed often as part of :class:`Statement`
+   and derived classes.
+
+   .. attribute:: cfg
+
+      :class:`snowmobile.Configuration` object; represents fully parsed
+      **snowmobile.toml** file.
+
+      :type: snowmobile.Configuration
+
+   .. attribute:: patt
+
+      :class:`snowmobile.Schema.Pattern` object; represents
+      ``script.patterns`` section of **snowmobile.toml**.
+
+      :type: snowmobile.Schema.Pattern
+
+   .. attribute:: nm_pr
+
+      Provided tag name for a given :class:`Statement`; can be empty.
+
+      :type: str
+
+   .. attribute:: index
+
+      Statement index position within :class:`Script`; can be empty.
+
+      :type: int
+
+   .. attribute:: is_included
+
+      Indicator of whether or not the combination of all scopes for this
+      statement tag is included within a given context.
+
+      :type: bool
+
+   .. attribute:: incl_idx_in_desc
+
+      Indicator of whether or not to include the statement index in the
+      `description` component of the tag; defaults to `True` so that all
+      generated statement tags are guaranteed to be unique for a given
+      script.
+          *   Mainly included for testing purposes where setting to
+              `False` enables comparing generated to provided statement
+              tags without having to change the index position of the
+              hard-coded/provided statement tag when adding/removing tests.
+
+      :type: bool
+
+   .. attribute:: obj_pr
+
+      The statement's `object name` if :attr:`is_struct_desc` evaluates
+      to `True`; empty string otherwise.
+
+      :type: str
+
+   .. attribute:: desc_pr
+
+      The statement's `description` if :attr:`is_struct_desc` evaluates
+      to `True`; empty string otherwise.
+
+      :type: str
+
+   .. attribute:: anchor_pr
+
+      The statement's `anchor`.
+
+      :type: str
+
+   .. attribute:: first_line
+
+      A raw string of the first line of sql associated with the statement.
+
+      :type: str
+
+   .. attribute:: first_line_remainder
+
+      The remainder of the first line once excluding the
+      :attr:`first_keyword` and stripping repeating whitespace.
+
+      :type: str
+
+   .. attribute:: kw
+
+      The final statement's **keyword** that is used elsewhere; this will
+      be the provided keyword if a statement tag exists and a
+      parsed/generated keyword otherwise.
+
+      :type: str
+
+   .. attribute:: nm
+
+      The final statement's **name** that is used elsewhere; this will
+      be the full tag name if a statement tag exists and a
+      parsed/generated tag name otherwise.
+
+      :type: str
+
+   .. attribute:: obj
+
+      The final statement's **object** that is used elsewhere; this will
+      be the object within a tag if a statement tag exists and follows
+      the correct structure and a parsed/generated object otherwise.
+
+      :type: str
+
+   .. attribute:: desc
+
+      The final statement's **description** that is used elsewhere; this
+      will be the description within a tag if a statement tag exists
+      and follows the correct structure and a parsed/generated
+      description otherwise.
+
+      :type: str
+
+   .. attribute:: anchor
+
+      The final statement's **anchor** that is used elsewhere; this will
+      be the anchor within a tag if a statement tag exists and follows
+      the correct structure and a parsed/generated tag name otherwise.
+
+      :type: str
+
+   .. attribute:: scopes
+
+      Combination of all scopes for a given tag; this is essentially the
+      all possible combinations of including/excluding any of the `kw`,
+      `nm`, `obj`, `desc`, and `anchor` for a given instance of :class:`Tag`.
+
+      :type: set[Scope]
+
+   .. method:: scope(self, **kwargs) -> bool
+
+      Evaluates all component's of a tag's scope against a set of filter args.
+
+          **kwargs:
+              Keyword arguments passed to :class:`Script.filter()` (e.g.
+              `incl_kw`, `excl_kw`, ..)
+
+      Returns (bool):
+          Value indicating whether or not the statement should be included
+          based on the outcome of the evaluation of all of its components.
+
+
+   .. method:: obj_ge(self)
+      :property:
+
+      Generated `object` for statement.
+
+
+   .. method:: desc_ge(self)
+      :property:
+
+      Generated `description` for statement.
+
+
+   .. method:: anchor_ge(self)
+      :property:
+
+      Generated `anchor` for statement.
+
+
+   .. method:: nm_ge(self)
+      :property:
+
+      Generated `name`; full statement tag for statement.
+
+
+
+.. py:class:: Statement(sn: Connector, statement: Union[sqlparse.sql.Statement, str], index: Optional[int] = None, attrs_raw: Optional[str] = None, e: Optional[ExceptionHandler] = None, **kwargs)
+
+   Bases: :class:`snowmobile.core.Tag`, :class:`snowmobile.core.Snowmobile`
+
+   Base class for all :class:`Statement` objects.
+
+   Home for attributes and methods that are associated with **all** statement
+   objects, generic or QA.
+
+   .. attribute:: sn
+
+      :class:`snowmobile.Connect` object.
+
+      :type: snowmobile.Connect
+
+   .. attribute:: statement
+
+      A :class:`sqlparse.sql.Statement` object.
+
+      :type: Union[sqlparse.sql.Statement, str]
+
+   .. attribute:: index
+
+      The context-specific index position of a statement within a script;
+      can be `None`.
+
+      :type: int
+
+   .. attribute:: _index
+
+      The original index position of a statement as read from the source;
+      This is used to restore the index position of a given statement
+      before exiting a specified context within :class:`snowmobile.Script`.
+
+      :type: int
+
+   .. attribute:: patterns
+
+      :class:`config.Pattern` object for more succinct access to
+      values specified in **snowmobile.toml**.
+
+      :type: config.Pattern
+
+   .. attribute:: results
+
+      The results of the statement if executed as a :class:`pandas.DataFrame`.
+
+      :type: pd.DataFrame
+
+   .. attribute:: outcome
+
+      Numeric indicator of outcome; defaults to `0` and is modified
+      based on the outcome of statement execution and/or QA validation
+      for derived classes.
+
+      :type: int
+
+   .. attribute:: outcome_txt
+
+      Plain text of outcome ('skipped', 'failed', 'completed', 'passed').
+
+      :type: str
+
+   .. attribute:: outcome_html
+
+      HTML text for the outcome as an admonition/information banner
+      based on the following mapping of :attr:`outcome_txt` to
+      admonition argument:
+          *   `failed` ------> `warning`
+          *   `completed` --> `info`
+          *   `passed` -----> `success`
+
+      :type: str
+
+   .. attribute:: start_time
+
+      Unix timestamp of the query start time if executed; 0 otherwise.
+
+      :type: int
+
+   .. attribute:: end_time
+
+      Unix timestamp of the query end time if executed; 0 otherwise.
+
+      :type: int
+
+   .. attribute:: execution_time
+
+      Execution time of the query in seconds if executed; 0 otherwise.
+
+      :type: int
+
+   .. attribute:: execution_time_txt
+
+      Plain text description of execution time if executed; returned in
+      seconds if execution time is less than 60 seconds, minutes otherwise.
+
+      :type: str
+
+   .. attribute:: attrs_raw
+
+      A raw string of the tag/attributes associated with the statement.
+
+      :type: str
+
+   .. attribute:: attrs_parsed
+
+      A parsed dictionary of the tag/attributes associated with the statement.
+
+      :type: dict
+
+   .. attribute:: is_tagged
+
+      Indicates whether or not the statement is tagged by the user.
+
+      :type: bool
+
+   .. attribute:: is_multiline
+
+      Indicates whether or not a statement tag is a multiline tag; will
+      be `False` by default if :attr:`is_tagged` is `False`.
+
+      :type: bool
+
+   .. attribute:: first_keyword
+
+      The first keyword within the statement as a :class:`sqlparse.sql.Token`.
+
+      :type: sqlparse.sql.Token
+
+   .. attribute:: sql
+
+      The sql associated with the statement as a raw string.
+
+      :type: str
+
+   .. attribute:: tag
+
+      :class:`Tag` object associated with the statement.
+
+      :type: Tag
+
+   .. method:: parse(self) -> Tuple[Dict, str]
+
+      Parses a statement tag into a valid dictionary.
+
+      Uses the values specified in **snowmobile.toml** to parse a
+      raw string of statement arguments into a valid dictionary.
+
+      .. note::
+
+         *   If :attr:`is_multiline` is `True` and `name` is not included
+             within the arguments, an assertion error will be thrown.
+         *   If :attr:`is_multiline` is `False`, the raw string within
+             the tag will be treated as the name.
+         *   The :attr:`tag` attribute is set once parsing is completed
+             and name has been validated.
+
+      Returns (dict):
+          Parsed tag arguments as a dictionary.
+
+
+   .. method:: start(self)
+
+      Sets :attr:`start_time` attribute.
+
+
+   .. method:: end(self)
+
+      Updates execution time attributes.
+
+      In total, sets:
+          *   :attr:`end_time`
+          *   :attr:`execution_time`
+          *   :attr:`execution_time_txt`
+
+
+   .. method:: attrs_total(self) -> Dict
+      :property:
+
+      Parses namespace for attributes specified in **snowmobile.toml**.
+
+      Searches attributes for those matching the keys specified in
+      ``script.markdown.attributes.aliases`` within **snowmobile.toml**
+      and adds to the existing attributes stored in :attr:`attrs_parsed`
+      before returning.
+
+      Returns (dict):
+          Combined dictionary of statement attributes from those explicitly
+          provided within the script and from object's namespace if specified
+          in **snowmobile.toml**.
+
+
+   .. method:: trim(self) -> str
+
+      Statement as a string including only the sql and a single-line tag name.
+
+      .. note::
+
+         The tag name used here will be the user-provided tag from the
+         original script or a generated :attr:`Tag.nm` of a tag was not
+         provided for a given statement.
+
+
+   .. method:: render(self) -> None
+
+      Renders the statement's sql as markdown in Notebook/IPython environments.
+
+
+   .. method:: is_derived(self)
+      :property:
+
+      Indicates whether or not it's a generic or derived (QA) statement.
+
+
+   .. method:: lines(self) -> int
+      :property:
+
+      Depth of the statement's sql by number of lines.
+
+
+   .. method:: as_section(self, incl_raw: Optional[bool] = None) -> Section
+
+      Returns current statement as a :class:`Section` object.
+
+
+   .. method:: set_state(self, index: Optional[int] = None, ctx_id: Optional[int] = None, in_context: Optional[bool] = None, filters: dict = None) -> Statement
+
+      Sets current state/context on a statement object.
+
+      :param ctx_id: Unix timestamp the :meth:`script.filter()` context manager was
+                     invoked.
+      :type ctx_id: int
+      :param filters: Kwargs passed to :meth:`script.filter()`.
+      :type filters: dict
+      :param index: Integer to set as the statement's index position.
+      :type index: int
+
+
+   .. method:: reset(self, index: bool = False, ctx_id: bool = False, in_context: bool = False, scope: bool = False) -> Statement
+
+      Resets attributes on the statement object to reflect as if read from source.
+
+      In its current form, includes:
+          *   Resetting the statement/tag's index to their original values.
+          *   Resetting the :attr:`is_included` attribute of the statement's
+              :attr:`tag` to `True`.
+          *   Populating :attr:`error_last` with errors from current context.
+          *   Caching current context's timestamp and resetting back to `None`.
+
+
+   .. method:: process(self)
+
+      Used by derived classes for post-processing the returned results.
+
+
+   .. method:: run(self, as_df: bool = True, lower: bool = True, render: bool = False, on_error: Optional[str] = None, on_exception: Optional[str] = None, on_failure: Optional[str] = None, ctx_id: Optional[int] = None) -> Statement
+
+      Run method for all statement objects.
+
+      :param as_df: Store results of query as :class:`pandas.DataFrame` or
+                    :class:`SnowflakeCursor`.
+      :type as_df: bool
+      :param lower: Lower case column names in :attr:`results` DataFrame if
+                    `as_df=True`.
+      :type lower: bool
+      :param render: Render the sql executed as markdown.
+      :type render: bool
+      :param on_error:
+                       Behavior if an execution/database error is encountered
+                           * `None`: default behavior, exception will be raised
+                           * `c`: continue with execution
+      :type on_error: str
+      :param on_exception: Behavior if an exception is raised in the **post-processing**
+                           of results from a derived class of :class:`Statement` (
+                           :class:`Empty` and :class:`Diff`).
+                               * `None`: default behavior, exception will be raised
+                               * `c`: continue with execution
+      :type on_exception: str
+      :param on_failure: Behavior if no error is encountered in execution or post-processing
+                         but the result of the post-processing has turned the statement's
+                         :attr:`outcome` attribute to False, indicating the results
+                         returned by the statement have failed validation.
+                             * `None`: default behavior, exception will be raised
+                             * `c`: continue with execution
+      :type on_failure: str
+
+      Returns (Statement):
+          Statement object post-executing query.
+
+
+   .. method:: outcome_txt(self, _id: Optional[int] = None) -> str
+
+      Outcome as a string.
+
+
+   .. method:: outcome_html(self) -> str
+      :property:
+
+      Outcome as an html admonition banner.
+
+
+
+.. py:class:: Column(original: str, current: Optional[str] = None, prior: Optional[str] = None, src: Optional[str] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Handles transformation operations of a single column within a DataFrame.
+
+   .. method:: update(self)
+
+      Simple context manager for dealing with current/prior migration.
+
+
+   .. method:: lower(self) -> str
+
+      Lower case column.
+
+
+   .. method:: upper(self) -> str
+
+      Upper case column.
+
+
+   .. method:: dedupe(current: str, char: Optional[str] = None) -> str
+      :staticmethod:
+
+      Dedupes consecutive characters within a string.
+
+      .. note::
+
+         *   Must iterate through matches and perform replacements in the
+             order of the **largest to the smallest by number of characters**;
+             this is to avoid altering the matches found before replacing them.
+
+      :param current: String containing characters to dedupe.
+      :type current: str
+      :param char: Character to dedupe.
+      :type char: str
+
+
+   .. method:: reformat(self, fill_char: Optional[str] = None, dedupe_special: bool = True) -> str
+
+      Reformat column for a load to the database.
+
+      :param fill_char: Character to replace special characters and whitespace with;
+                        defaults to `_`.
+      :type fill_char: str
+      :param dedupe_special: Dedupe consecutive special characters; defaults to `True`.
+      :type dedupe_special: bool
+
+
+
+.. py:class:: Diff(sn: Connector = None, **kwargs)
+
+   Bases: :class:`snowmobile.core.qa.QA`
+
+   QA class for comparison of values within a table based on
+   partitioning on a field.
+
+   .. attribute:: partition_on
+
+      Column name to partition data on before comparing the
+      partitioned datasets; defaults to 'src_description`.
+
+      :type: str
+
+   .. attribute:: end_index_at
+
+      Column name that marks the last column to use as an index column
+      when joining the partitioned datasets back together.
+
+      :type: str
+
+   .. attribute:: compare_patterns
+
+      Regex patterns to match columns on that should be *included* in
+      comparison (numeric columns you're running QA on).
+
+      :type: list
+
+   .. attribute:: ignore_patterns
+
+      Regex patterns to match columns on that should be *ignored* both
+      for the comparison and the index.
+
+      :type: list
+
+   .. attribute:: generic_metric_col_nm
+
+      Column name to use for the melted field names; defaults to 'Metric'.
+
+      :type: str
+
+   .. attribute:: compare_cols
+
+      Columns that are used in comparison once statement is executed
+      and parsing is applied.
+
+      :type: list
+
+   .. attribute:: drop_cols
+
+      Columns that are dropped once statement is executed and parsing
+      is applied.
+
+      :type: list
+
+   .. attribute:: idx_cols
+
+      Columns that are used for the index to join the data back
+      together once statement is executed and parsing is applied.
+
+      :type: list
+
+   .. attribute:: ub_raw
+
+      Maximum absolute raw difference (upper bound) that two fields
+      that are being compared can differ from each other without
+      causing a failure.
+
+      :type: float
+
+   .. attribute:: ub_perc
+
+      Maximum absolute percentage difference (upper bound) that two
+      comparison fields can differ from each other without causing a
+      failure.
+
+      :type: float
+
+   .. attribute:: MSG
+      :annotation: = a 'qa-diff' check did not pass its validation; this means that the difference in the values compared did not fall within the specified threshold.
+
+      
+
+   .. method:: split_cols(self) -> Diff
+
+      Post-processes results returned from a ``qa-diff`` statement.
+
+      Executes private methods to split columns into:
+          * Index columns
+          * Drop columns
+          * Comparison columns
+
+      Then runs checks needed to ensure minimum requirements are met in order
+      for a valid partition/comparison to be made.
+
+
+   .. method:: partitioned_by(self) -> Set[Any]
+      :property:
+
+      Distinct values within the ``partition_on`` column that data is
+      partitioned by.
+
+
+   .. method:: partitions_are_equal(partitions: Dict[str, pd.DataFrame], abs_tol: float, rel_tol: float) -> bool
+      :staticmethod:
+
+      Evaluates if a dictionary of DataFrames are identical.
+
+      :param partitions: A dictionary of DataFrames returned by
+                         :meth:`snowmobile.DataFrame`.
+      :type partitions: Dict[str, pd.DataFrame]
+      :param abs_tol: Absolute tolerance for difference in any value amongst the
+                      DataFrames being compared.
+      :type abs_tol: float
+      :param rel_tol: Relative tolerance for difference in any value amongst the
+                      DataFrames being compared.
+      :type rel_tol: float
+
+      Returns (bool):
+          Indication of equality amongst all the DataFrames contained in
+          ``partitions``.
+
+
+   .. method:: process(self) -> Diff
+
+      Post-processing for :class:`Diff`-specific results.
+
+
+
+.. py:class:: Empty(sn: Connector, **kwargs)
+
+   Bases: :class:`snowmobile.core.qa.QA`
+
+   QA class for results expected to be empty.
+
+   .. attribute:: MSG
+      :annotation: = a 'qa-empty' check did not pass its validation; this means that a query you expected to return empty results returned a non-zero number of records.
+
+      
+
+   .. method:: process(self) -> QA
+
+      Over-ride method; checks if results are empty and updates outcome
+
+
+
+.. py:class:: SnowFrame(df: pd.DataFrame)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Light extension to :class:`pandas.DataFrame` with a ``snf`` entry point.
+
+
+   .. method:: shared_cols(self, df2: pd.DataFrame) -> List[Tuple[pd.Series, pd.Series]]
+
+      Returns list of tuples containing column pairs that are common between two DataFrames.
+
+
+   .. method:: series_max_diff_abs(col1: pd.Series, col2: pd.Series, tolerance: float) -> bool
+      :staticmethod:
+
+      Determines if the max **absolute** difference between two
+      :class:`pandas.Series` is within a tolerance level.
+
+
+   .. method:: series_max_diff_rel(col1: pd.Series, col2: pd.Series, tolerance: float) -> bool
+      :staticmethod:
+
+      Determines if the maximum **relative** difference between two
+      :class:`pandas.Series` is within a tolerance level.
+
+
+   .. method:: df_max_diff_abs(self, df2: pd.DataFrame, tolerance: float) -> bool
+
+      Determines if the maximum **absolute** difference between any value
+      in the shared columns of 2 DataFrames is within a tolerance level.
+
+
+   .. method:: df_max_diff_rel(self, df2: pd.DataFrame, tolerance: float) -> bool
+
+      Determines if the maximum **relative** difference between any value
+      in the shared columns of 2 DataFrames is within a tolerance level.
+
+
+   .. method:: df_diff(self, df2: pd.DataFrame, abs_tol: Optional[float] = None, rel_tol: Optional[float] = None) -> bool
+
+      Determines if the column-wise difference between two DataFrames is
+      within a relative **or** absolute tolerance level.
+
+      .. note::
+
+         *   ``df1`` and ``df2`` are assumed to have a shared, pre-defined index.
+         *   Exactly **one** of ``abs_tol`` and ``rel_tol`` is expected to be a
+             a valid float; the other is expected to be **None**.
+         *   If valid float values are provided for both ``abs_tol`` and ``rel_tol``,
+             the outcome of the maximum **absolute** difference with respect to
+             ``abs_tol`` will be returned regardless of the value of ``rel_tol``.
+
+      :param df2: 2nd DataFrame for comparison.
+      :type df2: pd.DataFrame
+      :param abs_tol: Absolute tolerance; default is None.
+      :type abs_tol: float
+      :param rel_tol: Relative tolerance; default is None.
+      :type rel_tol: float
+
+      Returns (bool):
+          Boolean indicating whether or not difference is within tolerance.
+
+
+   .. method:: partitions(self, on: str) -> Dict[str, pd.DataFrame]
+
+      Returns a dictionary of DataFrames given a DataFrame and a partition column.
+
+      .. note::
+
+         *   The number of distinct values within ``partition_on`` column will be
+             1:1 with the number of partitions that are returned.
+         *   The ``partition_on`` column is dropped from the partitions that are returned.
+         *   The depth of a vertical concatenation of all partitions should equal the
+             depth of the original DataFrame.
+
+      :param on: The column name to use for partitioning the data.
+      :type on: str
+
+      Returns (Dict[str, pd.DataFrame]):
+          Dictionary of {(str) partition_value: (pd.DataFrame) associated subset of df}
+
+
+   .. method:: ddl(self, table: str) -> str
+
+      Returns a string containing 'create table' DDL given a table name
+
+
+   .. method:: lower(self, col: Optional[str] = None) -> pd.DataFrame
+
+      Lower cases all column names **or** all values within `col` if provided.
+
+
+   .. method:: upper(self, col: Optional[str] = None) -> pd.DataFrame
+
+      Upper cases all column names **or** all values within `col` if provided.
+
+
+   .. method:: reformat(self)
+
+      Re-formats DataFrame's columns via :class:`Column.reformat()`.
+
+
+   .. method:: append_dupe_suffix(self)
+
+      Adds a trailing index number '_i' to duplicate column names.
+
+
+   .. method:: to_list(self, col: Optional[str] = None, n: Optional[int] = None) -> List
+
+      Succinctly retrieves a column as a list.
+
+      :param col: Name of column.
+      :type col: str
+      :param n: Number of records to return; defaults to full depth of column.
+      :type n: int
+
+
+   .. method:: add_tmstmp(self, col_nm: Optional[str] = None) -> pd.DataFrame
+
+      Adds a column containing the current timestamp to a DataFrame.
+
+      :param col_nm: Name for column; defaults to `LOADED_TMSTMP`.
+      :type col_nm: str
+
+
+   .. method:: original(self) -> pd.DataFrame
+      :property:
+
+      Returns the DataFrame in its original form (drops columns added by
+      :class:`SnowFrame` and reverts to original column names).
+
+
+   .. method:: has_dupes(self) -> bool
+      :property:
+
+      DataFrame has duplicate column names.
+
+
+   .. method:: cols_matching(self, patterns: List[str], ignore_patterns: List[str] = None) -> List[str]
+
+      Returns a list of columns given a list of patterns to find.
+
+      :param patterns: List of regex patterns to match columns on.
+      :type patterns: List[str]
+      :param ignore_patterns: Optional list of regex patterns to exclude.
+      :type ignore_patterns: List[str]
+
+      Returns (List[str]):
+          List of columns found/excluded.
+
+
+   .. method:: cols_ending(self, nm: str, ignore_patterns: Optional[List] = None) -> List[str]
+
+      Returns all columns up to ``nm`` in a DataFrame.
+
+      :param nm: Name of column to end index at.
+      :type nm: str
+      :param ignore_patterns: Optional list of regex patterns to exclude in the list that's
+                              returned; primarily used to for getting `end-index-at` list
+                              while excluding `src_description`.
+      :type ignore_patterns: List[str]
+
+      Returns (List[str]):
+          List of column names matching criterion.
+
+
+
+.. py:class:: SQL(sn=None, nm: Optional[str] = None, obj: Optional[str] = None, auto_run: Optional[bool] = True)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   SQL class for generation & execution of common sql commands.
+
+   Intended to be interacted with as an attribute of :class:`snowmobile.Connect`.
+
+   .. note::
+
+      *   All arguments except for :attr:`sn` are optional.
+      *   The benefit of setting the other attributes on an instance of :class:`SQL`
+          is to (optionally) avoid passing the same information to multiple methods
+          when generating a variety of statements around the same object.
+
+   .. attribute:: sn
+
+      :class:`snowmobile.Connect` for sql execution and connection information.
+
+      :type: snowmobile.Connect
+
+   .. attribute:: nm
+
+      Object name to use in generated sql (e.g. 'some_table_name')
+
+      :type: str
+
+   .. attribute:: obj
+
+      Object type to use in generated sql (e.g. 'table')
+
+      :type: str
+
+   .. attribute:: schema
+
+      Schema to use when dot-prefixing sql; defaults to the schema with which the
+      :attr:`sn` is connected to.
+
+      :type: str
+
+   .. attribute:: auto_run
+
+      Indicates whether to automatically execute the sql generated by a given
+      method; defaults to *True*
+
+      :type: bool
+
+   .. method:: info_schema_tables(self, nm: Optional[str] = None, fields: List[str] = None, restrictions: Dict[str, str] = None, order_by: List[Optional[str, int]] = None, all_schemas: bool = False, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Query ``information_schema.tables`` for a given table or view.
+
+      :param nm: Table name, including schema if creating a stage outside of the
+                 current schema.
+      :type nm: str
+      :param fields: List of fields to include in returned results (e.g.
+                     ['table_name', 'table_type', 'last_altered'])
+      :type fields: List[str]
+      :param restrictions: List of conditionals typed as literal components of a `where`
+                           clause (e.g.
+                           ["table_type = 'base table'", 'last_altered::date = current_date()']
+                           ).
+      :type restrictions: List[str]
+      :param order_by: List of fields or their ordinal positions to order the results by.
+      :type order_by: List[str]
+      :param all_schemas: Include tables/views from all schemas; defaults to `False`.
+      :type all_schemas: bool
+      :param run: Determines whether to run the generated sql or not; defaults to `None`
+                  which will reference the current value of the :attr:`auto_run` attribute
+                  which defaults to `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: info_schema_columns(self, nm: Optional[str] = None, fields: Optional[List] = None, restrictions: Optional[Dict] = None, order_by: Optional[List] = None, all_schemas: bool = False, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Query ``information_schema.columns`` for a given table or view.
+
+      :param nm: Table name, including schema if creating a stage outside of the
+                 current schema.
+      :type nm: str
+      :param fields: List of fields to include in returned results (e.g.
+                     ['ordinal_position', 'column_name', 'data_type'])
+      :type fields: List[str]
+      :param restrictions: List of conditionals typed as literal components of a `where`
+                           clause (e.g.["regexp_count(lower(column_name), 'tmstmp') = 0"]).
+      :type restrictions: List[str]
+      :param order_by: List of fields or their ordinal positions to order the results by.
+      :type order_by: List[str]
+      :param all_schemas: Include tables/views from all schemas; defaults to `False`.
+      :type all_schemas: bool
+      :param run: Determines whether to run the generated sql or not; defaults to `None`
+                  which will reference the current value of the :attr:`auto_run` attribute
+                  which defaults to `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: cnt_records(self, nm: Optional[str] = None, run: Optional[bool] = None)
+
+      Number of records within a table or view.
+
+      :param nm: Table name, including schema if creating a stage outside of the
+                 current schema.
+      :type nm: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: table_last_altered(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Last altered timestamp for a table or view.
+
+      :param nm: Table name, including schema if creating a stage outside of the
+                 current schema.
+      :type nm: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: create_stage(self, nm_stage: str, nm_format: str, replace: bool = False, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Create a staging table.
+
+      :param nm_stage: Name of stage to create, including schema if creating a stage
+                       outside of the current schema.
+      :type nm_stage: str
+      :param nm_format: Name of file format to specify for the stage, including schema
+                        if using a format from outside of the current schema.
+      :type nm_format: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+      :param replace: Indicates whether to replace an existing stage if pre-existing;
+                      default is `False`.
+      :type replace: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: drop(self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Drop a ``Snowflake`` object.
+
+      :param nm: Name of the object to drop, including schema if creating a stage
+                 outside of the current schema.
+      :type nm: str
+      :param obj: Type of object to drop (e.g. 'table', 'schema', etc)
+      :type obj: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: clone(self, nm: Optional[str] = None, to: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None, replace: bool = False) -> Union[str, pd.DataFrame]
+
+      Clone a ``Snowflake`` object.
+
+      .. warning::
+
+         *   Make sure to read `Snowflake's documentation
+             <https://docs.snowflake.com/en/sql-reference/sql/create-clone.html>`_
+             for restrictions and considerations when cloning objects.
+
+      .. note::
+
+         *   In this specific method, the value provided to ``nm`` and ``to``
+             can be a single object name, a single schema, or both in the
+             form of `obj_schema.obj_name` depending on the desired outcome.
+         *   Additionally, **at least one of the** ``nm`` **or** ``to``
+             **arguments must be provided**.
+         *   The defaults for the target object are constructed such that
+             users can **either**:
+                 1.  Clone objects to *other* schemas that inherit the
+                     source object's *name* without specifying so in the
+                     ``to`` argument, **or**
+                 2.  Clone objects within the *current* schema that inherit
+                     the source object's *schema* without specifying so in
+                     the ``to`` argument.
+         *   If providing a schema without a name to either argument, prefix
+             the value provided with `__` to signify it's a schema and not
+             a lower-level object to be cloned.
+                 *   e.g. providing `nm='sample_table'` and
+                     `to='__sandbox'` will clone `sample_table` from the
+                     current schema to `sandbox.sample_table`.
+         *   An assertion error will be raised raised if neither argument
+             is specified as *this would result in a command to clone an
+             object and store it in an object that has the same name &
+             schema as the object being cloned*.
+
+      :param nm: Name of the object to clone, including schema if cloning an
+                 object outside of the current schema.
+      :type nm: str
+      :param to: Target name for cloned object, including schema if cloning an
+                 object outside of the current schema.
+      :type to: str
+      :param obj: Type of object to clone (e.g. 'table', 'view', 'file-format');
+                  defaults to `table`.
+      :type obj: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+      :param replace: Indicates whether to replace an existing stage if pre-existing;
+                      default is `False`.
+      :type replace: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: put_file_from_stage(self, path: Union[Path, str], nm_stage: str, options: Optional[Dict] = None, ignore_defaults: bool = False, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Generates a 'put' command into a staging table from a local file.
+
+      :param path: Path to local data file as a :class:`pathlib.Path` or string.
+      :type path: Union[Path, str]
+      :param nm_stage: Name of the staging table to load into.
+      :type nm_stage: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+      :param options: Optional arguments to add to `put` statement in addition to
+                      the values specified in the ``loading.put`` section
+                      of **snowmobile.toml**.
+      :type options: dict
+      :param ignore_defaults: Option to ignore the values specified in **snowmobile.toml**;
+                              defaults to `False`.
+      :type ignore_defaults: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: copy_into_table_from_stage(self, nm: str, nm_stage: str, options: Optional[Dict] = None, ignore_defaults: bool = False, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Generates a command to copy data into a table from a staging table.
+
+      :param nm: Name of the object to drop, including schema if creating a stage
+                 outside of the current schema.
+      :type nm: str
+      :param nm_stage: Name of the staging table to load from.
+      :type nm_stage: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+      :param options: Optional arguments to add to `put` statement in addition to
+                      the values specified in the ``loading.put`` section
+                      of **snowmobile.toml**.
+      :type options: dict
+      :param ignore_defaults: Option to ignore the values specified in **snowmobile.toml**;
+                              defaults to `False`.
+      :type ignore_defaults: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: show_file_formats(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Lists all file formats in the current schema.
+
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: ddl(self, nm: Optional[str] = None, obj: Optional[str] = None, run: Optional[bool] = None) -> str
+
+      Query the DDL for an in-warehouse object.
+
+      :param nm: Name of the object to get DDL for, including schema if object
+                 is outside of the current schema.
+      :type nm: str
+      :param obj: Type of object to get DDL for (e.g. 'table', 'view', 'file-format').
+      :type obj: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (str):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: table_sample(self, nm: Optional[str] = None, n: Optional[int] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select `n` sample records from a table.
+
+      :param nm: Name of table or view to sample, including schema if the table
+                 or view is outside of the current schema.
+      :type nm: str
+      :param n: Number of records to return, implemented as a 'limit' clause
+                in the query; defaults to 1.
+      :type n: int
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: truncate(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Truncate a table.
+
+      :param nm: Name of table, including schema if the table is outside of the
+                 current schema.
+      :type nm: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: current(self, obj: str, run: Optional[bool] = None)
+
+      Generic implementation of 'select current' for session-based objects.
+
+      :param obj: Type of object to retrieve information for (schema, session, ..).
+      :type obj: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: current_session(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select the current session.
+
+
+   .. method:: current_schema(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select the current schema.
+
+
+   .. method:: current_database(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select the current database.
+
+
+   .. method:: current_warehouse(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select the current warehouse.
+
+
+   .. method:: current_role(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Select the current role.
+
+
+   .. method:: use(self, nm: str, obj: str, run: Optional[bool] = None)
+
+      Generic implementation of 'use' command for in-warehouse objects.
+
+      :param nm: Name of object to use (schema name, warehouse name, role name, ..).
+      :type nm: str
+      :param obj: Type of object to use (schema, warehouse, role, ..).
+      :type obj: str
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, pd.DataFrame]):
+          Either:
+              1.  The results of the query as a :class:`pandas.DataFrame`, or
+              2.  The generated query as a :class:`str` of sql.
+
+
+   .. method:: use_schema(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Use schema command.
+
+
+   .. method:: use_database(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Use database command.
+
+
+   .. method:: use_warehouse(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Use warehouse command.
+
+
+   .. method:: use_role(self, nm: Optional[str] = None, run: Optional[bool] = None) -> Union[str, pd.DataFrame]
+
+      Use role command.
+
+
+   .. method:: columns(self, nm: Optional[str] = None, from_info_schema: bool = False, run: Optional[bool] = None) -> Union[str, List]
+
+      Returns an ordered list of columns for a table or view.
+
+      .. note::
+
+         *   The default behavior of this method is to retrieve the columns
+             for a table or view by selecting a single sample record
+             from the table and extracting the column names directly off
+             the returned :class:`pandas.DataFrame` due to the performance
+             gains in selecting a sample record as opposed to querying the
+             ``information_schema.columns``.
+         *   This can be changed by passing `from_info_schema=False`.
+
+      :param nm: Name of table or view, including schema if the table or view is
+                 outside of the current schema.
+      :type nm: str
+      :param from_info_schema: Indicates whether to retrieve columns via the
+                               ``information_schema.columns`` or by selecting a sample record
+                               from the table or view; defaults to `False`.
+      :type from_info_schema: bool
+      :param run: Indicates whether to execute generated sql or return as string;
+                  default is `True`.
+      :type run: bool
+
+      Returns (Union[str, List]):
+          Either:
+              1.  An ordered list of columns for the table or view, **or**
+              2.  The query against the table or view as a :class:`str` of sql.
+
+
+   .. method:: exists(self, nm: Optional[str] = None) -> bool
+
+      Checks the existence of a table or view.
+
+      :param nm: Name of table or view, including schema if the table or view is
+                 outside of the current schema.
+      :type nm: str
+
+      Returns (bool):
+          Boolean indication of whether or not the table or view exists.
+
+
+   .. method:: order(by: List[Union[int, str]]) -> str
+      :staticmethod:
+
+      Generates 'order by' clause from a list of fields or field ordinal positions.
+
+
+   .. method:: where(restrictions: Dict) -> str
+      :staticmethod:
+
+      Generates a 'where' clause based on a dictionary of restrictions.
+
+      :param restrictions: A dictionary of conditionals where each key/value pair
+                           respectively represents the left/right side of a condition
+                           within a 'where' clause.
+      :type restrictions: dict
+
+      Returns (str):
+          Formatted where clause.
+
+
+   .. method:: fields(fields: List) -> str
+      :staticmethod:
+
+      Utility to generate fields within a 'select' statement.
+
+
+   .. method:: copy(self) -> SQL
+
+      User-facing copy method.
+
+
+
+.. py:class:: Markup(sn: Connector, path: Path, contents: Dict[int, Union[Statement, Marker]], alt_file_nm: Optional[str] = None, alt_file_prefix: Optional[str] = None, alt_file_suffix: Optional[str] = None, incl_sql: bool = True, incl_markers: bool = True, incl_raw: bool = False, sql_incl_export_disclaimer: bool = True)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Markup document from SQL script.
+
+   .. method:: doc_root(self) -> Path
+      :property:
+
+      Documentation sub-directory; `.snowmobile` by default.
+
+
+   .. method:: file_nm_sql(self) -> str
+      :property:
+
+      Adjusted file name of the exported sql script.
+
+
+   .. method:: file_nm_md(self) -> str
+      :property:
+
+      Adjusted file name of the exported markdown.
+
+
+   .. method:: script_dir(self) -> Path
+      :property:
+
+      Directory for all exports from specific _file_nm..
+
+
+   .. method:: path_md(self) -> Path
+      :property:
+
+      Full path to write markdown to.
+
+
+   .. method:: path_sql(self) -> Path
+      :property:
+
+      Full path to write sql
+
+
+   .. method:: sections(self) -> Dict[int, Section]
+      :property:
+
+      All header sections of markdown file as a dictionary.
+
+
+   .. method:: markdown(self) -> str
+      :property:
+
+      Full markdown file as a string.
+
+
+   .. method:: included(self)
+      :property:
+
+      All included indices based on incl_ attributes.
+
+
+   .. method:: sql(self)
+      :property:
+
+      SQL for export.
+
+
+   .. method:: export(self, md_only: bool = False, sql_only: bool = False) -> None
+
+      Export files.
+
+      :param md_only: Export markdown file only.
+      :type md_only: bool
+      :param sql_only: Export sql file only.
+      :type sql_only: bool
+
+
+
+.. py:class:: Script(sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   .. method:: read(self, path: Path = None) -> Script
+
+      Runs quick path validation and reads in a sql file as a string.
+
+      A valid `path` must be provided if the `script.path` attribute hasn't
+      been set; ``ValueErrors`` will be thrown if neither is valid.
+
+      :param path: Full path to a sql object.
+      :type path: pathlib.Path
+
+
+   .. method:: from_str(self, sql: str, name: str, directory: Path = Path.cwd()) -> Script
+
+      Instantiates a raw string of sql as a script.
+
+
+   .. method:: source_stream(self) -> sqlparse.sql.Statement
+      :property:
+
+      Parses source sql into individual statements.
+
+
+   .. method:: add_statement(self, s: Optional[sqlparse.sql.Statement, str], index: Optional[int] = None) -> None
+
+      Adds a statement object to the script.
+
+      Default behavior will only add ``sqlparse.sql.Statement`` objects
+      returned from ``script.source_stream``.
+
+      ``clean_parse()`` utility function is utilized so that generated sql
+      within Python can be inserted back into the script as raw strings.
+
+      :param s: A sqlparse.sql.Statement object or a raw string of SQL for an
+                individual statement.
+      :type s: Union[sqlparse.sql.Statement, str]
+      :param index: Index position of the statement within the script; defaults
+                    to ``n + 1`` if index is not provided where ``n`` is the number
+                    of statements within the script at the time ``add_statement()``
+                    is called.
+      :type index: int
+
+
+   .. method:: filter(self, as_id: Optional[Union[str, int]] = None, from_id: Optional[Union[str, int]] = None, incl_kw: Optional[List] = None, incl_obj: Optional[List] = None, incl_desc: Optional[List] = None, incl_anchor: Optional[List] = None, incl_nm: Optional[List] = None, excl_kw: Optional[List] = None, excl_obj: Optional[List] = None, excl_desc: Optional[List] = None, excl_anchor: Optional[List] = None, excl_nm: Optional[List] = None, last: bool = False) -> ContextManager[Script]
+
+
+   .. method:: depth(self) -> int
+      :property:
+
+      Count of statements in the script.
+
+
+   .. method:: lines(self) -> int
+      :property:
+
+      Number of lines in the script
+
+
+   .. method:: statements(self) -> Dict[int, Statement]
+      :property:
+
+      All statements by index position included in the current context.
+
+
+   .. method:: excluded(self)
+      :property:
+
+      All statements by index position excluded from the current context.
+
+
+   .. method:: executed(self) -> Dict[int, Statement]
+      :property:
+
+      Executed statements by index position included in the current context.
+
+
+   .. method:: statement(self, _id: Optional[str, int] = None) -> Any[Statement, Empty, Diff]
+
+      Fetch a single statement by _id.
+
+
+   .. method:: reset(self, index: bool = False, ctx_id: bool = False, in_context: bool = False, scope: bool = False, _filter: bool = False) -> Script
+
+      Resets indices and scope on all statements to their state as read from source.
+
+      Invoked before exiting :meth:`filter()` context manger to reverse
+      the revised indices set by :meth:`index_to()` and inclusion/
+      exclusion scope set by :meth:`Statement.Tag.scope()`.
+
+
+   .. method:: duplicates(self) -> Dict[str, int]
+      :property:
+
+      Dictionary of indistinct statement names/tags within script.
+
+
+   .. method:: contents(self, by_index: bool = True, ignore_scope: bool = False, markers: bool = False, validate: bool = True) -> Dict[Union[int, str], Statement]
+
+      Dictionary of all executed statements with option to ignore current
+      scope.
+
+
+   .. method:: dtl(self, full: bool = False) -> None
+
+      Prints summary of statements within the current scope to console.
+
+
+   .. method:: first_s(self)
+      :property:
+
+      First statement by index position.
+
+
+   .. method:: last_s(self)
+      :property:
+
+      Last statement by index position
+
+
+   .. method:: first(self) -> Union[Statement, Empty, Diff]
+      :property:
+
+      First statement executed.
+
+
+   .. method:: last(self) -> Union[Statement, Empty, Diff]
+      :property:
+
+      Last statement executed.
+
+
+   .. method:: doc(self, alt_file_nm: Optional[str] = None, alt_file_prefix: Optional[str] = None, alt_file_suffix: Optional[str] = None, incl_markers: Optional[bool] = True, incl_sql: Optional[bool] = True, sql_incl_export_disclaimer: Optional[bool] = True) -> Markup
+
+      Markup object based on current context.
+
+
+   .. method:: ids_from_iterable(self, _id: Optional[Union[Tuple, List]] = None) -> List[int]
+
+      Utility function to get a list of statement IDs given an `_id`.
+
+      Invoked within script.run() if the `_id` parameter is either a:
+          (1) tuple of integers (lower and upper bound of statement indices
+              to run)
+          (2) list of integers or strings (statement names or indices to run)
+          (3) default=None; returns all statement indices within scope if so
+
+      :param _id Union[Tuple: _id field provided to script.run() if it's neither an integer
+                              or a string.
+      :param List]: _id field provided to script.run() if it's neither an integer
+                    or a string.
+
+      :returns: *List[int]* --     A list of statement indices to run.
+
+
+   .. method:: run(self, _id: Optional[str, int, Tuple, List] = None, as_df: bool = True, on_error: Optional[str] = None, on_exception: Optional[str] = None, on_failure: Optional[str] = None, lower: bool = True, render: bool = False, **kwargs)
+
+
+   .. method:: s(self, _id) -> Statement
+
+      Accessor for :meth:`statement`.
+
+
+   .. method:: st(self) -> Dict[Union[int, str], Statement]
+      :property:
+
+      Accessor for :attr:`statements`.
+
+
+
+.. py:class:: Table(df: pd.DataFrame, table: str, sn: Connector, if_exists: Optional[str] = None, path_ddl: Optional[Path] = None, path_output: Optional[str, Path] = None, file_format: Optional[str] = None, incl_tmstmp: Optional[bool] = None, tmstmp_col_nm: Optional[str] = None, reformat_cols: Optional[bool] = None, validate_format: Optional[bool] = None, validate_table: Optional[bool] = None, upper_case_cols: Optional[bool] = None, lower_case_table: Optional[bool] = None, keep_local: Optional[bool] = None, on_error: Optional[str] = None, check_dupes: Optional[bool] = None, load_copy: Optional[bool] = None)
+
+   Bases: :class:`snowmobile.core.Snowmobile`
+
+   Represents a DataFrame and a Table to be loaded into.
+
+   .. method:: exists(self)
+      :property:
+
+      Indicates if the target table exists.
+
+
+   .. method:: col_diff(self) -> Dict[int, bool]
+      :property:
+
+      Returns diff detail of local DataFrame to in-warehouse table.
+
+
+   .. method:: cols_match(self) -> bool
+      :property:
+
+      Indicates if columns match between DataFrame and table.
+
+
+   .. method:: load_statements(self, from_script: Path)
+
+      Generates exhaustive list of the statements to execute for a given
+      instance of loading a DataFrame.
+
+
+   .. method:: to_local(self, quote_all: bool = True)
+
+      Export to local file via configuration in ``snowmobile.toml``.
+
+
+   .. method:: tm_load(self) -> int
+      :property:
+
+      Seconds elapsed during loading.
+
+
+   .. method:: tm_validate_load(self) -> int
+      :property:
+
+      Seconds elapsed during validation.
+
+
+   .. method:: tm_total(self)
+      :property:
+
+      Total seconds elapsed for load.
+
+
+   .. method:: validate(self, if_exists: str) -> None
+
+      Validates load based on current state through a variety of operations.
+
+      :param if_exists: Desired behavior if table already exists; intended to be passed
+                        in from :meth:`table.load()` by default.
+      :type if_exists: str
+
+
+   .. method:: load(self, if_exists: Optional[str] = None, from_script: Path = None, verbose: bool = True, **kwargs) -> Table
+
+
+
+.. data:: DDL_DEFAULT_PATH
+   
+
+   
+
+.. data:: DIR_PKG_DATA
+   
+
+   
+
+.. data:: EXTENSIONS_DEFAULT_PATH
+   
+
+   
+

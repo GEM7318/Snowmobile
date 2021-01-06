@@ -1,0 +1,2939 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../../../../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../../../../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../../../../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../../../../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   snowmobile.core.script — Snowmobile
+  </title>
+  <link href="../../../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/copybutton.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../_static/panels-variables.15f6f9acc56a35a3d31e1c44b578b17b.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js">
+  </script>
+  <script src="../../../../_static/jquery.js">
+  </script>
+  <script src="../../../../_static/underscore.js">
+  </script>
+  <script src="../../../../_static/doctools.js">
+  </script>
+  <script src="../../../../_static/clipboard.min.js">
+  </script>
+  <script src="../../../../_static/copybutton.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
+  </script>
+  <link href="../../../../genindex.html" rel="index" title="Index"/>
+  <link href="../../../../search.html" rel="search" title="Search"/>
+  <link href="../section/index.html" rel="next" title="snowmobile.core.section"/>
+  <link href="../scope/index.html" rel="prev" title="snowmobile.core.scope"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#autoapi/snowmobile/core/script/index" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        snowmobile.core.script
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../../../../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../../../../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../modindex.html">
+        API Reference
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core
+         </span>
+        </code>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../../../../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../../../../_static/" width="48"/>
+          </a>
+          <a href="../../../../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/connector.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Connector
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/script1.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Script
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/script1.html#markup-no-results-sql">
+            markup_no_results.sql
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/script1.html#intra-statement-marker">
+            intra-statement-marker
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/script1.html#appendix">
+            Appendix
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/sql.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.SQL
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../usage/snowmobile_toml.html">
+            <strong>
+             snowmobile.toml
+            </strong>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../modindex.html">
+            API Reference
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="../index.html">
+              <code class="xref py py-mod docutils literal notranslate">
+               <span class="pre">
+                snowmobile.core
+               </span>
+              </code>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <label class="md-nav__title" for="__toc">
+          Contents
+         </label>
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="#autoapi-snowmobile-core-script-index--page-root">
+            <code class="xref py py-mod docutils literal notranslate">
+             <span class="pre">
+              snowmobile.core.script
+             </span>
+            </code>
+           </a>
+           <nav class="md-nav">
+            <ul class="md-nav__list">
+             <li class="md-nav__item">
+              <a class="md-nav__link" href="#module-contents">
+               Module Contents
+              </a>
+              <nav class="md-nav">
+               <ul class="md-nav__list">
+                <li class="md-nav__item">
+                 <a class="md-nav__link" href="#classes">
+                  Classes
+                 </a>
+                 <nav class="md-nav">
+                  <ul class="md-nav__list">
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.script.Script">
+                     Script
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.read">
+                        read
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.from_str">
+                        from_str
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.source_stream">
+                        source_stream
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.add_statement">
+                        add_statement
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.filter">
+                        filter
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.depth">
+                        depth
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.lines">
+                        lines
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.statements">
+                        statements
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.excluded">
+                        excluded
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.executed">
+                        executed
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.statement">
+                        statement
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.reset">
+                        reset
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.duplicates">
+                        duplicates
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.contents">
+                        contents
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.dtl">
+                        dtl
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.first_s">
+                        first_s
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.last_s">
+                        last_s
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.first">
+                        first
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.last">
+                        last
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.doc">
+                        doc
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.ids_from_iterable">
+                        ids_from_iterable
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.run">
+                        run
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.s">
+                        s
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.script.Script.st">
+                        st
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                  </ul>
+                 </nav>
+                </li>
+               </ul>
+              </nav>
+             </li>
+            </ul>
+           </nav>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../../../../_sources/autoapi/snowmobile/core/script/index.rst.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <span id="snowmobile-core-script">
+       </span>
+       <h1 id="autoapi-snowmobile-core-script-index--page-root">
+        <a class="reference internal" href="#autoapi-snowmobile-core-script-index--page-root" title="snowmobile.core.script">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           snowmobile.core.script
+          </span>
+         </code>
+        </a>
+        <a class="headerlink" href="#autoapi-snowmobile-core-script-index--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <p>
+        Class for intraacting with Script objects.
+       </p>
+       <p>
+        These are intended to be instantiated from a local
+        <em>
+         .sql
+        </em>
+        file or a readable
+text file containing sql code. The
+        <code class="xref py py-meth docutils literal notranslate">
+         <span class="pre">
+          Script.read(from_str=True)()
+         </span>
+        </code>
+        option
+was included for the purposes of creating easily reproducible examples of how a
+script is parsed.
+       </p>
+       <p>
+        # TODO: Add an example of how to re-implement the execute_stream() method from
+#   snowflake.Connector for documentation.
+       </p>
+       <h2 id="module-contents">
+        Module Contents
+        <a class="headerlink" href="#module-contents" title="Permalink to this headline">
+         ¶
+        </a>
+       </h2>
+       <h3 id="classes">
+        Classes
+        <a class="headerlink" href="#classes" title="Permalink to this headline">
+         ¶
+        </a>
+       </h3>
+       <table class="longtable docutils align-default">
+        <colgroup>
+         <col style="width: 10%"/>
+         <col style="width: 90%"/>
+        </colgroup>
+        <tbody>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.script.Script" title="snowmobile.core.script.Script">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Script
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+           </p>
+          </td>
+         </tr>
+        </tbody>
+       </table>
+       <dl class="py class">
+        <dt id="snowmobile.core.script.Script">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.script.
+         </code>
+         <code class="sig-name descname">
+          Script
+         </code>
+         <span class="sig-paren">
+          (
+         </span>
+         <em class="sig-param">
+          <span class="n">
+           sn
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Connector
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           path
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           Optional
+           <span class="p">
+            [
+           </span>
+           Path
+           <span class="p">
+            ,
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           None
+          </span>
+         </em>
+         ,
+         <em class="sig-param">
+          <span class="n">
+           as_generic
+          </span>
+          <span class="p">
+           :
+          </span>
+          <span class="n">
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+            bool
+           </a>
+          </span>
+          <span class="o">
+           =
+          </span>
+          <span class="default_value">
+           False
+          </span>
+         </em>
+         <span class="sig-paren">
+          )
+         </span>
+         <a class="headerlink" href="#snowmobile.core.script.Script" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../index.html#snowmobile.core.Snowmobile" title="snowmobile.core.Snowmobile">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.Snowmobile
+            </span>
+           </code>
+          </a>
+         </p>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.read">
+           <code class="sig-name descname">
+            read
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             path
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Path
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.script.Script" title="snowmobile.core.script.Script">
+            Script
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.read" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Runs quick path validation and reads in a sql file as a string.
+           </p>
+           <p>
+            A valid
+            <cite>
+             path
+            </cite>
+            must be provided if the
+            <cite>
+             script.path
+            </cite>
+            attribute hasn't
+been set;
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              ValueErrors
+             </span>
+            </code>
+            will be thrown if neither is valid.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <strong>
+               path
+              </strong>
+              (
+              <a class="reference external" href="https://docs.python.org/3.7/library/pathlib.html#pathlib.Path" title="(in Python v3.7)">
+               <em>
+                pathlib.Path
+               </em>
+              </a>
+              ) -- Full path to a sql object.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.from_str">
+           <code class="sig-name descname">
+            from_str
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             sql
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             name
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             directory
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Path
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             Path.cwd()
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.script.Script" title="snowmobile.core.script.Script">
+            Script
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.from_str" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Instantiates a raw string of sql as a script.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.source_stream">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            source_stream
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://sqlparse.readthedocs.io/en/latest/analyzing/#sqlparse.sql.Statement" title="(in python-sqlparse v0.4.2.dev0)">
+            sqlparse.sql.Statement
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.source_stream" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Parses source sql into individual statements.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.add_statement">
+           <code class="sig-name descname">
+            add_statement
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             s
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://sqlparse.readthedocs.io/en/latest/analyzing/#sqlparse.sql.Statement" title="(in python-sqlparse v0.4.2.dev0)">
+              sqlparse.sql.Statement
+             </a>
+             <span class="p">
+              ,
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             index
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">
+            None
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.add_statement" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Adds a statement object to the script.
+           </p>
+           <p>
+            Default behavior will only add
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              sqlparse.sql.Statement
+             </span>
+            </code>
+            objects
+returned from
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              script.source_stream
+             </span>
+            </code>
+            .
+           </p>
+           <p>
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              clean_parse()
+             </span>
+            </code>
+            utility function is utilized so that generated sql
+within Python can be inserted back into the script as raw strings.
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 s
+                </strong>
+                (
+                <em>
+                 Union
+                </em>
+                <em>
+                 [
+                </em>
+                <a class="reference external" href="https://sqlparse.readthedocs.io/en/latest/analyzing/#sqlparse.sql.Statement" title="(in python-sqlparse v0.4.2.dev0)">
+                 <em>
+                  sqlparse.sql.Statement
+                 </em>
+                </a>
+                <em>
+                 ,
+                </em>
+                <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+                 <em>
+                  str
+                 </em>
+                </a>
+                <em>
+                 ]
+                </em>
+                ) -- A sqlparse.sql.Statement object or a raw string of SQL for an
+individual statement.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 index
+                </strong>
+                (
+                <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+                 <em>
+                  int
+                 </em>
+                </a>
+                ) -- Index position of the statement within the script; defaults
+to
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  n
+                 </span>
+                 <span class="pre">
+                  +
+                 </span>
+                 <span class="pre">
+                  1
+                 </span>
+                </code>
+                if index is not provided where
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  n
+                 </span>
+                </code>
+                is the number
+of statements within the script at the time
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  add_statement()
+                 </span>
+                </code>
+                is called.
+               </p>
+              </li>
+             </ul>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.filter">
+           <code class="sig-name descname">
+            filter
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             as_id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             Union
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ,
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ]
+             </span>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             from_id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             Union
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ,
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ]
+             </span>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_kw
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_obj
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_desc
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_anchor
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_nm
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             excl_kw
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             excl_obj
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             excl_desc
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             excl_anchor
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             excl_nm
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             last
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → ContextManager
+           <span class="p">
+            [
+           </span>
+           <a class="reference internal" href="#snowmobile.core.script.Script" title="snowmobile.core.script.Script">
+            Script
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.filter" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.depth">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            depth
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.depth" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Count of statements in the script.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.lines">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            lines
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.lines" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Number of lines in the script
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.statements">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            statements
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ,
+           </span>
+           Statement
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.statements" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            All statements by index position included in the current context.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.excluded">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            excluded
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.excluded" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            All statements by index position excluded from the current context.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.executed">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            executed
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ,
+           </span>
+           Statement
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.executed" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Executed statements by index position included in the current context.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.statement">
+           <code class="sig-name descname">
+            statement
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             _id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ,
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Any
+           <span class="p">
+            [
+           </span>
+           Statement
+           <span class="p">
+            ,
+           </span>
+           Empty
+           <span class="p">
+            ,
+           </span>
+           Diff
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.statement" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Fetch a single statement by _id.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.reset">
+           <code class="sig-name descname">
+            reset
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             index
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             ctx_id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             in_context
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             scope
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             _filter
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference internal" href="#snowmobile.core.script.Script" title="snowmobile.core.script.Script">
+            Script
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.reset" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Resets indices and scope on all statements to their state as read from source.
+           </p>
+           <p>
+            Invoked before exiting
+            <a class="reference internal" href="#snowmobile.core.script.Script.filter" title="snowmobile.core.script.Script.filter">
+             <code class="xref py py-meth docutils literal notranslate">
+              <span class="pre">
+               filter()
+              </span>
+             </code>
+            </a>
+            context manger to reverse
+the revised indices set by
+            <code class="xref py py-meth docutils literal notranslate">
+             <span class="pre">
+              index_to()
+             </span>
+            </code>
+            and inclusion/
+exclusion scope set by
+            <code class="xref py py-meth docutils literal notranslate">
+             <span class="pre">
+              Statement.Tag.scope()
+             </span>
+            </code>
+            .
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.duplicates">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            duplicates
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ,
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.duplicates" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Dictionary of indistinct statement names/tags within script.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.contents">
+           <code class="sig-name descname">
+            contents
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             by_index
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             ignore_scope
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             markers
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             validate
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           Union
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ,
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <span class="p">
+            ,
+           </span>
+           Statement
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.contents" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Dictionary of all executed statements with option to ignore current
+scope.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.dtl">
+           <code class="sig-name descname">
+            dtl
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             full
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           →
+           <a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">
+            None
+           </a>
+           <a class="headerlink" href="#snowmobile.core.script.Script.dtl" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Prints summary of statements within the current scope to console.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.first_s">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            first_s
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.first_s" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            First statement by index position.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.last_s">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            last_s
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.last_s" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Last statement by index position
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.first">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            first
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Union
+           <span class="p">
+            [
+           </span>
+           Statement
+           <span class="p">
+            ,
+           </span>
+           Empty
+           <span class="p">
+            ,
+           </span>
+           Diff
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.first" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            First statement executed.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.last">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            last
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Union
+           <span class="p">
+            [
+           </span>
+           Statement
+           <span class="p">
+            ,
+           </span>
+           Empty
+           <span class="p">
+            ,
+           </span>
+           Diff
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.last" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Last statement executed.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.doc">
+           <code class="sig-name descname">
+            doc
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             alt_file_nm
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             alt_file_prefix
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             alt_file_suffix
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_markers
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             incl_sql
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             sql_incl_export_disclaimer
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Markup
+           <a class="headerlink" href="#snowmobile.core.script.Script.doc" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Markup object based on current context.
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.ids_from_iterable">
+           <code class="sig-name descname">
+            ids_from_iterable
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             _id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             Union
+             <span class="p">
+              [
+             </span>
+             Tuple
+             <span class="p">
+              ,
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → List
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.ids_from_iterable" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Utility function to get a list of statement IDs given an
+            <cite>
+             _id
+            </cite>
+            .
+           </p>
+           <dl class="simple">
+            <dt>
+             Invoked within script.run() if the
+             <cite>
+              _id
+             </cite>
+             parameter is either a:
+            </dt>
+            <dd>
+             <ol class="arabic simple">
+              <li>
+               <p>
+                tuple of integers (lower and upper bound of statement indices
+to run)
+               </p>
+              </li>
+              <li>
+               <p>
+                list of integers or strings (statement names or indices to run)
+               </p>
+              </li>
+              <li>
+               <p>
+                default=None; returns all statement indices within scope if so
+               </p>
+              </li>
+             </ol>
+            </dd>
+           </dl>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Parameters
+            </dt>
+            <dd class="field-odd">
+             <ul class="simple">
+              <li>
+               <p>
+                <strong>
+                 Union
+                </strong>
+                <strong>
+                 [
+                </strong>
+                <strong>
+                 Tuple
+                </strong>
+                (
+                <em>
+                 _id
+                </em>
+                ) -- _id field provided to script.run() if it's neither an integer
+or a string.
+               </p>
+              </li>
+              <li>
+               <p>
+                <strong>
+                 List
+                </strong>
+                <strong>
+                 ]
+                </strong>
+                -- _id field provided to script.run() if it's neither an integer
+or a string.
+               </p>
+              </li>
+             </ul>
+            </dd>
+            <dt class="field-even">
+             Returns
+            </dt>
+            <dd class="field-even">
+             <p>
+              <em>
+               List[int]
+              </em>
+              --     A list of statement indices to run.
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.run">
+           <code class="sig-name descname">
+            run
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             _id
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ,
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+              int
+             </a>
+             <span class="p">
+              ,
+             </span>
+             Tuple
+             <span class="p">
+              ,
+             </span>
+             List
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             as_df
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_error
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_exception
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             on_failure
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             Optional
+             <span class="p">
+              [
+             </span>
+             <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+              str
+             </a>
+             <span class="p">
+              ]
+             </span>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             None
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             lower
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             True
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             render
+            </span>
+            <span class="p">
+             :
+            </span>
+            <span class="n">
+             <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+              bool
+             </a>
+            </span>
+            <span class="o">
+             =
+            </span>
+            <span class="default_value">
+             False
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="o">
+             **
+            </span>
+            <span class="n">
+             kwargs
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.run" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.s">
+           <code class="sig-name descname">
+            s
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           ,
+           <em class="sig-param">
+            <span class="n">
+             _id
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Statement
+           <a class="headerlink" href="#snowmobile.core.script.Script.s" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Accessor for
+            <a class="reference internal" href="#snowmobile.core.script.Script.statement" title="snowmobile.core.script.Script.statement">
+             <code class="xref py py-meth docutils literal notranslate">
+              <span class="pre">
+               statement()
+              </span>
+             </code>
+            </a>
+            .
+           </p>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.script.Script.st">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            st
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <span class="p">
+            [
+           </span>
+           Union
+           <span class="p">
+            [
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">
+            int
+           </a>
+           <span class="p">
+            ,
+           </span>
+           <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+            str
+           </a>
+           <span class="p">
+            ]
+           </span>
+           <span class="p">
+            ,
+           </span>
+           Statement
+           <span class="p">
+            ]
+           </span>
+           <a class="headerlink" href="#snowmobile.core.script.Script.st" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Accessor for
+            <a class="reference internal" href="#snowmobile.core.script.Script.statements" title="snowmobile.core.script.Script.statements">
+             <code class="xref py py-attr docutils literal notranslate">
+              <span class="pre">
+               statements
+              </span>
+             </code>
+            </a>
+            .
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../scope/index.html" rel="prev" title="snowmobile.core.scope">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.scope
+         </span>
+        </code>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../section/index.html" rel="next" title="snowmobile.core.section">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.section
+         </span>
+        </code>
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>

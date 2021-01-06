@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="python">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="ie=edge" http-equiv="x-ua-compatible"/>
+  <meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+  <meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+  <meta content="en" name="lang:search.language"/>
+  <meta content="True" name="lang:search.pipeline.stopwords"/>
+  <meta content="True" name="lang:search.pipeline.trimmer"/>
+  <meta content="No matching documents" name="lang:search.result.none"/>
+  <meta content="1 matching document" name="lang:search.result.one"/>
+  <meta content="# matching documents" name="lang:search.result.other"/>
+  <meta content="[\s\-]+" name="lang:search.tokenizer"/>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&amp;display=fallback" rel="stylesheet"/>
+  <style>
+   body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+  </style>
+  <link href="../../../../../_static/stylesheets/application.css" rel="stylesheet"/>
+  <link href="../../../../../_static/stylesheets/application-palette.css" rel="stylesheet"/>
+  <link href="../../../../../_static/stylesheets/application-fixes.css" rel="stylesheet"/>
+  <link href="../../../../../_static/fonts/material-icons.css" rel="stylesheet"/>
+  <meta content="#2196f3" name="theme-color"/>
+  <script src="../../../../../_static/javascripts/modernizr.js">
+  </script>
+  <title>
+   snowmobile.core.cfg.loading — Snowmobile
+  </title>
+  <link href="../../../../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/material.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/graphviz.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/copybutton.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../../../_static/panels-variables.15f6f9acc56a35a3d31e1c44b578b17b.css" rel="stylesheet" type="text/css"/>
+  <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js">
+  </script>
+  <script src="../../../../../_static/jquery.js">
+  </script>
+  <script src="../../../../../_static/underscore.js">
+  </script>
+  <script src="../../../../../_static/doctools.js">
+  </script>
+  <script src="../../../../../_static/clipboard.min.js">
+  </script>
+  <script src="../../../../../_static/copybutton.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
+  </script>
+  <link href="../../../../../genindex.html" rel="index" title="Index"/>
+  <link href="../../../../../search.html" rel="search" title="Search"/>
+  <link href="../script/index.html" rel="next" title="snowmobile.core.cfg.script"/>
+  <link href="../extensions/index.html" rel="prev" title="snowmobile.core.cfg.extensions"/>
+ </head>
+ <body data-md-color-accent="cyan" data-md-color-primary="blue" dir="ltr">
+  <svg class="md-svg">
+   <defs data-children-count="0">
+    <svg height="448" id="__github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg">
+     <path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor">
+     </path>
+    </svg>
+   </defs>
+  </svg>
+  <input class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+  <input class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+  <label class="md-overlay" data-md-component="overlay" for="__drawer">
+  </label>
+  <a class="md-skip" href="#autoapi/snowmobile/core/cfg/loading/index" tabindex="1">
+   Skip to content
+  </a>
+  <header class="md-header" data-md-component="header">
+   <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <a class="md-header-nav__button md-logo" href="../../../../../index.html" title="Snowmobile">
+      </a>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
+      </label>
+     </div>
+     <div class="md-flex__cell md-flex__cell--stretch">
+      <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+       <span class="md-header-nav__topic">
+        snowmobile
+       </span>
+       <span class="md-header-nav__topic">
+        snowmobile.core.cfg.loading
+       </span>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <label class="md-icon md-icon--search md-header-nav__button" for="__search">
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+       <label class="md-search__overlay" for="__search">
+       </label>
+       <div class="md-search__inner" role="search">
+        <form action="../../../../../search.html" class="md-search__form" method="GET" name="search">
+         <input autocapitalize="off" autocomplete="off" class="md-search__input" data-md-component="query" data-md-state="active" name="q" placeholder="Search" spellcheck="false" type="text"/>
+         <label class="md-icon md-search__icon" for="__search">
+         </label>
+         <button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+          
+         </button>
+        </form>
+        <div class="md-search__output">
+         <div class="md-search__scrollwrap" data-md-scrollfix="">
+          <div class="md-search-result" data-md-component="result">
+           <div class="md-search-result__meta">
+            Type to start searching
+           </div>
+           <ol class="md-search-result__list">
+           </ol>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="md-flex__cell md-flex__cell--shrink">
+      <div class="md-header-nav__source">
+       <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+        <div class="md-source__icon">
+         <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <use height="24" width="24" xlink:href="#__github">
+          </use>
+         </svg>
+        </div>
+        <div class="md-source__repository">
+         Snowmobile
+        </div>
+       </a>
+      </div>
+     </div>
+     <script src="../../../../../_static/javascripts/version_dropdown.js">
+     </script>
+     <script>
+      var json_loc = "../../../../../"versions.json"",
+        target_loc = "../../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+     </script>
+    </div>
+   </nav>
+  </header>
+  <div class="md-container">
+   <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+     <ul class="md-tabs__list">
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../../index.html">
+        Snowmobile
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../../../../modindex.html">
+        API Reference
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core
+         </span>
+        </code>
+       </a>
+      </li>
+      <li class="md-tabs__item">
+       <a class="md-tabs__link" href="../index.html">
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.cfg
+         </span>
+        </code>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <main class="md-main">
+    <div class="md-main__inner md-grid" data-md-component="container">
+     <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--primary" data-md-level="0">
+         <label class="md-nav__title md-nav__title--site" for="__drawer">
+          <a class="md-nav__button md-logo" href="../../../../../index.html" title="Snowmobile">
+           <img alt=" logo" height="48" src="../../../../../_static/" width="48"/>
+          </a>
+          <a href="../../../../../index.html" title="Snowmobile">
+           snowmobile
+          </a>
+         </label>
+         <div class="md-nav__source">
+          <a class="md-source" data-md-source="github" href="https://github.com/GEM7318/Snowmobile" title="Go to repository">
+           <div class="md-source__icon">
+            <svg height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <use height="24" width="24" xlink:href="#__github">
+             </use>
+            </svg>
+           </div>
+           <div class="md-source__repository">
+            Snowmobile
+           </div>
+          </a>
+         </div>
+         <ul class="md-nav__list">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/connector.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Connector
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/script1.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.Script
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/script1.html#markup-no-results-sql">
+            markup_no_results.sql
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/script1.html#intra-statement-marker">
+            intra-statement-marker
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/script1.html#appendix">
+            Appendix
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/sql.html">
+            <code class="xref py py-class docutils literal notranslate">
+             <span class="pre">
+              snowmobile.SQL
+             </span>
+            </code>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../usage/snowmobile_toml.html">
+            <strong>
+             snowmobile.toml
+            </strong>
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../modindex.html">
+            API Reference
+           </a>
+           <ul class="md-nav__list">
+            <li class="md-nav__item">
+             <a class="md-nav__link" href="../../index.html">
+              <code class="xref py py-mod docutils literal notranslate">
+               <span class="pre">
+                snowmobile.core
+               </span>
+              </code>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../extensions.html">
+            Extensions
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../snippets.html">
+            Snippets
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../authors.html">
+            Authors
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../changelog.html">
+            Changelog
+           </a>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="../../../../../license.html">
+            License
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+      <div class="md-sidebar__scrollwrap">
+       <div class="md-sidebar__inner">
+        <nav class="md-nav md-nav--secondary">
+         <label class="md-nav__title" for="__toc">
+          Contents
+         </label>
+         <ul class="md-nav__list" data-md-scrollfix="">
+          <li class="md-nav__item">
+           <a class="md-nav__link" href="#autoapi-snowmobile-core-cfg-loading-index--page-root">
+            <code class="xref py py-mod docutils literal notranslate">
+             <span class="pre">
+              snowmobile.core.cfg.loading
+             </span>
+            </code>
+           </a>
+           <nav class="md-nav">
+            <ul class="md-nav__list">
+             <li class="md-nav__item">
+              <a class="md-nav__link" href="#module-contents">
+               Module Contents
+              </a>
+              <nav class="md-nav">
+               <ul class="md-nav__list">
+                <li class="md-nav__item">
+                 <a class="md-nav__link" href="#classes">
+                  Classes
+                 </a>
+                 <nav class="md-nav">
+                  <ul class="md-nav__list">
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Put">
+                     Put
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Put.auto_compress">
+                        auto_compress
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Copy">
+                     Copy
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Copy.on_error">
+                        on_error
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Other">
+                     Other
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Other.keep_local">
+                        keep_local
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Other.include_loaded_tmstmp">
+                        include_loaded_tmstmp
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                   <li class="md-nav__item">
+                    <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading">
+                     Loading
+                    </a>
+                    <nav class="md-nav">
+                     <ul class="md-nav__list">
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.include_index">
+                        include_index
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.on_error">
+                        on_error
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.keep_local">
+                        keep_local
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.include_loaded_tmstmp">
+                        include_loaded_tmstmp
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.quote_char">
+                        quote_char
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.auto_compress">
+                        auto_compress
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.overwrite_pre_existing_stage">
+                        overwrite_pre_existing_stage
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.defaults">
+                        defaults
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.put">
+                        put
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.copy_into">
+                        copy_into
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.other">
+                        other
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.export_options">
+                        export_options
+                       </a>
+                      </li>
+                      <li class="md-nav__item">
+                       <a class="md-nav__link" href="#snowmobile.core.cfg.loading.Loading.configured_args">
+                        configured_args
+                       </a>
+                      </li>
+                     </ul>
+                    </nav>
+                   </li>
+                  </ul>
+                 </nav>
+                </li>
+               </ul>
+              </nav>
+             </li>
+            </ul>
+           </nav>
+          </li>
+          <li class="md-nav__item">
+           <a class="md-nav__extra_link" href="../../../../../_sources/autoapi/snowmobile/core/cfg/loading/index.rst.txt">
+            Show Source
+           </a>
+          </li>
+          <li class="md-nav__item" id="searchbox">
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </div>
+     </div>
+     <div class="md-content">
+      <article class="md-content__inner md-typeset" role="main">
+       <span id="snowmobile-core-cfg-loading">
+       </span>
+       <h1 id="autoapi-snowmobile-core-cfg-loading-index--page-root">
+        <a class="reference internal" href="#autoapi-snowmobile-core-cfg-loading-index--page-root" title="snowmobile.core.cfg.loading">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           snowmobile.core.cfg.loading
+          </span>
+         </code>
+        </a>
+        <a class="headerlink" href="#autoapi-snowmobile-core-cfg-loading-index--page-root" title="Permalink to this headline">
+         ¶
+        </a>
+       </h1>
+       <p>
+        Module contains the object model for
+        <strong>
+         snowmobile.toml
+        </strong>
+        .
+       </p>
+       <h2 id="module-contents">
+        Module Contents
+        <a class="headerlink" href="#module-contents" title="Permalink to this headline">
+         ¶
+        </a>
+       </h2>
+       <h3 id="classes">
+        Classes
+        <a class="headerlink" href="#classes" title="Permalink to this headline">
+         ¶
+        </a>
+       </h3>
+       <table class="longtable docutils align-default">
+        <colgroup>
+         <col style="width: 10%"/>
+         <col style="width: 90%"/>
+        </colgroup>
+        <tbody>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.cfg.loading.Put" title="snowmobile.core.cfg.loading.Put">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Put
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Default 'put' statement arguments.
+           </p>
+          </td>
+         </tr>
+         <tr class="row-even">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.cfg.loading.Copy" title="snowmobile.core.cfg.loading.Copy">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Copy
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Default 'copy into' statement arguments
+           </p>
+          </td>
+         </tr>
+         <tr class="row-odd">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.cfg.loading.Other" title="snowmobile.core.cfg.loading.Other">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Other
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Default output-file options
+           </p>
+          </td>
+         </tr>
+         <tr class="row-even">
+          <td>
+           <p>
+            <a class="reference internal" href="#snowmobile.core.cfg.loading.Loading" title="snowmobile.core.cfg.loading.Loading">
+             <code class="xref py py-obj docutils literal notranslate">
+              <span class="pre">
+               Loading
+              </span>
+             </code>
+            </a>
+           </p>
+          </td>
+          <td>
+           <p>
+            Default settings to use when loading data.
+           </p>
+          </td>
+         </tr>
+        </tbody>
+       </table>
+       <dl class="py class">
+        <dt id="snowmobile.core.cfg.loading.Put">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.cfg.loading.
+         </code>
+         <code class="sig-name descname">
+          Put
+         </code>
+         <a class="headerlink" href="#snowmobile.core.cfg.loading.Put" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../base/index.html#snowmobile.core.cfg.base.Base" title="snowmobile.core.cfg.base.Base">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.cfg.base.Base
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Default 'put' statement arguments.
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Put.auto_compress">
+           <code class="sig-name descname">
+            auto_compress
+           </code>
+           <em class="property">
+            :bool
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Put.auto_compress" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+       <dl class="py class">
+        <dt id="snowmobile.core.cfg.loading.Copy">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.cfg.loading.
+         </code>
+         <code class="sig-name descname">
+          Copy
+         </code>
+         <a class="headerlink" href="#snowmobile.core.cfg.loading.Copy" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../base/index.html#snowmobile.core.cfg.base.Base" title="snowmobile.core.cfg.base.Base">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.cfg.base.Base
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Default 'copy into' statement arguments
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Copy.on_error">
+           <code class="sig-name descname">
+            on_error
+           </code>
+           <em class="property">
+            :str
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Copy.on_error" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+       <dl class="py class">
+        <dt id="snowmobile.core.cfg.loading.Other">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.cfg.loading.
+         </code>
+         <code class="sig-name descname">
+          Other
+         </code>
+         <a class="headerlink" href="#snowmobile.core.cfg.loading.Other" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../base/index.html#snowmobile.core.cfg.base.Base" title="snowmobile.core.cfg.base.Base">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.cfg.base.Base
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Default output-file options
+         </p>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Other.keep_local">
+           <code class="sig-name descname">
+            keep_local
+           </code>
+           <em class="property">
+            :bool
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Other.keep_local" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Other.include_loaded_tmstmp">
+           <code class="sig-name descname">
+            include_loaded_tmstmp
+           </code>
+           <em class="property">
+            :bool
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Other.include_loaded_tmstmp" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+       <dl class="py class">
+        <dt id="snowmobile.core.cfg.loading.Loading">
+         <em class="property">
+          class
+         </em>
+         <code class="sig-prename descclassname">
+          snowmobile.core.cfg.loading.
+         </code>
+         <code class="sig-name descname">
+          Loading
+         </code>
+         <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading" title="Permalink to this definition">
+          ¶
+         </a>
+        </dt>
+        <dd>
+         <p>
+          Bases:
+          <a class="reference internal" href="../base/index.html#snowmobile.core.cfg.base.Base" title="snowmobile.core.cfg.base.Base">
+           <code class="xref py py-class docutils literal notranslate">
+            <span class="pre">
+             snowmobile.core.cfg.base.Base
+            </span>
+           </code>
+          </a>
+         </p>
+         <p>
+          Default settings to use when loading data.
+         </p>
+         <dl class="py attribute">
+          <dt>
+           <code class="sig-name descname">
+            default-file-format
+           </code>
+          </dt>
+          <dd>
+           <p>
+            Name of file-format to use when loading data into the warehouse;
+default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              snowmobile_default_csv
+             </span>
+            </code>
+            ;
+which will be created and
+dropped afterwards if an existing file format is not specified;
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               str
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.include_index">
+           <code class="sig-name descname">
+            include_index
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.include_index" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Include the index of a DataFrame when loading it into a table;
+default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              False
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.on_error">
+           <code class="sig-name descname">
+            on_error
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.on_error" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Action to take if an error is encountered when loading data into
+the warehouse; default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              continue
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.keep_local">
+           <code class="sig-name descname">
+            keep_local
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.keep_local" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Option to keep the local file exported when loading into a
+staging table; default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              False
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.include_loaded_tmstmp">
+           <code class="sig-name descname">
+            include_loaded_tmstmp
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.include_loaded_tmstmp" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Include a
+            <strong>
+             loaded_tmstmp
+            </strong>
+            column when loading a DataFrame into
+the warehouse; default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              True
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.quote_char">
+           <code class="sig-name descname">
+            quote_char
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.quote_char" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Quote character to use for delimited files; default is double
+quotes (
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              "
+             </span>
+            </code>
+            ).
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)">
+               str
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.auto_compress">
+           <code class="sig-name descname">
+            auto_compress
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.auto_compress" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Auto-compress file when loading data; default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              True
+             </span>
+            </code>
+            ..
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.overwrite_pre_existing_stage">
+           <code class="sig-name descname">
+            overwrite_pre_existing_stage
+           </code>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.overwrite_pre_existing_stage" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Overwrite pre-existing staging table if data is being appended
+into an existing table/the staging table already exists; default is
+            <code class="docutils literal notranslate">
+             <span class="pre">
+              True
+             </span>
+            </code>
+            .
+           </p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             Type
+            </dt>
+            <dd class="field-odd">
+             <p>
+              <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)">
+               bool
+              </a>
+             </p>
+            </dd>
+           </dl>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.defaults">
+           <code class="sig-name descname">
+            defaults
+           </code>
+           <em class="property">
+            :Dict
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.defaults" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.put">
+           <code class="sig-name descname">
+            put
+           </code>
+           <em class="property">
+            :Put
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.put" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.copy_into">
+           <code class="sig-name descname">
+            copy_into
+           </code>
+           <em class="property">
+            :Copy
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.copy_into" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.other">
+           <code class="sig-name descname">
+            other
+           </code>
+           <em class="property">
+            :Other
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.other" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py attribute">
+          <dt id="snowmobile.core.cfg.loading.Loading.export_options">
+           <code class="sig-name descname">
+            export_options
+           </code>
+           <em class="property">
+            :Dict[str, Dict]
+           </em>
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.export_options" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+          </dd>
+         </dl>
+         <dl class="py method">
+          <dt id="snowmobile.core.cfg.loading.Loading.configured_args">
+           <em class="property">
+            property
+           </em>
+           <code class="sig-name descname">
+            configured_args
+           </code>
+           <span class="sig-paren">
+            (
+           </span>
+           <em class="sig-param">
+            <span class="n">
+             self
+            </span>
+           </em>
+           <span class="sig-paren">
+            )
+           </span>
+           → Dict
+           <a class="headerlink" href="#snowmobile.core.cfg.loading.Loading.configured_args" title="Permalink to this definition">
+            ¶
+           </a>
+          </dt>
+          <dd>
+           <p>
+            Placeholder for configuration arguments of derived classes.
+           </p>
+          </dd>
+         </dl>
+        </dd>
+       </dl>
+      </article>
+     </div>
+    </div>
+   </main>
+  </div>
+  <footer class="md-footer">
+   <div class="md-footer-nav">
+    <nav class="md-footer-nav__inner md-grid">
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../extensions/index.html" rel="prev" title="snowmobile.core.cfg.extensions">
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-back md-footer-nav__button">
+       </i>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Previous
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.cfg.extensions
+         </span>
+        </code>
+       </span>
+      </div>
+     </a>
+     <a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../script/index.html" rel="next" title="snowmobile.core.cfg.script">
+      <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+       <span class="md-flex__ellipsis">
+        <span class="md-footer-nav__direction">
+         Next
+        </span>
+        <code class="xref py py-mod docutils literal notranslate">
+         <span class="pre">
+          snowmobile.core.cfg.script
+         </span>
+        </code>
+       </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+       <i class="md-icon md-icon--arrow-forward md-footer-nav__button">
+       </i>
+      </div>
+     </a>
+    </nav>
+   </div>
+   <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+     <div class="md-footer-copyright">
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script src="../../../../../_static/javascripts/application.js">
+  </script>
+  <script>
+   app.initialize({version: "1.0.4", url: {base: ".."}})
+  </script>
+ </body>
+</html>
