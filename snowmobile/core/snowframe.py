@@ -172,6 +172,17 @@ class SnowFrame(Snowmobile):
         )
         return self._obj
 
+    def append_dupe_suffix(self):
+        """Adds a trailing index number '_i' to duplicate column names."""
+        cols = pd.Series(self._obj.columns)
+        for dupe_col in cols[cols.duplicated()].unique():
+            dupe_indices = cols[cols == dupe_col].index.values.tolist()
+            cols[dupe_indices] = [
+                f"{dupe_col}_{i}" if i != 0
+                else dupe_col for i in range(sum(cols == dupe_col))
+            ]
+        self._obj.columns = cols
+
     def to_list(self, col: Optional[str] = None, n: Optional[int] = None) -> List:
         """Succinctly retrieves a column as a list.
 
@@ -210,6 +221,11 @@ class SnowFrame(Snowmobile):
             [c.current for c in self.cols if c.src == "original"]
         ]
         return df.rename(columns={c.current: c.original for c in self.cols})
+
+    @property
+    def has_dupes(self) -> bool:
+        """DataFrame has duplicate column names."""
+        return len(set(self._obj.columns)) != len(list(self._obj.columns))
 
     def cols_matching(
         self, patterns: List[str], ignore_patterns: List[str] = None
