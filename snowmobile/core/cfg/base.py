@@ -1,7 +1,7 @@
 """
 Configuration and Base classes from which all objects in snowmobile's
 configuration model are derived (i.e. ``snowmobile.toml`` and
-``snowmobile_backend.toml``.)
+``snowmobile_ext.toml``.)
 """
 from __future__ import annotations
 
@@ -68,6 +68,21 @@ class Config:
 
 class Base(BaseModel, Config):
     """Base class for object model parsed from ``snowmobile.toml``."""
+
+    @property
+    def configured_args(self) -> Dict:
+        """Placeholder for configuration arguments of derived classes."""
+        return dict()
+
+    def kwarg(self, arg_nm: str, arg_val: Any, arg_typ: Any) -> Any:
+        """Compares a provided keyword argument to a configured keyword argument."""
+        if isinstance(arg_val, arg_typ):
+            return arg_val
+        return (
+            self.configured_args.get(arg_nm)
+            if arg_nm in self.configured_args
+            else arg_val
+        )
 
     def from_relative(self, obj: Any):
         """Updates current object's attributes with those from a different

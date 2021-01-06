@@ -25,8 +25,19 @@
         authenticator = 'snowflake'
         timezone = 'America/Chicago'
 
+# TODO: Change to just 'loading'
 [loading-defaults]
-    default-file-format = 'snowmobile_default_psv'
+
+    [loading-defaults.default-table-kwargs]
+        file_format = 'snowmobile_default_psv'
+        validate_table = true
+        validate_format = true
+        if_exists = 'append'
+        keep_local = false
+        reformat_cols = true
+        upper_case_cols = true
+        check_dupes = true
+        load_copy = true
 
     [loading-defaults.put]
         auto_compress = true
@@ -45,10 +56,6 @@
             header = false
             quotechar = '"'
             sep = "|"
-
-    [loading-defaults.other]
-        include-loaded-timestamp = true
-        keep-local-file-after-load = false
 
 [script]
     export-dir-name = '.snowmobile'

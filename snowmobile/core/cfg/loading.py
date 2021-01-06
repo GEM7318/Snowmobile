@@ -70,11 +70,8 @@ class Loading(Base):
     """
 
     # fmt: off
-    default_file_format: str = Field(
-        default_factory=str, alias="default-file-format"
-    )
-    default_if_exists: str = Field(
-        alias="default-if-exists-behavior"
+    defaults: Dict = Field(
+        default_factory=dict, alias="default-table-kwargs"
     )
     put: Put = Field(
         default_factory=Put, alias="put"
@@ -89,3 +86,8 @@ class Loading(Base):
         default_factory=dict, alias="export-options"
     )
     # fmt: on
+
+    @property
+    def configured_args(self) -> Dict:
+        """Placeholder for configuration arguments of derived classes."""
+        return self.defaults
