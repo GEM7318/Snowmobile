@@ -13,7 +13,7 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import Snowmobile, SQL, Connector, Script, errors
+from . import Snowmobile, SQL, Connector, Script, errors, ExceptionHandler
 from .paths import DDL_DEFAULT_PATH
 
 
@@ -30,16 +30,62 @@ class Table(Snowmobile):
         path_ddl: Optional[Path] = None,
         path_output: Optional[str, Path] = None,
         file_format: Optional[str] = None,
-        incl_tmstmp: bool = True,
+        incl_tmstmp: Optional[bool] = None,
         tmstmp_col_nm: Optional[str] = None,
-        reformat_cols: bool = True,
-        validate_format: bool = True,
-        upper_case_cols: bool = True,
-        lower_case_table: Optional[bool] = False,
-        keep_local: bool = False,
+        reformat_cols: Optional[bool] = None,
+        validate_format: Optional[bool] = None,
+        validate_table: Optional[bool] = None,
+        upper_case_cols: Optional[bool] = None,
+        lower_case_table: Optional[bool] = None,
+        keep_local: Optional[bool] = None,
         on_error: Optional[str] = None,
+        check_dupes: Optional[bool] = None,
+        load_copy: Optional[bool] = None,
+
     ):
         super().__init__()
+
+        # combine kwargs + snowmobile.toml
+        # --------------------------------
+        if_exists = sn.cfg.loading.kwarg(
+            arg_nm='if_exists', arg_val=if_exists, arg_typ=str,
+        )
+        file_format = sn.cfg.loading.kwarg(
+            arg_nm='file_format', arg_val=file_format, arg_typ=str,
+        )
+        incl_tmstmp = sn.cfg.loading.kwarg(
+            arg_nm='incl_tmstmp', arg_val=incl_tmstmp, arg_typ=bool,
+        )
+        tmstmp_col_nm = sn.cfg.loading.kwarg(
+            arg_nm='tmstmp_col_nm', arg_val=tmstmp_col_nm, arg_typ=str,
+        ) or 'loaded_tmstmp'
+        reformat_cols = sn.cfg.loading.kwarg(
+            arg_nm='reformat_cols', arg_val=reformat_cols, arg_typ=bool,
+        )
+        validate_format = sn.cfg.loading.kwarg(
+            arg_nm='validate_format', arg_val=validate_format, arg_typ=bool,
+        )
+        validate_table = sn.cfg.loading.kwarg(
+            arg_nm='validate_table', arg_val=validate_table, arg_typ=bool,
+        )
+        upper_case_cols = sn.cfg.loading.kwarg(
+            arg_nm='upper_case_cols', arg_val=upper_case_cols, arg_typ=bool,
+        )
+        lower_case_table = sn.cfg.loading.kwarg(
+            arg_nm='lower_case_table', arg_val=lower_case_table, arg_typ=bool,
+        )
+        keep_local = sn.cfg.loading.kwarg(
+            arg_nm='keep_local', arg_val=keep_local, arg_typ=bool,
+        )
+        on_error = sn.cfg.loading.kwarg(
+            arg_nm='on_error', arg_val=on_error, arg_typ=str,
+        )
+        check_dupes = sn.cfg.loading.kwarg(
+            arg_nm='check_dupes', arg_val=check_dupes, arg_typ=bool,
+        )
+        copy = sn.cfg.loading.kwarg(
+            arg_nm='load_copy', arg_val=load_copy, arg_typ=bool,
+        )
 
         # sql generation and execution
         # ----------------------------
@@ -47,6 +93,7 @@ class Table(Snowmobile):
 
         # flow control
         # ------------
+        self.e = ExceptionHandler(within=self).set(ctx_id=-1)
         self.msg: str = str()
         self.error: Any[
             errors.LoadingInternalError,
@@ -58,6 +105,7 @@ class Table(Snowmobile):
 
         # dataframe / table information
         # -----------------------------
+        df = df.copy(deep=True) if copy else df
         self.df = df.snf.upper() if upper_case_cols else df
         self.name: str = table.upper() if not lower_case_table else table
         self._exists: bool = bool()
@@ -67,10 +115,11 @@ class Table(Snowmobile):
         # --------------------------------
         self.path_ddl = path_ddl or DDL_DEFAULT_PATH
         self.path_output = path_output or Path.cwd() / f"{table}.csv"
-        self.keep_local = keep_local or sn.cfg.loading.other.keep_local
-        self.on_error = on_error or sn.cfg.loading.copy_into.on_error
-        self.file_format = file_format or sn.cfg.loading.default_file_format
-        self.if_exists = if_exists or sn.cfg.loading.default_if_exists
+        self.keep_local = keep_local
+        self.on_error = on_error
+        self.file_format = file_format
+        self.if_exists = if_exists
+        self.validate_table = validate_table
 
         # time tracking
         # -------------
@@ -107,10 +156,15 @@ class Table(Snowmobile):
                 col_nm=col_nm.upper() if upper_case_cols else col_nm.lower()
             )
 
-        # column formatting
-        # -----------------
+        # standard column formatting
+        # --------------------------
         if reformat_cols:
             self.df.snf.reformat()
+
+        # duplicate column reformatting
+        # -----------------------------
+        if check_dupes and self.df.snf.has_dupes:
+            self.df.snf.append_dupe_suffix()
 
         # other
         # -----
@@ -208,7 +262,9 @@ class Table(Snowmobile):
                 f"provided; please provide 'replace', 'append', or "
                 f"'truncate' to continue loading with a pre-existing table."
             )
-            self.error = errors.ExistingTableError(msg=self.msg)
+            e = errors.ExistingTableError(msg=self.msg, to_raise=True)
+            self.e.collect(e)
+            self.error = e
 
         elif self.cols_match and if_exists == "append":
             self.msg = (
@@ -237,7 +293,9 @@ class Table(Snowmobile):
                 f" provide if_exists='replace' to overwrite the existing table "
                 f"or see `table.col_diff` to inspect the mismatched columns."
             )
-            self.error = errors.ColumnMismatchError(msg=self.msg)
+            e = errors.ColumnMismatchError(msg=self.msg, to_raise=True)
+            self.error = e
+            self.e.collect(e)
 
         elif not self.cols_match:
             self.msg = (
@@ -252,16 +310,17 @@ class Table(Snowmobile):
                 f"Unknown combination of arguments passed to "
                 f"``loadable.to_table()``."
             )
-            self.error = errors.LoadingInternalError(msg=self.msg)
+            e = errors.LoadingInternalError(msg=self.msg, to_raise=True)
+            self.error = e
+            self.e.collect(e)
 
         self._upload_validation_end = time.time()
 
     def load(
         self,
         if_exists: Optional[str] = None,
-        verbose: bool = True,
         from_script: Path = None,
-        validate: bool = True,
+        verbose: bool = True,
         **kwargs,
     ) -> Table:
 
@@ -273,10 +332,15 @@ class Table(Snowmobile):
             )
 
         # check for table existence; validate if so, all respecting `if_exists`
-        if validate:
+        if self.validate_table:
             self.validate(if_exists=if_exists)
             if self.error:
                 raise self.error
+            # if self.e.seen(to_raise=True):
+            #     if self.on_error != 'c':
+            #         raise self.e.get(to_raise=True, last=True)
+            #     else:
+            #         return self
 
         try:
             self._stdout_starting(verbose)
@@ -293,12 +357,16 @@ class Table(Snowmobile):
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             self.loaded = False
             raise e
+            # self.e.collect(e=e)
+            # if self.on_error != 'c':
+            #     raise e
 
         finally:
             self._load_end = time.time()
             self.sql.drop(nm=f"{self.name}_stage", obj="stage")  # drop stage
             if not self.keep_local:
                 os.remove(str(self.path_output))
+            self.df = self.df.snf.original  # revert to original form
             self._stdout_time(verbose=(not kwargs.get("silence") and self.loaded))
 
         return self

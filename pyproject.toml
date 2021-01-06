@@ -93,11 +93,6 @@ source = ['snowmobile']
 include = ['snowmobile']
 branch = true
 
-#[tool.coverage.codecov]
-#source = ['snowmobile']
-#branch = '0.2.1'
-#require_ci_to_pass = false
-
 [tool.coverage.report]
 fail_under = 80
 show_missing = true
