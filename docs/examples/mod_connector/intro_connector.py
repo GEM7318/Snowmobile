@@ -7,26 +7,26 @@ import snowmobile
 sn = snowmobile.Connect()
 sn2 = snowmobile.Connect(creds="creds1")
 
-sn.cfg.connection.current == sn2.cfg.connection.current  # > True
-sn.sql.current("schema") == sn2.sql.current("schema")  # > True
-sn.sql.current("session") == sn2.sql.current("session")  # > False
+sn.cfg.connection.current == sn2.cfg.connection.current  #> True
+sn.sql.current("schema") == sn2.sql.current("schema")    #> True
+sn.sql.current("session") == sn2.sql.current("session")  #> False
 
-type(sn)  # > snowmobile.core.connector.Connector
+type(sn)         #> snowmobile.core.connector.Connector
 
-type(sn.cfg)  # > snowmobile.core.configuration.Configuration
-str(sn.cfg)  # > snowmobile.Configuration('snowmobile.toml')
+type(sn.cfg)     #> snowmobile.core.configuration.Configuration
+str(sn.cfg)      #> snowmobile.Configuration('snowmobile.toml')
 
-type(sn.con)  # > snowflake.connector.connection.SnowflakeConnection
-type(sn.cursor)  # > snowflake.connector.cursor.SnowflakeCursor
+type(sn.con)     #> snowflake.connector.connection.SnowflakeConnection
+type(sn.cursor)  #> snowflake.connector.cursor.SnowflakeCursor
 
 df1 = sn.query("select 1")  #  == pd.read_sql()
-type(df1)  # > pandas.core.frame.DataFrame
+type(df1)                   #> pandas.core.frame.DataFrame
 
-cur1 = sn.ex("select 1")  #  == SnowflakeConnection.cursor().execute()
-type(cur1)  # > snowflake.connector.cursor.SnowflakeCursor
+cur1 = sn.ex("select 1")    #  == SnowflakeConnection.cursor().execute()
+type(cur1)                  #> snowflake.connector.cursor.SnowflakeCursor
 
 dcur1 = sn.exd("select 1")  #  == SnowflakeConnection.cursor(DictCursor).execute()
-type(dcur1)  # > snowflake.connector.DictCursor
+type(dcur1)                 #> snowflake.connector.DictCursor
 
 
 import pandas as pd
@@ -39,9 +39,9 @@ from snowflake.connector import DictCursor
 
 dcur2 = sn.con.cursor(cursor_class=DictCursor).execute("select 1")
 
-print(df2.equals(df1))  # > True
-print(cur1.fetchone() == cur2.fetchone())  # > True
-print(dcur1.fetchone() == dcur2.fetchone())  # > True
+print(df2.equals(df1))                       #> True
+print(cur1.fetchone() == cur2.fetchone())    #> True
+print(dcur1.fetchone() == dcur2.fetchone())  #> True
 
 cur1 = sn.cursor.execute("select 1")
 cur2 = sn.cursor.execute("select 2")
@@ -50,7 +50,7 @@ cursor = sn.cursor
 cur11 = cursor.execute("select 1")
 cur22 = cursor.execute("select 2")
 
-id(cur1) == id(cur2)  # > False
-id(cur11) == id(cur22)  # > True
+id(cur1) == id(cur2)    #> False
+id(cur11) == id(cur22)  #> True
 
-# -- standalone example; should run 'as is' --
+# -- freestanding example; should run 'as is' --

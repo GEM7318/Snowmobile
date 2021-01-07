@@ -7,7 +7,7 @@ import csv
 import os
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -95,12 +95,6 @@ class Table(Snowmobile):
         # ------------
         self.e = ExceptionHandler(within=self).set(ctx_id=-1)
         self.msg: str = str()
-        self.error: Any[
-            errors.LoadingInternalError,
-            errors.ExistingTableError,
-            errors.ColumnMismatchError,
-            errors.FileFormatNameError,
-        ] = None
         self.requires_sql: bool = bool()
 
         # dataframe / table information
@@ -246,7 +240,7 @@ class Table(Snowmobile):
                 in from :meth:`table.load()` by default.
 
         """
-        self.error = None  # wipe prior validation results
+        self.e.set(ctx_id=-1)  # reset error handler to new context
         self._upload_validation_start = time.time()
 
         if not self.exists:  # no validation needed
@@ -264,7 +258,6 @@ class Table(Snowmobile):
             )
             e = errors.ExistingTableError(msg=self.msg, to_raise=True)
             self.e.collect(e)
-            self.error = e
 
         elif self.cols_match and if_exists == "append":
             self.msg = (
@@ -294,7 +287,6 @@ class Table(Snowmobile):
                 f"or see `table.col_diff` to inspect the mismatched columns."
             )
             e = errors.ColumnMismatchError(msg=self.msg, to_raise=True)
-            self.error = e
             self.e.collect(e)
 
         elif not self.cols_match:
@@ -311,7 +303,6 @@ class Table(Snowmobile):
                 f"``loadable.to_table()``."
             )
             e = errors.LoadingInternalError(msg=self.msg, to_raise=True)
-            self.error = e
             self.e.collect(e)
 
         self._upload_validation_end = time.time()
@@ -334,13 +325,11 @@ class Table(Snowmobile):
         # check for table existence; validate if so, all respecting `if_exists`
         if self.validate_table:
             self.validate(if_exists=if_exists)
-            if self.error:
-                raise self.error
-            # if self.e.seen(to_raise=True):
-            #     if self.on_error != 'c':
-            #         raise self.e.get(to_raise=True, last=True)
-            #     else:
-            #         return self
+            if self.e.seen(to_raise=True):
+                if self.on_error != 'c':
+                    raise self.e.get(to_raise=True, last=True)
+                else:
+                    return self
 
         try:
             self._stdout_starting(verbose)
@@ -356,10 +345,9 @@ class Table(Snowmobile):
 
         except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
             self.loaded = False
-            raise e
-            # self.e.collect(e=e)
-            # if self.on_error != 'c':
-            #     raise e
+            self.e.collect(e=e)
+            if self.on_error != 'c':
+                raise e
 
         finally:
             self._load_end = time.time()

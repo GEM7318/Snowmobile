@@ -1,0 +1,2 @@
+# {class}`snowmobile.Table`
+

@@ -21,4 +21,4 @@ assert (
     "default-creds = ''" in snowmobile_toml_raw
 ), "Value of 'default-creds' has been altered from default"
 
-# --/ stand-alone example; should run 'as is' /--
+# --/ freestanding example; should run 'as is' /--

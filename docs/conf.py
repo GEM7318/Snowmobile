@@ -1,3 +1,4 @@
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -8,7 +9,8 @@ import sys
 
 from pathlib import Path
 
-# import management
+# -- Import Management --------------------------------------------------------
+
 sys.path.append(".")
 
 HERE = Path(__file__).absolute()
@@ -29,10 +31,10 @@ for dir_name, dir_path in to_insert.items():
     print(f"<added-to-path> {dir_name}")
 
 
-# -- hyperlink aliasing/xref --------------------------------------------------
-# note:
-#   See docstring in ext/xref.py for more info
-# from .ext import xref  # imported by 'extensions' but included for clarity
+# -- Xref Extension -----------------------------------------------------------
+
+# note: see docstring in ext/xref.py for more info
+
 # noinspection PyUnresolvedReferences
 from links.link import *
 
@@ -40,9 +42,8 @@ from links.link import *
 from links import *
 
 
-# ============================
-# staple configuration options
-# ============================
+# -- Standard Options ---------------------------------------------------------
+
 source_suffix = [".rst", ".md"]
 
 extensions = [
@@ -66,12 +67,12 @@ language = "python"
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "__main__.py", "__init__.py"]
 
-
 nbsphinx_execute = "never"
 nbsphinx_kernel_name = "snowmobile3"
 
 
 # Project Information ---------------------------------------------------------
+
 # from snowmobile import __version__
 version = "0.0.15"
 
@@ -86,6 +87,7 @@ release = version
 
 
 # Sphinx Panels ---------------------------------------------------------------
+
 # https://sphinx-panels.readthedocs.io/en/latest/
 
 html_css_files = [
@@ -95,16 +97,16 @@ panels_add_bootstrap_css = True  # required for color in icons/etc
 panels_add_fontawesome_latex = True
 
 panels_css_variables = {
-    "tabs-color-label-active": "hsla(231, 99%, 66%, 1)",
-    "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
+    "tabs-color-label-active": "rgba(33, 150, 243, 1)",
+    "tabs-color-label-inactive": "rgba(33, 150, 243, 0.55)",
+    # "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
     "tabs-color-overline": "rgb(207, 236, 238)",
     "tabs-color-underline": "rgb(207, 236, 238)",
-    # "tabs-size-label": "1rem",
     "tabs-size-label": "0.85rem",
-    # "tabs-size-label": "0.75rem",
 }
 
 # MySt ------------------------------------------------------------------------
+
 # https://myst-parser.readthedocs.io/en/latest/
 
 myst_heading_anchors = 5  # auto generate anchor slugs for h1-h5
@@ -128,10 +130,10 @@ myst_enable_extensions = [
 myst_url_schemes = ("http", "https", "mailto")
 
 
-# =====================
-# AutoAPI configuration
+# -- AutoAPI ------------------------------------------------------------------
+
 # https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html
-# =====================
+
 autoapi_add_toctree_entry = False
 autoapi_type = "python"
 autoapi_dirs = ["../snowmobile"]
@@ -144,15 +146,16 @@ autoapi_ignore = [
 ]
 autoapi_python_class_content = "class"  # 'both' if __init__ as well
 autoapi_member_order = "bysource"  # 'bysource' or 'groupwise'
-# ..note:
-#   'bysource' means 'by docstring order' for attributes and 'by actual source'
-#   for methods and properties.
+"""
+    'bysource' means 'by docstring order' for attributes and 'by actual source'
+    for methods and properties.
+"""
 
 
-# ===================================
-# sphinx material/html theme settings
+# Sphinx Material / HTML Theme ------------------------------------------------
+
 # https://bashtage.github.io/sphinx-material/
-# ===================================
+
 import sphinx_material
 
 html_show_sourcelink = True
@@ -162,11 +165,8 @@ extensions.append("sphinx_material")
 html_theme_path = sphinx_material.html_theme_path()
 html_context = sphinx_material.get_html_context()
 html_theme = "sphinx_material"
-
-# Set link name generated in the top bar.
 html_title = "Snowmobile"
 
-# Material theme options (see theme.conf for more information)
 html_theme_options = {
     # 'google_analytics_account': 'UA-XXXXX',
     # 'logo_icon': '&#xe869',
@@ -177,7 +177,7 @@ html_theme_options = {
     "globaltoc_collapse": True,
     "globaltoc_includehidden": True,
     "repo_url": "https://github.com/GEM7318/Snowmobile",
-    "repo_name": "Snowmobile",
+    "repo_name": "gem7318/snowmobile",
     "nav_title": "snowmobile",
     "color_primary": "blue",
     "color_accent": "cyan",
@@ -185,13 +185,11 @@ html_theme_options = {
     "body_max_width": None,
 }
 
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-# Napoleon settings
+
+# Napoleon --------------------------------------------------------------------
+
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 
@@ -254,7 +252,8 @@ html_show_copyright = False
 # https://sublime-and-sphinx-guide.readthedocs.io/en/latest/code_blocks.html
 pygments_style = "sphinx"
 
-# -- External mapping ------------------------------------------------------------
+# -- External URLs ------------------------------------------------------------
+
 python_version = ".".join(map(str, sys.version_info[0:2]))
 
 intersphinx_mapping = {
@@ -276,9 +275,6 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
 }
 
-# Adding so that __init__ will be documented - source is from link below:
-# https://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
-
 
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
@@ -291,3 +287,5 @@ def autoapi_skip_member(app, what, name, obj, skip, options):
 def setup(app):
     """Add autoapi-skip-member."""
     app.connect("autoapi-skip-member", autoapi_skip_member)
+    app.add_css_file('css/friendly.css')
+

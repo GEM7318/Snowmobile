@@ -7,4 +7,4 @@ from pathlib import Path
 
 snowmobile.Configuration(export_dir=Path.cwd())
 
-# -- standalone example; should run 'as is' --
+# -- freestanding example; should run 'as is' --

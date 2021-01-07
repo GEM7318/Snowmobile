@@ -142,7 +142,7 @@ class Connector(Snowmobile):
             self.con = connect(
                 **{
                     **self.cfg.connection.connect_kwargs,  # snowmobile.toml
-                    **kwargs,  # .toml over-rides/additional
+                    **kwargs,  # any kwarg over-rides
                 }
             )
             self.sql = sql.SQL(sn=self)
@@ -172,6 +172,8 @@ class Connector(Snowmobile):
             self.connect()
         return self.con.cursor()
 
+    # TODO: check type hint in source code for SnowflakeConnector.cursor()
+    #  method; shouldn't it be Union[SnowflakeCursor, DictCursor]?
     # noinspection PydanticTypeChecker,PyTypeChecker
     @property
     def dictcursor(self) -> DictCursor:
@@ -224,7 +226,6 @@ class Connector(Snowmobile):
         except ProgrammingError as e:
             self._exception(e=e, _id=1, _raise=on_error != "c")
 
-    # TODO: Change as_df to 'as' where default = 'df' and options are 'cur', 'dcur'
     def query(
         self,
         sql: str,

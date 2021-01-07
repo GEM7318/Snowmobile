@@ -15,11 +15,12 @@ A library built to streamline interacting with {xref}`snowflake` through Python.
 ```{eval-rst}
 
 .. toctree::
-  :maxdepth: 3
+  :maxdepth: 2
   :hidden:
 
   ./usage/connector.md
-  ./usage/script1.md
+  ./usage/table.md
+  ./usage/script.md
   ./usage/sql.md
   ./usage/snowmobile_toml.md
   ./modindex.md

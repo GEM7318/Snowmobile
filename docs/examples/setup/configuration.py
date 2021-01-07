@@ -38,4 +38,4 @@ cur2 = sn.con.cursor().execute("select 1")
 print(df2.equals(df1))  # > True
 print(cur1.fetchone() == cur2.fetchone())  # > True
 
-# -- standalone example; should run 'as is' --
+# -- freestanding example; should run 'as is' --

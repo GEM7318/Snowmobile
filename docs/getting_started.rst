@@ -55,5 +55,5 @@ Successful setup and connection results in ending console output similar to:.
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
     ..connected: snowmobile.Connect(creds='creds1')
 
-:link-badge:`./usage/connector_basics.html#executing-raw-sql,cls=badge-primary badge-pill text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
-:link-badge:`./usage/connector_basics.html#connecting-to-snowflake,cls=badge-danger text-white,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
+:link-badge:`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
+:link-badge:`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`

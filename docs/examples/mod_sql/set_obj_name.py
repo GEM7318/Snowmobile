@@ -25,4 +25,4 @@ except ValueError as e:
     raise
 # stdout> 'drop table sandbox.DEMO_TABLE'
 
-# --/ stand-alone example; should run 'as is' /--
+# --/ freestanding example; should run 'as is' /--
