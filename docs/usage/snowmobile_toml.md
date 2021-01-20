@@ -46,13 +46,30 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 
 ````
 
+% indentation for glossary
+
+<style>
+.tabbed-set.docutils {
+    margin-bottom: unset;
+    margin-top: 0;
+}
+
+.tabbed-content.docutils {
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    border-top: unset;
+}
+</style>
+
 ## Glossary
 
 (connection)=
+````{rst-class} sn-glossary
 ```{tabbed} [connection]
 :new-group:
 *All configuration options for establishing connections to {xref}`snowflake`*
 ```
+````
 
 (connection.default-creds)=
 ```{tabbed} default-creds

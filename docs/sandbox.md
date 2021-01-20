@@ -26,6 +26,16 @@ Special paragraph.
 
 +++
 
+````{rst-class} test-custom
+````
+```{tabbed} [connection]
+*All configuration options for establishing connections to {xref}`snowflake`*
+```
+
+
+
++++
+
 By providing {class}`script` (below) the same instance of {class}`sn` with which {class}`t1` (above)
 was instantiated, **the {xref}`SnowflakeConnection` and [Configuration](./usage/snowmobile_toml.md) is
 shared amongst:**

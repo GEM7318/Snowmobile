@@ -28,8 +28,6 @@ ul.md-source__facts  li {
     margin-top: 0;
 }
 
-
-
 ol.simple, ul.simple, li {
     margin-bottom: 0.1rem;
     margin-top: -0.45rem;
@@ -218,8 +216,8 @@ button.toggle-button.toggle-button-hidden:before {
 
 /* Re-centering +/- symbol */
 .toggle-button .bar {
-    left: 12%;
-    top: 42%;
+    left: 10%;
+    top: 40%;
 }
 
 /* Style for the paragraph that precedes bullets or definitions list */

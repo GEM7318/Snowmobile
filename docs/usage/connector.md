@@ -207,7 +207,6 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 :lines: 2-14
 ```
 ````
-<br>
 
 +++
 
