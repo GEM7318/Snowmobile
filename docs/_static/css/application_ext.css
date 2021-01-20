@@ -118,18 +118,18 @@ div.admonition label.tabbed-label {
     line-height: 0.7rem;
     /*background-color: #fbfbfb;*/
     /*background-color: #00b8d417;*/
-    background-color: #00b8d400;
+    background-color: #34b3c5;
     border-bottom-color: #00b8d47a;
     font-weight: 100;
     font-style: italic;
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
-    color: #248fe49c;
+    color: #73d8e7c4;;
     top: 0.30rem;
     font-family: 'FontAwesome', serif;
     font-weight: 900; /* 600+ if not on pro */
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     /*content: "\f0c9";*/
     content: "\f013";
 }
@@ -144,14 +144,16 @@ div.admonition label.tabbed-label {
 .md-typeset .admonition.is-explanation>.admonition-title{
     line-height: 0.7rem;
     /*background-color: #fbfbfb;*/
-    background-color: #43c6ff82;
+    background-color: #43c6ff0d;
+    border-bottom-color: #329ef452;
     font-weight: 500;
     font-style: italic;
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
-    color: #248fe482;
-    top: 0.35rem;
+    /*color: #248fe482;*/
+    color: #248fe4c7;
+    top: 0.30rem;
     font-family: 'FontAwesome', serif;
     font-weight: 900; /* 600+ if not on pro */
     font-size: 0.85rem;
