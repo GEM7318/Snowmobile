@@ -13,6 +13,7 @@ that it was instantiated with.
 1.  Establish connections to {xref}`snowflake`
 1.  Store the {xref}`SnowflakeConnection` ({class}`sn.con`) and execute commands against the database 
 
++++
 
 {link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from docstrings`
 
