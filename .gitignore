@@ -57,12 +57,13 @@ MANIFEST
 
 # snowmobile-specific ---------------------------------------------------------
 
+# jupyter
 **/jupyter_execute/*
+**/.ipynb_checkpoints/.*
 
 # sandbox directories
 _sandbox/*
 _runner/*
-**/.ipynb_checkpoints/.*
 csv/*
 README.md
 
