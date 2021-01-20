@@ -56,6 +56,12 @@ hr.sn-blue {
     border-bottom-color: #cfecee;
 }
 
+div.admonition hr.sn-blue {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-style: solid;
+    border-bottom-color: #329ef452;
+}
 
 /* -- Jupyter/Notebook adjustments ----------------------------------------- */
 
@@ -119,7 +125,7 @@ div.admonition label.tabbed-label {
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
-    color: #00b8d4;
+    color: #248fe49c;
     top: 0.30rem;
     font-family: 'FontAwesome', serif;
     font-weight: 900; /* 600+ if not on pro */

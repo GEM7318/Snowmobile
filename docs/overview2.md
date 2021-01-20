@@ -10,6 +10,8 @@ jupyter:
     display_name: snowmobile2
     language: python
     name: snowmobile2
+
+orphan: true
 ---
 
 ```python tags=["remove-cell"]
