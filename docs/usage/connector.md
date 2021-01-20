@@ -31,8 +31,9 @@ that it was instantiated with.
     1.  Aliased as *creds1* and *creds2* respectively
 1.  {ref}`default-creds<connection.default-creds>` has been left blank
 ```
-
 <br>
+
++++
 
 ### Connecting to {xref}`snowflake`
 ---
@@ -89,6 +90,8 @@ Here's some context on how to think about the basic differences in these two
 :lines: 10-12
 ```
 {link-badge}`./sql.html,cls=badge-primary text-white,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
+
+<br>
 
 +++
 
@@ -150,6 +153,7 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 ````
+<br>
 
 +++
 *The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).
@@ -203,6 +207,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 :lines: 2-14
 ```
 ````
+<br>
 
 +++
 
@@ -251,6 +256,7 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 :lines: 1-24
 ```
 ````
+<br>
 
 +++
 
@@ -272,6 +278,7 @@ connection to {xref}`snowflake` at which point a call is made to
 :lineno-start: 1
 :lines: 1-17
 ```
+<br>
 
 +++
 
@@ -283,6 +290,7 @@ connection to {xref}`snowflake` at which point a call is made to
 :class: error
 Missing
 ```
+<br>
 
 (header_target)=
 ### Using *ensure_alive*
