@@ -32,6 +32,8 @@ that it was instantiated with.
 1.  {ref}`default-creds<connection.default-creds>` has been left blank
 ```
 
+<br>
+
 ### Connecting to {xref}`snowflake`
 ---
 
@@ -88,6 +90,7 @@ Here's some context on how to think about the basic differences in these two
 ```
 {link-badge}`./sql.html,cls=badge-primary text-white,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
 
++++
 
 ### Executing Raw SQL
 ---
@@ -182,7 +185,7 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 ---
 
 ````{admonition} Tip: Naming Convention
-:class: toggle, tip
+:class: toggle, tip, sn-indent-h
 The following convention of variable/attribute name to associated object is
 used throughout {ref}`snowmobile`'s documentation and source code, including in 
 method signatures:
@@ -200,6 +203,8 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 :lines: 2-14
 ```
 ````
+
++++
 
 (header_target)=
 ### Aliasing Credentials

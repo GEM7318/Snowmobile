@@ -36,13 +36,6 @@ ol.simple, ul.simple, li {
     margin-left: 0.4rem;
 }
 
-
-/* Default line break (docutils) */
-hr {
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-}
-
 /* Custom line break */
 hr.sn-blue {
     margin-top: 0.2rem;
@@ -51,9 +44,16 @@ hr.sn-blue {
     border-bottom-color: #cfecee;
 }
 
-/* 'indented' admonition style */
-.admonition.sn-indented {
-    margin: -0.15rem 1.2rem .7rem 0.25em;
+/* 'indented' style */
+.md-typeset .sn-indent-h {
+    margin-left: 0.25em;
+    margin-right: 1.2rem;
+}
+
+/* 'remove vertical margins' */
+.md-typeset .sn-reduce-v-margin {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
@@ -63,6 +63,13 @@ div.admonition hr.sn-blue {
     border-style: solid;
     border-bottom-color: #329ef452;
 }
+
+/* Default line break (docutils) */
+.md-typeset hr {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
 
 /* -- Jupyter/Notebook adjustments ----------------------------------------- */
 
