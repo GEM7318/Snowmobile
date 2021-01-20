@@ -1,0 +1,278 @@
+
+/* Global spacing settings for content container */
+.md-content__inner.md-typeset {
+    line-height: 1.3em;
+    margin-bottom: 0.2rem;
+    margin-top: 0.2rem;
+}
+
+/* Adjusting definition lists written in RST */
+.md-typeset dd {
+    margin: 0 0 0 1.1rem;
+}
+
+/* Resetting admonition titles to template line height */
+/*p.admonition-title {*/
+/*    line-height: unset;*/
+/*}*/
+
+/* Reducing line height of ::tabbed directive */
+div.tabbed-set.docutils {
+    margin: 0;
+    line-height: 1em;
+}
+
+
+/* Expanding line-height for primary TOC */
+ul.md-nav__list {
+    line-height: 1rem;
+}
+
+/* Expanding line-height for secondary TOC */
+ul.md-source__facts  li {
+    margin-top: 0;
+}
+
+
+
+ol.simple, ul.simple, li {
+    margin-bottom: 0.1rem;
+    margin-top: -0.45rem;
+    margin-left: 0.4rem;
+}
+
+
+/* Default line break (docutils) */
+hr {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+/* Custom line break */
+hr.sn-blue {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-style: solid;
+    border-bottom-color: #cfecee;
+}
+
+
+/* -- Jupyter/Notebook adjustments ----------------------------------------- */
+
+/* Indenting Jupyter cells */
+.cell.docutils.container {
+    padding-left: 1em;
+    padding-right: 2em;
+    margin-top: -0.3em;
+}
+
+div.highlight {
+    /*margin: 0 0 -0.25rem 0;*/
+    margin: -0.25rem 0 -0.25rem 0;
+}
+
+/* Reducing space between cell and output */
+.cell_output.docutils.container {
+    margin-top: 0.2em;
+}
+
+.cell_output.docutils.container div.highlight {
+    /*margin: unset;*/
+    /*margin: -0.25rem 0 -0.25rem 0;*/
+    margin-top: 0.4rem;
+    /*margin-top: -0.6em;*/
+}
+
+/* -- Tweaking nested tabbed directives within admonitions ----------------- */
+div.admonition div.tabbed-set.docutils {
+    margin-top: -0.6rem;
+    /*--tabs-color-underline: #21252929;*/
+    /*--tabs-color-overline: #21252929;*/
+}
+
+/* Unsetting nested tabbed directives that don't have a preceding <p> */
+p.admonition-title + div.tabbed-set.docutils {
+    margin-top: unset;
+}
+
+div.admonition label.tabbed-label {
+    font-size: 0.65rem;
+    color: #212529a1;
+    font-style: italic;
+}
+
+/* -- is-setup ------------------------------------------------------------- */
+.md-typeset .admonition.is-setup {
+    /*border-left-color: #a6bace;*/
+    border-left-color: #00b8d48c;
+    margin: -0.15rem 1.2rem .7rem 0.25em;
+}
+
+.md-typeset .admonition.is-setup>.admonition-title{
+    line-height: 0.7rem;
+    /*background-color: #fbfbfb;*/
+    /*background-color: #00b8d417;*/
+    background-color: #00b8d400;
+    border-bottom-color: #00b8d47a;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.md-typeset .admonition.is-setup>.admonition-title:before{
+    color: #00b8d4;
+    top: 0.40rem;
+    font-family: 'FontAwesome', serif;
+    font-weight: 900; /* 600+ if not on pro */
+    font-size: 0.7rem;
+    content: "\f0c9";
+}
+
+/* -- is-explanation ------------------------------------------------------- */
+.md-typeset .admonition.is-explanation {
+    border-left-color: #167ee678;
+    margin: -0.15rem 1.2rem .7rem 0.25em;
+}
+
+.md-typeset .admonition.is-explanation>.admonition-title{
+    line-height: 0.7rem;
+    background-color: #fbfbfb;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.md-typeset .admonition.is-explanation>.admonition-title:before{
+    color: #248fe482;
+    top: 0.35rem;
+    font-family: 'FontAwesome', serif;
+    font-weight: 900; /* 600+ if not on pro */
+    font-size: 0.85rem;
+    content: "\f013";
+}
+
+
+/* Reducing space between cell and output */
+div.output.stream.highlight-myst-ansi.notranslate {
+    margin-top: 0.2em;
+}
+
+/* Reducing space between cell and output */
+div.output.text_plain.highlight-myst-ansi.notranslate {
+    margin-top: 0.2em;
+}
+
+/* Reducing line height of lists  */
+.tabbed-content.docutils {
+    line-height: 1.3em;
+}.p,ol.simple,ul.simple,dl.simple,
+
+
+/*
+    Removing trailing space from arbitrary Python directives; i.e.
+    what is rendered when wrapping something in `single` backticks or in
+    a form :any:`single` directive that doesn't find a target.
+*/
+code.docutils.literal.notranslate {
+    margin: 0;
+}.md-typeset span,
+
+
+/* Removing scroll effect from collapsed admonition boxes */
+div.toggle.admonition {
+    overflow: hidden;
+ }
+
+/* Reducing font-size for lists nested inside of admonition directives */
+.md-typeset .admonition, .md-typeset details {
+    font-size: 0.7rem;
+}.p, ol.simple, ul.simple, dl.simple,
+
+
+/* Moving toggle button hint  closer to the symbol */
+button.toggle-button.toggle-button-hidden {
+    margin-top: 0.25rem;
+    right: 0.2em;
+}
+
+ /* Moving toggle button symbol farther to the right */
+button.toggle-button.toggle-button-hidden:before {
+    left: -4em;
+}
+
+/* Shrinking toggle button size */
+.toggle-button {
+    font-size: 0.6rem;
+}
+
+/* Re-centering +/- symbol */
+.toggle-button .bar {
+    left: 12%;
+    top: 42%;
+}
+
+/* Style for the paragraph that precedes bullets or definitions list */
+.hanging {
+    margin-bottom: 0.5rem;
+}.md-typeset blockquote, .md-typeset ol, .md-typeset p, .md-typeset ul {
+    margin: .5rem 0;
+}
+
+ /* Reducing space between list items */
+/*ol.simple, ul.simple, li {*/
+/*    margin-bottom: 0.1rem;*/
+/*    margin-top: -0.45rem;*/
+/*    margin-left: 0.4rem;*/
+/*}*/
+ol.simple, ul.simple, dl.simple {
+    margin-bottom: 0.1rem;
+    margin-top: -0.1rem;
+    margin-left: 0.4rem;
+}
+
+/* Reducing margins on headers */
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4, .md-typeset h5, .md-typeset h6 {
+    margin-bottom: 0.4rem;
+    margin-top: 0.4rem;
+}
+
+/* Allowing check marks to 'spill' into previous/next lines (not visible in render) */
+span.fa.fa-check.text-success.mr-1 {
+    overflow: visible;
+}
+
+/* Un-indenting parent/caption sections of globaltoc */
+span.md-nav__link.caption {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    margin-left: -0.5em;
+}
+
+/* Adjusting copybutton position in notebook cells */
+div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
+    top: 0.4em;
+}
+
+/* Reducing admonition title line height */
+.md-typeset .admonition>.admonition-title{
+    line-height: 0.7rem;
+}
+
+/* Adjusting icon position */
+.md-typeset .admonition>.admonition-title:before{
+    top: 0.30rem;
+}
+
+/* adjusting toggle-button position */
+.toggle.admonition button.toggle-button {
+    margin-right: .5em;
+    right: 0;
+    position: absolute;
+    top: .2rem;
+}
+
+/* Indented to same level that jupyter cells are */
+p.sn-pre-cell {
+    margin-left: 0.9rem;
+    margin-top: 1em;
+    font-size: 0.75rem;
+    font-weight: 800;
+}

@@ -306,7 +306,8 @@ class Script(Snowmobile):
 
         """
         _id = _id or (len(self.filters) + 1)
-        # TODO: Remove this feature
+        # TODO: Remove this argument/feature in script.filter(); super not worth
+        #   the time.
         scope_to_update = (
             self._scope_from_id(_id=_id, pop=True)
             if _id in self.filters
@@ -391,11 +392,15 @@ class Script(Snowmobile):
             self.e.collect(e=e)
 
         finally:
+
+            # first collect e
             to_raise = (
                 self.e.get(last=True, to_raise=True)
                 if self.e.seen(to_raise=True)
                 else None
             )
+
+            # then reset context
             self.reset(
                 index=True,  # restore statement indices
                 scope=True,  # reset included/excluded status of all statements
@@ -403,8 +408,11 @@ class Script(Snowmobile):
                 in_context=True,  # release 'in context manager' indicator (to False)
                 _filter=True,  # release 'impose filter' indicator (to False)
             )
+
+            # then give e his due
             if to_raise:
                 raise to_raise
+
             return self
 
     def _depth(self, full: bool = False) -> int:

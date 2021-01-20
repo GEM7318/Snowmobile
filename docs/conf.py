@@ -1,15 +1,13 @@
 
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+# =============================================================================
+# ========= Configuration file for the Sphinx documentation builder ===========
+# =============================================================================
 
+
+# -- Import Management --------------------------------------------------------
 import sys
 
 from pathlib import Path
-
-# -- Import Management --------------------------------------------------------
 
 sys.path.append(".")
 
@@ -32,8 +30,7 @@ for dir_name, dir_path in to_insert.items():
 
 
 # -- Xref Extension -----------------------------------------------------------
-
-# note: see docstring in ext/xref.py for more info
+# -- See docstring in ext/xref.py for more info
 
 # noinspection PyUnresolvedReferences
 from links.link import *
@@ -44,10 +41,15 @@ from links import *
 
 # -- Standard Options ---------------------------------------------------------
 
-source_suffix = [".rst", ".md"]
+source_suffix = {
+    '.md': 'myst-nb',
+    '.rst': 'restructuredtext',
+    '.ipynb': 'myst-nb',
+    '.myst': 'myst-nb',
+}
 
 extensions = [
-    "myst_parser",
+    "myst_nb",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
@@ -55,20 +57,17 @@ extensions = [
     "xref",
     "sphinx_panels",
     "autoapi.extension",
-    "nbsphinx",
     "sphinx_copybutton",
+    "sphinx_togglebutton",
+    # "myst_parser",
+    # "nbsphinx",
 ]
 
 master_doc = "index"
 default_role = None
-htmlhelp_basename = "Recommonmarkdoc"
-source_parsers = {".md": "recommonmark.parser.CommonMarkParser"}
 language = "python"
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "__main__.py", "__init__.py"]
-
-nbsphinx_execute = "never"
-nbsphinx_kernel_name = "snowmobile3"
+exclude_patterns = ["_build", "__main__.py", "__init__.py", "**.ipynb_checkpoints"]
 
 
 # Project Information ---------------------------------------------------------
@@ -79,10 +78,8 @@ version = "0.0.15"
 project = "snowmobile"
 copyright = "2020, Grant E Murray"
 author = "Grant E Murray"
-
 # version = __version__
 # release = __version__
-
 release = version
 
 
@@ -102,7 +99,7 @@ panels_css_variables = {
     # "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
     "tabs-color-overline": "rgb(207, 236, 238)",
     "tabs-color-underline": "rgb(207, 236, 238)",
-    "tabs-size-label": "0.85rem",
+    "tabs-size-label": "0.75rem",
 }
 
 # MySt ------------------------------------------------------------------------
@@ -110,24 +107,60 @@ panels_css_variables = {
 # https://myst-parser.readthedocs.io/en/latest/
 
 myst_heading_anchors = 5  # auto generate anchor slugs for h1-h5
-
-autosectionlabel_prefix_document = True
 autosectionlabel_max_depth = 4
+autosectionlabel_prefix_document = True
 
 from markdown_it.extensions import deflist
 
 myst_enable_extensions = [
-    "dollarmath",
+    # "dollarmath",
+    # "amsmath",
+    # "deflist",
+    # "html_image",
+    # "colon_fence",
+    # "smartquotes",
+    # "replacements",
+    # "linkify",
+    # "substitution",
     "amsmath",
-    "deflist",
-    "html_image",
     "colon_fence",
-    "smartquotes",
-    "replacements",
-    "linkify",
-    "substitution",
+    "deflist",
+    "dollarmath",
+    "html_image",
 ]
 myst_url_schemes = ("http", "https", "mailto")
+
+
+# MySt Nb ---------------------------------------------------------------------
+# jupyter_execute_notebooks = "cache"
+jupyter_execute_notebooks = "off"
+
+kernelspec = {
+    'display_name': 'Snowmobile', 'language': 'python', 'name': 'snowmobile2'
+}
+
+nb_render_priority = {
+  "html": (
+            "application/vnd.jupyter.widget-view+json",
+            "application/javascript",
+            "text/html",
+            "image/svg+xml",
+            "image/png",
+            "image/jpeg",
+            "text/markdown",
+            "text/latex",
+            "text/plain",
+        )
+}
+# default; see https://myst-nb.readthedocs.io/en/latest/use/formatting_outputs.html
+
+# -- CopyButton ---------------------------------------------------------------
+
+# https://sphinx-copybutton.readthedocs.io/en/latest/
+
+# Throwing out outputs, keeping jupyter inputs and code blocks.
+copybutton_selector = "div:not(.output) > div.highlight pre, div.notranslate td.code div.highlight pre"
+# copybutton_selector = "div.highlight pre"  # default
 
 
 # -- AutoAPI ------------------------------------------------------------------
@@ -151,6 +184,12 @@ autoapi_member_order = "bysource"  # 'bysource' or 'groupwise'
     for methods and properties.
 """
 
+# -- ToggleButton -------------------------------------------------------------
+
+# https://sphinx-togglebutton.readthedocs.io/en/latest/
+
+togglebutton_hint = "expand"
+
 
 # Sphinx Material / HTML Theme ------------------------------------------------
 
@@ -158,34 +197,54 @@ autoapi_member_order = "bysource"  # 'bysource' or 'groupwise'
 
 import sphinx_material
 
+html_title = "snowmobile"
 html_show_sourcelink = True
 html_sidebars = {"**": ["globaltoc.html", "localtoc.html", "searchbox.html"]}
-
-extensions.append("sphinx_material")
 html_theme_path = sphinx_material.html_theme_path()
 html_context = sphinx_material.get_html_context()
 html_theme = "sphinx_material"
-html_title = "Snowmobile"
+extensions.append("sphinx_material")
 
 html_theme_options = {
     # 'google_analytics_account': 'UA-XXXXX',
     # 'logo_icon': '&#xe869',
-    "html_minify": False,
-    "html_prettify": True,
+    "html_minify": True,
+    "html_prettify": False,
     "css_minify": True,
-    "globaltoc_depth": 2,
+    "globaltoc_depth": -1,
     "globaltoc_collapse": True,
     "globaltoc_includehidden": True,
     "repo_url": "https://github.com/GEM7318/Snowmobile",
     "repo_name": "gem7318/snowmobile",
-    "nav_title": "snowmobile",
+    "nav_title": "",
     "color_primary": "blue",
     "color_accent": "cyan",
-    "theme_color": "#2196f3",
+    "theme_color": "2196f3",
     "body_max_width": None,
+    'master_doc': True,
 }
+# Accent colors:
+# red, pink, purple, deep-purple, indigo, blue, light-blue, cyan,
+# teal, green, light-green, lime, yellow, amber, orange, deep-orange
+
+
+# Other HTML Options ----------------------------------------------------------
 
 html_static_path = ["_static"]
+html_use_smartypants = True
+html_use_index = True
+html_domain_indices = True
+html_show_sphinx = False
+html_show_copyright = False
+
+pygments_style = "sphinx"
+# pygments_style = "emacs"
+
+# html_sidebars = {}
+# html_additional_pages = {}
+# html_domain_indices = True
+# html_split_index = False
+# html_last_updated_fmt = '%b %d, %Y'
 
 
 # Napoleon --------------------------------------------------------------------
@@ -208,49 +267,6 @@ napoleon_use_keyword = True
 
 napoleon_custom_sections = "Attributes"
 
-# Scaffolding paste from here down ============================================
-
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-# html_last_updated_fmt = '%b %d, %Y'
-
-# If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-html_use_smartypants = True
-
-# Custom sidebar templates, maps markup names to template names.
-# html_sidebars = {}
-
-# Additional templates that should be rendered to pages, maps page names to
-# template names.
-# html_additional_pages = {}
-
-# If false, no module index is generated.
-# html_domain_indices = True
-
-# If false, no index is generated.
-html_use_index = True
-
-# If true, the index is split into individual pages for each letter.
-# html_split_index = False
-
-# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-html_show_sphinx = False
-
-# If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
-html_show_copyright = False
-
-# If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-# html_use_opensearch = ''
-
-# This is the file name suffix for HTML files (e.g. ".xhtml").
-# html_file_suffix = None
-
-# Highlighting for code blocks
-# https://sublime-and-sphinx-guide.readthedocs.io/en/latest/code_blocks.html
-pygments_style = "sphinx"
 
 # -- External URLs ------------------------------------------------------------
 
@@ -288,4 +304,4 @@ def setup(app):
     """Add autoapi-skip-member."""
     app.connect("autoapi-skip-member", autoapi_skip_member)
     app.add_css_file('css/friendly.css')
-
+    app.add_css_file('css/application_ext.css')

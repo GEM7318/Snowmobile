@@ -1,6 +1,271 @@
 # Sandbox
 
+```{literalinclude} ../snowmobile/core/connector.py
+:caption: snowmobile.core.connector.query()
+:pyobject: Connector.query
+```
+
+
+## Custom class
+---
+
+````{rst-class} test-custom
+```{literalinclude} ../snowmobile/core/connector.py
+:caption: snowmobile.core.connector.query()
+:lines: 1-20
+```
+````
+
+````{rst-class} test-custom-admonition
+```{admonition} Special Note Title
+:class: note
+
+Special paragraph.
+```
+````
+
++++
+
+By providing {class}`script` (below) the same instance of {class}`sn` with which {class}`t1` (above)
+was instantiated, **the {xref}`SnowflakeConnection` and [Configuration](./usage/snowmobile_toml.md) is
+shared amongst:**
+
+
+## hlist
+---
+
+```{hlist}
+:columns:
+* {class}`sn:` {class}`~snowmobile.Connector`
+* {class}`t1:` {class}`~snowmobile.Table`
+* {class}`script:` {class}`~snowmobile.Script`
+```
+
+
+
+<html>
+<head>
+<style>
+/*p + ol {*/
+/*    margin-top: -10px;*/
+/*}*/
+</style>
+</head>
+
+<body>
+
+<div class="myDiv">
+    <b>Its purpose is to provide an entry point that will:</b>
+    <ol style="margin-top: 8px">
+            <li>
+            Locate, parse, and instantiate
+                <a class="reference internal" href="snowmobile_toml.html#snowmobile-toml">
+                           <span class="std std-doc">
+                            snowmobile.toml
+                           </span>
+                          </a>
+            </li>
+        <li>Establish connections to Snowflake</li>
+        <li>
+            Store the SnowflakeConnection and execute commands against the database
+        </li>
+    </ol>
+</div>
+
+</body>
+</html>
+
+
+
+
+<html>
+<head>
+<style>
+.myDiv {
+  /*border: 5px outset red;*/
+  /*background-color: lightblue;*/
+  /*text-align: center;*/
+  /*  margin: 0;*/
+    line-height: 1em;
+    /*padding: 0;*/
+}
+</style>
+</head>
+
+<body>
+
+<div class="myDiv">
+    <b>Its purpose is to provide an entry point that will:</b>
+    <ol class="gem">
+        <li>Locate, parse, and instantiate snowmobile.toml</li>
+        <li>Establish connections to Snowflake</li>
+    </ol>
+</div>
+
+</body>
+</html>
+
+<div>
+    <b>Its purpose is to provide an entry point that will:</b>
+    <ol class="gem">
+        <li>Locate, parse, and instantiate snowmobile.toml</li>
+        <li>Establish connections to Snowflake</li>
+    </ol>
+</div>
+
+<br><br><br>
+
+<html>
+<head>
+<style></style><title></title>
+</head>
+<body>
+<div>
+<b>Its purpose is to provide an entry point that will:</b>
+<ol class="gem">
+    <li>Locate, parse, and instantiate snowmobile.toml</li>
+    <li>Establish connections to Snowflake</li>
+</ol>
+</div>
+</body>
+</html>
+
+<br><br><br>
+
+<html>
+    <body>
+        <b>Its purpose is to provide an entry point that will:</b>
+            <ol style="margin-top: 8px">
+                    <li>
+                    Locate, parse, and instantiate
+                        <a class="reference internal" href="snowmobile_toml.html#snowmobile-toml">
+                                   <span class="std std-doc">
+                                    snowmobile.toml
+                                   </span>
+                                  </a>
+                    </li>
+                <li>Establish connections to Snowflake</li>
+                <li>
+                    Store the SnowflakeConnection and execute commands against the database
+                </li>
+            </ol>
+    </body>
+</html>
+
+<br><br><br>
+
+
+<DL compact>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Use a single configuration file for any number of Python instances on a machine <i>(snowmobile.toml)</i></b>
+    <dd><i>No hard-coding credentials or paths to configuration files</i>
+    <dd><i>Assign aliases to credentials, connection parameters and loading specifications</i>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Work with sql scripts as Python objects</b>
+    <dd><i>Tag and access individual statements from within sql files</i>
+    <dd><i>Queue multiple scripts across shared or distinct sessions</i>
+    <dd><i>Document scripts with a sql-compliant markup syntax that exports to .md</i>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Flexible, reliable loading of DataFrames</b>
+    <dd><i><code>if_exists</code> support for ('append', 'truncate', 'replace', 'fail')</i>
+    <dd><i>Generates DDL from DataFrame if table doesn't exist</i>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Simplified execution of raw SQL</b>
+    <dd><i>Return query results in a `SnowflakeCursor` or a `DataFrame` from the same method</i>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Built-in methods to run common information schema and administrative commands</b>
+    <dd><i>Avoid embedding sql in docstrings</i>
+</DL>
+
+````{panels}
+
+<DL compact>
+<DT><span class="fa fa-check text-success mr-1"></span><b>Use a single configuration file, <i>snowmobile.toml</i></b>
+    <dd><i>Accessible from any Python instance on a machine</i>
+    <dd><i>Tracked and managed by snowmobile</i>
+    <dd><i>No hard-coding credentials or file paths</i>
+    <dd><i>Access different configurations by assigned alias</i>
+</DL>    
+<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/connector.html#executing-raw-sql" title="Usage Documentation on Connecting to Snowflake">
+<span>Related: Executing Raw SQL</span>
+</a>
+
+---
+
+<DT><span class="fa fa-check text-success mr-1"></span><b>Work with sql scripts as Python objects</b>
+    <dd><i>Tag and access individual statements from scripts</i>
+    <dd><i>Queue scripts across shared or distinct sessions</i>
+    <dd><i>Add metadata to statements, generate docs in .md</i>
+    
+---    
+
+<DT><span class="fa fa-check text-success mr-1"></span><b>Flexible, reliable loading of data</b>
+    <dd><i>DDL generation from DataFrame</i>
+    <dd><i>DataFrame vs.table compatability checks at run time</i>
+    <dd><i><code>if_exists</code> support for 'truncate', append', 'replace', 'fail'</i>
+    
+---
+
+<DT><span class="fa fa-check text-success mr-1"></span><b>Simplified execution of raw SQL</b>
+    <dd><i>Access credentials & connection parameters by alias</i>
+    <dd><i>Query results in a DataFrame, SnowflakeCursor, or DictCursor from the same object</i>
+    
+<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/connector.html#executing-raw-sql" title="Usage Documentation on Executing Raw SQL">
+<span>See Docs: Executing Raw SQL</span>
+</a>
+
+````
+
+```{include} ./usage/script.ipynb
+:source_parser: myst-nb
+```
+
+
+# {class}`snowmobile.Table`
+
+{class}`snowmobile.Table` is a data loading solution that at minimum can be provided a 
+[**Connector**](./usage/connector.md) ({class}`sn`), a {class}`pandas.DataFrame` ({class}`df`),
+and a table name. 
+
+The rest of its keyword arguments are mirrored in the 
+{ref}`[loading.default-table-kwargs]<loading.default-table-kwargs>`
+section of [snowmobile.toml](./usage/snowmobile_toml.md) and documented in 
+[**the API Docs for **Table**](./_build/autoapi/snowmobile/core/table/index.html).
+
+
+{link-badge}`../autoapi/snowmobile/core/table/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.Table,tooltip=Documentation parsed from module docstring`
+
+
+````{admonition} Note
+:class: note
+
+**Similarly to how** [**Connector**](./usage/connector.md) **handles its `creds` keyword argument,**
+{class}`~snowmobile.Table` **will adhere to any arguments explicitly provided and differ
+to the values configured in [snowmobile.toml](./usage/snowmobile_toml) otherwise.** 
+
+The exact configuration that a given instance of {class}`~snowmobile.Table` will 
+differ to is defined by the state of [**snowmobile.toml**](./usage/snowmobile_toml)
+at the time the [**Connector**](./usage/connector.md) ({class}`sn`) was instantiated,
+not its state at the time that it ({class}`~snowmobile.Table`) was instantiated; 
+*also outlined in [**Connector**](./usage/connector.md) description.*  
+
+**The default behavior outlined below reflects those within the 
+{ref}`[loading]<loading.parent>` section of the 
+[default **snowmobile.toml** file](./usage/snowmobile_toml.md#file-contents).**
+ 
+````
+
+
+````{toggle} [loading]
+:description: See [loading]
+
+```{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+:lines: 27-56
+:lineno-start: 27
+```
+
+````
+
+
+```
+
 ## 1. Default
+
 
 ````{tabbed} .sql (original)
 ```{literalinclude} ../tests/data/sql/markup_with_results.sql
@@ -160,7 +425,7 @@ performs type validation of all fields upon each instantiation.
 
 
 ### 2.3: `import snowmobile` and verify connection
-```{literalinclude} /examples/setup/test_connection.py
+```{literalinclude} /snippets/test_connection.py
 :language: python
 :lineno-start: 1
 :lines: 5-8
@@ -330,7 +595,7 @@ Its design is focused on enabling:
 ## 4. Basic Usage
 
 #### 4.1 Verify connection
-```{literalinclude} /examples/setup/test_connection.py
+```{literalinclude} /snippets/test_connection.py
 :language: python
 :lines: 5-8
 :lineno-start: 1
@@ -339,7 +604,7 @@ Its design is focused on enabling:
 
 
 #### 4.2: Composition context
-```{literalinclude} /examples/setup/test_connection.py
+```{literalinclude} /snippets/test_connection.py
 :language: python
 :lines: 16-19
 :lineno-start: 12

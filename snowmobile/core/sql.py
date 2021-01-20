@@ -232,7 +232,7 @@ class SQL(Snowmobile):
         except ValueError as e:
             raise e
         sql = f"select count(*) from {obj_name}"
-        return self.sn.query(sql=sql) if self._run(run) else sql
+        return self.sn.query(sql=sql).snf.to_list(n=1) if self._run(run) else sql
 
     def table_last_altered(
         self, nm: Optional[str] = None, run: Optional[bool] = None
@@ -629,13 +629,13 @@ class SQL(Snowmobile):
         except ValueError as e:
             raise e
         # fmt: on
-        _sql = f"""
+        limit = f"limit {n or 1}" if n != -1 else str()
+        sql = f"""
 select
     *
 from {up(schema)}.{up(table)}
-limit {n or 1}
+{limit}
         """
-        sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
     def truncate(
@@ -673,7 +673,9 @@ limit {n or 1}
         sql = strip(_sql)
         return self.sn.query(sql=sql) if self._run(run) else sql
 
-    def current(self, obj: str, run: Optional[bool] = None):
+    def current(
+        self, obj: str, run: Optional[bool] = None
+    ) -> Union[str, Union[str, int]]:
         """Generic implementation of 'select current' for session-based objects.
 
         Args:
@@ -691,7 +693,7 @@ limit {n or 1}
         """
         _sql = f"select current_{obj}()"
         sql = strip(_sql)
-        return self.sn.query(sql=sql) if self._run(run) else sql
+        return self.sn.query(sql=sql).snf.to_list(n=1) if self._run(run) else sql
 
     def current_session(self, run: Optional[bool] = None) -> Union[str, pd.DataFrame]:
         """Select the current session."""

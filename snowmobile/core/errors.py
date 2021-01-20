@@ -15,7 +15,7 @@ class Error(Exception):
     Args:
         msg (Optional[str]):
             Error message.
-        msg (Optional[int]):
+        errno (Optional[int]):
             Error number.
         nm (Optional[str]):
             Globally unique name for an exception being raised; used for

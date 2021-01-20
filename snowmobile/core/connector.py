@@ -13,7 +13,7 @@ for brevity.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Optional, Union
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -49,7 +49,7 @@ class Connector(Snowmobile):
             instantiated, enabling access to the configuration object model
             through the :attr:`Connector.cfg` attribute; defaults to `False`.
         ensure_alive (bool):
-            Establishes a new connection if a method requiring a connection
+            Establish a new connection if a method requiring a connection
             against the database is called while :attr:`alive` is `False`;
             defaults to `True`.
         config_file_nm (Optional[str]):
@@ -80,6 +80,10 @@ class Connector(Snowmobile):
             A :class:`snowmobile.SQL` object with the current connection
             embedded; stores command sql commands as utility methods and is
             heavily leveraged in `snowmobile`'s internals.
+        ensure_alive (bool):
+            Establish a new connection if a method requiring a connection
+            against the database is called while :attr:`alive` is `False`;
+            defaults to `True`.
         e (ExceptionHandler):
             A :class:`snowmobile.ExceptionHandler` object for orchestrating
             exceptions across objects; kept as a public attribute on the class
@@ -87,12 +91,6 @@ class Connector(Snowmobile):
             during development.
 
     """
-
-    _QUERY_OUTCOMES: Dict[Any, Tuple] = {
-        0: ("", ""),
-        1: ("warning", "failed"),
-        2: ("info", "completed"),
-    }
 
     def __init__(
         self,
@@ -105,21 +103,16 @@ class Connector(Snowmobile):
     ):
         super().__init__()
 
-        # TODO: Remove these attributes
-        self.error: Optional[DatabaseError, pdDataBaseError] = None
-        self.outcome: int = int()
-
         self.cfg: Configuration = Configuration(
             creds=creds, config_file_nm=config_file_nm, from_config=from_config
         )
         self.ensure_alive = ensure_alive
         self.con: Optional[SnowflakeConnection] = None
         self.sql: sql.SQL = sql.SQL(sn=self)
+        self.e: ExceptionHandler = ExceptionHandler(within=self).set(ctx_id=-1)
 
         if not delay:
             self.connect(**connect_kwargs)
-
-        self.e: ExceptionHandler = ExceptionHandler(within=self)
 
     def connect(self, **kwargs) -> Connector:
         """Establishes connection to Snowflake.
@@ -168,17 +161,18 @@ class Connector(Snowmobile):
     @property
     def cursor(self) -> SnowflakeCursor:
         """:class:`SnowflakeCursor` accessor."""
-        if not isinstance(self.con, SnowflakeConnection):
+        if not isinstance(self.con, SnowflakeConnection) and self.ensure_alive:
             self.connect()
         return self.con.cursor()
 
-    # TODO: check type hint in source code for SnowflakeConnector.cursor()
-    #  method; shouldn't it be Union[SnowflakeCursor, DictCursor]?
     # noinspection PydanticTypeChecker,PyTypeChecker
     @property
     def dictcursor(self) -> DictCursor:
         """:class:`DictCursor` accessor."""
-        if not isinstance(self.con, SnowflakeConnection):
+        # TODO: check type hint in source code for SnowflakeConnection.cursor()
+        #  method to figure out why intellisense is yelling about this;
+        #  shouldn't it be Union[SnowflakeCursor, DictCursor]?
+        if not isinstance(self.con, SnowflakeConnection) and self.ensure_alive:
             self.connect()
         return self.con.cursor(cursor_class=DictCursor)
 
@@ -199,10 +193,12 @@ class Connector(Snowmobile):
 
         """
         try:
-            self.outcome = 2
             return self.cursor.execute(command=sql, **kwargs)
         except ProgrammingError as e:
-            self._exception(e=e, _id=1, _raise=on_error != "c")
+            e.to_raise = on_error != 'c'
+            self.e.collect(e=e)
+            if e.to_raise:
+                raise e
 
     def exd(self, sql: str, on_error: Optional[str] = None, **kwargs) -> DictCursor:
         """Executes a command via :class:`DictCursor`.
@@ -221,10 +217,12 @@ class Connector(Snowmobile):
 
         """
         try:
-            self.outcome = 2
             return self.dictcursor.execute(command=sql, **kwargs)
         except ProgrammingError as e:
-            self._exception(e=e, _id=1, _raise=on_error != "c")
+            e.to_raise = on_error != 'c'
+            self.e.collect(e=e)
+            if e.to_raise:
+                raise e
 
     def query(
         self,
@@ -260,8 +258,6 @@ class Connector(Snowmobile):
             return self.ex(sql=sql)
 
         try:
-            self.outcome = 2
-
             if not self.alive and self.ensure_alive:
                 self.connect()
 
@@ -269,45 +265,10 @@ class Connector(Snowmobile):
             return df.snf.lower() if lower else df
 
         except (pdDataBaseError, DatabaseError) as e:
-            self._exception(e=e, _id=1, _raise=on_error != "c")
-
-    def _exception(self, _id: int, e: Exception, _raise: bool = False) -> None:
-        """Saves exception encountered; will raise if `_raise=False` is passed."""
-        self.outcome, self.error = _id, e
-        if _raise:
-            raise e
-
-    def to_table(
-        self,
-        df: pd.DataFrame,
-        table: str,
-        file_format: Optional[str] = None,
-        incl_tmstmp: Optional[bool] = None,
-        on_error: Optional[str] = None,
-        if_exists: Optional[str] = None,
-        as_is: bool = False,
-        **kwargs,
-    ):
-        """Table re-implementation."""
-        from snowmobile.core import Table  # isort:skip
-
-        try:
-            table = Table(
-                sn=self,
-                df=df,
-                table=table,
-                file_format=file_format,
-                incl_tmstmp=incl_tmstmp,
-                on_error=on_error,
-                if_exists=if_exists,
-                **(kwargs or {}),
-            )
-            if as_is:
-                return table.load()
-            return table
-
-        except (ProgrammingError, pdDataBaseError, DatabaseError) as e:
-            raise e
+            e.to_raise = on_error != 'c'
+            self.e.collect(e=e)
+            if e.to_raise:
+                raise e
 
     def __str__(self) -> str:
         return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"

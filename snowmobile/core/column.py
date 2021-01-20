@@ -1,5 +1,5 @@
 """
-:class:`Column` object.
+Represents a single ``Column`` of a {class}`SnowFrame`}.
 """
 from __future__ import annotations
 
@@ -96,10 +96,11 @@ class Column(Snowmobile):
         with self.update() as s:
             fill_char = fill_char or "_"
             to_swap = {k: fill_char for k in self._EXCLUDE_CHARS}
+            to_swap['_'] = '_'
             for char, swap_char in to_swap.items():
                 s.current = s.current.replace(char, swap_char)
             if dedupe_special:
-                s.current = s.dedupe(fill_char=fill_char, current=s.current)
+                s.current = s.dedupe(current=s.current, char=fill_char)
         return self.current
 
     def __eq__(self, other: Column) -> bool:

@@ -1,14 +1,17 @@
-# **snowmobile.toml**
+# *snowmobile.toml*
 
-The parsed and validated form of [snowmobile.toml](#snowmobiletoml) is a {class}`snowmobile.Configuration` object, with the parent-level sections
-of [snowmobile.toml](#snowmobiletoml) stored as individual attributes.
+The parsed and validated form of [snowmobile.toml](#snowmobiletoml) is a 
+{class}`snowmobile.Configuration` object; all parsing of the file is done within 
+{mod}`snowmobile.core.cfg`, in which sections are split at the root and fed into 
+{xref}`pydantic's` glorious API to define the schema and impose (evolving) validation 
+where needed.
 
-The sections are parsed as dictionaries and instantiated as {xref}`pydantic` objects in the {mod}`snowmobile.core.cfg` module to ensure type safety
-and population of required fields each time a {ref}`snowmobile` object is created.
+Once validated, the {class}`Configuration` object serves as a namespace for the 
+contents/structure of the configuration file and utility methods implemented on 
+top of them, **with the rest of the API accessing it as the 
+{attr}`~snowmobile.Connector.cfg` attribute of {class}`~snowmobile.Connector`**.
 
-Once validated, the {class}`Configuration` object serves as a namespace for the contents/structure of the configuration file and utility methods
-implemented on top of them, with the rest of the API accessing it as the {attr}`~snowmobile.Connector.cfg` attribute of {class}`snowmobile.Connector`.
-
+{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from module docstring`
 
 ````{tabbed} Usage
 :new-group:
@@ -19,7 +22,7 @@ attribute of {class}`snowmobile.Connector`.
 We can create an instance of {class}`snowmobile.Connector` without connecting to {xref}`snowflake` by providing it with the convenience argument
 `delay=True`, which will omit connecting to {xref}`snowflake` when the object is created.
 
-```{literalinclude} ../examples/configuration/instantiate_connector.py
+```{literalinclude} ../snippets/instantiate_connector.py
 :language: python
 :lines: 6-14
 :lineno-start: 1
@@ -27,7 +30,7 @@ We can create an instance of {class}`snowmobile.Connector` without connecting to
 
 The attributes that map to different sections of [snowmobile.toml](#snowmobiletoml) are:
 
-```{literalinclude} ../examples/configuration/instantiate_connector.py
+```{literalinclude} ../snippets/instantiate_connector.py
 :language: python
 :lines: 16-20
 :lineno-start: 10
@@ -43,7 +46,7 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 
 ````
 
-## **Glossary**
+## Glossary
 
 (connection)=
 ```{tabbed} [connection]
@@ -133,7 +136,7 @@ together aliases/names of:
 *Default arguments to include in {xref}`snowflake` {meth}`copy into` statement*
 ```
 
-(loading.export-options)=
+(loading.default-table-kwargs)=
 ```{tabbed} [loading.export-options]
 :new-group:
 *Groups subsections of export-options*
@@ -151,7 +154,7 @@ data to a local file before loading into a staging table via
 {xref}`snowflake`'s {meth}`put file from stage` statement.
 ```
 
-## **File Contents**
+## File Contents
 
 ```{admonition} Tip
 :class: tip

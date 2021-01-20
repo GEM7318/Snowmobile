@@ -1,5 +1,11 @@
-# Extensions
+```{eval-rst}
+===========================
+Extending :ref:`snowmobile`
+===========================
 
-## *DDL.sql*
+*DDL.sql*
+=========
 
-## *snowmobile_ext.toml*
+*snowmobile_ext.toml*
+=====================
+```

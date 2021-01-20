@@ -84,7 +84,9 @@ class Statement(Tag, Snowmobile):
         -3: ("success", "passed"),
         -2: ("warning", "failed"),
         -1: ("-", "error: post-processing"),
+        # -- derived end
         0: ("-", ""),
+        # -- base start
         1: ("-", "error: execution"),
         2: ("success", "completed"),
     }
@@ -235,7 +237,7 @@ class Statement(Tag, Snowmobile):
 
         note:
             The tag name used here will be the user-provided tag from the
-            original script or a generated :attr:`Tag.nm` of a tag was not
+            original script or a generated :attr:`Tag.nm` if a tag was not
             provided for a given statement.
 
         """
@@ -243,9 +245,10 @@ class Statement(Tag, Snowmobile):
         open_p, close_p = patterns.core.to_open, patterns.core.to_close
         return f"{open_p}{self.nm}{close_p}\n{self.sql};\n"
 
-    def render(self) -> None:
+    def render(self) -> Statement:
         """Renders the statement's sql as markdown in Notebook/IPython environments."""
         display((Markdown(self.as_section().sql_md)))
+        return self
 
     @property
     def is_derived(self):

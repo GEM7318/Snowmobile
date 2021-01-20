@@ -1,19 +1,40 @@
-{xref}`snowmobile` wraps the {xref}`SnowflakeConnection` class into an object model focused on configuration
-management and evolving the way Python is used to interact with the {xref}`snowflakedb`, its core features being:
+```{include} /badges.md
+```
 
-{fa}`check,text-success mr-1` **Use a single configuration file, [snowmobile.toml](./usage/snowmobile_toml.md#snowmobiletoml), for any number of Python instances on a machine**
+---
 
-{fa}`check,text-success mr-1` **Alias different sets of credentials, connection parameters and loading specifications**
+{xref}`snowmobile` bundles the {xref}`SnowflakeConnection` into an object model focused on configuration-management
+and making it easy to work with {xref}`snowflake` in natural idiomatic Python.
 
-{fa}`check,text-success mr-1` **Work with sql scripts as Python objects**
+**Its main features are:**
+<style>
+truncated {
+    margin: 0 0.1rem 0.1rem 1.1rem;
+}
+</style>
+<DL style="margin-top: -0.4em;">
+<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/snowmobile_toml.html#snowmobile-toml"><span class="std std-doc">Consolidated configuration: snowmobile.toml</span></a>
+    <dd class="truncated">Use one configuration file, tracked by <a class="reference external" href="https://pypi.org/project/snowmobile/">snowmobile</a> and accessible from all Python instances on a machine
 
-{fa}`check,text-success mr-1` **Document scripts with a sql-compliant markup syntax (exports to .md)**
+<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/connector.html#executing-raw-sql"><span class="std std-doc">Simplified execution of raw SQL</span></a>
+    <dd class="truncated">Query results into a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">DataFrame</a>, 
+    <a class="reference external" href="https://docs.snowflake.com/en/user-guide/python-connector-api.html#cursor">SnowflakeCursor</a> or 
+    <a class="reference external" href="https://docs.snowflake.com/en/user-guide/python-connector-api.html#cursor">DictCursor</a> from the same object
 
-{fa}`check,text-success mr-1` **Tag and access individual statements from within sql files**
+<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/table.html"><span class="std std-doc">Refined data loading implementation</span></a>
+    <dd class="truncated">DDL from <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">DataFrame</a>;
+    compatibility checks at run time; supports <i>if_exists</i> in (<i>'truncate'</i>, <i>'append'</i>, <i>'replace'</i>, <i>'fail'</i>)
 
-{fa}`check,text-success mr-1` **Map in-warehouse file formats to stored DDL and export options**
+<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/script.html#examples"><span class="std std-doc">.sql scripts as Python objects</span></a>
+    <dd class="truncated">Scripts as context managers; add markup; work with actual statements; export to markdown
+</DL>
 
-{fa}`check,text-success mr-1` **Return query results in a [SnowflakeCursor](https://docs.snowflake.com/en/user-guide/python-connector-api.html)
-or a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) from the same method**
+```{note} 
+{xref}`snowmobile` is a wrapper **around** the {xref}`snowflake.connector2`, 
+not a replacement for it; the {xref}`SnowflakeConnection` is intentionally
+stored as a public attribute so that the {xref}`snowflake.connector2` 
+and {xref}`snowmobile` APIs can be leveraged congruently. 
+```
 
-{fa}`check,text-success mr-1` **Built-in methods to run common information schema and administrative commands**
+---
+

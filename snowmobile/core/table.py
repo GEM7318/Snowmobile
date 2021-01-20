@@ -7,7 +7,7 @@ import csv
 import os
 import time
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
@@ -41,6 +41,7 @@ class Table(Snowmobile):
         on_error: Optional[str] = None,
         check_dupes: Optional[bool] = None,
         load_copy: Optional[bool] = None,
+        as_is: bool = False,
     ):
         super().__init__()
 
@@ -165,6 +166,9 @@ class Table(Snowmobile):
         self.db_responses: Dict[str, str] = dict()
         self.loaded: bool = bool()
 
+        if as_is:
+            self.load()
+
     @property
     def exists(self):
         """Indicates if the target table exists."""
@@ -173,7 +177,7 @@ class Table(Snowmobile):
         return self._exists
 
     @property
-    def col_diff(self) -> Dict[int, bool]:
+    def col_diff(self) -> Dict[int, Tuple[str, str]]:
         """Returns diff detail of local DataFrame to in-warehouse table."""
 
         def fetch(idx: int, from_list: List) -> str:
@@ -191,7 +195,7 @@ class Table(Snowmobile):
         cols_df = list(self.df.columns)
 
         self._col_diff = {
-            i: fetch(i, cols_t) == fetch(i, cols_df)
+            i: (fetch(i, cols_t), fetch(i, cols_df))
             for i in range(max(len(cols_t), len(cols_df)))
         }
         return self._col_diff
@@ -199,7 +203,7 @@ class Table(Snowmobile):
     @property
     def cols_match(self) -> bool:
         """Indicates if columns match between DataFrame and table."""
-        return all(self.col_diff.values())
+        return all(d[0] == d[1] for d in self.col_diff.values())
 
     def load_statements(self, from_script: Path):
         """Generates exhaustive list of the statements to execute for a given
@@ -253,8 +257,8 @@ class Table(Snowmobile):
         if if_exists == "fail":
             self.msg = (
                 f"`{self.name}` already exists and if_exists='fail' was "
-                f"provided; please provide 'replace', 'append', or "
-                f"'truncate' to continue loading with a pre-existing table."
+                f"provided;\n'replace', 'append', or 'truncate' required "
+                f"to continue load process with a pre-existing table."
             )
             e = errors.ExistingTableError(msg=self.msg, to_raise=True)
             self.e.collect(e)
@@ -386,6 +390,8 @@ class Table(Snowmobile):
         """Generates table DDL or truncate statement where applicable."""
         if self.requires_sql == "ddl" and not from_script:
             return self.df.snf.ddl(table=self.name)
+        # TODO: Add 'ddl' keyword argument for the option to just pass in
+        #   DDL directly as opposed to from a script.
         elif self.requires_sql == "ddl":
             return Script(path=from_script, sn=self.sql.sn).s(_id=self.name).sql
         else:

@@ -1,8 +1,8 @@
 
 [connection]
-    default-creds = ''  # will use `creds1` if left blank
+    default-creds = ''
 
-    [connection.credentials.creds1]  # `creds1` is a starter/temporary alias
+    [connection.credentials.creds1]
         user = ''
         password = ''
         role = ''
@@ -11,7 +11,7 @@
         database = ''
         schema = ''
 
-    [connection.credentials.creds2]  # each set of credentials stored gets a unique alias
+    [connection.credentials.creds2]
         user = ''
         password = ''
         role = ''
@@ -20,7 +20,7 @@
         database = ''
         schema = ''
 
-    [connection.default-arguments]  # staple kwargs for snowflake.connector.connect()
+    [connection.default-arguments]
         autocommit = true
         authenticator = 'snowflake'
         timezone = 'America/Chicago'

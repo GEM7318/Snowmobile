@@ -57,10 +57,12 @@ MANIFEST
 
 # snowmobile-specific ---------------------------------------------------------
 
+**/jupyter_execute/*
+
 # sandbox directories
 _sandbox/*
 _runner/*
-**/*.ipynb
+**/.ipynb_checkpoints/.*
 csv/*
 README.md
 
@@ -69,3 +71,4 @@ snowmobile.toml
 snowmobile_testing.toml
 snowmobile.json
 snowflake_credentials.json
+

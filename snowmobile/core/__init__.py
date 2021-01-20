@@ -8,6 +8,7 @@ from .exception_handler import ExceptionHandler
 from .configuration import Configuration
 from .connector import Connector
 from .connector import Connector as Connect
+from .connector import Connector as connect
 from .section import Section
 from .scope import Scope
 from .tag import Tag
@@ -35,8 +36,7 @@ __all__ = [
     # core object model
     "Snowmobile",
     "Configuration",
-    "Connector",
-    "Connect",
+    "Connector", "Connect", "connect",
     "Table",
     "Script",
     "SQL",
