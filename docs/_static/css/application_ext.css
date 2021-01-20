@@ -11,11 +11,6 @@
     margin: 0 0 0 1.1rem;
 }
 
-/* Resetting admonition titles to template line height */
-/*p.admonition-title {*/
-/*    line-height: unset;*/
-/*}*/
-
 /* Reducing line height of ::tabbed directive */
 div.tabbed-set.docutils {
     margin: 0;
@@ -56,6 +51,12 @@ hr.sn-blue {
     border-bottom-color: #cfecee;
 }
 
+/* 'indented' admonition style */
+.admonition.sn-indented {
+    margin: -0.15rem 1.2rem .7rem 0.25em;
+}
+
+/*noinspection CssReplaceWithShorthandSafely*/
 div.admonition hr.sn-blue {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -116,48 +117,41 @@ div.admonition label.tabbed-label {
 
 .md-typeset .admonition.is-setup>.admonition-title{
     line-height: 0.7rem;
-    /*background-color: #fbfbfb;*/
-    /*background-color: #00b8d417;*/
-    background-color: #34b3c5;
-    border-bottom-color: #00b8d47a;
+    background-color: #34b3c51f;
+    /*border-bottom-color: #00b8d47a;*/
     font-weight: 100;
     font-style: italic;
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
-    color: #73d8e7c4;;
-    top: 0.30rem;
-    font-family: 'FontAwesome', serif;
+    color: #0ebdbd;
+    top: 0.25rem;
     font-weight: 900; /* 600+ if not on pro */
-    font-size: 0.9rem;
-    /*content: "\f0c9";*/
+    font-size: 1rem;
+    font-family: 'FontAwesome', serif;
     content: "\f013";
 }
 
 /* -- is-explanation ------------------------------------------------------- */
 .md-typeset .admonition.is-explanation {
-    /*border-left-color: #167ee678;*/
     border-left-color: #0f70d178;
     margin: -0.15rem 1.2rem .7rem 0.25em;
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title{
     line-height: 0.7rem;
-    /*background-color: #fbfbfb;*/
     background-color: #43c6ff0d;
-    border-bottom-color: #329ef452;
+    /*border-bottom-color: #329ef452;*/
     font-weight: 500;
     font-style: italic;
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
-    /*color: #248fe482;*/
-    color: #248fe4c7;
-    top: 0.30rem;
-    font-family: 'FontAwesome', serif;
+    color: #0f70d173;
+    top: 0.35rem;
     font-weight: 900; /* 600+ if not on pro */
-    font-size: 0.85rem;
-    /*content: "\f013";*/
+    font-size: 0.9rem;
+    font-family: 'FontAwesome', serif;
     content: "\f0c9";
 }
 
