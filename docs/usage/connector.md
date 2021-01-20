@@ -32,7 +32,6 @@ that it was instantiated with.
 1.  {ref}`default-creds<connection.default-creds>` has been left blank
 ```
 
-
 ### Connecting to {xref}`snowflake`
 ---
 
