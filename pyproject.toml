@@ -50,6 +50,58 @@ test = [
     "pytest >= 5.0.0"
 ]
 
+[project]
+dependencies = [
+    'myst-nb==0.10.1',
+    'Sphinx',
+    'sphinx-autoapi',
+    'sphinx-copybutton==0.3.1',
+    'sphinx-material==0.0.32',
+    'sphinx-panels==0.5.2',
+    'sphinx-togglebutton==0.2.3',
+    'sphinxcontrib-applehelp==1.0.2',
+    'sphinxcontrib-devhelp==1.0.2',
+    'sphinxcontrib-dotnetdomain==0.4',
+    'sphinxcontrib-golangdomain==0.2.0.dev0',
+    'sphinxcontrib-htmlhelp==1.0.3',
+    'sphinxcontrib-jsmath==1.0.1',
+    'sphinxcontrib-napoleon==0.7',
+    'sphinxcontrib-qthelp==1.0.3',
+    'sphinxcontrib-serializinghtml==1.1.4',
+
+    'appdirs==1.4.4',
+    'ipython>=7.18.1',
+    'pydantic>=1.7.3',
+    'toml>=0.10',
+    'pytoml==0.1.21',
+
+    # -- copied from: https://github.com/snowflakedb/snowflake-connector-python/blob/master/setup.py
+    'azure-common<2.0.0',
+    'azure-storage-blob>=12.0.0,<13.0.0',
+    'boto3>=1.4.4,<2.0.0',
+    # While requests is vendored, we use regular requests to perform OCSP checks
+    'requests<3.0.0',
+    'certifi<2021.0.0',
+    'pytz<2021.0',
+    'pycryptodomex>=3.2,!=3.5.0,<4.0.0',
+    'pyOpenSSL>=16.2.0,<20.0.0',
+    'cffi>=1.9,<2.0.0',
+    'cryptography>=2.5.0,<4.0.0',
+    'pyjwt<2.0.0',
+    'oscrypto<2.0.0',
+    'asn1crypto>0.24.0,<2.0.0',
+    # A functioning pkg_resources.working_set.by_key and pkg_resources.Requirement is
+    # required. Python 3.6 was released at the end of 2016. setuptools 34.0.0 was released
+    # in early 2017, so we pick this version as a reasonably modern base.
+    'setuptools>34.0.0',
+    # requests requirements
+    'chardet>=3.0.2,<4',
+    'idna>=2.5,<3',
+    'certifi>=2017.4.17',
+
+]
+
+
 [tool.isort]
 profile = "black"
 src_paths = ["snowmobile", "tests"]
