@@ -1,5 +1,5 @@
 
-version: 0.2.1
+version: 2  # version no for readthedocs.yml; v1 deprecated
 
 sphinx:
   builder: html
