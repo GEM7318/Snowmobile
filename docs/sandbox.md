@@ -1,5 +1,42 @@
 # Sandbox
 
+## Setup ish
+
+````{admonition} snippet: snowmobile.toml
+:class: is-content, toggle, toggle-shown
+Lines 2-26 of [](./usage/snowmobile_toml.md) are outlined below; altering
+configurations below this point during initial setup is not recommended.
+```{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+:language: toml
+:lineno-start: 2
+:lines: 2-26
+:emphasize-lines: 4, 13, 22
+```
+````
+
+
+```{admonition}
+:class: note, sn-indent-h
+**The default behavior assumes [](usage/snowmobile_toml) is a unique file name for a given machine**; 
+the first thing {xref}`snowmobile` will do is find your [*snowmobile.toml*](./usage/snowmobile_toml)
+file and cache its location; this step isn't repeated unless the file is moved, 
+the cache is manually cleared, or a different distribution of {xref}`snowmobile` is installed.
+
+<a 
+    class="sphinx-bs badge badge-primary text-white reference external hanging" 
+    href="./usage/connector.html#executing-raw-sql" 
+    title="Binding a process to a specific snowmobile.toml file">
+    <span>Related: Specifying Configuration</span>
+</a>
+<a 
+    class="sphinx-bs badge badge-primary text-white reference external hanging" 
+    href="./usage/snowmobile_toml#clearing-cached-paths" 
+    title="Clearing cached file paths">
+    <span>Related: Clearing Cached Paths</span>
+</a>
+```
+
+
 ```{literalinclude} ../snowmobile/core/connector.py
 :caption: snowmobile.core.connector.query()
 :pyobject: Connector.query

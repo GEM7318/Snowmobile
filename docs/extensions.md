@@ -1,11 +1,16 @@
-```{eval-rst}
-===========================
-Extending :ref:`snowmobile`
-===========================
+# Extending {ref}`snowmobile`
 
-*DDL.sql*
-=========
 
-*snowmobile_ext.toml*
-=====================
+## *DDL.sql*
+
+```{admonition} TODO
+:class: error
+Missing
+```
+
+## *snowmobile_ext.toml*
+
+```{admonition} TODO
+:class: error
+Missing
 ```

@@ -4,7 +4,7 @@
 ---
 
 {xref}`snowmobile` bundles the {xref}`SnowflakeConnection` into an object model focused on configuration-management
-and making it easy to work with {xref}`snowflake` in natural idiomatic Python.
+and making it easy to work with {xref}`snowflake` in natural, idiomatic Python.
 
 **Its main features are:**
 <style>
@@ -26,7 +26,7 @@ truncated {
     compatibility checks at run time; supports <i>if_exists</i> in (<i>'truncate'</i>, <i>'append'</i>, <i>'replace'</i>, <i>'fail'</i>)
 
 <DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/script.html#examples"><span class="std std-doc">.sql scripts as Python objects</span></a>
-    <dd class="truncated">Scripts as context managers; add markup; work with actual statements; export to markdown
+    <dd class="truncated">Scripts as context managers; work with actual statements; add markup; export to markdown
 </DL>
 
 ```{note} 

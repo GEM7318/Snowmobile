@@ -1,3 +1,4 @@
+(header_target)=
 # *snowmobile.toml*
 
 The parsed and validated form of [snowmobile.toml](#snowmobiletoml) is a 
@@ -12,9 +13,6 @@ top of them, **with the rest of the API accessing it as the
 {attr}`~snowmobile.Connector.cfg` attribute of {class}`~snowmobile.Connector`**.
 
 {link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from module docstring`
-
-````{tabbed} Usage
-:new-group:
 
 {class}`snowmobile.Configuration` doesn't need to be directly instantiated since it's accessible through the {attr}`~snowmobile.Connector.cfg`
 attribute of {class}`snowmobile.Connector`.
@@ -44,10 +42,14 @@ Each section of [snowmobile.toml](#snowmobiletoml) and attribute of {attr}`~snow
 specific class of {xref}`snowmobile`, the documentation for which contains more detailed information on its use.
 ```
 
-````
+## *Examples*
+
+### Inspecting {attr}`sn.cfg`
+
+### Clearing Cached Paths
+
 
 % indentation for glossary
-
 <style>
 .tabbed-set.docutils {
     margin-bottom: unset;
@@ -169,6 +171,11 @@ This defines a set of keyword arguments associated with **snowmobile_default_psv
 to be passed directly to the {meth}`pandas.DataFrame.to_csv` method when exporting
 data to a local file before loading into a staging table via
 {xref}`snowflake`'s {meth}`put file from stage` statement.
+```
+
+```{admonition} TODO
+:class: error
+Finish
 ```
 
 ## File Contents

@@ -282,7 +282,7 @@ connection to {xref}`snowflake` at which point a call is made to
 +++
 
 (header_target)=
-### Using Different [snowmobile.toml](./snowmobile_toml.md) Files
+### Specifying [snowmobile.toml](./snowmobile_toml.md)
 ---
 
 ```{admonition} TODO
@@ -313,4 +313,14 @@ This behavior is outlined in the below snippet:
 :language: python
 :lineno-start: 1
 :lines: 1-39
+```
+
+
+(header_target)=
+### Parameter Resolution
+---
+
+```{admonition} TODO 
+:class: error
+Missing
 ```

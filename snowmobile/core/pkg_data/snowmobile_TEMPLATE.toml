@@ -21,9 +21,9 @@
         schema = ''
 
     [connection.default-arguments]
-        autocommit = true
-        authenticator = 'snowflake'
-        timezone = 'America/Chicago'
+#        autocommit = true
+#        authenticator = 'snowflake'
+#        timezone = 'America/Chicago'
 
 [loading]
 

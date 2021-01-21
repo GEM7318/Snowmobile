@@ -96,7 +96,6 @@ panels_add_fontawesome_latex = True
 panels_css_variables = {
     "tabs-color-label-active": "rgba(33, 150, 243, 1)",
     "tabs-color-label-inactive": "rgba(33, 150, 243, 0.55)",
-    # "tabs-color-label-inactive": "rgba(178, 206, 245, 0.62)",
     "tabs-color-overline": "#329ef452",
     "tabs-color-underline": "#329ef452",
     "tabs-size-label": "0.75rem",
@@ -188,7 +187,7 @@ autoapi_member_order = "bysource"  # 'bysource' or 'groupwise'
 
 # https://sphinx-togglebutton.readthedocs.io/en/latest/
 
-togglebutton_hint = "expand"
+togglebutton_hint = "show"
 
 
 # Sphinx Material / HTML Theme ------------------------------------------------

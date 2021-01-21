@@ -1,5 +1,10 @@
 # Snippets
 
+```{admonition} TODO
+:class: error
+Clean this up
+```
+
 ## instantiate_connector.py
 
 ```{literalinclude} /snippets/instantiate_connector.py

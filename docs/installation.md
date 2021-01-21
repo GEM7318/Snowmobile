@@ -1,58 +1,47 @@
-## Setup
+## Getting Started
 ---
 
 <br>
 
-**1. Installation**
-
+### 1. Install
 `pip install snowmobile`
 
 <br>
 
-**2. Save a snowmobile.toml file**
-
-````{tabbed} Download
-```{only} builder_html
-Download {download}`this <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` file and
-remove the `_TEMPLATE` portion of the file name so that it's saved as **snowmobile.toml**.
-```
-````
-
-````{tabbed} Copy File Contents
-Copy the contents below in a file called **snowmobile.toml** anywhere on your local file
-system.
-```{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
-:language: toml
-:lineno-start: 1
-```
-````
+### 2. Save *snowmobile.toml*
+Download {download}`snowmobile_TEMPLATE.toml <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` and save it in anywhere on your file system as **`snowmobile.toml`**.
 
 <br>
 
-**3. Store A Set Credentials**
+### 3. Store Credentials
+The first few lines of [](./usage/snowmobile_toml.md) are outlined below; **for 
+minimum configuration,** populate lines 6-12 with a valid set of {xref}`snowflake` 
+credentials.
 
-The first few lines of **snowmobile.toml** are outlined below; **for minimum configuration**:
-1. Specify a valid set of credentials within the **[connection.credentials.creds1]** block
-1. Modify or remove any unwanted arguments within the **[connection.default-arguments]** block
-
-````{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+`````{literalinclude} ../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+:class: toggle-shown, sn-indent-h
 :language: toml
 :lineno-start: 2
-:lines: 2-26
-:emphasize-lines: 4, 13, 22
-````
+:lines: 2-12
+:emphasize-lines: 5-12
+`````
 
-```{note}
-For initial setup and to ensure replicability of code samples, it's a good idea to:
-1.  Leave *default-creds* as is
-1.  Leave the **aliases** for *creds1* and *creds2* as *creds1* and *creds2*
-1.  Store a second set of credentials under *creds2* if available; if not, store the same set as used
-    for *creds1* under the alias *creds2* as well
-```
+````{admonition} More Info
+:class: note, sn-indent-h, toggle, toggle-shown
+
+`default-creds` on line *3* is an option to specify the connection <u>alias</u> to authenticate with by 
+default; if this field is not populated, {xref}`snowmobile` will use the first set of credentials
+stored at the level of **connection.credentials** (e.g. `creds1` in this instance).
+
+`creds1` on line *5* is the <u>alias</u> associated with the connection arguments in lines 6-12.
+ 
+See [**Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution) for
+detail on what can be included within an aliased credentials block.
+````
 
 <br>
 
-**4. Connect to** {xref}`snowflake`
+### 4. Connect to {xref}`snowflake`
 
 ```python
 import snowmobile
@@ -60,7 +49,7 @@ import snowmobile
 sn = snowmobile.connect()
 ```
 
-Successful setup and connection results in ending console output similar to:
+Successful setup and connection results in ending console output :
 
     >>>
     Looking for snowmobile.toml in local file system..
@@ -70,4 +59,12 @@ Successful setup and connection results in ending console output similar to:
 {link-badge}`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
 {link-badge}`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
 
-<br>
+<hr>
+
+````{admonition} Tip
+:class: tip, sn-indent-h
+**The rest of the documentation assumes**: 
+1.  The first credentials block has been populated with a valid set of credentials
+    and its alias remains `creds1`
+1.  `default-creds` has been left blank
+````

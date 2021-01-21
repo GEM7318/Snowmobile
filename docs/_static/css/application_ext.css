@@ -161,6 +161,30 @@ div.admonition label.tabbed-label {
 }
 
 
+/* -- is-content ----------------------------------------------------------- */
+.md-typeset .admonition.is-content {
+    border-left-color: #0f70d178;
+    margin: -0.15rem 1.2rem .7rem 0.25em;
+}
+
+.md-typeset .admonition.is-content>.admonition-title{
+    line-height: 0.7rem;
+    background-color: #43c6ff0d;
+    /*border-bottom-color: #329ef452;*/
+    font-weight: 500;
+    font-style: italic;
+}
+
+.md-typeset .admonition.is-content>.admonition-title:before{
+    color: #0f70d173;
+    top: 0.35rem;
+    font-weight: 900; /* 600+ if not on pro */
+    font-size: 0.9rem;
+    font-family: 'FontAwesome', serif;
+    content: "\f15c";
+}
+
+
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
     margin-top: 0.2em;
