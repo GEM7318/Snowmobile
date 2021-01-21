@@ -75,10 +75,11 @@ exclude_patterns = ["_build", "__main__.py", "__init__.py", "**.ipynb_checkpoint
 
 # Project Information ---------------------------------------------------------
 
-from snowmobile import __version__
+# TODO: Sort out the requirements dependencies; see Build #12815403
+# from snowmobile import __version__
 
+__version__ = "0.2.0"
 # version = __version__
-# version = "0.0.15"
 
 project = "snowmobile"
 copyright = "2020, Grant E Murray"

@@ -11,7 +11,7 @@
 ### 2. Save *snowmobile.toml*
 Download {download}`snowmobile_TEMPLATE.toml <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` 
 and save it in anywhere on your file system as **`snowmobile.toml`**.
-
++++
 <br>
 
 ### 3. Store Credentials
