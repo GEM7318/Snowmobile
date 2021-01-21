@@ -75,7 +75,7 @@ should provide direct feedback as to what's causing them.
 Since *creds1* is the first set of credentials stored in
 [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) and the
 {ref}`default-creds<connection.default-creds>` field hasn't been set
-(re: {ref}`Section Assumptions<assumptions>`), line **7** is implicitly invoking:
+(re: [*Setup*](#examples)), line **7** is implicitly invoking:
 ```{literalinclude} ../snippets/intro_connector.py
 :language: python
 :lineno-start: 8
@@ -260,6 +260,17 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 +++
 
 (header_target)=
+### Parameter Resolution
+---
+
+```{admonition} TODO 
+:class: error
+Missing
+```
+
++++
+
+(header_target)=
 ### Delaying Connection
 ---
 
@@ -313,14 +324,4 @@ This behavior is outlined in the below snippet:
 :language: python
 :lineno-start: 1
 :lines: 1-39
-```
-
-
-(header_target)=
-### Parameter Resolution
----
-
-```{admonition} TODO 
-:class: error
-Missing
 ```

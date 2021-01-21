@@ -290,7 +290,7 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
 }
 
-
+# TODO: Exclude all caps too
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
     import re
