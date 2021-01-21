@@ -9,7 +9,9 @@
 <br>
 
 ### 2. Save *snowmobile.toml*
-Download {download}`snowmobile_TEMPLATE.toml <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` and save it in anywhere on your file system as **`snowmobile.toml`**.
+Download {download}`snowmobile_TEMPLATE.toml 
+<../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` 
+and save it in anywhere on your file system as **`snowmobile.toml`**.
 
 <br>
 
@@ -27,7 +29,7 @@ credentials.
 `````
 
 ````{admonition} More Info
-:class: note, sn-indent-h, toggle, toggle-shown
+:class: note, sn-indent-h, toggle
 
 `default-creds` on line *3* is an option to specify the connection <u>alias</u> to authenticate with by 
 default; if this field is not populated, {xref}`snowmobile` will use the first set of credentials
