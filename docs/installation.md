@@ -29,14 +29,14 @@ credentials.
 ````{admonition} More Info
 :class: note, toggle, sn-indent-h, sn-dedent-h-t
 
-On line *3* above, `default-creds` is the *alias* associated
+On line *3*, `default-creds` is the *alias* associated
 with the connection arguments to authenticate with if one is not passed 
 to the *creds* argument of {meth}`snowmobile.connect()`.
  
 In instances where this field is left empty and an alias is not explicitly
-provided to the `creds` argument of {meth}`~snowmobile.Connector.connect()`,
-the first set of credentials stored at the level of **`connection.credentials.*`** 
-will be used (e.g. `creds1` in this instance).
+provided to {meth}`~snowmobile.Connector.connect()`, the first set of 
+credentials stored at the level of **`connection.credentials.*`** will be 
+used (e.g. `creds1` in this instance).
 
 <hr class="sn-blue">
 
@@ -50,15 +50,13 @@ For detailed information on what can be included within an aliased credentials b
 <br>
 
 ### 4. Connect to {xref}`snowflake`
+Successful setup and connection can be verified with:
 
 ```python
 import snowmobile
 
 sn = snowmobile.connect()
 ```
-
-Successful setup and connection results in ending console output :
-
     >>>
     Looking for snowmobile.toml in local file system..
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
