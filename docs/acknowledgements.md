@@ -3,6 +3,8 @@
 The purpose of this page is to acknowledge projects that are leveraged
 in the construction of the {xref}`snowmobile` API and documentation.
 
+<br>
+
 <h2 class="hanging">API</h2>
 <hr class="sn-blue hanging">
 

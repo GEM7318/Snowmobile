@@ -27,7 +27,7 @@ credentials.
 `````
 
 ````{admonition} More Info
-:class: note, toggle, sn-indent-h, sn-dedent-h-t
+:class: note, toggle, sn-indent-h, sn-dedent-v-t
 
 On line *3*, `default-creds` represents the *alias* associated
 with the connection arguments to authenticate with by default if one is not passed 

@@ -48,9 +48,14 @@ hr.sn-blue {
     margin-right: 1.2rem;
 }
 
-/* 'remove vertical margins' */
-.md-typeset .sn-dedent-h-t {
+/* 'remove vertical margins (top)' */
+.md-typeset .sn-dedent-v-t {
     margin-top: 0;
+}
+
+/* 'remove vertical margins (bottom)' */
+.md-typeset .sn-dedent-v-b {
+    margin-bottom: 0;
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
