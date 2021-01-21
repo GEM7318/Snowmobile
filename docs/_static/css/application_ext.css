@@ -49,9 +49,8 @@ hr.sn-blue {
 }
 
 /* 'remove vertical margins' */
-.md-typeset .sn-reduce-v-margin {
+.md-typeset .sn-dedent-h-t {
     margin-top: 0;
-    margin-bottom: 0;
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/

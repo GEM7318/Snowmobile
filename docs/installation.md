@@ -24,19 +24,26 @@ credentials.
 :language: toml
 :lineno-start: 2
 :lines: 2-12
-:emphasize-lines: 5-12
 `````
 
 ````{admonition} More Info
-:class: note, sn-indent-h, toggle
+:class: note, toggle, sn-indent-h, sn-dedent-h-t
 
-On line *3* above, `default-creds` is an option to specify the connection <u>alias</u> to authenticate with by 
-default; if this field is not populated, {xref}`snowmobile` will use the first set of credentials
-stored at the level of `[connection.credentials.*]` (e.g. `creds1` in this instance).
+On line *3* above, `default-creds` is the *alias* associated
+with the connection arguments to authenticate with if one is not passed 
+to the *creds* argument of {meth}`snowmobile.connect()`.
+ 
+In instances where this field is left empty and an alias is not explicitly
+provided to the `creds` argument of {meth}`~snowmobile.Connector.connect()`,
+the first set of credentials stored at the level of **`connection.credentials.*`** 
+will be used (e.g. `creds1` in this instance).
+
+<hr class="sn-blue">
 
 On line *5*, `creds1` is the <u>alias</u> associated with the connection arguments in lines 6-12.
+
  
-For detail on what can be included within an aliased credentials block, see
+For detailed information on what can be included within an aliased credentials block, see
 [**snowmobile.Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
 ````
 
