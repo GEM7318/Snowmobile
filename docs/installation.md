@@ -31,14 +31,14 @@ credentials.
 ````{admonition} More Info
 :class: note, sn-indent-h, toggle
 
-`default-creds` on line *3* is an option to specify the connection <u>alias</u> to authenticate with by 
+On line *3* above, `default-creds` is an option to specify the connection <u>alias</u> to authenticate with by 
 default; if this field is not populated, {xref}`snowmobile` will use the first set of credentials
-stored at the level of **connection.credentials** (e.g. `creds1` in this instance).
+stored at the level of `[connection.credentials.*]` (e.g. `creds1` in this instance).
 
-`creds1` on line *5* is the <u>alias</u> associated with the connection arguments in lines 6-12.
+On line *5*, `creds1` is the <u>alias</u> associated with the connection arguments in lines 6-12.
  
-See [**Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution) for
-detail on what can be included within an aliased credentials block.
+For detail on what can be included within an aliased credentials block, see
+[**snowmobile.Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
 ````
 
 <br>

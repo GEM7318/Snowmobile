@@ -186,6 +186,11 @@ Finish
 See [here](https://github.com/toml-lang/toml) if unfamiliar with *.toml* syntax
 ```
 
+```{admonition} FYIs 
+:class: TODO
+Several sections below are commented out.. etc/etc
+```
+
 ````{tabbed} snowmobile.toml
 ```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
 :language: toml
