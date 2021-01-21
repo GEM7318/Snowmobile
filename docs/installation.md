@@ -1,4 +1,4 @@
-## Getting Started
+## Setup
 ---
 
 <br>
@@ -29,34 +29,33 @@ credentials.
 ````{admonition} More Info
 :class: note, toggle, sn-indent-h, sn-dedent-h-t
 
-On line *3*, `default-creds` is the *alias* associated
-with the connection arguments to authenticate with if one is not passed 
+On line *3*, `default-creds` represents the *alias* associated
+with the connection arguments to authenticate with by default if one is not passed 
 to the *creds* argument of {meth}`snowmobile.connect()`.
  
 In instances where this field is left empty and an alias is not explicitly
 provided to {meth}`~snowmobile.Connector.connect()`, the first set of 
 credentials stored at the level of **`connection.credentials.*`** will be 
-used (e.g. `creds1` in this instance).
+used (e.g. `creds1` above).
 
 <hr class="sn-blue">
 
 On line *5*, `creds1` is the <u>alias</u> associated with the connection arguments in lines 6-12.
 
- 
-For detailed information on what can be included within an aliased credentials block, see
-[**snowmobile.Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
+For granular information on what can be included within an aliased credentials block, see
+[**Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
 ````
 
 <br>
 
 ### 4. Connect to {xref}`snowflake`
 Successful setup and connection can be verified with:
-
 ```python
 import snowmobile
 
 sn = snowmobile.connect()
 ```
+
     >>>
     Looking for snowmobile.toml in local file system..
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml

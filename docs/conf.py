@@ -5,6 +5,7 @@
 
 
 # -- Import Management --------------------------------------------------------
+import os
 import sys
 
 from pathlib import Path
@@ -20,14 +21,16 @@ PACKAGE_DIR = ROOT / "snowmobile"
 
 to_insert = {
     "DOCS_DIR": DOCS_DIR,
-    "LINKS_DIR": LINKS_DIR,
+    # "LINKS_DIR": LINKS_DIR,
     "EXT_DIR": EXT_DIR,
     "PACKAGE_DIR": PACKAGE_DIR,
+    "ROOT": ROOT,
 }
 for dir_name, dir_path in to_insert.items():
     sys.path.insert(0, str(dir_path))
-    print(f"<added-to-path> {dir_name}")
+    print(f"<added> {dir_name}: {dir_path.as_posix()}")
 
+os.chdir(str(ROOT))
 
 # -- Xref Extension -----------------------------------------------------------
 # -- See docstring in ext/xref.py for more info
@@ -72,15 +75,17 @@ exclude_patterns = ["_build", "__main__.py", "__init__.py", "**.ipynb_checkpoint
 
 # Project Information ---------------------------------------------------------
 
-# from snowmobile import __version__
-version = "0.0.15"
+from snowmobile import __version__
+
+# version = __version__
+# version = "0.0.15"
 
 project = "snowmobile"
 copyright = "2020, Grant E Murray"
 author = "Grant E Murray"
-# version = __version__
-# release = __version__
-release = version
+version = __version__
+release = __version__
+# release = version
 
 
 # Sphinx Panels ---------------------------------------------------------------
@@ -289,6 +294,7 @@ intersphinx_mapping = {
     "sklearn": ("http://scikit-learn.org/stable", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
 }
+
 
 # TODO: Exclude all caps too
 def autoapi_skip_member(app, what, name, obj, skip, options):
