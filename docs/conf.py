@@ -280,14 +280,6 @@ python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {
     "sqlparse": ("https://sqlparse.readthedocs.io/en/latest/", None),
     "pandas": ("http://pandas.pydata.org/pandas-docs/stable", None),
-    "snowflake.connector": (
-        "https://docs.snowflake.com/en/user-guide/python-connector.html",
-        None,
-    ),
-    "snowflake": (
-        "https://docs.snowflake.com/en/user-guide/python-connector.html",
-        None,
-    ),
     "sphinx": ("http://www.sphinx-doc.org/en/stable", None),
     "python": ("https://docs.python.org/" + python_version, None),
     "matplotlib": ("https://matplotlib.org", None),
@@ -301,7 +293,6 @@ intersphinx_mapping = {
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
     import re
-
     exclude = re.findall("\._.*", str(obj)) or "stdout" in str(obj).lower()
     return skip or exclude
 

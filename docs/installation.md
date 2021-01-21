@@ -55,7 +55,6 @@ import snowmobile
 
 sn = snowmobile.connect()
 ```
-
     >>>
     Looking for snowmobile.toml in local file system..
     (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
