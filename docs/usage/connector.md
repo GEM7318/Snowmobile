@@ -47,7 +47,7 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
-Given *Setup / Assumptions* above, this is implictly invoking:  
+Given *Setup / Assumptions* above, this is implicitly invoking:  
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
 :lines: 8-8

@@ -324,12 +324,23 @@ p.sn-pre-cell {
 /* TODO: Add a style that gives some padding above paragraphs that begin right
     after code blocks. */
 
-.highlight-python.notranslate ~ p {
-    margin-top: 0.7rem;
+/*.highlight-python.notranslate ~ p {*/
+/*    margin-top: 0.7rem;*/
 
+/*}*/
+
+/*p ~ .highlight-python.notranslate {*/
+/*    margin-top: -0.4rem;*/
+/*    margin-left: 0.9rem;*/
+/*    margin-right: 2em;*/
+/*}*/
+
+.highlight-python.notranslate ~ p {
+    margin-top: 0.8rem;
 }
 
 p ~ .highlight-python.notranslate {
-    margin-top: -0.4rem;
-
+    margin-left: 0.9rem;
+    margin-right: 2em;
+    margin-bottom: -0.4rem;
 }
