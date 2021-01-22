@@ -39,7 +39,7 @@ that it was instantiated with.
 +++
 
 ### Connecting to {xref}`snowflake`
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 Establishing a connection can be done with: 
 ```{literalinclude} ../snippets/connector/connecting.py
@@ -79,7 +79,7 @@ recreating it.
 <br>
 
 ### Executing Raw SQL
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 {xref}`snowmobile` provides the following three convenience methods for executing
 raw SQL directly off the {class}`~snowmobile.Connector`.
@@ -99,6 +99,8 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 :lines: 32-34
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
+
+<hr class="sn-blue">
 ````
 
 ````{tabbed} sn.ex()
@@ -108,7 +110,6 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 :lines: 25-26
 ```
 ````
-
 ````{tabbed} +
 Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands within a {xref}`SnowflakeCursor`
 ```{literalinclude} ../snippets/intro_connector.py
@@ -116,6 +117,8 @@ Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands
 :lines: 36-36
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
+
+<hr class="sn-blue">
 ````
 
 ````{tabbed} sn.exd()
@@ -133,6 +136,8 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 :lines: 38-40
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
+
+<hr class="sn-blue">
 ````
 +++
 *The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).
@@ -190,7 +195,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 
 (header_target)=
 ### Aliasing Credentials
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 The below line in [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
 denotes the set of credentials to authenticate with if one isn't
@@ -239,7 +244,7 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 
 (header_target)=
 ### Parameter Resolution
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 ```{admonition} TODO 
 :class: error
@@ -250,7 +255,7 @@ Missing
 
 (header_target)=
 ### Delaying Connection
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 Sometimes it's helpful to create a {class}`~snowmobile.Connector` without 
 establishing a connection; this is accomplished by providing it with the 
@@ -272,7 +277,7 @@ connection to {xref}`snowflake` at which point a call is made to
 
 (header_target)=
 ### Specifying [snowmobile.toml](./snowmobile_toml.md)
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 ```{admonition} TODO
 :class: error
@@ -282,7 +287,7 @@ Missing
 
 (header_target)=
 ### Using *ensure_alive*
-<hr class="sn-blue-thick">
+<hr class="sn-green-thick">
 
 Controlling the behavior of {class}`~snowmobile.Connector` when a connection is 
 lost or intentionally killed is done through the {attr}`~snowmobile.Connector.ensure_alive` 

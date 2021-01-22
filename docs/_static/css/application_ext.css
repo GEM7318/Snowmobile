@@ -1,11 +1,11 @@
 
 /* Gradient across header -------------------------------------------------- */
 header.md-header {
-    background-image: linear-gradient(to right,#007bff,#0070207d 60%);
+    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)
 }
 
 nav.md-tabs {
-    background-image: linear-gradient(to right,#007bff,#0070207d 60%);
+    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)
 }
 
 
@@ -23,7 +23,7 @@ nav.md-tabs {
 
 /* Reducing line height of ::tabbed directive */
 div.tabbed-set.docutils {
-    margin: 0;
+    margin: 0 0 0.2rem;
     line-height: 1em;
 }
 
@@ -117,6 +117,14 @@ div.admonition hr.sn-blue {
     border: 0;
 }
 
+.md-typeset hr.sn-green-thick {
+    /*border-style: solid;*/
+    /*border-width: .08rem;*/
+    height: 0.16rem;
+    background-color: #11838e59;
+    margin-top: -0.2em;
+    border: 0;
+}
 
 /* -- Jupyter/Notebook adjustments ----------------------------------------- */
 
