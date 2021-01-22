@@ -100,7 +100,6 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands within a {xref}`SnowflakeCursor`
 ```{literalinclude} ../snippets/intro_connector.py
 :language: python
-:lineno-start: 36
 :lines: 36-36
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
@@ -123,8 +122,6 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 ````
-<br>
-
 +++
 *The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).
 
@@ -159,7 +156,7 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 ---
 
 ````{admonition} Tip: Naming Convention
-:class: toggle, tip, sn-indent-h
+:class: toggle, tip, indented
 The following convention of variable/attribute name to associated object is
 used throughout {ref}`snowmobile`'s documentation and source code, including in 
 method signatures:

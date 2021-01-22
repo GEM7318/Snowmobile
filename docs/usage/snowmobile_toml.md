@@ -47,6 +47,7 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 ### Clearing Cached Paths
 
 ## Glossary
+<hr class="sn-blue-thick">
 
 (connection)=
 ````{rst-class} sn-glossary
@@ -162,6 +163,7 @@ Finish
 ```
 
 ## File Contents
+<hr class="sn-blue-thick">
 
 ```{admonition} Tip
 :class: tip

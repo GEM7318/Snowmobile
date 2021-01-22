@@ -19,7 +19,7 @@ is understood before use is recommended.
 ```
 
 ## Using {attr}`~snowmobile.SQL.auto_run`
----
+<hr class="sn-blue-thick">
 
 If the keyword argument {any}`run: bool` is omitted to a method of
 {class}`~snowmobile.SQL`, the current value of its {attr}`~snowmobile.SQL.auto_run`
@@ -74,6 +74,7 @@ This creates a temp table for us called `dummy_table` with the following structu
 ````
 
 ##### 1: When {attr}`~snowmobile.SQL.auto_run`=*True*
+<hr class="sn-blue-thick">
 
 **By default**, calling {meth}`~snowmobile.SQL.table_sample` on our 
 *dummy_table* will select an {any}`n: int` record sample from a 
@@ -104,6 +105,7 @@ can be superseded by the `run` keyword argument provided to any method:
 ### Extras
 
 ##### 1: When {attr}`~snowmobile.SQL.auto_run`=*False*
+<hr class="sn-blue-thick">
 
 To reverse this behavior, {attr}`~snowmobile.SQL.auto_run` can be set to *False* with:
 ```{literalinclude} ../snippets/sql_working_example.py

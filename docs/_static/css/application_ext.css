@@ -35,13 +35,13 @@ ol.simple, ul.simple, li {
     margin-left: 0.4rem;
 }
 
-/* Custom line break */
-hr.sn-blue {
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-    border-style: solid;
-    border-bottom-color: #cfecee;
-}
+/*!* Custom line break *!*/
+/*hr.sn-blue {*/
+/*    margin-top: 0.2rem;*/
+/*    margin-bottom: 0.2rem;*/
+/*    border-style: solid;*/
+/*    border-bottom-color: #cfecee;*/
+/*}*/
 
 /* 'indented' style */
 .md-typeset .sn-indent-h {
@@ -75,6 +75,16 @@ hr.sn-blue {
     margin-bottom: 1rem;
 }
 
+/* Line breaks / <hr> ------------------------------------------------------ */
+
+/* Custom line break */
+hr.sn-blue {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-style: solid;
+    border-bottom-color: #cfecee;
+}
+
 /*noinspection CssReplaceWithShorthandSafely*/
 div.admonition hr.sn-blue {
     margin-top: 0.2rem;
@@ -90,11 +100,12 @@ div.admonition hr.sn-blue {
 }
 
 .md-typeset hr.sn-blue-thick {
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: .08rem;
+    /*border-style: solid;*/
+    /*border-width: .08rem;*/
+    height: 0.12rem;
     background-color: #329ef48a;
     margin-top: -0.4em;
+    border: 0;
 }
 
 
@@ -224,9 +235,11 @@ div.output.text_plain.highlight-myst-ansi.notranslate {
     margin-top: 0.2em;
 }
 
+
 /* Reducing line height of lists  */
 .tabbed-content.docutils {
     line-height: 1.3em;
+    padding-bottom: 0;
 }.p,ol.simple,ul.simple,dl.simple,
 
 
@@ -273,6 +286,10 @@ button.toggle-button.toggle-button-hidden:before {
     top: 40%;
 }
 
+button.toggle-button {
+    background: #2125299e;
+}
+
 /* Style for the paragraph that precedes bullets or definitions list */
 .hanging {
     margin-bottom: 0.5rem;
@@ -309,6 +326,18 @@ span.md-nav__link.caption {
 div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
     top: 0.4em;
 }
+
+
+/*.md-typeset .admonition {*/
+/*    margin-left: 0.7rem;*/
+/*    margin-right: 1.2rem;*/
+/*}*/
+
+.admonition.indented {
+    margin-left: 0.7rem;
+    margin-right: 1.2rem;
+}
+
 
 /* Reducing admonition title line height */
 .md-typeset .admonition>.admonition-title{
@@ -358,4 +387,18 @@ p ~ .highlight-python.notranslate {
     margin-left: 0.9rem;
     margin-right: 2em;
     margin-bottom: -0.2rem;
+}
+
+
+header.md-header {
+/*     background-image: linear-gradient(20deg, #007bff 20%, #2269b5 40%, #007bff 60%); */
+    background-image: linear-gradient(to right, #007bff, #b4c9de, #0070207d);
+/*     background-image: linear-gradient(20deg, #007bff, #b4c9de, #0070207d); */
+/*     background-image: linear-gradient(to_right, #448aff 0%, #00ff4075 50%, #448aff 75%); */
+}
+
+
+nav.md-tabs {
+    background-image: linear-gradient(20deg, #007bff, #b4c9de, #0070207d);
+/*     background-image: linear-gradient(to_right, #007bff, #b4c9de, #0070207d); */
 }

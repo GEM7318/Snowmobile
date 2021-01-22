@@ -54,11 +54,13 @@ Successful setup and connection can be verified with:
 import snowmobile
 
 sn = snowmobile.connect()
+"""
+Looking for snowmobile.toml in local file system..
+(1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
+..connected: snowmobile.Connector(creds='creds1')
+"""
 ```
-    >>>
-    Looking for snowmobile.toml in local file system..
-    (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
-    ..connected: snowmobile.Connector(creds='creds1')
+
 
 {link-badge}`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
 {link-badge}`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
