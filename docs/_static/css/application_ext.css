@@ -1,3 +1,15 @@
+header.md-header {
+/*     background-image: linear-gradient(20deg, #007bff 20%, #2269b5 40%, #007bff 60%); */
+    background-image: linear-gradient(to right, #007bff, #b4c9de, #0070207d);
+/*     background-image: linear-gradient(20deg, #007bff, #b4c9de, #0070207d); */
+/*     background-image: linear-gradient(to_right, #448aff 0%, #00ff4075 50%, #448aff 75%); */
+}
+
+
+nav.md-tabs {
+    background-image: linear-gradient(40deg, #007bff, #b4c9de, #0070207d);
+/*     background-image: linear-gradient(to_right, #007bff, #b4c9de, #0070207d); */
+}
 
 
 /* Global spacing settings for content container */
