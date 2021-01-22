@@ -59,11 +59,24 @@ Here's some context on how to think about the basic differences in these two
 :language: python
 :lines: 10-12
 ```
-{link-badge}`./sql.html,cls=badge-primary text-white sn-indent-cell,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
 
-<br>
+<p style="margin-top: 0.4rem; margin-bottom: 1.3rem;">
+    <a 
+        class="sphinx-bs badge badge-primary text-white reference external sn-indent-cell"
+        href="./sql.html" 
+        title="Documentation parsed from module docstring">
+        <span>Related: snowmobile.SQL</span>
+    </a>
+</p>
+
+```{admonition} Fixture: **sn**
+:class: toggle, toggle-shown, sn-fixture
+The remaining examples in this section make use of the `sn` instantiated above without explicitly 
+recreating it.
+```
 
 +++
+<br>
 
 ### Executing Raw SQL
 <hr class="sn-blue-thick">
@@ -126,7 +139,7 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
 *The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).
 
 ````{admonition} SnowflakeCursor / DictCursor
-:class: note
+:class: note, toggle, toggle-shown
 
 ```{eval-rst}
 
@@ -150,7 +163,6 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executin
       :lineno-start: 1
       :lines: 1-19
 ```
-
 ````
 
 ---

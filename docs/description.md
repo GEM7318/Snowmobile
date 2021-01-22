@@ -1,7 +1,6 @@
 ```{include} /badges.md
 ```
-
----
+<hr style="margin-top: -0.2rem;">
 
 {xref}`snowmobile` bundles the {xref}`SnowflakeConnection` into an object model focused on configuration-management
 and making it easy to work with {xref}`snowflake` in natural, idiomatic Python.
@@ -36,5 +35,4 @@ stored as a public attribute so that the {xref}`snowflake.connector2`
 and {xref}`snowmobile` APIs can be leveraged congruently. 
 ```
 
----
-
+<hr style="margin: 0;">

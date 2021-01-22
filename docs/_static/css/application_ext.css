@@ -1,14 +1,15 @@
-header.md-header {
-    background-image: linear-gradient(to right,#007bff 10%,#0070207d);
-}
 
+/* Gradient across header -------------------------------------------------- */
+header.md-header {
+    background-image: linear-gradient(to right,#007bff,#0070207d);
+}
 
 nav.md-tabs {
-    background-image: linear-gradient(to right,#007bff 10%,#0070207d);
+    background-image: linear-gradient(to right,#007bff,#0070207d);
 }
 
 
-/* Global spacing settings for content container */
+/* Global spacing settings for content container --------------------------- */
 .md-content__inner.md-typeset {
     line-height: 1.3em;
     margin-bottom: 0.2rem;
@@ -73,13 +74,13 @@ ol.simple, ul.simple, li {
     margin-top: 0;
 }
 
-/* 'remove vertical margins (bottom)' */
-.md-typeset .sn-dedent-v-b {
-    margin-bottom: 0;
+/* 'increase vertical margins (bottom)' */
+.md-typeset .sn-increase-margin-b {
+    margin-bottom: 1rem;
 }
 
-/* 'remove vertical margins (bottom)' */
-.md-typeset .sn-increase-margin-b {
+/* 'increase vertical margins (bottom)' */
+.md-typeset .sn-increase-margin-t {
     margin-bottom: 1rem;
 }
 
@@ -146,8 +147,6 @@ div.highlight {
 /* -- Tweaking nested tabbed directives within admonitions ----------------- */
 div.admonition div.tabbed-set.docutils {
     margin-top: -0.6rem;
-    /*--tabs-color-underline: #21252929;*/
-    /*--tabs-color-overline: #21252929;*/
 }
 
 /* Unsetting nested tabbed directives that don't have a preceding <p> */
@@ -183,6 +182,33 @@ div.admonition label.tabbed-label {
     font-size: 1rem;
     font-family: 'FontAwesome', serif;
     content: "\f013";
+}
+
+/* -- sn-sticky ------------------------------------------------------------ */
+.md-typeset .admonition.sn-fixture {
+    /*border-left-color: #a6bace;*/
+    border-left-color: #11838e;
+    margin: -0.15rem 1.5rem .7rem 0.9rem;
+    display: inline-block;
+}
+
+.md-typeset .admonition.sn-fixture>.admonition-title{
+    line-height: 0.7rem;
+    background-color: #ffff;
+    border-bottom-color: #11838e;
+    font-weight: 100;
+}
+
+.md-typeset .admonition.sn-fixture>.admonition-title:before{
+    color: #11838e;
+    top: 0.15rem;
+    font-weight: 900; /* 600+ if not on pro */
+    font-size: 1.3rem;
+    font-family: 'FontAwesome', serif;
+    /*content: "\f560";*/
+    /*content: "\f249";*/
+    /*content: "\f024";  !* flag *!*/
+    content: "\f103";  /* double arrows down */
 }
 
 /* -- is-explanation ------------------------------------------------------- */
@@ -294,9 +320,9 @@ button.toggle-button.toggle-button-hidden:before {
     top: 40%;
 }
 
-button.toggle-button {
-    background: #2125299e;
-}
+/*button.toggle-button {*/
+/*    background: #2125299e;*/
+/*}*/
 
 /* Style for the paragraph that precedes bullets or definitions list */
 .hanging {
@@ -373,7 +399,7 @@ div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
 /*    font-weight: 800;*/
 /*}*/
 .md-typeset .sn-indent-cell {
-    margin-left: 0.8rem;
+    margin-left: 0.85rem;
 }
 
 /*.highlight-python.notranslate ~ p {*/
