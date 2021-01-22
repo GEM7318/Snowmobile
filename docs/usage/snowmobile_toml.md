@@ -19,7 +19,6 @@ attribute of {class}`snowmobile.Connector`.
 
 We can create an instance of {class}`snowmobile.Connector` without connecting to {xref}`snowflake` by providing it with the convenience argument
 `delay=True`, which will omit connecting to {xref}`snowflake` when the object is created.
-
 ```{literalinclude} ../snippets/instantiate_connector.py
 :language: python
 :lines: 6-14
@@ -27,7 +26,6 @@ We can create an instance of {class}`snowmobile.Connector` without connecting to
 ```
 
 The attributes that map to different sections of [snowmobile.toml](#snowmobiletoml) are:
-
 ```{literalinclude} ../snippets/instantiate_connector.py
 :language: python
 :lines: 16-20
@@ -54,25 +52,26 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 ````{rst-class} sn-glossary
 ```{tabbed} [connection]
 :new-group:
+(connection.default-creds)=
 *All configuration options for establishing connections to {xref}`snowflake`*
 ```
 ````
 
-(connection.default-creds)=
 ```{tabbed} default-creds
 :new-group:
+(connection.credentials)=
 *The credentials (alias) to use by default if not specified in
 {arg}`snowmobile.Connector.creds`*
 ```
 
-(connection.credentials)=
 ```{tabbed} [connection.credentials]
 :new-group:
+(connection.credentials.creds1)=
 *Groups subsections of credentials, each declared with the structure of
 ``[connection.credentials.credentials_alias]``*
 ```
-```{tabbed} +
 
+```{tabbed} +
 The value of `credentials_alias` is the literal string to pass to the
 ``creds`` argument of {class}`snowmobile.Connector` to establish the
 {xref}`snowflake` connection with those credentials.
@@ -84,13 +83,12 @@ a specific timezone or transaction mode (for example) to a specific set of
 credentials.
 ```
 
-(connection.credentials.creds1)=
 ```{tabbed} [connection.credentials.creds1]
 :new-group:
+(connection.credentials.creds2)=
 *Store your first set of credentials here*
 ```
 
-(connection.credentials.creds2)=
 ```{tabbed} [connection.credentials.creds2]
 :new-group:
 *Store as many more credentials as you want following this format*

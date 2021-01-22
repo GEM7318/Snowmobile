@@ -100,10 +100,10 @@ panels_add_bootstrap_css = True  # required for color in icons/etc
 panels_add_fontawesome_latex = True
 
 panels_css_variables = {
-    "tabs-color-label-active": "rgba(33, 150, 243, 1)",
+    "tabs-color-label-active": "rgba(33, 150, 243, 0.85)",
     "tabs-color-label-inactive": "rgba(33, 150, 243, 0.55)",
     "tabs-color-overline": "#329ef452",
-    "tabs-color-underline": "#329ef452",
+    "tabs-color-underline": "#ffffff",
     "tabs-size-label": "0.75rem",
 }
 

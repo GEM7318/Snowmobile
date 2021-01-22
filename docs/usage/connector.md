@@ -27,7 +27,7 @@ that it was instantiated with.
 ```{admonition} Setup / Assumptions
 :class: toggle, todo, is-setup, toggle-shown
 **This section assumes the following about the contents of** [**snowmobile.toml**](./snowmobile_toml.md#snowmobiletoml):
-1.  {ref}`[connection.credentials.creds1]<connection.credentials.creds1>`
+1.  {ref}`[connection.credentials.creds1] <connection.credentials.creds1>`
     and {ref}`[connection.credentials.creds2]<connection.credentials.creds2>` are:
     1.  Populated with valid credentials
     1.  The first and second credentials stored respectively
@@ -39,7 +39,7 @@ that it was instantiated with.
 +++
 
 ### Connecting to {xref}`snowflake`
----
+<hr class="sn-blue-thick">
 
 Establishing a connection can be done with: 
 ```{literalinclude} ../snippets/connector/connecting.py
@@ -59,14 +59,14 @@ Here's some context on how to think about the basic differences in these two
 :language: python
 :lines: 10-12
 ```
-{link-badge}`./sql.html,cls=badge-primary text-white,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
+{link-badge}`./sql.html,cls=badge-primary text-white sn-indent-cell,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
 
 <br>
 
 +++
 
 ### Executing Raw SQL
----
+<hr class="sn-blue-thick">
 
 {xref}`snowmobile` provides the following three convenience methods for executing
 raw SQL directly off the {class}`~snowmobile.Connector`.
@@ -182,7 +182,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 
 (header_target)=
 ### Aliasing Credentials
----
+<hr class="sn-blue-thick">
 
 The below line in [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
 denotes the set of credentials to authenticate with if one isn't
@@ -231,7 +231,7 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 
 (header_target)=
 ### Parameter Resolution
----
+<hr class="sn-blue-thick">
 
 ```{admonition} TODO 
 :class: error
@@ -242,7 +242,7 @@ Missing
 
 (header_target)=
 ### Delaying Connection
----
+<hr class="sn-blue-thick">
 
 Sometimes it's helpful to create a {class}`~snowmobile.Connector` without 
 establishing a connection; this is accomplished by providing it with the 
@@ -264,7 +264,7 @@ connection to {xref}`snowflake` at which point a call is made to
 
 (header_target)=
 ### Specifying [snowmobile.toml](./snowmobile_toml.md)
----
+<hr class="sn-blue-thick">
 
 ```{admonition} TODO
 :class: error
@@ -274,7 +274,7 @@ Missing
 
 (header_target)=
 ### Using *ensure_alive*
----
+<hr class="sn-blue-thick">
 
 Controlling the behavior of {class}`~snowmobile.Connector` when a connection is 
 lost or intentionally killed is done through the {attr}`~snowmobile.Connector.ensure_alive` 

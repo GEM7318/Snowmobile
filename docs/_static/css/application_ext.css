@@ -1,4 +1,5 @@
 
+
 /* Global spacing settings for content container */
 .md-content__inner.md-typeset {
     line-height: 1.3em;
@@ -48,6 +49,12 @@ hr.sn-blue {
     margin-right: 1.2rem;
 }
 
+.md-typeset .sn-indent-h-cell {
+    padding-left: 1em;
+    padding-right: 2em;
+}
+
+
 /* 'remove vertical margins (bottom)' */
 .md-typeset .sn-dedent-v-b {
     margin-bottom: 0;
@@ -80,6 +87,14 @@ div.admonition hr.sn-blue {
 .md-typeset hr {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
+}
+
+.md-typeset hr.sn-blue-thick {
+    border-style: solid;
+    border-color: #ffffff;
+    border-width: .08rem;
+    background-color: #329ef48a;
+    margin-top: -0.4em;
 }
 
 
@@ -242,9 +257,9 @@ button.toggle-button.toggle-button-hidden {
     right: 0.2em;
 }
 
- /* Moving toggle button symbol farther to the right */
+/* Moving toggle button symbol farther to the right */
 button.toggle-button.toggle-button-hidden:before {
-    left: -4em;
+    left: -1.5rem;
 }
 
 /* Shrinking toggle button size */
@@ -314,15 +329,15 @@ div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
 }
 
 /* Indented to same level that jupyter cells are */
-p.sn-pre-cell {
-    margin-left: 0.9rem;
-    margin-top: 1em;
-    font-size: 0.75rem;
-    font-weight: 800;
+/*p.sn-indent-cell {*/
+/*    margin-left: 0.9rem;*/
+/*    margin-top: 1em;*/
+/*    font-size: 0.75rem;*/
+/*    font-weight: 800;*/
+/*}*/
+.md-typeset .sn-indent-cell {
+    margin-left: 0.8rem;
 }
-
-/* TODO: Add a style that gives some padding above paragraphs that begin right
-    after code blocks. */
 
 /*.highlight-python.notranslate ~ p {*/
 /*    margin-top: 0.7rem;*/
@@ -334,6 +349,7 @@ p.sn-pre-cell {
 /*    margin-left: 0.9rem;*/
 /*    margin-right: 2em;*/
 /*}*/
+
 .highlight-python.notranslate ~ p {
     margin-top: 0.8rem;
 }
@@ -341,5 +357,5 @@ p.sn-pre-cell {
 p ~ .highlight-python.notranslate {
     margin-left: 0.9rem;
     margin-right: 2em;
-    margin-bottom: -0.4rem;
+    margin-bottom: -0.2rem;
 }
