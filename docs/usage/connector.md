@@ -98,7 +98,7 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 :language: python
 :lines: 32-34
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 ````
 
 ````{tabbed} sn.ex()
@@ -115,7 +115,7 @@ Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands
 :language: python
 :lines: 36-36
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 ````
 
 ````{tabbed} sn.exd()
@@ -126,14 +126,13 @@ Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands
 :lines: 28-29
 ```
 ````
-
 ````{tabbed} +
 Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executing commands within {xref}`DictCursor`
 ```{literalinclude} ../snippets/intro_connector.py
 :language: python
 :lines: 38-40
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 ````
 +++
 *The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).

@@ -1,11 +1,11 @@
 
 /* Gradient across header -------------------------------------------------- */
 header.md-header {
-    background-image: linear-gradient(to right,#007bff,#0070207d);
+    background-image: linear-gradient(to right,#007bff,#0070207d 60%);
 }
 
 nav.md-tabs {
-    background-image: linear-gradient(to right,#007bff,#0070207d);
+    background-image: linear-gradient(to right,#007bff,#0070207d 60%);
 }
 
 
@@ -163,20 +163,21 @@ div.admonition label.tabbed-label {
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
     /*border-left-color: #a6bace;*/
-    border-left-color: #00b8d4a6;
+    border-left-color: #11838e;
     margin: -0.15rem 1.2rem .7rem 0.25em;
+    display: inline-block;
 }
 
 .md-typeset .admonition.is-setup>.admonition-title{
     line-height: 0.7rem;
-    background-color: #00b8d41a;
-    border-bottom-color: #00b8d41a;
+    background-color: #72edf936;
+    border-bottom-color: #11838e2e;
     font-weight: 100;
     font-style: italic;
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
-    color: #00b8d4c4;
+    color: #11838e;
     top: 0.25rem;
     font-weight: 900; /* 600+ if not on pro */
     font-size: 1rem;
@@ -184,7 +185,7 @@ div.admonition label.tabbed-label {
     content: "\f013";
 }
 
-/* -- sn-sticky ------------------------------------------------------------ */
+/* -- sn-fixture ----------------------------------------------------------- */
 .md-typeset .admonition.sn-fixture {
     /*border-left-color: #a6bace;*/
     border-left-color: #11838e;
@@ -195,13 +196,13 @@ div.admonition label.tabbed-label {
 .md-typeset .admonition.sn-fixture>.admonition-title{
     line-height: 0.7rem;
     background-color: #ffff;
-    border-bottom-color: #11838e;
+    border-bottom-color: #11838e2e;
     font-weight: 100;
 }
 
 .md-typeset .admonition.sn-fixture>.admonition-title:before{
     color: #11838e;
-    top: 0.15rem;
+    top: 0.12rem;
     font-weight: 900; /* 600+ if not on pro */
     font-size: 1.3rem;
     font-family: 'FontAwesome', serif;
