@@ -399,6 +399,6 @@ header.md-header {
 
 
 nav.md-tabs {
-    background-image: linear-gradient(20deg, #007bff, #b4c9de, #0070207d);
+    background-image: linear-gradient(40deg, #007bff, #b4c9de, #0070207d);
 /*     background-image: linear-gradient(to_right, #007bff, #b4c9de, #0070207d); */
 }
