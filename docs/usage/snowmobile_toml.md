@@ -48,21 +48,6 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 
 ### Clearing Cached Paths
 
-
-% indentation for glossary
-<style>
-.tabbed-set.docutils {
-    margin-bottom: unset;
-    margin-top: 0;
-}
-
-.tabbed-content.docutils {
-    padding-left: 1rem;
-    margin-bottom: 0.5rem;
-    border-top: unset;
-}
-</style>
-
 ## Glossary
 
 (connection)=
@@ -197,3 +182,18 @@ Several sections below are commented out.. etc/etc
 :lineno-start: 1
 ```
 ````
+
+
+% indentation for glossary
+<style>
+.tabbed-set.docutils {
+    margin-bottom: unset;
+    margin-top: 0;
+}
+
+.tabbed-content.docutils {
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    border-top: unset;
+}
+</style>

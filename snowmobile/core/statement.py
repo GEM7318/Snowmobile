@@ -8,7 +8,7 @@ from typing import Any, Callable, Dict, Optional, Union, Tuple
 
 import pandas as pd
 import sqlparse
-from IPython.core.display import Markdown, display
+from IPython.display import Markdown, display
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 

@@ -48,6 +48,11 @@ hr.sn-blue {
     margin-right: 1.2rem;
 }
 
+/* 'remove vertical margins (bottom)' */
+.md-typeset .sn-dedent-v-b {
+    margin-bottom: 0;
+}
+
 /* 'remove vertical margins (top)' */
 .md-typeset .sn-dedent-v-t {
     margin-top: 0;
@@ -56,6 +61,11 @@ hr.sn-blue {
 /* 'remove vertical margins (bottom)' */
 .md-typeset .sn-dedent-v-b {
     margin-bottom: 0;
+}
+
+/* 'remove vertical margins (bottom)' */
+.md-typeset .sn-increase-margin-b {
+    margin-bottom: 1rem;
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
@@ -256,11 +266,6 @@ button.toggle-button.toggle-button-hidden:before {
 }
 
  /* Reducing space between list items */
-/*ol.simple, ul.simple, li {*/
-/*    margin-bottom: 0.1rem;*/
-/*    margin-top: -0.45rem;*/
-/*    margin-left: 0.4rem;*/
-/*}*/
 ol.simple, ul.simple, dl.simple {
     margin-bottom: 0.1rem;
     margin-top: -0.1rem;
@@ -314,4 +319,17 @@ p.sn-pre-cell {
     margin-top: 1em;
     font-size: 0.75rem;
     font-weight: 800;
+}
+
+/* TODO: Add a style that gives some padding above paragraphs that begin right
+    after code blocks. */
+
+.highlight-python.notranslate ~ p {
+    margin-top: 0.7rem;
+
+}
+
+p ~ .highlight-python.notranslate {
+    margin-top: -0.4rem;
+
 }

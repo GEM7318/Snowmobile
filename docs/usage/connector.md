@@ -20,9 +20,12 @@ that it was instantiated with.
 ---
 <br>
 
-## *Examples*
-```{admonition} Setup
-:class: toggle, todo, is_setup, toggle-shown
+(connector-examples)=
+<h2 class="sn-increase-margin-b">Examples</h2>
+
+(connector-setup)=
+```{admonition} Setup / Assumptions
+:class: toggle, todo, is-setup, toggle-shown
 **This section assumes the following about the contents of** [**snowmobile.toml**](./snowmobile_toml.md#snowmobiletoml):
 1.  {ref}`[connection.credentials.creds1]<connection.credentials.creds1>`
     and {ref}`[connection.credentials.creds2]<connection.credentials.creds2>` are:
@@ -38,55 +41,22 @@ that it was instantiated with.
 ### Connecting to {xref}`snowflake`
 ---
 
-````{tabbed} Content
-
-Establishing a connection to {xref}`snowflake` can be done with: 
-```{literalinclude} ../snippets/intro_connector.py
+Establishing a connection can be done with: 
+```{literalinclude} ../snippets/connector/connecting.py
 :language: python
-:lineno-start: 1
-:lines: 1-7
+:lines: 4-6
 ```
 
-````
-
-````{tabbed} Info / Errors
-
-Three things are happening behind the scenes upon execution of line **7** in
-the provided snippet and any exceptions that are raised
-should provide direct feedback as to what's causing them.
-
----
-
-1.  {xref}`snowmobile` will traverse your file system from the ground up
-    searching for a file called [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml).
-    Once found, it will cache this location for future reference and not repeat
-    this step unless the file is moved.
-    -   *on-failure expects* `FileNotFoundError`
-2.  It will then instantiate the contents of the configuration file as
-    {xref}`pydantic` objects. This ensures instant exceptions will be thrown
-    if any required fields are omitted or unable to be coerced into their intended type.
-    -   *on-failure expects* `ValidationError`
-3.  Once validated, it will then pass the parsed arguments to the
-    {meth}`snowflake.connector.connect()` method and instantiate the
-    {xref}`SnowflakeConnection` object.
-    -   *on-failure expects* `DataBaseError`
-````
-
-Since *creds1* is the first set of credentials stored in
-[snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) and the
-{ref}`default-creds<connection.default-creds>` field hasn't been set
-(re: [*Setup*](#examples)), line **7** is implicitly invoking:
-```{literalinclude} ../snippets/intro_connector.py
+Given *Setup / Assumptions* above, this is implictly invoking:  
+```{literalinclude} ../snippets/connector/connecting.py
 :language: python
-:lineno-start: 8
 :lines: 8-8
 ```
 
 Here's some context on how to think about the basic differences in these two
 {class}`~snowmobile.core.Connector` objects:
-```{literalinclude} ../snippets/intro_connector.py
+```{literalinclude} ../snippets/connector/connecting.py
 :language: python
-:lineno-start: 10
 :lines: 10-12
 ```
 {link-badge}`./sql.html,cls=badge-primary text-white,Related: snowmobile.SQL,tooltip=Documentation parsed from module docstring`
@@ -325,3 +295,4 @@ This behavior is outlined in the below snippet:
 :lineno-start: 1
 :lines: 1-39
 ```
+
