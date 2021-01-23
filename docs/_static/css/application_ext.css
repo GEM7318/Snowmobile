@@ -280,6 +280,7 @@ div.admonition label.tabbed-label {
     font-style: inherit;
     /*padding-right: 1em;*/
     display: inline;
+    overflow: visible;
     background-color: #6c757d0f;
 }
 

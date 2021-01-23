@@ -47,7 +47,7 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
-Given {fa}`cog` above, this is implicitly invoking:  
+Given {fa}`cog`, this is implicitly invoking:  
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
 :lines: 8-8
