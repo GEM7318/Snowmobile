@@ -211,24 +211,26 @@ content: " \f013\ Setup";
     /*border-left-color: #a6bace;*/
     display: inline-block;
     margin: -0.15rem 1.5rem .7rem 0.9rem;
-    border-right-style: solid;
-    border-bottom-style: solid;
+    /*border-right-style: solid;*/
+    /*border-bottom-style: solid;*/
     border-top-style: solid;
     border-top-width: thin;
-    border-right-width: thin;
-    border-bottom-width: thin;
+    /*border-right-width: thin;*/
+    /*border-bottom-width: thin;*/
     border-left-color: #11838e;
-    border-bottom-color: #11838e2e;
-    border-right-color: #11838e2e;
+    /*border-bottom-color: #11838e2e;*/
+    /*border-right-color: #11838e2e;*/
     border-top-color: #11838e2e;
 }
 
 .md-typeset .admonition.sn-fixture>.admonition-title{
     line-height: .7rem;
-    /*border-right-style: solid;*/
-    /*border-right-width: thin;*/
+    border-right-style: solid;
+    border-right-width: thin;
     background-color: #ffff;
-    /*border-right-color: #11838e2e;*/
+    border-bottom-style: solid;
+    border-bottom-color: #11838e2e;
+    border-right-color: #11838e2e;
     /*border-bottom-color: #11838e2e;*/
     font-weight: 100;
 }
