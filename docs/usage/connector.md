@@ -21,10 +21,11 @@ that it was instantiated with.
 <br>
 
 (connector-examples)=
-<h2 class="sn-increase-margin-b hanging">Examples</h2>
+## *Examples*
+[comment]: <> (<h2 class="sn-increase-margin-b hanging">Examples</h2>)
 
 (connector-setup)=
-```{admonition} Setup / Assumptions
+```{admonition} Setup
 :class: toggle, todo, is-setup, toggle-shown
 **This section assumes the following about the contents of** [**snowmobile.toml**](./snowmobile_toml.md#snowmobiletoml):
 1.  {ref}`[connection.credentials.creds1] <connection.credentials.creds1>`
@@ -47,7 +48,7 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
-Given {fa}`cog`, this is implicitly invoking:  
+Given [{fa}`cog`](#examples), this is implicitly invoking:  
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
 :lines: 8-8

@@ -168,6 +168,19 @@ div.admonition label.tabbed-label {
     font-style: italic;
 }
 
+/* Icons ------------------------------------------------------------------- */
+.md-typeset .fa-cog {
+    color: #11838e;
+    font-style: inherit;
+    display: inline;
+    overflow: visible;
+    background-color: #6c757d0f;
+}
+
+.md-typeset .fa-cog:before {
+content: " \f013\ Setup";
+}
+
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
     /*border-left-color: #a6bace;*/
@@ -181,7 +194,7 @@ div.admonition label.tabbed-label {
     background-color: #72edf936;
     border-bottom-color: #11838e2e;
     font-weight: 100;
-    font-style: italic;
+    /*font-style: italic;*/
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
@@ -196,15 +209,27 @@ div.admonition label.tabbed-label {
 /* -- sn-fixture ----------------------------------------------------------- */
 .md-typeset .admonition.sn-fixture {
     /*border-left-color: #a6bace;*/
-    border-left-color: #11838e;
-    margin: -0.15rem 1.5rem .7rem 0.9rem;
     display: inline-block;
+    margin: -0.15rem 1.5rem .7rem 0.9rem;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-top-width: thin;
+    border-right-width: thin;
+    border-bottom-width: thin;
+    border-left-color: #11838e;
+    border-bottom-color: #11838e2e;
+    border-right-color: #11838e2e;
+    border-top-color: #11838e2e;
 }
 
 .md-typeset .admonition.sn-fixture>.admonition-title{
-    line-height: 0.7rem;
+    line-height: .7rem;
+    /*border-right-style: solid;*/
+    /*border-right-width: thin;*/
     background-color: #ffff;
-    border-bottom-color: #11838e2e;
+    /*border-right-color: #11838e2e;*/
+    /*border-bottom-color: #11838e2e;*/
     font-weight: 100;
 }
 
@@ -273,17 +298,6 @@ div.admonition label.tabbed-label {
 }
 
 
-/* Icons ------------------------------------------------------------------- */
-.md-typeset .fa-cog:before {
-    content: " \f013\ Setup / Assumptions";
-    color: #11838e;
-    font-style: inherit;
-    /*padding-right: 1em;*/
-    display: inline;
-    overflow: visible;
-    background-color: #6c757d0f;
-}
-
 /*.md-typeset .cog2:before {*/
 /*    content: "Setup / Assumptions";*/
 /*    color: #11838e;*/
@@ -329,7 +343,9 @@ div.toggle.admonition {
 .md-typeset .admonition, .md-typeset details {
     font-size: 0.7rem;
 }.p, ol.simple, ul.simple, dl.simple,
-
+/*.admonition .p, ol.simple, ul.simple, dl.simple {*/
+/*    font-size: 0.7rem;*/
+/*}*/
 
 /* Moving toggle button hint  closer to the symbol */
 button.toggle-button.toggle-button-hidden {
