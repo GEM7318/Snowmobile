@@ -108,7 +108,7 @@ div.admonition hr.sn-blue {
     margin-bottom: 0.2rem;
 }
 
-.md-typeset hr.sn-blue-thick {
+hr.sn-blue-thick {
     /*border-style: solid;*/
     /*border-width: .08rem;*/
     height: 0.12rem;
@@ -267,6 +267,28 @@ div.admonition label.tabbed-label {
     content: "\f15c";
 }
 
+/* Tip --------------------------------------------------------------------- */
+.md-typeset .admonition.tip>.admonition-title{
+    background-color: #fff;
+}
+
+
+/* Icons ------------------------------------------------------------------- */
+.md-typeset .fa-cog:before {
+    content: " \f013\ Setup / Assumptions";
+    color: #11838e;
+    font-style: inherit;
+    /*padding-right: 1em;*/
+    background-color: #6c757d0f;
+}
+
+/*.md-typeset .cog2:before {*/
+/*    content: "Setup / Assumptions";*/
+/*    color: #11838e;*/
+/*    font-style: inherit;*/
+/*    !*padding-right: 1em;*!*/
+/*    background-color: #6c757d0f;*/
+/*}*/
 
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {

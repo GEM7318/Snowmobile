@@ -46,8 +46,8 @@ Code Parsing
 +++
 Docs Parsing
 -   The rest of the docs are built on top of the glorious work being 
-    done by the [**Executable Books**](https://github.com/executablebooks)
-    team, most specifically:
+    done by the [**The Executable Book Project**](https://github.com/executablebooks),
+    most specifically:
     -   [**MySt**](https://myst-parser.readthedocs.io/en/latest/) which bundles 
         markdown and reStructuredText into the same markup syntax
     -   [**MySt-NB**](https://myst-nb.readthedocs.io/en/latest/) which enables the use

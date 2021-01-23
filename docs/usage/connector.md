@@ -21,7 +21,7 @@ that it was instantiated with.
 <br>
 
 (connector-examples)=
-<h2 class="sn-increase-margin-b">Examples</h2>
+<h2 class="sn-increase-margin-b hanging">Examples</h2>
 
 (connector-setup)=
 ```{admonition} Setup / Assumptions
@@ -47,7 +47,7 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
-Given *Setup / Assumptions* above, this is implicitly invoking:  
+Given {fa}`cog` above, this is implicitly invoking:  
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
 :lines: 8-8

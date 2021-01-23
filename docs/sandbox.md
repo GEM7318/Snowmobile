@@ -1,5 +1,18 @@
 # Sandbox
 
+## Icons
+
+{fa}`check,text-success mr-1`
+
+{fa}`cog`
+
+Setup {fa}`fas cog`
+
+
+{fas}`cog`
+
+{test-custom}`anything`
+
 ## Connector
 
 
