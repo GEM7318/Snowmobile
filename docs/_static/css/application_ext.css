@@ -213,6 +213,7 @@ content: " \f013\ Setup";
     margin: -0.15rem 1.5rem .7rem 0.9rem;
     /*border-right-style: solid;*/
     /*border-bottom-style: solid;*/
+    border-left: 0;
     border-top-style: solid;
     border-top-width: thin;
     /*border-right-width: thin;*/
