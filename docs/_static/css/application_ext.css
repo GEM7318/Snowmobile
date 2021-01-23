@@ -225,13 +225,12 @@ content: " \f013\ Setup";
 
 .md-typeset .admonition.sn-fixture>.admonition-title{
     line-height: .7rem;
-    border-right-style: solid;
-    border-right-width: thin;
+    /*border-right-style: solid;*/
+    /*border-right-width: thin;*/
     background-color: #ffff;
     border-bottom-style: solid;
     border-bottom-color: #11838e2e;
-    border-right-color: #11838e2e;
-    /*border-bottom-color: #11838e2e;*/
+    /*border-right-color: #11838e2e;*/
     font-weight: 100;
 }
 
