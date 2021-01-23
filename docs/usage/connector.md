@@ -47,32 +47,40 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
-Given [{fa}`cog`](#examples), this is implicitly invoking:  
+Here's some basic information on the composition of `sn`:
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
-:lines: 8-8
+:lines: 8-10
 ```
 
-Here's some context on how to think about the basic differences in these two
-{class}`~snowmobile.core.Connector` objects:
+```{div} sn-indent-h-cell
+<hr class="sn-blue" style="margin-top: 0.9rem; margin-bottom: -0.2rem;">
+```
+
+Given [{fa}`cog`](#examples), `sn` is implicitly using the same connection arguments
+as:  
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
-:lines: 10-12
+:lines: 12-12
 ```
 
-<p style="margin-top: 0.4rem; margin-bottom: 1.3rem;">
-    <a 
-        class="sphinx-bs badge badge-primary text-white reference external sn-indent-cell"
-        href="./sql.html" 
-        title="Documentation parsed from module docstring">
-        <span>Related: snowmobile.SQL</span>
-    </a>
-</p>
+Here's some context on how to think about these two instances of
+{class}`~snowmobile.core.Connector`:
+```{literalinclude} ../snippets/connector/connecting.py
+:language: python
+:lines: 14-16
+```
+```{div} sn-indent-cell, sn-snippet
+[{fa}`file-code-o` ../connecting.py](../snippets.md#connectingpy)
+```
+
+<hr class="sn-spacer">
+<hr class="sn-spacer">
 
 ```{admonition} Fixture: **sn**
 :class: toggle, toggle-shown, sn-fixture
-The remaining examples in this section make use of the `sn` instantiated above without explicitly 
-recreating it.
+Applicable examples below make use of an equivalent `sn` without 
+explicitly re-instantiating it.
 ```
 
 +++
@@ -84,21 +92,19 @@ recreating it.
 {xref}`snowmobile` provides three convenience methods for executing raw SQL 
 directly off the {class}`~snowmobile.Connector`.
 
-
-
 ````{tabbed} sn.query()
-```{literalinclude} ../snippets/intro_connector.py
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 22-23
+:lines: 9-10
 ```
 ````
-
 ````{tabbed} +
-Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.DataFrame`
+Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.DataFrame`.
 +++
-```{literalinclude} ../snippets/intro_connector.py
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 32-34
+:lines: 8-18
+:emphasize-lines: 5-11
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
@@ -107,16 +113,18 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 
 ````{tabbed} sn.ex()
 :new-group:
-```{literalinclude} ../snippets/intro_connector.py
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 25-26
+:lines: 22-23
 ```
 ````
 ````{tabbed} +
-Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands within a {xref}`SnowflakeCursor`
-```{literalinclude} ../snippets/intro_connector.py
+Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands 
+within a {xref}`SnowflakeCursor`.
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 36-36
+:lines: 21-29
+:emphasize-lines: 5-10 
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
@@ -126,26 +134,30 @@ Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands
 ````{tabbed} sn.exd()
 :new-group:
 
-```{literalinclude} ../snippets/intro_connector.py
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 28-29
+:lines: 33-34
 ```
 ````
 ````{tabbed} +
-Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for executing commands within {xref}`DictCursor`
-```{literalinclude} ../snippets/intro_connector.py
+Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for 
+executing commands within {xref}`DictCursor`.
+```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 38-40
+:lines: 32-42
+:emphasize-lines: 5-12
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
 <hr class="sn-blue">
 ````
-+++
-*The full script for this section can be found* [*here*](../snippets.md#quick_intro_connectorpy).
+```{div} sn-snippet
+[{fa}`file-code-o` ../executing.py](../snippets.md#executingpy)
+```
+
 
 ````{admonition} SnowflakeCursor / DictCursor
-:class: note, toggle, toggle-shown
+:class: note, toggle, toggle-shown, sn-indent-cell
 
 ```{eval-rst}
 

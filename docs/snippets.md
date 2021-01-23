@@ -5,8 +5,18 @@
 Clean this up
 ```
 
-## instantiate_connector.py
+## connecting.py
+```{literalinclude} /snippets/connector/connecting.py
+:language: python
+```
 
+## executing.py
+```{literalinclude} /snippets/connector/executing.py
+:language: python
+```
+
+
+## instantiate_connector.py
 ```{literalinclude} /snippets/instantiate_connector.py
 :language: python
 :lines: 1-22

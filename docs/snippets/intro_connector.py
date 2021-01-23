@@ -1,5 +1,5 @@
 """
-Establish connection and explore basic snowmobile.Connector attributes.
+.
 ../snippets/intro_connector.py
 """
 import snowmobile

@@ -1,9 +1,13 @@
 """ Establish a basic connection.
-../snippets/intro_connector.py
+../docs/snippets/connecting.py
 """
 import snowmobile
 
 sn = snowmobile.connect()
+
+print(sn)            #> snowmobile.Connector(creds='creds1')
+print(sn.cfg)        #> snowmobile.Configuration('snowmobile.toml')
+print(type(sn.con))  #> <class 'snowflake.connector.connection.SnowflakeConnection'>
 
 sn2 = snowmobile.connect(creds="creds1")
 

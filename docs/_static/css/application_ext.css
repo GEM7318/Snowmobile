@@ -67,7 +67,7 @@ ol.simple, ul.simple, li {
 }
 
 .md-typeset .sn-indent-h-cell {
-    padding-left: 1em;
+    padding-left: 0.95rem;
     padding-right: 2em;
 }
 
@@ -134,6 +134,12 @@ hr.sn-blue-thick {
     border: 0;
 }
 
+.md-typeset hr.sn-spacer {
+    height: 0.16rem;
+    background-color: #fff;
+    border: 0;
+}
+
 /* -- Jupyter/Notebook adjustments ----------------------------------------- */
 
 /* Indenting Jupyter cells */
@@ -177,21 +183,33 @@ div.admonition label.tabbed-label {
 }
 
 /* Icons ------------------------------------------------------------------- */
+
+/* 'Setup' gear icon */
 .md-typeset .fa-cog {
     color: #11838e;
     font-style: inherit;
     display: inline;
     overflow: visible;
-    background-color: #6c757d0f;
+    /*background-color: #6c757d0f;*/
 }
 
 .md-typeset .fa-cog:before {
 content: " \f013\ Setup";
 }
 
+
+
+/* 'Snippet' file icon */
+.md-typeset span.std.std-doc span.fa-file-code {
+    display: inline;
+    overflow: visible;
+    /*color: #0f70d173;*/
+}.md-typeset span.std.std-doc {
+    /*color: #356794bf;*/
+}
+
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
-    /*border-left-color: #a6bace;*/
     border-left-color: #11838e;
     margin: -0.15rem 1.2rem .7rem 0.25em;
     display: inline-block;
@@ -202,7 +220,6 @@ content: " \f013\ Setup";
     background-color: #72edf936;
     border-bottom-color: #11838e2e;
     font-weight: 100;
-    /*font-style: italic;*/
 }
 
 .md-typeset .admonition.is-setup>.admonition-title:before{
@@ -216,30 +233,19 @@ content: " \f013\ Setup";
 
 /* -- sn-fixture ----------------------------------------------------------- */
 .md-typeset .admonition.sn-fixture {
-    /*border-left-color: #a6bace;*/
     display: inline-block;
     margin: -0.15rem 1.5rem .7rem 0.9rem;
-    /*border-right-style: solid;*/
-    /*border-bottom-style: solid;*/
+    border-style: solid;
+    border-width: thin;
     border-left: 0;
-    border-top-style: solid;
-    border-top-width: thin;
-    /*border-right-width: thin;*/
-    /*border-bottom-width: thin;*/
-    border-left-color: #11838e;
-    /*border-bottom-color: #11838e2e;*/
-    /*border-right-color: #11838e2e;*/
-    border-top-color: #11838e2e;
+    border-color: #11838e2e;
 }
 
 .md-typeset .admonition.sn-fixture>.admonition-title{
     line-height: .7rem;
-    /*border-right-style: solid;*/
-    /*border-right-width: thin;*/
     background-color: #ffff;
     border-bottom-style: solid;
     border-bottom-color: #11838e2e;
-    /*border-right-color: #11838e2e;*/
     font-weight: 100;
 }
 
@@ -249,9 +255,6 @@ content: " \f013\ Setup";
     font-weight: 900; /* 600+ if not on pro */
     font-size: 1.3rem;
     font-family: 'FontAwesome', serif;
-    /*content: "\f560";*/
-    /*content: "\f249";*/
-    /*content: "\f024";  !* flag *!*/
     content: "\f103";  /* double arrows down */
 }
 
@@ -281,13 +284,14 @@ content: " \f013\ Setup";
 
 /* -- is-content ----------------------------------------------------------- */
 .md-typeset .admonition.is-content {
-    border-left-color: #0f70d178;
-    margin: -0.15rem 1.2rem .7rem 0.25em;
+    border-left: 0;
+    display: inline-block;
+    margin: -0.8rem 1.5rem .7rem 0.9rem;
 }
 
 .md-typeset .admonition.is-content>.admonition-title{
     line-height: 0.7rem;
-    background-color: #43c6ff0d;
+    background-color: #ffffff;
     /*border-bottom-color: #329ef452;*/
     font-weight: 500;
     font-style: italic;
@@ -452,34 +456,32 @@ div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
     top: .2rem;
 }
 
-/* Indented to same level that jupyter cells are */
-/*p.sn-indent-cell {*/
-/*    margin-left: 0.9rem;*/
-/*    margin-top: 1em;*/
-/*    font-size: 0.75rem;*/
-/*    font-weight: 800;*/
-/*}*/
+/* Indent to level of code cells */
 .md-typeset .sn-indent-cell {
-    margin-left: 0.85rem;
+    margin-left: 0.95rem;
 }
 
-/*.highlight-python.notranslate ~ p {*/
-/*    margin-top: 0.7rem;*/
+/* Align to right side of code cells */
+.sn-align-right-cell {
+    display: flex;
+    overflow: visible;
+    justify-content: flex-end;
+    margin-top: 0.2em;
+    padding-right: 2em;
+}
 
-/*}*/
-
-/*p ~ .highlight-python.notranslate {*/
-/*    margin-top: -0.4rem;*/
-/*    margin-left: 0.9rem;*/
-/*    margin-right: 2em;*/
-/*}*/
-
+/* Reduce space between code cells and paragraphs */
 .highlight-python.notranslate ~ p {
     margin-top: 0.8rem;
 }
 
+/* Reduce space between paragraphs and code cells */
 p ~ .highlight-python.notranslate {
     margin-left: 0.9rem;
     margin-right: 2em;
     margin-bottom: -0.2rem;
+}
+
+.md-typeset .sn-snippet * {
+    color: #1f708975;
 }
