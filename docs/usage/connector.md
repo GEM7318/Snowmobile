@@ -82,8 +82,10 @@ recreating it.
 ### Executing Raw SQL
 <hr class="sn-green-thick">
 
-{xref}`snowmobile` provides the following three convenience methods for executing
-raw SQL directly off the {class}`~snowmobile.Connector`.
+{xref}`snowmobile` provides three convenience methods for executing raw SQL 
+directly off the {class}`~snowmobile.Connector`.
+
+
 
 ````{tabbed} sn.query()
 ```{literalinclude} ../snippets/intro_connector.py

@@ -1,12 +1,12 @@
 
 /* Gradient across header -------------------------------------------------- */
-header.md-header {
-    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)
-}
+/*header.md-header {*/
+/*    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)*/
+/*}*/
 
-nav.md-tabs {
-    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)
-}
+/*nav.md-tabs {*/
+/*    background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)*/
+/*}*/
 
 
 /* Global spacing settings for content container --------------------------- */
