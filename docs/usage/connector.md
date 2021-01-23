@@ -21,7 +21,7 @@ that it was instantiated with.
 <br>
 
 (connector-examples)=
-## *Examples*
+## Examples
 
 (connector-setup)=
 ```{admonition} Setup
