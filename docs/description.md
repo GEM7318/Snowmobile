@@ -28,14 +28,13 @@ truncated {
     <dd class="truncated">Scripts as context managers; work with actual statements; add markup; export to markdown
 </DL>
 
-```{admonition}
----
-class: note, sn-indent-h-cell
---- 
+````{div} sn-indent-h-cell
+```{note}
 {xref}`snowmobile` is a wrapper **around** the {xref}`snowflake.connector2` and 
 is not nor intended to be a replacement for it; the {xref}`SnowflakeConnection` 
 is intentionally stored as a public attribute so that the {xref}`snowflake.connector2` 
 and {xref}`snowmobile` APIs can be leveraged congruently.
 ```
+````
 
 <hr style="margin: 0;">

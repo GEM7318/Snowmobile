@@ -74,8 +74,7 @@ Here's some context on how to think about these two instances of
 [{fa}`file-code-o` ../connecting.py](../snippets.md#connectingpy)
 ```
 
-<hr class="sn-spacer">
-<hr class="sn-spacer">
+<br>
 
 ```{admonition} Fixture: **sn**
 :class: toggle, toggle-shown, sn-fixture
@@ -170,9 +169,8 @@ executing commands within {xref}`DictCursor`.
 
 .. tabbed:: Note
 
-   The accessors :attr:`~snowmobile.Connector.cursor` and
-   :attr:`~snowmobile.Connector.dictcursor` are **properties** of
-   :attr:`snowmobile.Connector` that return a new instance each time they are 
+   The accessors `sn.cursor` and `sn.dictcursor` are **properties** of
+   :attr:`~snowmobile.Connector` that return a new instance each time they are 
    accessed. Depending on the intended use of :xref:`SnowflakeCursor` or
    :xref:`DictCursor`, it could be better to store an instance for re-referencing
    as opposed to repeatedly instantiating new instances off :class:`~snowmobile.Connector`.
@@ -185,7 +183,6 @@ executing commands within {xref}`DictCursor`.
 
    .. literalinclude:: ../snippets/connector_cursor_note.py
       :language: python
-      :lineno-start: 1
       :lines: 1-19
 ```
 ````
