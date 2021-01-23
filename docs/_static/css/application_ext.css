@@ -71,6 +71,10 @@ ol.simple, ul.simple, li {
     padding-right: 2em;
 }
 
+.md-typeset .sn-indent-h-sub-cell-right {
+    margin-right: 2rem;
+}
+
 
 /* 'remove vertical margins (bottom)' */
 .md-typeset .sn-dedent-v-b {

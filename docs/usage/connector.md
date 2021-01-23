@@ -108,7 +108,9 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
+```{div} sn-indent-h-cell
 <hr class="sn-blue">
+```
 ````
 
 ````{tabbed} sn.ex()
@@ -128,7 +130,9 @@ within a {xref}`SnowflakeCursor`.
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
+```{div} sn-indent-h-cell
 <hr class="sn-blue">
+```
 ````
 
 ````{tabbed} sn.exd()
@@ -149,15 +153,18 @@ executing commands within {xref}`DictCursor`.
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
+```{div} sn-indent-h-cell
 <hr class="sn-blue">
+```
 ````
 ```{div} sn-snippet
 [{fa}`file-code-o` ../executing.py](../snippets.md#executingpy)
 ```
 
++++
 
 ````{admonition} SnowflakeCursor / DictCursor
-:class: note, toggle, toggle-shown, sn-indent-cell
+:class: note, toggle, toggle-shown, sn-indent-cell, sn-indent-h-sub-cell-right
 
 ```{eval-rst}
 
@@ -183,10 +190,12 @@ executing commands within {xref}`DictCursor`.
 ```
 ````
 
----
+```{div} sn-indent-cell, sn-indent-h-sub-cell-right
+<hr>
+```
 
 ````{admonition} Tip: Naming Convention
-:class: toggle, tip, indented
+:class: toggle, tip, sn-indent-cell, sn-indent-h-sub-cell-right
 The following convention of variable/attribute name to associated object is
 used throughout {ref}`snowmobile`'s documentation and source code, including in 
 method signatures:
@@ -205,7 +214,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 ```
 ````
 
-+++
+<hr class="sn-spacer">
 
 (header_target)=
 ### Aliasing Credentials
