@@ -22,7 +22,6 @@ that it was instantiated with.
 
 (connector-examples)=
 ## *Examples*
-[comment]: <> (<h2 class="sn-increase-margin-b hanging">Examples</h2>)
 
 (connector-setup)=
 ```{admonition} Setup
