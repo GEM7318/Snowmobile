@@ -94,7 +94,7 @@ directly off the {class}`~snowmobile.Connector`.
 ````{tabbed} sn.query()
 ```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 9-10
+:lines: 10-11
 ```
 ````
 ````{tabbed} +
@@ -102,8 +102,8 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 +++
 ```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 8-18
-:emphasize-lines: 5-11
+:lines: 9-18
+:emphasize-lines: 5-10
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
@@ -124,8 +124,8 @@ Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands
 within a {xref}`SnowflakeCursor`.
 ```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 21-29
-:emphasize-lines: 5-10 
+:lines: 21-28
+:emphasize-lines: 5-8 
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
@@ -139,7 +139,7 @@ within a {xref}`SnowflakeCursor`.
 
 ```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 33-34
+:lines: 32-33
 ```
 ````
 ````{tabbed} +
@@ -147,8 +147,8 @@ Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for
 executing commands within {xref}`DictCursor`.
 ```{literalinclude} ../snippets/connector/executing.py
 :language: python
-:lines: 32-42
-:emphasize-lines: 5-12
+:lines: 31-40
+:emphasize-lines: 5-10
 ```
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
@@ -206,7 +206,6 @@ method signatures:
 For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 ```{literalinclude} ../snippets/inspect_connector.py
 :language: python
-:lineno-start: 1
 :lines: 2-14
 ```
 ````
@@ -234,7 +233,7 @@ stored and no other alias is specified; by modifying [snowmobile.toml](./snowmob
 to the below spec, we're telling  {xref}`snowmobile`to use `creds2` for 
 authentication regardless of where it falls relative to all the other credentials stored:
 
-```{literalinclude} ../snippets/snowmobile_set_default_creds.toml
+```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
 :language: toml
 :lineno-start: 3
 :lines: 3-3
@@ -243,7 +242,6 @@ authentication regardless of where it falls relative to all the other credential
 The change can be verified with:
 ```{literalinclude} ../snippets/connector_verify_default.py
 :language: python
-:lineno-start: 1
 :lines: 1-13
 ```
 
@@ -254,7 +252,6 @@ Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` c
 
 ```{literalinclude} ../snippets/connector_alias_order.py
 :language: python
-:lineno-start: 1
 :lines: 1-24
 ```
 ````
@@ -288,7 +285,6 @@ connection to {xref}`snowflake` at which point a call is made to
 {meth}`snowflake.connector.connect()`, the connection established, and the attribute set.
 ```{literalinclude} ../snippets/connector_delayed.py
 :language: python
-:lineno-start: 1
 :lines: 1-17
 ```
 <br>

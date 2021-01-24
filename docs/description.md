@@ -30,8 +30,8 @@ truncated {
 
 ````{div} sn-indent-h-cell
 ```{note}
-{xref}`snowmobile` is a wrapper **around** the {xref}`snowflake.connector2` and 
-is not nor intended to be a replacement for it; the {xref}`SnowflakeConnection` 
+{xref}`snowmobile` is a wrapper **around** the {xref}`snowflake.connector2`; 
+it is not nor is it intended to be a replacement for it. The {xref}`SnowflakeConnection` 
 is intentionally stored as a public attribute so that the {xref}`snowflake.connector2` 
 and {xref}`snowmobile` APIs can be leveraged congruently.
 ```

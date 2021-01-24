@@ -5,7 +5,8 @@ import snowmobile
 
 sn = snowmobile.connect()
 
-# -- sn.query() ---------------------------------------------------------------
+# ================
+# -- sn.query() --
 df = sn.query("select 1")  #  == pd.read_sql()
 type(df)                   #> pandas.core.frame.DataFrame
 
@@ -14,22 +15,20 @@ import pandas as pd
 
 df2 = pd.read_sql(sql="select 1", con=sn.con)
 
-# -- comparison --
 print(df2.equals(df))  #> True
 
-
-# -- sn.ex() ------------------------------------------------------------------
+# =============
+# -- sn.ex() --
 cur = sn.ex("select 1")    #  == SnowflakeConnection.cursor().execute()
 type(cur)                  #> snowflake.connector.cursor.SnowflakeCursor
 
 # -- SnowflakeConnection.cursor().execute() --
 cur2 = sn.con.cursor().execute("select 1")
 
-# -- comparison --
 print(cur.fetchone() == cur2.fetchone())  #> True
 
-
-# -- sn.exd() -----------------------------------------------------------------
+# ==============
+# -- sn.exd() --
 dcur = sn.exd("select 1")  #  == SnowflakeConnection.cursor(DictCursor).execute()
 type(dcur)                 #> snowflake.connector.DictCursor
 
@@ -38,7 +37,6 @@ from snowflake.connector import DictCursor
 
 dcur2 = sn.con.cursor(cursor_class=DictCursor).execute("select 1")
 
-# -- comparison --
 print(dcur.fetchone() == dcur2.fetchone())  #> True
 
 # -- complete example; should run 'as is' --

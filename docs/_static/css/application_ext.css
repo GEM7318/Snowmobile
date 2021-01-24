@@ -76,29 +76,29 @@ ol.simple, ul.simple, li {
 }
 
 
-/* 'remove vertical margins (bottom)' */
+/* 'remove vertical margins: bottom' */
 .md-typeset .sn-dedent-v-b {
     margin-bottom: 0;
 }
 
-/* 'remove vertical margins (top)' */
+/* 'remove vertical margins: top' */
 .md-typeset .sn-dedent-v-t {
     margin-top: 0;
 }
 
-/* 'increase vertical margins (bottom)' */
+/* 'increase vertical margins: bottom' */
 .md-typeset .sn-increase-margin-b {
     margin-bottom: 1rem;
 }
 
-/* 'increase vertical margins (bottom)' */
+/* 'increase vertical margins: bottom' */
 .md-typeset .sn-increase-margin-t {
     margin-bottom: 1rem;
 }
 
 /* Line breaks / <hr> ------------------------------------------------------ */
 
-/* Custom line break */
+/* Standard blue - thin */
 hr.sn-blue {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -107,6 +107,7 @@ hr.sn-blue {
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
+/* Tweaking for within admonitions to be lighter */
 div.admonition hr.sn-blue {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -114,12 +115,13 @@ div.admonition hr.sn-blue {
     border-bottom-color: #329ef452;
 }
 
-/* Default line break (docutils) */
+/* Reduced margins on default docutils line break */
 .md-typeset hr {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
 }
 
+/* Sub-header: h2-h3 */
 hr.sn-blue-thick {
     /*border-style: solid;*/
     /*border-width: .08rem;*/
@@ -129,6 +131,7 @@ hr.sn-blue-thick {
     border: 0;
 }
 
+/* Sub-header green: h2-h3 */
 .md-typeset hr.sn-green-thick {
     /*border-style: solid;*/
     /*border-width: .08rem;*/
@@ -138,6 +141,7 @@ hr.sn-blue-thick {
     border: 0;
 }
 
+/* Padding */
 .md-typeset hr.sn-spacer {
     height: 0.16rem;
     background-color: #fff;
@@ -188,7 +192,7 @@ div.admonition label.tabbed-label {
 
 /* Icons ------------------------------------------------------------------- */
 
-/* 'Setup' gear icon */
+/* 'Setup' Gear Link style */
 .md-typeset .fa-cog {
     color: #11838e;
     font-style: inherit;
@@ -197,20 +201,20 @@ div.admonition label.tabbed-label {
     /*background-color: #6c757d0f;*/
 }
 
+/* 'Setup' Gear Link content */
 .md-typeset .fa-cog:before {
 content: " \f013\ Setup";
 }
-
-
 
 /* 'Snippet' file icon */
 .md-typeset span.std.std-doc span.fa-file-code {
     display: inline;
     overflow: visible;
-    /*color: #0f70d173;*/
 }.md-typeset span.std.std-doc {
     /*color: #356794bf;*/
 }
+
+/* =========================/ ADMONITIONS /==================================*/
 
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
@@ -257,7 +261,7 @@ content: " \f013\ Setup";
     top: 0.12rem;
     font-weight: 900; /* 600+ if not on pro */
     font-size: 1.3rem;
-    font-family: 'FontAwesome', serif;
+    font-family: 'FontAwesome', serif; /* TODO: FontAwesome 4.7 -> 5.0 */
     content: "\f103";  /* double arrows down */
 }
 
@@ -295,7 +299,6 @@ content: " \f013\ Setup";
 .md-typeset .admonition.is-content>.admonition-title{
     line-height: 0.7rem;
     background-color: #ffffff;
-    /*border-bottom-color: #329ef452;*/
     font-weight: 500;
     font-style: italic;
 }
@@ -315,13 +318,6 @@ content: " \f013\ Setup";
 }
 
 
-/*.md-typeset .cog2:before {*/
-/*    content: "Setup / Assumptions";*/
-/*    color: #11838e;*/
-/*    font-style: inherit;*/
-/*    !*padding-right: 1em;*!*/
-/*    background-color: #6c757d0f;*/
-/*}*/
 
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
@@ -334,7 +330,7 @@ div.output.text_plain.highlight-myst-ansi.notranslate {
 }
 
 
-/* Reducing line height of lists  */
+/* Reducing line height of lists within tabs */
 .tabbed-content.docutils {
     line-height: 1.3em;
     padding-bottom: 0;
@@ -346,9 +342,9 @@ div.output.text_plain.highlight-myst-ansi.notranslate {
     what is rendered when wrapping something in `single` backticks or in
     a form :any:`single` directive that doesn't find a target.
 */
-code.docutils.literal.notranslate {
-    margin: 0;
-}.md-typeset span,
+/*code.docutils.literal.notranslate {*/
+/*    margin: 0;*/
+/*}.md-typeset span,*/
 
 
 /* Removing scroll effect from collapsed admonition boxes */
@@ -486,5 +482,6 @@ p ~ .highlight-python.notranslate {
 }
 
 .md-typeset .sn-snippet * {
-    color: #1f708975;
+    /*color: #1f708975;*/
+    color: #afd5e2;
 }
