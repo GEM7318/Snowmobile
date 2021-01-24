@@ -301,11 +301,11 @@ class Configuration(Snowmobile):
         # locating
         # --------
         def _locating(self):
-            print("Locating credentials...")
+            print("Locating credentials..")
             return self
 
         def checking_cache(self):
-            print("(1 of 2) Checking for cached path...")
+            print("(1 of 2) Finding snowmobile.toml..")
             return self
 
         def reading_provided(self):

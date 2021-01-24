@@ -1,12 +1,13 @@
 # Acknowledgements
 
-The purpose of this page is to acknowledge projects that are leveraged
-in the construction of the {xref}`snowmobile` API and documentation.
+[comment]: <> (The purpose of this page is to acknowledge projects that are leveraged)
 
-<br>
+[comment]: <> (in the construction of the {xref}`snowmobile` API and documentation.)
+
+[comment]: <> (<br>)
 
 <h2 class="hanging">API</h2>
-<hr class="sn-blue hanging">
+<hr class="sn-green hanging">
 
 +++
 [**appdirs**](https://pypi.org/project/appdirs/)
@@ -30,12 +31,12 @@ in the construction of the {xref}`snowmobile` API and documentation.
 -   The {meth}`sqlparse.parsestream()` method is used for the **initial** parsing
     of a raw SQL file into individual statements.
 
-<hr class="sn-blue">
+<hr class="sn-green">
 
 <br>
 
 <h2 class="hanging">Documentation</h2>
-<hr class="sn-blue">
+<hr class="sn-green">
 
 +++
 Code Parsing
@@ -47,20 +48,17 @@ Code Parsing
 Docs Parsing
 -   The rest of the docs are built on top of the glorious work being 
     done by the [**The Executable Book Project**](https://github.com/executablebooks),
-    most specifically:
-    -   [**MySt**](https://myst-parser.readthedocs.io/en/latest/) which bundles 
-        markdown and reStructuredText into the same markup syntax
-    -   [**MySt-NB**](https://myst-nb.readthedocs.io/en/latest/) which enables the use
-        of [**Notebooks**](https://jupyter.org/) to generate valid documentation
+    specifically:
+    -   [**MySt**](https://myst-parser.readthedocs.io/en/latest/) & [**MySt-NB**](https://myst-nb.readthedocs.io/en/latest/)
     -   [**Sphinx-copybutton**](https://sphinx-copybutton.readthedocs.io/en/latest/)
     -   [**Sphinx-togglebutton**](https://github.com/executablebooks/sphinx-togglebutton)
-    -   [**Sphinx-abs**](https://sphinx-tabs.readthedocs.io/en/latest/#)
+    -   [**Sphinx-tabs**](https://sphinx-tabs.readthedocs.io/en/latest/#)
     
 +++
 Theme
 -   [**Material for Sphinx**](https://bashtage.github.io/sphinx-material/) 
-    is used as the theme for this site
+    is the base theme for this site
 
-<hr class="sn-blue">
+<hr class="sn-green">
 
 <br>

@@ -5,7 +5,9 @@
 {xref}`snowmobile` bundles the {xref}`SnowflakeConnection` into an object model focused on configuration-management
 and making it easy to work with {xref}`snowflake` in natural, idiomatic Python.
 
+```{div} hanging
 **Its main features are:**
+```
 <style>
 truncated {
     margin: 0 0.1rem 0.1rem 1.1rem;

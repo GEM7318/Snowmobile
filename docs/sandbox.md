@@ -14,6 +14,17 @@ Setup {fa}`fas cog`
 
 {test-custom}`anything`
 
+
+
+````{admonition} Tip
+:class: tip, sn-indent-h
+**The rest of the documentation assumes**: 
+1.  The first credentials block has been populated with a valid set of credentials
+    and its alias remains `creds1`
+1.  `default-creds` has been left blank
+````
+
+
 ## Connector
 
 

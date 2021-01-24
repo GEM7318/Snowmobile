@@ -242,8 +242,8 @@ html_domain_indices = True
 html_show_sphinx = False
 html_show_copyright = False
 
-pygments_style = "sphinx"
-# pygments_style = "emacs"
+# pygments_style = "sphinx"
+pygments_style = "emacs"
 
 # html_sidebars = {}
 # html_additional_pages = {}

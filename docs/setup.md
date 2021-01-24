@@ -6,13 +6,14 @@
 ### 1. Install
 `pip install snowmobile`
 
-<br>
+<hr class="sn-spacer">
 
 ### 2. Save *snowmobile.toml*
 Download {download}`snowmobile_TEMPLATE.toml <../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml>` 
 and save it in anywhere on your file system as **`snowmobile.toml`**.
 +++
-<br>
+
+<hr class="sn-spacer">
 
 ### 3. Store Credentials
 The first few lines of [](./usage/snowmobile_toml.md) are outlined below; **for 
@@ -38,7 +39,7 @@ provided to {meth}`~snowmobile.Connector.connect()`, the first set of
 credentials stored at the level of **`connection.credentials.*`** will be 
 used (e.g. `creds1` above).
 
-<hr class="sn-blue">
+<hr class="sn-green">
 
 On line *5*, `creds1` is the <u>alias</u> associated with the connection arguments in lines 6-12.
 
@@ -46,7 +47,7 @@ For granular information on what can be included within an aliased credentials b
 [**Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
 ````
 
-<br>
+<hr class="sn-spacer">
 
 ### 4. Connect to {xref}`snowflake`
 Successful setup and connection can be verified with:
@@ -61,16 +62,7 @@ Looking for snowmobile.toml in local file system..
 """
 ```
 
+{link-badge}`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white sn-indent-cell,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
+{link-badge}`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark sn-indent-cell,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
 
-{link-badge}`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
-{link-badge}`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
-
-<hr>
-
-````{admonition} Tip
-:class: tip, sn-indent-h
-**The rest of the documentation assumes**: 
-1.  The first credentials block has been populated with a valid set of credentials
-    and its alias remains `creds1`
-1.  `default-creds` has been left blank
-````
+<br>

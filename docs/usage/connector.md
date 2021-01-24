@@ -41,7 +41,9 @@ that it was instantiated with.
 ### Connecting to {xref}`snowflake`
 <hr class="sn-green-thick">
 
-Establishing a connection can be done with: 
+```{div} hanging
+Establishing a connection can be done with:
+``` 
 ```{literalinclude} ../snippets/connector/connecting.py
 :language: python
 :lines: 4-6
@@ -54,7 +56,7 @@ Here's some basic information on the composition of `sn`:
 ```
 
 ```{div} sn-indent-h-cell
-<hr class="sn-blue" style="margin-top: 0.9rem; margin-bottom: -0.2rem;">
+<hr class="sn-green" style="margin-top: 0.9rem; margin-bottom: -0.2rem;">
 ```
 
 Given [{fa}`cog`](#examples), `sn` is implicitly using the same connection arguments
@@ -108,7 +110,7 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
-<hr class="sn-blue">
+<hr class="sn-green">
 ```
 ````
 
@@ -130,7 +132,7 @@ within a {xref}`SnowflakeCursor`.
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
-<hr class="sn-blue">
+<hr class="sn-green">
 ```
 ````
 
@@ -153,7 +155,7 @@ executing commands within {xref}`DictCursor`.
 {link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
-<hr class="sn-blue">
+<hr class="sn-green">
 ```
 ````
 ```{div} sn-snippet
