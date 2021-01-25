@@ -1,4 +1,4 @@
-# snowmobile.SQL
+# SQL
 
 {class}`~snowmobile.SQL` generates and executes raw SQL from inputs; 
 it comes free as the {attr}`~snowmobile.Snowmobile.sql` attribute of 

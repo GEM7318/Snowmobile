@@ -1,4 +1,4 @@
-# snowmobile.Snowmobile
+# Snowmobile
 ---
 
 An instance of {class}`~snowmobile.Snowmobile` ({class}`sn`) represents a distinct 
@@ -15,7 +15,7 @@ that it was instantiated with.
 
 +++
 
-{link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from docstrings`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connection,tooltip=Documentation parsed from docstrings`
 
 ---
 <br>

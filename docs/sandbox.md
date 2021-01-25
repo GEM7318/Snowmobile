@@ -121,8 +121,8 @@ the cache is manually cleared, or a different distribution of {xref}`snowmobile`
 ```
 
 
-```{literalinclude} ../snowmobile/core/connector.py
-:caption: snowmobile.core.connector.query()
+```{literalinclude} ../snowmobile.core.connection.py
+:caption: snowmobile.core.connection.query()
 :pyobject: Connector.query
 ```
 
@@ -131,8 +131,8 @@ the cache is manually cleared, or a different distribution of {xref}`snowmobile`
 ---
 
 ````{rst-class} test-custom
-```{literalinclude} ../snowmobile/core/connector.py
-:caption: snowmobile.core.connector.query()
+```{literalinclude} ../snowmobile.core.connection.py
+:caption: snowmobile.core.connection.query()
 :lines: 1-20
 ```
 ````
@@ -779,7 +779,7 @@ of this section is to:
 ```{admonition} See Related: API Reference
 :class: tip
 
-{mod}`snowmobile.core.connector`
+{mod}`snowmobile.core.connection`
 
 {link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-primary text-white,related: API Reference,tooltip=a tooltip`
 
