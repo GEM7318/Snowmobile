@@ -1,10 +1,10 @@
 """
-Create a delayed snowmobile.Connector object.
+Create a delayed snowmobile.Snowmobile object.
 ..docs/snippets/connector_delayed.py
 """
 import snowmobile
 
-sn = snowmobile.Connector(delay=True)
+sn = snowmobile.Snowmobile(delay=True)
 
 type(sn.con)     #> None
 print(sn.alive)  #> False

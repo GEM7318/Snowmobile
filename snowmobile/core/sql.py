@@ -6,7 +6,7 @@ note:
         generated sql will execute when a method is called; if set to `False`
         the method will return the sql as a string without executing.
     *   The :class:`SQL` object is primarily interacted with as a
-        pre-instantiated attribute of :class:`Connector`; in these instances
+        pre-instantiated attribute of :class:`Connection`; in these instances
         users can fetch the generated sql as a string either by:
             1.  Providing *run=False* to any method called; this will override
                 all behavior set by the current value of :attr:`auto_run`.
@@ -30,14 +30,14 @@ from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from . import Snowmobile
+from . import Generic
 from .utils.parsing import p, strip, up
 
 
-class SQL(Snowmobile):
+class SQL(Generic):
     """SQL class for generation & execution of common sql commands.
 
-    Intended to be interacted with as an attribute of :class:`snowmobile.Connect`.
+    Intended to be interacted with as an attribute of :class:`snowmobile.connect`.
 
     note:
         *   All arguments except for :attr:`sn` are optional.
@@ -46,8 +46,8 @@ class SQL(Snowmobile):
             when generating a variety of statements around the same object.
 
     Attributes:
-        sn (snowmobile.Connect):
-            :class:`snowmobile.Connect` for sql execution and connection information.
+        sn (snowmobile.connect):
+            :class:`snowmobile.connect` for sql execution and connection information.
         nm (str):
             Object name to use in generated sql (e.g. 'some_table_name')
         obj (str):

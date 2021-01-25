@@ -4,11 +4,7 @@ Fixtures for snowmobile integration tests.
 
 import pytest
 
-import time
-from typing import Union, Tuple, Type
 from pathlib import Path
-
-from snowmobile.core.exception_handler import ExceptionHandler
 
 
 @pytest.fixture()

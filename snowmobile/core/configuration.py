@@ -18,11 +18,11 @@ from pydantic.json import pydantic_encoder
 
 from snowmobile.core import paths, cfg, utils
 from snowmobile.core.utils.parsing import rmerge_dicts
-from .base import Snowmobile
+from .base import Generic
 from .cache import Cache
 
 
-class Configuration(Snowmobile):
+class Configuration(Generic):
     """User-facing access point for a fully parsed ``snowmobile.toml`` file.
 
 

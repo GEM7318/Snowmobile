@@ -73,7 +73,7 @@ Since *creds1* is the first set of credentials stored in
 ```
 
 Here's some context on how to think about the basic differences in these two
-{class}`~snowmobile.core.Connector` objects:
+{class}`~snowmobile.core.Snowmobile` objects:
 ```{literalinclude} ../snippets/intro_connector.py
 :language: python
 :lineno-start: 10
@@ -167,7 +167,7 @@ shared amongst:**
 
 ```{hlist}
 :columns:
-* {class}`sn:` {class}`~snowmobile.Connector`
+* {class}`sn:` {class}`~snowmobile.Snowmobile`
 * {class}`t1:` {class}`~snowmobile.Table`
 * {class}`script:` {class}`~snowmobile.Script`
 ```
@@ -350,7 +350,7 @@ shared amongst:**
 # {class}`snowmobile.Table`
 
 {class}`snowmobile.Table` is a data loading solution that at minimum can be provided a 
-[**Connector**](./usage/connector.md) ({class}`sn`), a {class}`pandas.DataFrame` ({class}`df`),
+[**Connector**](./usage/snowmobile.md) ({class}`sn`), a {class}`pandas.DataFrame` ({class}`df`),
 and a table name. 
 
 The rest of its keyword arguments are mirrored in the 
@@ -365,15 +365,15 @@ section of [snowmobile.toml](./usage/snowmobile_toml.md) and documented in
 ````{admonition} Note
 :class: note
 
-**Similarly to how** [**Connector**](./usage/connector.md) **handles its `creds` keyword argument,**
+**Similarly to how** [**Connector**](./usage/snowmobile.md) **handles its `creds` keyword argument,**
 {class}`~snowmobile.Table` **will adhere to any arguments explicitly provided and differ
 to the values configured in [snowmobile.toml](./usage/snowmobile_toml) otherwise.** 
 
 The exact configuration that a given instance of {class}`~snowmobile.Table` will 
 differ to is defined by the state of [**snowmobile.toml**](./usage/snowmobile_toml)
-at the time the [**Connector**](./usage/connector.md) ({class}`sn`) was instantiated,
+at the time the [**Connector**](./usage/snowmobile.md) ({class}`sn`) was instantiated,
 not its state at the time that it ({class}`~snowmobile.Table`) was instantiated; 
-*also outlined in [**Connector**](./usage/connector.md) description.*  
+*also outlined in [**Connector**](./usage/snowmobile.md) description.*  
 
 **The default behavior outlined below reflects those within the 
 {ref}`[loading]<loading.parent>` section of the 
@@ -740,7 +740,7 @@ Its design is focused on enabling:
 :lines: 16-19
 :lineno-start: 12
 ```
-The above statements give very brief context on the composition of `snowmobile.Connector`; please see
+The above statements give very brief context on the composition of `snowmobile.Snowmobile`; please see
 ___ for in-depth information on the `Connector`'s object model and usage.
 
 
@@ -755,8 +755,8 @@ Classes
 
    snowmobile.SQL
    snowmobile.Configuration
-   snowmobile.Connect
-   snowmobile.Connector
+   snowmobile.connect
+   snowmobile.Snowmobile
    snowmobile.Table
    snowmobile.Script
    snowmobile.Statement
@@ -781,10 +781,10 @@ of this section is to:
 
 {mod}`snowmobile.core.connector`
 
-{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-primary text-white,related: API Reference,tooltip=a tooltip`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-primary text-white,related: API Reference,tooltip=a tooltip`
 
 ```
 
 
-{class}`snowmobile.Connector` ({class}`sn`) is used across the majority of {ref}`snowmobile`'s object model since its attributes include the
+{class}`snowmobile.Snowmobile` ({class}`sn`) is used across the majority of {ref}`snowmobile`'s object model since its attributes include the
 [snowmobile.Configuration](./snowmobile_toml.md#snowmobiletoml) object ({attr}`sn.cfg`) as well as the {xref}`SnowflakeConnection` object ({attr}`sn.con`).

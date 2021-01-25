@@ -3,7 +3,7 @@ import snowmobile
 
 sn = snowmobile.connect()
 
-type(sn)         #> snowmobile.core.connector.Connector
+type(sn)         #> snowmobile.core.connection.Snowmobile
 
 type(sn.cfg)     #> snowmobile.core.configuration.Configuration
 str(sn.cfg)      #> snowmobile.Configuration('snowmobile.toml')

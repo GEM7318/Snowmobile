@@ -50,12 +50,12 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from . import Snowmobile, Configuration, errors
+from . import Generic, Configuration, errors
 from .cfg import Markdown
 from .utils import parsing as p
 
 
-class Name(Snowmobile):
+class Name(Generic):
     """Handles attribute-name parsing including identification of wildcards.
 
     """
@@ -224,7 +224,7 @@ class Item(Name):
 
 
 # TESTS: Add tests for Section
-class Section(Snowmobile):
+class Section(Generic):
     """Represents any (1-6 level) header section within `Script Name (doc).md`.
 
 

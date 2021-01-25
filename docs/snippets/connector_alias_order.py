@@ -1,11 +1,11 @@
 """
 Verify credentials order and alias is as laid out as defined in
-snowmobile.Connector intro assumptions.
+snowmobile.Snowmobile intro assumptions.
 ..docs/snippets/connector_aliases.py
 """
 import snowmobile
 
-sn = snowmobile.Connector()
+sn = snowmobile.Snowmobile()
 print(sn.cfg.connection.current)  # > Credentials('creds1')
 
 assert list(sn.cfg.connection.credentials)[:2] == [

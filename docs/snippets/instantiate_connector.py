@@ -1,13 +1,13 @@
 """
-Instantiate a delayed snowmobile.Connector object.
+Instantiate a delayed snowmobile.Snowmobile object.
 ../docs/snippets/instantiate_connector.py
 """
 
 import snowmobile
 
-sn = snowmobile.Connector(delay=True)
+sn = snowmobile.Snowmobile(delay=True)
 
-type(sn)                  #> snowmobile.core.connector.Connector
+type(sn)                  #> snowmobile.core.connection.Snowmobile
 type(sn.con)              #> None
 
 type(sn.cfg)              #> snowmobile.core.configuration.Configuration

@@ -57,7 +57,7 @@ def test_exception_handler_core(
     any_raise_exc1, typ_exc_r1 = to_be_raised_exception1
     any_raise_exc2, typ_exc_r2 = to_be_raised_exception2
 
-    assert e.within == type(sn_delayed)  # expected: snowmobile.Connector
+    assert e.within == type(sn_delayed)  # expected: snowmobile.Snowmobile
 
     def with_one_dormant_exception():
         """setting an initial `ctx_id`; collecting a dormant exception."""

@@ -6,12 +6,12 @@ Clean this up
 ```
 
 ## connecting.py
-```{literalinclude} /snippets/connector/connecting.py
+```{literalinclude} /snippets/snowmobile/connecting.py
 :language: python
 ```
 
 ## executing.py
-```{literalinclude} /snippets/connector/executing.py
+```{literalinclude} /snippets/snowmobile/executing.py
 :language: python
 ```
 

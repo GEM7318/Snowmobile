@@ -12,7 +12,7 @@ import snowmobile
 
 def get_testing_script(nm: str, results_limit: int = 1):
     path = Path(__file__).absolute().parent.parent / nm
-    sn = snowmobile.Connect(delay=True, config_file_nm="snowmobile_testing.toml")
+    sn = snowmobile.connect(delay=True, config_file_nm="snowmobile_testing.toml")
     sn.cfg.script.markdown.result_limit = results_limit
     return snowmobile.Script(path=path, sn=sn)
 

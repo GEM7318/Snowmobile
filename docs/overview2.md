@@ -46,7 +46,7 @@ os.chdir(str(Path.cwd().parent.parent))
 ## Example
 
 
-Establishing a connection through {class}`snowmobile.Connector`
+Establishing a connection through {class}`snowmobile.Snowmobile`
 
 ```python
 import snowmobile
@@ -83,7 +83,7 @@ Verifying load with {class}`snowmobile.SQL`
 sn.sql.exists('sample_table')
 ```
 
-Querying table with {class}`~snowmobile.Connector`..
+Querying table with {class}`~snowmobile.Snowmobile`..
 
 
 Into a {xref}`DataFrame`

@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Set
 
 import pandas as pd
 
-from . import Connector  # isort: skip
+from . import Snowmobile  # isort: skip
 from . import Statement  # isort: skip
 from . import errors  # isort: skip
 
@@ -18,7 +18,7 @@ class QA(Statement):
 
     MSG = "object-specific exception message goes here."
 
-    def __init__(self, sn: Connector, **kwargs):
+    def __init__(self, sn: Snowmobile, **kwargs):
         super().__init__(sn=sn, **kwargs)
 
     def set_outcome(self):
@@ -58,7 +58,7 @@ class Empty(QA):
         "number of records."
     )
 
-    def __init__(self, sn: Connector, **kwargs):
+    def __init__(self, sn: Snowmobile, **kwargs):
         super().__init__(sn=sn, **kwargs)
 
     def process(self) -> QA:
@@ -112,7 +112,7 @@ class Diff(QA):
         "specified threshold."
     )
 
-    def __init__(self, sn: Connector = None, **kwargs):
+    def __init__(self, sn: Snowmobile = None, **kwargs):
         """Instantiates a ``qa-diff`` statement.
 
         Args:

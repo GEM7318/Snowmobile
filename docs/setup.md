@@ -35,7 +35,7 @@ with the connection arguments to authenticate with by default if one is not pass
 to the *creds* argument of {meth}`snowmobile.connect()`.
  
 In instances where this field is left empty and an alias is not explicitly
-provided to {meth}`~snowmobile.Connector.connect()`, the first set of 
+provided to {meth}`~snowmobile.Snowmobile.connect()`, the first set of 
 credentials stored at the level of **`connection.credentials.*`** will be 
 used (e.g. `creds1` above).
 
@@ -44,7 +44,7 @@ used (e.g. `creds1` above).
 On line *5*, `creds1` is the <u>alias</u> associated with the connection arguments in lines 6-12.
 
 For granular information on what can be included within an aliased credentials block, see
-[**Connector: Parameter Resolution**](./usage/connector.md#parameter-resolution).
+[**Connector: Parameter Resolution**](./usage/snowmobile.md#parameter-resolution).
 ````
 
 <hr class="sn-spacer">
@@ -58,7 +58,7 @@ sn = snowmobile.connect()
 """
 Looking for snowmobile.toml in local file system..
 (1 of 1) Located 'snowmobile.toml' at ../Snowmobile/snowmobile.toml
-..connected: snowmobile.Connector(creds='creds1')
+..connected: snowmobile.Snowmobile(creds='creds1')
 """
 ```
 

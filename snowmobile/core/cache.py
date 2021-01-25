@@ -11,7 +11,7 @@ from contextlib import contextmanager
 
 from appdirs import AppDirs
 
-from . import Snowmobile
+from . import Generic
 from snowmobile import (
     __version__ as version,
     __author__ as author,
@@ -19,7 +19,7 @@ from snowmobile import (
 )
 
 
-class Cache(Snowmobile):
+class Cache(Generic):
     """Bare bones caching implementation for configuration file locations."""
 
     def __init__(self):

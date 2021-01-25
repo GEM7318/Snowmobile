@@ -1,5 +1,5 @@
 """
-:class:`snowmobile.Connector` is the core of ``snowmobile``'s object model and a given
+:class:`snowmobile.connection` is the core of ``snowmobile``'s object model and a given
 instance is often shared across multiple objects at once.
 
 It is the primary method of executing statements against the warehouse and
@@ -31,10 +31,10 @@ from snowmobile.core import ExceptionHandler
 from snowmobile.core.snowframe import SnowFrame
 
 from . import Configuration
-from . import Snowmobile
+from . import Generic
 
 
-class Connector(Snowmobile):
+class Snowmobile(Generic):
     """Primary method of statement execution and accessor to parsed snowmobile.toml.
 
     Args:
@@ -47,7 +47,7 @@ class Connector(Snowmobile):
         delay (bool):
             Optionally delay establishing a connection when the object is
             instantiated, enabling access to the configuration object model
-            through the :attr:`Connector.cfg` attribute; defaults to `False`.
+            through the :attr:`Connection.cfg` attribute; defaults to `False`.
         ensure_alive (bool):
             Establish a new connection if a method requiring a connection
             against the database is called while :attr:`alive` is `False`;
@@ -75,7 +75,7 @@ class Connector(Snowmobile):
         con (SnowflakeConnection):
             :class:`SnowflakeConnection` object; this attribute is populated
             when a connection is established and can be `None` if the
-            :class:`Connector` object was instantiated with `delay=True`.
+            :class:`Connection` object was instantiated with `delay=True`.
         sql (SQL):
             A :class:`snowmobile.SQL` object with the current connection
             embedded; stores command sql commands as utility methods and is
@@ -114,7 +114,7 @@ class Connector(Snowmobile):
         if not delay:
             self.connect(**connect_kwargs)
 
-    def connect(self, **kwargs) -> Connector:
+    def connect(self, **kwargs) -> Connection:
         """Establishes connection to Snowflake.
 
         Re-implements :func:`snowflake.connector.connect()` with connection
@@ -122,7 +122,7 @@ class Connector(Snowmobile):
             *   Credentials from ``snowmobile.toml``.
             *   Default connection arguments from ``snowmobile.toml``.
             *   Optional keyword arguments either passed to
-                :class:`snowmobile.Connect` or directly to this method.
+                :class:`snowmobile.connect` or directly to this method.
 
             kwargs:
                 Optional keyword arguments to pass to
@@ -145,8 +145,8 @@ class Connector(Snowmobile):
         except DatabaseError as e:
             raise e
 
-    def disconnect(self) -> Connector:
-        """Disconnect from connection with which Connector() was instantiated."""
+    def disconnect(self) -> Connection:
+        """Disconnect from connection with which Connection() was instantiated."""
         self.con.close()
         self.con = None
         return self
@@ -271,7 +271,7 @@ class Connector(Snowmobile):
                 raise e
 
     def __str__(self) -> str:
-        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.connection(creds='{self.cfg.connection.creds}')"
 
     def __repr__(self) -> str:
-        return f"snowmobile.Connector(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.connection(creds='{self.cfg.connection.creds}')"

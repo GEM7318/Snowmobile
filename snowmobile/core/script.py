@@ -7,7 +7,7 @@ was included for the purposes of creating easily reproducible examples of how a
 script is parsed.
 
 # TODO: Add an example of how to re-implement the execute_stream() method from
-#   snowflake.Connector for documentation.
+#   snowflake.Snowmobile for documentation.
 """
 from __future__ import annotations
 
@@ -21,8 +21,8 @@ from typing import Any, ContextManager, Dict, List, Optional, Set, Tuple, Union
 import sqlparse
 
 from . import (
+    Generic,
     Snowmobile,
-    Connector,
     Diff,
     Empty,
     ExceptionHandler,
@@ -33,13 +33,13 @@ from . import (
 )
 
 
-class Script(Snowmobile):
+class Script(Generic):
 
     # Maps statement anchors to alternate base class.
     _ANCHOR_TO_QA_BASE_MAP = {"qa-diff": Diff, "qa-empty": Empty}
 
     def __init__(
-        self, sn: Connector, path: Optional[Path, str] = None, as_generic: bool = False
+        self, sn: Snowmobile, path: Optional[Path, str] = None, as_generic: bool = False
     ):
         super().__init__()
         self._is_from_str: Optional[bool] = None
@@ -49,7 +49,7 @@ class Script(Snowmobile):
         self._open = sn.cfg.script.patterns.core.to_open
         self._close = sn.cfg.script.patterns.core.to_close
 
-        self.sn: Connector = sn
+        self.sn: Snowmobile = sn
         self.patterns: cfg.Pattern = sn.cfg.script.patterns
         self.as_generic = as_generic
         self.filters: Dict[Any[str, int], Dict[str, Set]] = {

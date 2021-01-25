@@ -13,11 +13,11 @@ import pandas as pd
 from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
-from . import Snowmobile, SQL, Connector, Script, errors, ExceptionHandler
+from . import Generic, SQL, Snowmobile, Script, errors, ExceptionHandler
 from .paths import DDL_DEFAULT_PATH
 
 
-class Table(Snowmobile):
+class Table(Generic):
     """Represents a DataFrame and a Table to be loaded into.
     """
 
@@ -25,7 +25,7 @@ class Table(Snowmobile):
         self,
         df: pd.DataFrame,
         table: str,
-        sn: Connector,
+        sn: Snowmobile,
         if_exists: Optional[str] = None,
         path_ddl: Optional[Path] = None,
         path_output: Optional[str, Path] = None,

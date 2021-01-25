@@ -1,4 +1,4 @@
-"""Tests for snowmobile.Connector."""
+"""Tests for snowmobile.Snowmobile."""
 import pytest
 
 import snowmobile
@@ -51,8 +51,8 @@ def test_alive_evaluates_to_false_post_disconnect(sn):
 @pytest.mark.connector
 def test_alternate_kwarg_takes_precedent_over_configuration_file():
     """Tests over-riding configuration file with alternate connection kwargs."""
-    sn_as_from_config = snowmobile.Connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM)
-    sn_with_a_conflicting_parameter = snowmobile.Connect(
+    sn_as_from_config = snowmobile.connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM)
+    sn_with_a_conflicting_parameter = snowmobile.connect(
         creds=CREDS,
         config_file_nm=CONFIG_FILE_NM,
         autocommit=False,  # <-- explicit kwarg that also exists in snowmobile.toml
@@ -72,7 +72,7 @@ def test_providing_invalid_credentials_raises_exception(sn):
     from snowflake.connector.errors import DatabaseError
 
     with pytest.raises(DatabaseError):
-        snowmobile.Connect(
+        snowmobile.connect(
             creds=CREDS,
             config_file_nm=CONFIG_FILE_NM,
             user="invalid@invalid.com",  # <-- a set of invalid credentials
@@ -112,10 +112,10 @@ def test_invalid_sql_passed_to_exd_raises_exception(sn):
 @pytest.mark.connector
 def test_invalid_credentials_alias_raises_exception():
     """Tests that an invalid credentials name creds raises KeyError."""
-    from snowmobile import Connector
+    from snowmobile import Snowmobile
 
     with pytest.raises(KeyError):
-        Connector(creds="name_for_a_nonexistent_set_of_creds")
+        Snowmobile(creds="name_for_a_nonexistent_set_of_creds")
 
 
 @pytest.mark.connector

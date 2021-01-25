@@ -1,7 +1,7 @@
-# snowmobile.Connector
+# snowmobile.Snowmobile
 ---
 
-An instance of {class}`~snowmobile.Connector` ({class}`sn`) represents a distinct 
+An instance of {class}`~snowmobile.Snowmobile` ({class}`sn`) represents a distinct 
 [session](https://docs.snowflake.com/en/sql-reference/sql/alter-session.html)
 along with the contents of [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
 that it was instantiated with.
@@ -15,7 +15,7 @@ that it was instantiated with.
 
 +++
 
-{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from docstrings`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from docstrings`
 
 ---
 <br>
@@ -44,13 +44,13 @@ that it was instantiated with.
 ```{div} hanging
 Establishing a connection can be done with:
 ``` 
-```{literalinclude} ../snippets/connector/connecting.py
+```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 4-6
 ```
 
 Here's some basic information on the composition of `sn`:
-```{literalinclude} ../snippets/connector/connecting.py
+```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 8-10
 ```
@@ -61,14 +61,14 @@ Here's some basic information on the composition of `sn`:
 
 Given [{fa}`cog`](#examples), `sn` is implicitly using the same connection arguments
 as:  
-```{literalinclude} ../snippets/connector/connecting.py
+```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 12-12
 ```
 
 Here's some context on how to think about these two instances of
-{class}`~snowmobile.core.Connector`:
-```{literalinclude} ../snippets/connector/connecting.py
+{class}`~snowmobile.core.Snowmobile`:
+```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 14-16
 ```
@@ -91,10 +91,10 @@ explicitly re-instantiating it.
 <hr class="sn-green-thick">
 
 {xref}`snowmobile` provides three convenience methods for executing raw SQL 
-directly off the {class}`~snowmobile.Connector`.
+directly off the {class}`~snowmobile.Snowmobile`.
 
 ````{tabbed} sn.query()
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 10-11
 ```
@@ -102,12 +102,12 @@ directly off the {class}`~snowmobile.Connector`.
 ````{tabbed} +
 Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.DataFrame`.
 +++
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 9-18
 :emphasize-lines: 5-10
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
 <hr class="sn-green">
@@ -116,7 +116,7 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 
 ````{tabbed} sn.ex()
 :new-group:
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 22-23
 ```
@@ -124,12 +124,12 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 ````{tabbed} +
 Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands 
 within a {xref}`SnowflakeCursor`.
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 21-28
 :emphasize-lines: 5-8 
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
 <hr class="sn-green">
@@ -139,7 +139,7 @@ within a {xref}`SnowflakeCursor`.
 ````{tabbed} sn.exd()
 :new-group:
 
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 32-33
 ```
@@ -147,12 +147,12 @@ within a {xref}`SnowflakeCursor`.
 ````{tabbed} +
 Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for 
 executing commands within {xref}`DictCursor`.
-```{literalinclude} ../snippets/connector/executing.py
+```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 31-40
 :emphasize-lines: 5-10
 ```
-{link-badge}`../autoapi/snowmobile/core/connector/index.html#snowmobile.core.connector.Connector.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
 ```{div} sn-indent-h-cell
 <hr class="sn-green">
@@ -172,15 +172,15 @@ executing commands within {xref}`DictCursor`.
 .. tabbed:: Note
 
    The accessors `sn.cursor` and `sn.dictcursor` are **properties** of
-   :attr:`~snowmobile.Connector` that return a new instance each time they are 
+   :attr:`~snowmobile.Snowmobile` that return a new instance each time they are 
    accessed. Depending on the intended use of :xref:`SnowflakeCursor` or
    :xref:`DictCursor`, it could be better to store an instance for re-referencing
-   as opposed to repeatedly instantiating new instances off :class:`~snowmobile.Connector`.
+   as opposed to repeatedly instantiating new instances off :class:`~snowmobile.Snowmobile`.
 
 .. tabbed:: +
 
    The below demonstrates the difference between calling two methods on
-   the :attr:`snowmobile.Connector.cursor` property compared to on the same
+   the :attr:`snowmobile.Snowmobile.cursor` property compared to on the same
    instance of :xref:`SnowflakeCursor`.
 
    .. literalinclude:: ../snippets/connector_cursor_note.py
@@ -198,14 +198,14 @@ executing commands within {xref}`DictCursor`.
 The following convention of variable/attribute name to associated object is
 used throughout {ref}`snowmobile`'s documentation and source code, including in 
 method signatures:
-- **`sn`**: {class}`snowmobile.Connector`
+- **`sn`**: {class}`snowmobile.Snowmobile`
 - **`cfg`**: {class}`snowmobile.Configuration`
 - **`con`**: {xref}`snowflake.connector.SnowflakeConnection`
 - **`cursor`**: {xref}`snowflake.connector.cursor.SnowflakeCursor`
 
 ---
 
-For example, see the below attributes of {class}`~snowmobile.core.Connector`:
+For example, see the below attributes of {class}`~snowmobile.core.Snowmobile`:
 ```{literalinclude} ../snippets/inspect_connector.py
 :language: python
 :lines: 2-14
@@ -220,7 +220,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Connector`:
 
 The below line in [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
 denotes the set of credentials to authenticate with if one isn't
-specified in the optional `creds` argument of {class}`snowmobile.Connector`.
+specified in the optional `creds` argument of {class}`snowmobile.Snowmobile`.
 
 ```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
 :language: toml
@@ -276,13 +276,13 @@ Missing
 ### Delaying Connection
 <hr class="sn-green-thick">
 
-Sometimes it's helpful to create a {class}`~snowmobile.Connector` without 
+Sometimes it's helpful to create a {class}`~snowmobile.Snowmobile` without 
 establishing a connection; this is accomplished by providing it with the 
 convenience argument `delay=True`, which omits connecting to {xref}`snowflake`
 when the object is created.
 
-In these instances, the {attr}`~snowmobile.Connector.con` attribute will be `None` 
-until a method is called on the {class}`~snowmobile.Connector` that requires a 
+In these instances, the {attr}`~snowmobile.Snowmobile.con` attribute will be `None` 
+until a method is called on the {class}`~snowmobile.Snowmobile` that requires a 
 connection to {xref}`snowflake` at which point a call is made to
 {meth}`snowflake.connector.connect()`, the connection established, and the attribute set.
 ```{literalinclude} ../snippets/connector_delayed.py
@@ -307,11 +307,11 @@ Missing
 ### Using *ensure_alive*
 <hr class="sn-green-thick">
 
-Controlling the behavior of {class}`~snowmobile.Connector` when a connection is 
-lost or intentionally killed is done through the {attr}`~snowmobile.Connector.ensure_alive` 
+Controlling the behavior of {class}`~snowmobile.Snowmobile` when a connection is 
+lost or intentionally killed is done through the {attr}`~snowmobile.Snowmobile.ensure_alive` 
 parameter. 
 
-Its default value is *True,* meaning that if the  {attr}`~snowmobile.Connector.alive` 
+Its default value is *True,* meaning that if the  {attr}`~snowmobile.Snowmobile.alive` 
 property evaluates to *False*, **and a method is invoked that requires a 
 connection,** it will re-connect to {xref}`snowflake` before continuing execution.
 

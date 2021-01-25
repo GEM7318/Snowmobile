@@ -6,10 +6,10 @@ from __future__ import annotations
 from typing import Any, Iterable, Set, Type
 
 from .errors import *
-from . import Snowmobile
+from . import Generic
 
 
-class ExceptionHandler(Snowmobile):
+class ExceptionHandler(Generic):
     """Context management for snowmobile objects."""
 
     def __init__(

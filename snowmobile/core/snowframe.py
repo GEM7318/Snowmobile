@@ -11,11 +11,11 @@ import pandas as pd
 
 from . import errors
 from .column import Column
-from . import Snowmobile
+from . import Generic
 
 
 @pd.api.extensions.register_dataframe_accessor("snf")
-class SnowFrame(Snowmobile):
+class SnowFrame(Generic):
     """Light extension to :class:`pandas.DataFrame` with a ``snf`` entry point.
 
     """

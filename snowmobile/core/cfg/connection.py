@@ -74,7 +74,7 @@ class Connection(Base):
     Attributes:
         default_alias (str):
             The set of credentials that is used if :attr:`creds` is not
-            explicitly passed to :class:`snowmobile.Connect` on
+            explicitly passed to :class:`snowmobile.connect` on
             instantiation.
         creds (str):
             The name given to the set of credentials within the
@@ -117,7 +117,7 @@ class Connection(Base):
 
     @property
     def creds(self):
-        """Credentials alias used by current Connector."""
+        """Credentials alias used by current Connection."""
         return self.provided_alias or self.default_alias
 
     @property

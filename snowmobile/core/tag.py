@@ -5,11 +5,11 @@ from __future__ import annotations
 
 from typing import Optional, Set
 
-from . import Snowmobile, Configuration, Scope
+from . import Generic, Configuration, Scope
 from .cfg import Pattern
 
 
-class Tag(Snowmobile):
+class Tag(Generic):
     """Handles the decomposition/parsing of statement tags.
 
     Should never be instantiated directly by the user-facing API but its

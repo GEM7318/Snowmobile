@@ -1,8 +1,8 @@
 # snowmobile.SQL
 
 {class}`~snowmobile.SQL` generates and executes raw SQL from inputs; 
-it comes free as the {attr}`~snowmobile.Connector.sql` attribute of 
-{class}`~snowmobile.Connector`, and its purpose is to provide a simple, 
+it comes free as the {attr}`~snowmobile.Snowmobile.sql` attribute of 
+{class}`~snowmobile.Snowmobile`, and its purpose is to provide a simple, 
 accessible Python API to query metadata and execute administrative commands 
 against {xref}`snowflake`.
 
@@ -38,7 +38,7 @@ not just {meth}`snowmobile.SQL.table_sample`.
 
 ````{tabbed} Setup
 
-Let's instantiate a {class}`~snowmobile.Connector` object and create a *dummy_table* 
+Let's instantiate a {class}`~snowmobile.Snowmobile` object and create a *dummy_table* 
 to use for the rest of the example.
 
 Lines 11-12 in the below make use of {class}`snowmobile.Script` to parse a sql 
@@ -155,15 +155,15 @@ produce the same results**.
 ````{tabbed} Setup
 
 The below setup code does the following:
-1.  Instantiates two instances of {class}`snowmobile.Connector` with the default 
+1.  Instantiates two instances of {class}`snowmobile.Snowmobile` with the default 
     set of credentials
 1.  Sets the `auto_run` attribute on both instances of 
-    {attr}`~snowmobile.Connector.sql` to *False* to omit executing the generated 
+    {attr}`~snowmobile.Snowmobile.sql` to *False* to omit executing the generated 
     commands throughout example
 1.  Creates a **transient** *sample_table* table so that we can 
     access it from either session as if it were a permanent table
 1.  Explicitly sets the following on the **second** instances of 
-    {class}`~snowmobile.Connector`:
+    {class}`~snowmobile.Snowmobile`:
     1.  {attr}`~snowmobile.SQL.nm` to *sample_table*
     1.  {attr}`~snowmobile.SQL.obj` to *table* 
 

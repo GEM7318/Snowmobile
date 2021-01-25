@@ -12,7 +12,7 @@ def sn():
     """Returns a standard `Connector` object."""
     import snowmobile
 
-    sn = snowmobile.Connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM)
+    sn = snowmobile.connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM)
     sn.ex("create schema TESTING_SNOWMOBILE")
     yield sn
     sn.ex("drop schema TESTING_SNOWMOBILE")
@@ -23,7 +23,7 @@ def sn_delayed():
     """Returns a delayed `Connector` object."""
     import snowmobile
 
-    return snowmobile.Connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM, delay=True)
+    return snowmobile.connect(creds=CREDS, config_file_nm=CONFIG_FILE_NM, delay=True)
 
 
 @pytest.fixture(scope="session")

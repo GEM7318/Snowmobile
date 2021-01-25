@@ -5,7 +5,7 @@ derived from pydantic's BaseModel).
 from __future__ import annotations
 
 
-class Snowmobile(object):
+class Generic(object):
     """Generic dunder implementation for ``snowmobile`` objects.
 
     Base class for all ``snowmobile`` objects that do **not** inherit from

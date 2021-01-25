@@ -13,18 +13,18 @@ from pandas.io.sql import DatabaseError as pdDataBaseError
 from snowflake.connector.errors import DatabaseError, ProgrammingError
 
 from . import ExceptionHandler, Section, Tag, errors, cfg
-from . import Snowmobile, Connector  # isort: skip
+from . import Generic, Snowmobile  # isort: skip
 
 
-class Statement(Tag, Snowmobile):
+class Statement(Tag, Generic):
     """Base class for all :class:`Statement` objects.
 
     Home for attributes and methods that are associated with **all** statement
     objects, generic or QA.
 
     Attributes:
-        sn (snowmobile.Connect):
-            :class:`snowmobile.Connect` object.
+        sn (snowmobile.connect):
+            :class:`snowmobile.connect` object.
         statement (Union[sqlparse.sql.Statement, str]):
             A :class:`sqlparse.sql.Statement` object.
         index (int):
@@ -99,14 +99,14 @@ class Statement(Tag, Snowmobile):
 
     def __init__(
         self,
-        sn: Connector,
+        sn: Snowmobile,
         statement: Union[sqlparse.sql.Statement, str],
         index: Optional[int] = None,
         attrs_raw: Optional[str] = None,
         e: Optional[ExceptionHandler] = None,
         **kwargs,
     ):
-        Snowmobile.__init__(self)
+        Generic.__init__(self)
 
         self._index: int = index
         self._outcome: int = int()

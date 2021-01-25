@@ -49,19 +49,19 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
-from . import Snowmobile, Configuration, Connector, Diff, Empty, Section, Statement
+from . import Generic, Configuration, Snowmobile, Diff, Empty, Section, Statement
 from .paths import DIR_PKG_DATA
 from .cfg import Marker
 from .utils import Console
 
 
-class Markup(Snowmobile):
+class Markup(Generic):
     """Markup document from SQL script.
     """
 
     def __init__(
         self,
-        sn: Connector,
+        sn: Snowmobile,
         path: Path,
         contents: Dict[int, Union[Statement, Marker]],
         alt_file_nm: Optional[str] = None,

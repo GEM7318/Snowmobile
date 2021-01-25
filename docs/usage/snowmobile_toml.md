@@ -10,14 +10,14 @@ where needed.
 Once validated, the {class}`Configuration` object serves as a namespace for the 
 contents/structure of the configuration file and utility methods implemented on 
 top of them, **with the rest of the API accessing it as the 
-{attr}`~snowmobile.Connector.cfg` attribute of {class}`~snowmobile.Connector`**.
+{attr}`~snowmobile.Snowmobile.cfg` attribute of {class}`~snowmobile.Snowmobile`**.
 
-{link-badge}`../autoapi/snowmobile/core/connector/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from module docstring`
+{link-badge}`../autoapi/snowmobile/core/connection/index.html,cls=badge-secondary badge-pill text-white,API Docs: snowmobile.core.connector,tooltip=Documentation parsed from module docstring`
 
-{class}`snowmobile.Configuration` doesn't need to be directly instantiated since it's accessible through the {attr}`~snowmobile.Connector.cfg`
-attribute of {class}`snowmobile.Connector`.
+{class}`snowmobile.Configuration` doesn't need to be directly instantiated since it's accessible through the {attr}`~snowmobile.Snowmobile.cfg`
+attribute of {class}`snowmobile.Snowmobile`.
 
-We can create an instance of {class}`snowmobile.Connector` without connecting to {xref}`snowflake` by providing it with the convenience argument
+We can create an instance of {class}`snowmobile.Snowmobile` without connecting to {xref}`snowflake` by providing it with the convenience argument
 `delay=True`, which will omit connecting to {xref}`snowflake` when the object is created.
 ```{literalinclude} ../snippets/instantiate_connector.py
 :language: python
@@ -36,7 +36,7 @@ The attributes that map to different sections of [snowmobile.toml](#snowmobileto
 
 ```{admonition} Tip
 :class: tip
-Each section of [snowmobile.toml](#snowmobiletoml) and attribute of {attr}`~snowmobile.Connector.cfg` outlined in lines 10-14 above maps squarely to a
+Each section of [snowmobile.toml](#snowmobiletoml) and attribute of {attr}`~snowmobile.Snowmobile.cfg` outlined in lines 10-14 above maps squarely to a
 specific class of {xref}`snowmobile`, the documentation for which contains more detailed information on its use.
 ```
 
@@ -62,7 +62,7 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 :new-group:
 (connection.credentials)=
 *The credentials (alias) to use by default if not specified in
-{arg}`snowmobile.Connector.creds`*
+{arg}`snowmobile.Snowmobile.creds`*
 ```
 
 ```{tabbed} [connection.credentials]
@@ -74,7 +74,7 @@ specific class of {xref}`snowmobile`, the documentation for which contains more 
 
 ```{tabbed} +
 The value of `credentials_alias` is the literal string to pass to the
-``creds`` argument of {class}`snowmobile.Connector` to establish the
+``creds`` argument of {class}`snowmobile.Snowmobile` to establish the
 {xref}`snowflake` connection with those credentials.
 
 Additional keyword-arguments can be specified in an aliased section so long

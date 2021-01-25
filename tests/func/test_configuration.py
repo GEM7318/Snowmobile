@@ -6,14 +6,14 @@ import pytest
 
 from tests import CONFIG_FILE_NM
 
-from snowmobile import Connector
+from snowmobile import Snowmobile
 
 CACHE_TESTING_ITEM_NAME1 = "test-path"
 CACHE_TESTING_ITEM_NAME2 = "test-path2"
 
 
 @pytest.fixture(scope="module")
-def cache_with_a_testing_value_saved(sn_delayed) -> Tuple[Connector, str]:
+def cache_with_a_testing_value_saved(sn_delayed) -> Tuple[Snowmobile, str]:
     """Performs setup for cache testing.
 
     Specifically:

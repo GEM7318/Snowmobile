@@ -4,7 +4,7 @@ Verify `default-creds` has been changed to `creds2`.
 """
 import snowmobile
 
-sn = snowmobile.Connector()
+sn = snowmobile.Snowmobile()
 
 assert sn.cfg.connection.default_alias == 'creds2', (
     "Something's not right here; expected default_alias =='creds2'"

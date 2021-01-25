@@ -5,7 +5,7 @@ import snowmobile
 
 sn = snowmobile.connect()
 
-print(sn)            #> snowmobile.Connector(creds='creds1')
+print(sn)            #> snowmobile.Snowmobile(creds='creds1')
 print(sn.cfg)        #> snowmobile.Configuration('snowmobile.toml')
 print(type(sn.con))  #> <class 'snowflake.connector.connection.SnowflakeConnection'>
 

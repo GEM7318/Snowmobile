@@ -3,12 +3,11 @@
 intellisense/autocomplete while interacting with the API.
 """
 # isort: skip_file
-from .base import Snowmobile
+from .base import Generic
 from .exception_handler import ExceptionHandler
 from .configuration import Configuration
-from .connector import Connector
-from .connector import Connector as Connect
-from .connector import Connector as connect
+from.connection import Snowmobile
+from.connection import Snowmobile as connect
 from .section import Section
 from .scope import Scope
 from .tag import Tag
@@ -34,9 +33,9 @@ from .paths import (
 
 __all__ = [
     # core object model
-    "Snowmobile",
+    "Generic",
     "Configuration",
-    "Connector", "Connect", "connect",
+    "Snowmobile", "connect",
     "Table",
     "Script",
     "SQL",
@@ -49,15 +48,19 @@ __all__ = [
     "SnowFrame",
     "Column",
     "Tag",
+
     # parsed `snowmobile.toml` objects
     "cfg",
+
     # error/exception handling
     "ExceptionHandler",
     "errors",
+
     # file paths
     "DIR_PKG_DATA",
     "DDL_DEFAULT_PATH",
     "EXTENSIONS_DEFAULT_PATH",
+
     # other
     "utils",
 ]

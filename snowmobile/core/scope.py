@@ -6,10 +6,10 @@ from __future__ import annotations
 import re
 from typing import Dict
 
-from . import Snowmobile
+from . import Generic
 
 
-class Scope(Snowmobile):
+class Scope(Generic):
     """Handles the scope/context for :class:`Statement` objects and derived classes.
 
     Should never be interacted with from the user-facing API.

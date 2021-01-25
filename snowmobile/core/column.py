@@ -9,10 +9,10 @@ import string
 from contextlib import contextmanager
 from typing import Optional
 
-from . import Snowmobile
+from . import Generic
 
 
-class Column(Snowmobile):
+class Column(Generic):
     """Handles transformation operations of a single column within a DataFrame."""
 
     _EXCLUDE_CHARS = list(

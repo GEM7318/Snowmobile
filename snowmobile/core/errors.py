@@ -1,5 +1,5 @@
 """
-Snowmobile exceptions.
+Generic exceptions.
 """
 import time
 from typing import Dict, List, Optional
@@ -10,7 +10,7 @@ from snowflake.connector.errors import ProgrammingError
 
 
 class Error(Exception):
-    """Base Snowmobile exception class.
+    """Base Generic exception class.
 
     Args:
         msg (Optional[str]):

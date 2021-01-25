@@ -11,7 +11,7 @@ sn.cfg.connection.current == sn2.cfg.connection.current  #> True
 sn.sql.current("schema") == sn2.sql.current("schema")    #> True
 sn.sql.current("session") == sn2.sql.current("session")  #> False
 
-type(sn)         #> snowmobile.core.connector.Connector
+type(sn)         #> snowmobile.core.connection.Snowmobile
 
 type(sn.cfg)     #> snowmobile.core.configuration.Configuration
 str(sn.cfg)      #> snowmobile.Configuration('snowmobile.toml')

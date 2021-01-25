@@ -81,10 +81,10 @@ def contents_are_identical(path1: Path, path2: Path) -> bool:
 
 def script(script_name: str):
     """Get a script object from its script name."""
-    from snowmobile import Script, Connect
+    from snowmobile import Script, Snowmobile
 
     path_to_script = FILES[script_name]
     return Script(
         path=path_to_script,
-        sn=Connect(config_file_nm=CONFIG_FILE_NM, creds=CREDS, delay=True),
+        sn=Snowmobile(config_file_nm=CONFIG_FILE_NM, creds=CREDS, delay=True),
     )

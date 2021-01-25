@@ -15,7 +15,7 @@ __all__ = [
     "__application__",
 
     # API
-    "Connector", "Connect", "connect",
+    "Snowmobile", "connect",
     "SQL",
     "Table",
     "Configuration",
@@ -27,7 +27,7 @@ __all__ = [
 from .core import (
     SQL,
     Configuration,
-    Connect, Connector, connect,
+    Snowmobile, connect,
     Table,
     Script,
     Section,
