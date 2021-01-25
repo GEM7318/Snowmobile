@@ -97,7 +97,7 @@ hr.sn-green {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     border-style: solid;
-    border-bottom-color: #329ef48a;
+    border-bottom-color: #11838e59;
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
@@ -106,21 +106,13 @@ div.admonition hr.sn-green {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     border-style: solid;
-    border-bottom-color: #329ef452;
+    border-bottom-color: #11838e59;
 }
 
 /* Reduced margins on default docutils line break */
 .md-typeset hr {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
-}
-
-/* Sub-header: h2-h3 */
-hr.sn-green-thick {
-    height: 0.12rem;
-    background-color: #329ef48a;
-    margin-top: -0.4em;
-    border: 0;
 }
 
 /* Sub-header green: h2-h3 */
