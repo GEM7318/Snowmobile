@@ -1,4 +1,4 @@
-```{include} /badges.md
+```{include} /badges.html
 ```
 <hr style="margin-top: -0.2rem;">
 
@@ -17,7 +17,7 @@ truncated {
 <DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/snowmobile_toml.html#snowmobile-toml"><span class="std std-doc">Consolidated configuration: snowmobile.toml</span></a>
     <dd class="truncated">Use one configuration file, tracked by <a class="reference external" href="https://pypi.org/project/snowmobile/">snowmobile</a> and accessible from all Python instances on a machine
 
-<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/connector.html#executing-raw-sql"><span class="std std-doc">Simplified execution of raw SQL</span></a>
+<DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/snowmobile.html#executing-raw-sql"><span class="std std-doc">Simplified execution of raw SQL</span></a>
     <dd class="truncated">Query results into a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">DataFrame</a>, 
     <a class="reference external" href="https://docs.snowflake.com/en/user-guide/python-connector-api.html#cursor">SnowflakeCursor</a> or 
     <a class="reference external" href="https://docs.snowflake.com/en/user-guide/python-connector-api.html#cursor">DictCursor</a> from the same object

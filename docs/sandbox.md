@@ -108,7 +108,7 @@ the cache is manually cleared, or a different distribution of {xref}`snowmobile`
 
 <a 
     class="sphinx-bs badge badge-primary text-white reference external hanging" 
-    href="./usage/connector.html#executing-raw-sql" 
+    href="./usage/snowmobile.html#executing-raw-sql" 
     title="Binding a process to a specific snowmobile.toml file">
     <span>Related: Specifying Configuration</span>
 </a>
@@ -312,7 +312,7 @@ shared amongst:**
     <dd><i>No hard-coding credentials or file paths</i>
     <dd><i>Access different configurations by assigned alias</i>
 </DL>    
-<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/connector.html#executing-raw-sql" title="Usage Documentation on Connecting to Snowflake">
+<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/snowmobile.html#executing-raw-sql" title="Usage Documentation on Connecting to Snowflake">
 <span>Related: Executing Raw SQL</span>
 </a>
 
@@ -336,7 +336,7 @@ shared amongst:**
     <dd><i>Access credentials & connection parameters by alias</i>
     <dd><i>Query results in a DataFrame, SnowflakeCursor, or DictCursor from the same object</i>
     
-<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/connector.html#executing-raw-sql" title="Usage Documentation on Executing Raw SQL">
+<a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/snowmobile.html#executing-raw-sql" title="Usage Documentation on Executing Raw SQL">
 <span>See Docs: Executing Raw SQL</span>
 </a>
 

@@ -62,7 +62,7 @@ Looking for snowmobile.toml in local file system..
 """
 ```
 
-{link-badge}`./usage/connector.html#executing-raw-sql,cls=badge-primary badge text-white sn-indent-cell,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
-{link-badge}`./usage/connector.html#connecting-to-snowflake,cls=badge-warning text-dark sn-indent-cell,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
+{link-badge}`./usage/snowmobile.html#executing-raw-sql,cls=badge-primary badge text-white sn-indent-cell,Related: Executing Raw SQL,tooltip=Usage Documentation on Connecting to Snowflake`
+{link-badge}`./usage/snowmobile.html#connecting-to-snowflake,cls=badge-warning text-dark sn-indent-cell,Issues? See Docs,tooltip=Usage Documentation on Connecting to Snowflake`
 
 <br>
