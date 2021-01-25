@@ -470,13 +470,13 @@ div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
 /*}*/
 
 /* Reduce space between code cells and paragraphs */
-.md-typeset .highlight-python.notranslate ~ p {
+.md-typeset .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate ~ p {
     margin-top: 0.8rem;
     margin-bottom: 0.4rem;
 }
 
 /* Reduce space between paragraphs and code cells */
-.md-typeset p ~ .highlight-python.notranslate {
+.md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {
     margin-left: 0.9rem;
     margin-right: 2em;
     margin-bottom: -0.2rem;

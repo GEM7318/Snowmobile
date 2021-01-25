@@ -114,7 +114,7 @@ class Snowmobile(Generic):
         if not delay:
             self.connect(**connect_kwargs)
 
-    def connect(self, **kwargs) -> Connection:
+    def connect(self, **kwargs) -> Snowmobile:
         """Establishes connection to Snowflake.
 
         Re-implements :func:`snowflake.connector.connect()` with connection
@@ -145,7 +145,7 @@ class Snowmobile(Generic):
         except DatabaseError as e:
             raise e
 
-    def disconnect(self) -> Connection:
+    def disconnect(self) -> Snowmobile:
         """Disconnect from connection with which Connection() was instantiated."""
         self.con.close()
         self.con = None
@@ -271,7 +271,7 @@ class Snowmobile(Generic):
                 raise e
 
     def __str__(self) -> str:
-        return f"snowmobile.connection(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Snowmobile(creds='{self.cfg.connection.creds}')"
 
     def __repr__(self) -> str:
-        return f"snowmobile.connection(creds='{self.cfg.connection.creds}')"
+        return f"snowmobile.Snowmobile(creds='{self.cfg.connection.creds}')"
