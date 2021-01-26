@@ -6,8 +6,9 @@ An instance of {class}`~snowmobile.Snowmobile` ({class}`sn`) represents a distin
 along with the contents of [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
 that it was instantiated with.
 
-<p class="hanging;">Its purpose is to provide an entry point that will:</p>
-
+```{div} sn-dedent-v-t-h, sn-dedent-v-b-h
+Its purpose is to provide an entry point that will:
+```
 1.  Locate, parse, and instantiate [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
     as a {class}`~snowmobile.Configuration` object ({class}`sn.cfg`)
 1.  Establish connections to {xref}`snowflake`
@@ -41,7 +42,7 @@ that it was instantiated with.
 ### Connecting to {xref}`snowflake`
 <hr class="sn-green-thick">
 
-```{div} hanging
+```{div} sn-pre-code
 Establishing a connection can be done with:
 ``` 
 ```{literalinclude} ../snippets/snowmobile/connecting.py
@@ -49,7 +50,9 @@ Establishing a connection can be done with:
 :lines: 4-6
 ```
 
+```{div} sn-pre-code 
 Here's some basic information on the composition of `sn`:
+```
 ```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 8-10
@@ -59,15 +62,19 @@ Here's some basic information on the composition of `sn`:
 <hr class="sn-green" style="margin-top: 0.9rem; margin-bottom: -0.2rem;">
 ```
 
+```{div} sn-pre-code 
 Given [{fa}`cog`](#examples), `sn` is implicitly using the same connection arguments
 as:  
+```
 ```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 12-12
 ```
 
+```{div} sn-pre-code 
 Here's some context on how to think about these two instances of
 {class}`~snowmobile.core.Snowmobile`:
+```
 ```{literalinclude} ../snippets/snowmobile/connecting.py
 :language: python
 :lines: 14-16
@@ -100,18 +107,21 @@ directly off the {class}`~snowmobile.Snowmobile`.
 ```
 ````
 ````{tabbed} +
-Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.DataFrame`.
-+++
-```{literalinclude} ../snippets/snowmobile/executing.py
-:language: python
-:lines: 9-18
-:emphasize-lines: 5-10
-```
-{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
 
-```{div} sn-indent-h-cell
-<hr class="sn-green">
-```
+  Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.DataFrame`. 
+
+  ```{literalinclude} ../snippets/snowmobile/executing.py
+  :language: python
+  :lines: 9-18
+  :emphasize-lines: 5-10
+  ```
+
+  {link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.query,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.query(),tooltip=Documentation parsed from module docstring`
+
+  ```{div} sn-indent-h-cell
+  <hr class="sn-green">
+  ```
+  
 ````
 
 ````{tabbed} sn.ex()
@@ -122,42 +132,48 @@ Implements {meth}`pandas.read_sql` for querying results into a {class}`pandas.Da
 ```
 ````
 ````{tabbed} +
-Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands 
-within a {xref}`SnowflakeCursor`.
-```{literalinclude} ../snippets/snowmobile/executing.py
-:language: python
-:lines: 21-28
-:emphasize-lines: 5-8 
-```
-{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
 
-```{div} sn-indent-h-cell
-<hr class="sn-green">
-```
+  Implements {meth}`SnowflakeConnection.cursor().execute()` for executing commands 
+  within a {xref}`SnowflakeCursor`.
+
+  ```{literalinclude} ../snippets/snowmobile/executing.py
+  :language: python
+  :lines: 21-28
+  :emphasize-lines: 5-8 
+  ```
+
+  {link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.ex,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.ex() ,tooltip=Documentation parsed from module docstring`
+
+  ```{div} sn-indent-h-cell
+  <hr class="sn-green">
+  ```
 ````
 
 ````{tabbed} sn.exd()
 :new-group:
-
 ```{literalinclude} ../snippets/snowmobile/executing.py
 :language: python
 :lines: 32-33
 ```
 ````
 ````{tabbed} +
-Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for 
-executing commands within {xref}`DictCursor`.
-```{literalinclude} ../snippets/snowmobile/executing.py
-:language: python
-:lines: 31-40
-:emphasize-lines: 5-10
-```
-{link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
 
-```{div} sn-indent-h-cell
-<hr class="sn-green">
-```
+  Implements {meth}`SnowflakeConnection.cursor(DictCursor).execute()` for 
+  executing commands within {xref}`DictCursor`. 
+
+  ```{literalinclude} ../snippets/snowmobile/executing.py
+  :language: python
+  :lines: 31-40
+  :emphasize-lines: 5-10
+  ```
+
+  {link-badge}`../autoapi/snowmobile/core/connection/index.html#snowmobile.core.connection.Snowmobile.exd,cls=badge-secondary badge-pill text-white sn-indent-cell,API Docs: Connector.exd(),tooltip=Documentation parsed from module docstring`
+
+  ```{div} sn-indent-h-cell
+  <hr class="sn-green">
+  ```
 ````
+
 ```{div} sn-snippet
 [{fa}`file-code-o` ../executing.py](../snippets.md#executingpy)
 ```

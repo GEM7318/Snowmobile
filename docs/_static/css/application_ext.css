@@ -1,20 +1,14 @@
 
-/* Gradient across header --------------------------------------------------*/
+/* Gradient across header ---------------------------------------------------*/
 header.md-header {
-    /*background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)*/
     background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #011f098c)
-    /*background-image: linear-gradient(120deg, #007bff, #619c879c  70%, #0c5b63  75%)*/
+    /*background: radial-gradient(circle, rgba(71,152,135,1) 0%, rgba(0,123,255,1) 99%);*/
 }
 
 nav.md-tabs {
-    /*background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #0070207d)*/
     background-image: linear-gradient(100deg,#007bff 20%, #5bbb777d 55%, #011f098c)
-    /*background-image: linear-gradient(60deg, #007bff 2%, #0070207d  70%, #0070207d  75%, #073815a6 93%)*/
+    /*background: radial-gradient(circle, rgba(71,152,135,1) 0%, rgba(0,123,255,1) 99%);*/
 }
-
-/*.md-typeset h1 {*/
-/*    color: #000000ab;*/
-/*}*/
 
 
 /* Global spacing settings for content container --------------------------- */
@@ -35,22 +29,70 @@ div.tabbed-set.docutils {
     line-height: 1em;
 }
 
-
-/* Expanding line-height for primary TOC */
-ul.md-nav__list {
-    line-height: 1rem;
+div.md-sidebar.md-sidebar--primary label {
+    margin-left: -0.4rem;
+    margin-bottom: -0.2rem;
 }
 
-/* Expanding line-height for secondary TOC */
-ul.md-source__facts  li {
-    margin-top: 0;
+li.md-nav__item > .md-nav__link.caption {
+    margin-bottom: -0.1em;
+}
+
+li.md-nav__item * {
+    line-height: 0.75rem;
+    font-size: 0.7rem;
+    overflow: visible;
+    margin-bottom: -0.2rem;
+}
+
+/* Expanding line-height for primary TOC */
+/*ul.md-nav__list {*/
+/*    line-height: 1rem;*/
+/*}*/
+
+/*!* Expanding line-height for secondary TOC *!*/
+/*ul.md-source__facts  li {*/
+/*    margin-top: 0;*/
+/*}*/
+
+/* Style for the paragraph that precedes bullets or definitions list */
+.md-typeset .hanging {
+    margin-bottom: -0.5rem;
+}
+
+ /* Reducing space between list items */
+.md-typeset ol.simple, ul.simple, dl.simple {
+    margin-bottom: 0.1rem;
+    margin-top: -0.8rem;
+    /*margin-left: 0.4rem;*/
+}
+
+/* Reducing margins on headers */
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4, .md-typeset h5, .md-typeset h6 {
+    margin-bottom: 0.4rem;
+    margin-top: 0.4rem;
+    color: #000000b5;
 }
 
 /* Shrinking margins on lists */
-ol.simple, ul.simple, li {
-    margin-bottom: 0.1rem;
-    margin-top: -0.45rem;
-    margin-left: 0.4rem;
+/*ol.simple, ul.simple {*/
+/*    margin-bottom: 0.1rem;*/
+/*    !*margin-top: -0.45rem;*!*/
+/*    margin-top: -0.8rem;*/
+/*    margin-left: 0.4rem;*/
+/*}*/
+
+.md-typeset ol li, .md-typeset ul li {
+    margin-bottom: -0.3rem;
+    margin-top: 0;
+    /*margin-bottom: 0.1rem;*/
+    /*margin-top: -0.3rem;*/
+
+    /*margin-left: 0.4rem;*/
+}
+
+ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
+    margin-bottom: unset;
 }
 
 /* 'indented' style */
@@ -65,29 +107,92 @@ ol.simple, ul.simple, li {
     padding-right: 2em;
 }
 
+/* Indent cell horizontally */
+.md-typeset .sn-indent-h-cell-right {
+    margin-right: 2em;
+}
+
 /* Indent to right side (containers following code cells) */
 .md-typeset .sn-indent-h-sub-cell-right {
     margin-right: 2rem;
 }
 
 /* 'remove vertical margins: bottom' */
-.md-typeset .sn-dedent-v-b {
+.md-typeset .sn-dedent-v-b * {
+    margin-bottom: 0;
+}
+
+.md-typeset .sn-dedent-v-b-h * {
+    margin-bottom: 0.5rem;
+}
+
+.md-typeset .sn-dedent-v-b-container {
     margin-bottom: 0;
 }
 
 /* 'remove vertical margins: top' */
-.md-typeset .sn-dedent-v-t {
+.md-typeset .sn-dedent-v-t * {
     margin-top: 0;
 }
 
+.md-typeset .sn-dedent-v-t-container {
+    margin-top: 0;
+}
+
+.md-typeset .sn-dedent-v-t-h-container {
+    margin-top: 0.5rem;
+}
+
+.md-typeset .sn-dedent-v-b-container {
+    margin-bottom: 0;
+}
+
+.md-typeset .sn-dedent-v-b-h-container {
+    margin-bottom: 0.5rem;
+}
+
+.md-typeset .sn-dedent-v * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.md-typeset .sn-dedent-v-container {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* 'remove half of vertical margins: top' */
+.md-typeset .sn-dedent-v-t-h * {
+    margin-top: 0.5rem;
+}
+
+/* 'remove half of vertical margins: bottom' */
+.md-typeset .sn-dedent-v-b-h * {
+    margin-bottom: 0.5rem;
+}
+
 /* 'increase vertical margins: bottom' */
-.md-typeset .sn-increase-margin-b {
+.md-typeset .sn-increase-margin-b * {
+    margin-bottom: 1rem;
+}
+
+.md-typeset .sn-increase-margin-v-b-container {
     margin-bottom: 1rem;
 }
 
 /* 'increase vertical margins: bottom' */
-.md-typeset .sn-increase-margin-t {
+.md-typeset .sn-increase-margin-b-h * {
+    margin-bottom: 0.5rem;
+}
+
+/* 'increase vertical margins: bottom' */
+.md-typeset .sn-increase-margin-t * {
     margin-bottom: 1rem;
+}
+
+
+.md-typeset .sn-inline-flex-container {
+    display: inline-flex;
 }
 
 /* Line breaks / <hr> ------------------------------------------------------ */
@@ -123,6 +228,15 @@ div.admonition hr.sn-green {
     border: 0;
 }
 
+/* Sub-header green: h3-h4 */
+.md-typeset hr.sn-green-medium {
+    height: 0.1rem;
+    background-color: #11838e59;
+    margin-top: -0.2em;
+    /*margin-right: 2em;*/
+    border: 0;
+}
+
 /* Padding */
 .md-typeset hr.sn-spacer {
     height: 0.16rem;
@@ -130,11 +244,35 @@ div.admonition hr.sn-green {
     border: 0;
 }
 
+.md-typeset hr.sn-spacer-thin {
+    margin: 0;
+    height: 0.1rem;
+    background-color: #fff;
+    border: 0;
+}
+
+/* Solid gray line */
+.md-typeset hr.sn-gray {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-style: solid;
+    border-color: #6a94bf73;
+}
+
 /* -- Jupyter/Notebook adjustments ----------------------------------------- */
 
-/* Reduce space between leading paragraph and code cell */
+/* Reduce space between leading paragraph and jupyter code cell */
 .md-typeset .sn-pre-cell p {
     margin-bottom: 0.5rem;
+}
+
+/* Reduce space between leading paragraph and literalinclude code cell */
+.md-typeset .sn-pre-code * {
+    margin-bottom: 0.4rem;
+}
+
+.md-typeset .sn-post-code * {
+    margin-top: 1rem;
 }
 
 /* Indenting Jupyter cells */
@@ -151,7 +289,7 @@ div.highlight {
 
 /* Reducing space between cell and output */
 .cell_output.docutils.container {
-    margin-top: 0.2em;
+    margin-top: 0.4em;
 }
 
 .cell_output.docutils.container div.highlight {
@@ -161,9 +299,18 @@ div.highlight {
     /*margin-top: -0.6em;*/
 }
 
-.md-typeset .codehilite code, .md-typeset .codehilite pre, .highlight code, .highlight pre {
+/* Reducing vertical margins on code and line numbers */
+.md-typeset .codehilite code, .md-typeset .codehilite pre, .highlight code, .highlight pre, .md-typeset .linenos .linenodiv {
     padding-top: 0.4rem;
     padding-bottom: 0.4rem;
+}
+
+.md-typeset div.cell div.cell_input {
+    background: #f0f0f0;
+    border-radius: .1rem;
+    color: #37474f;
+    line-height: 1.4em;
+    border: 0;
 }
 
 /* -- Tweaking nested tabbed directives within admonitions ----------------- */
@@ -260,7 +407,7 @@ content: " \f013\ Setup";
 /* -- is-explanation ------------------------------------------------------- */
 .md-typeset .admonition.is-explanation {
     display: inline-block;
-    margin: -0.15rem 1.5rem .7rem 0.85rem;
+    /*margin: -0.15rem 1.5rem .7rem 0.85rem;*/
     border-style: solid;
     border-width: thin;
     border-color: #11838e2e;
@@ -268,10 +415,14 @@ content: " \f013\ Setup";
 
 .md-typeset .admonition.is-explanation>.admonition-title{
     line-height: .7rem;
-    background-color: #ffff;
-    border-bottom-style: solid;
-    border-bottom-color: #11838e2e;
     font-weight: 100;
+
+    border-bottom: 0;
+    /*background-color: #448aff0a;*/
+
+    background-color: #ffff;
+    /*border-bottom-style: solid;*/
+    /*border-bottom-color: #11838e2e;*/
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
@@ -311,6 +462,10 @@ content: " \f013\ Setup";
     background-color: #fff;
 }
 
+.md-typeset .admonition.sn-clear-title>.admonition-title{
+    background-color: #fff;
+}
+
 
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
@@ -322,22 +477,11 @@ div.output.text_plain.highlight-myst-ansi.notranslate {
     margin-top: 0.2em;
 }
 
-
 /* Reducing line height of lists within tabs */
 .tabbed-content.docutils {
     line-height: 1.3em;
     padding-bottom: 0;
 }.p,ol.simple,ul.simple,dl.simple,
-
-
-/*
-    Removing trailing space from arbitrary Python directives; i.e.
-    what is rendered when wrapping something in `single` backticks or in
-    a form :any:`single` directive that doesn't find a target.
-*/
-/*code.docutils.literal.notranslate {*/
-/*    margin: 0;*/
-/*}.md-typeset span,*/
 
 
 /* Removing scroll effect from collapsed admonition boxes */
@@ -346,12 +490,11 @@ div.toggle.admonition {
  }
 
 /* Reducing font-size for lists nested inside of admonition directives */
-.md-typeset .admonition, .md-typeset details {
+.md-typeset .admonition, .md-typeset details .p, ol.simple, ul.simple, dl.simple {
     font-size: 0.7rem;
-}.p, ol.simple, ul.simple, dl.simple,
-/*.admonition .p, ol.simple, ul.simple, dl.simple {*/
-/*    font-size: 0.7rem;*/
-/*}*/
+}
+
+/* Toggle Button ------------------------------------------------------------*/
 
 /* Moving toggle button hint  closer to the symbol */
 button.toggle-button.toggle-button-hidden {
@@ -361,7 +504,7 @@ button.toggle-button.toggle-button-hidden {
 
 /* Moving toggle button symbol farther to the right */
 button.toggle-button.toggle-button-hidden:before {
-    left: -1.5rem;
+    left: -1.3rem;
 }
 
 /* Shrinking toggle button size */
@@ -373,26 +516,6 @@ button.toggle-button.toggle-button-hidden:before {
 .toggle-button .bar {
     left: 10%;
     top: 40%;
-}
-
-
-/* Style for the paragraph that precedes bullets or definitions list */
-.md-typeset .hanging {
-    margin-bottom: -0.5rem;
-}
-
- /* Reducing space between list items */
-.md-typeset ol.simple, ul.simple, dl.simple {
-    margin-bottom: 0.1rem;
-    margin-top: -0.5rem;
-    margin-left: 0.4rem;
-}
-
-/* Reducing margins on headers */
-.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4, .md-typeset h5, .md-typeset h6 {
-    margin-bottom: 0.4rem;
-    margin-top: 0.4rem;
-    color: #000000b5;
 }
 
 
@@ -409,21 +532,14 @@ span.md-nav__link.caption {
 }
 
 /* Adjusting copybutton position in notebook cells */
-div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
-    top: 0.4em;
-}
-
-
-/*.md-typeset .admonition {*/
-/*    margin-left: 0.7rem;*/
-/*    margin-right: 1.2rem;*/
+/*div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {*/
+/*    top: 0.4em;*/
 /*}*/
 
 .admonition.indented {
     margin-left: 0.7rem;
     margin-right: 1.2rem;
 }
-
 
 /* Reducing admonition title line height */
 .md-typeset .admonition>.admonition-title{
@@ -457,25 +573,27 @@ div.highlight-ipython3.notranslate .copybtn.o-tooltip--left {
     padding-right: 2em;
 }
 
-/*!* Reduce space between code cells and paragraphs *!*/
-/*.highlight-python.notranslate ~ p {*/
+
+/* Reduce space between code cells and paragraphs */
+/*.md-typeset .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate ~ p {*/
 /*    margin-top: 0.8rem;*/
+/*    margin-bottom: 0.4rem;*/
 /*}*/
 
-/*!* Reduce space between paragraphs and code cells *!*/
-/*p ~ .highlight-python.notranslate {*/
+/* Reduce space between paragraphs and code cells */
+/*.md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {*/
 /*    margin-left: 0.9rem;*/
 /*    margin-right: 2em;*/
 /*    margin-bottom: -0.2rem;*/
 /*}*/
 
-/* Reduce space between code cells and paragraphs */
-.md-typeset .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate ~ p {
-    margin-top: 0.8rem;
-    margin-bottom: 0.4rem;
+/* Reduce space between paragraphs and code cells */
+.md-typeset .sn-pre-code ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {
+    margin-left: 0.9rem;
+    margin-right: 2em;
+    margin-bottom: -0.2rem;
 }
 
-/* Reduce space between paragraphs and code cells */
 .md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {
     margin-left: 0.9rem;
     margin-right: 2em;

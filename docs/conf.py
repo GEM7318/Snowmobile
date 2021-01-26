@@ -7,6 +7,7 @@
 # -- Import Management --------------------------------------------------------
 import os
 import sys
+from typing import List
 
 from pathlib import Path
 
@@ -289,6 +290,11 @@ intersphinx_mapping = {
 }
 
 
+rm_dirs = [
+    r'_build', r'.ipynb_checkpoints', r'jupyter_execute'
+]
+
+
 # TODO: Exclude all caps too
 def autoapi_skip_member(app, what, name, obj, skip, options):
     """Exclude all private attributes, methods, and dunder methods from Sphinx."""
@@ -297,8 +303,18 @@ def autoapi_skip_member(app, what, name, obj, skip, options):
     return skip or exclude
 
 
+def rm_build_dirs(to_rm: List[str] = None, root_dir: Path = DOCS_DIR):
+    """Ensure fresh build each time."""
+    import shutil
+    to_rm = to_rm or rm_dirs
+    dirs = [d for d in root_dir.iterdir() if d.is_dir() and d.name in to_rm]
+    for d in dirs:
+        shutil.rmtree(path=d)
+
+
 def setup(app):
     """Add autoapi-skip-member."""
+    rm_build_dirs()
     app.connect("autoapi-skip-member", autoapi_skip_member)
     app.add_css_file('css/friendly.css')
     app.add_css_file('css/application_ext.css')
