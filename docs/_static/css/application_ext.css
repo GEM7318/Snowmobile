@@ -248,8 +248,14 @@ div.admonition hr.sn-green {
     margin-top: -0.3em;
     margin-bottom: 0.3rem;
     border: 0;
-    /*margin-right: 0;*/
-    /*margin-left: 0;*/
+}
+
+.md-typeset hr.sn-grey-thick {
+    height: 0.16rem;
+    background-color: #11838e59;
+    margin-top: -0.3em;
+    margin-bottom: 0.3rem;
+    border: 0;
 }
 
 /* Sub-header green: h3-h4 */
@@ -679,7 +685,7 @@ div.output.text_html {
     background-color: #fcfcfc;
     border-style: solid;
     border-width: thin;
-    border-color: aliceblue;
+    border-color: #3b4144;
     padding: 0.2rem;
 }
 
