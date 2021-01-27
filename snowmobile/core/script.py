@@ -827,6 +827,7 @@ class Script(Generic):
             name = self.name
             if underline:
                 bottom_border = "=" * len(name)
-                name = f"{bottom_border}\n{name}\n{bottom_border}"
+                # name = f"{bottom_border}\n{name}\n{bottom_border}"
+                name = f"{name}\n{bottom_border}"
             if self.verbose:
                 print(f"{name}")

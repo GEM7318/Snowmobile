@@ -1,3 +1,4 @@
+(usage/snowmobile)=
 # Snowmobile
 ---
 
@@ -22,7 +23,18 @@ Its purpose is to provide an entry point that will:
 <br>
 
 (connector-examples)=
-## Examples
+## Content
+
+- [Connecting](usage/snowmobile/connecting)
+- [Executing Raw SQL](usage/snowmobile/executing)
+- [Aliasing Credentials](usage/snowmobile/aliasing-credentials)
+- [Parameter Resolution](usage/snowmobile/parameter-resolution)
+- [Delaying Connection](usage/snowmobile/delaying-connection)
+- [Specifying snowmobile.toml](usage/snowmobile/specifying-snowmobiletoml)
+- [Using *ensure_alive*](usage/snowmobile/using-ensure-alive)
+
+<br>
+<hr class="sn-spacer">
 
 (connector-setup)=
 ```{admonition} Setup
@@ -35,10 +47,12 @@ Its purpose is to provide an entry point that will:
     1.  Aliased as *creds1* and *creds2* respectively
 1.  {ref}`default-creds<connection.default-creds>` has been left blank
 ```
+
 <br>
+<hr class="sn-spacer">
+<hr class="sn-spacer">
 
-+++
-
+(usage/snowmobile/connecting)=
 ### Connecting to {xref}`snowflake`
 <hr class="sn-green-thick">
 
@@ -90,10 +104,11 @@ Here's some context on how to think about these two instances of
 Applicable examples below make use of an equivalent `sn` without 
 explicitly re-instantiating it.
 ```
-
 +++
 <br>
+<hr class="sn-spacer">
 
+(usage/snowmobile/executing)=
 ### Executing Raw SQL
 <hr class="sn-green-thick">
 
@@ -205,12 +220,10 @@ directly off the {class}`~snowmobile.Snowmobile`.
 ```
 ````
 
-```{div} sn-indent-cell, sn-indent-h-sub-cell-right
-<hr>
-```
+`````{admonition} Naming Convention
+:class: tip, toggle, toggle-shown, sn-indent-cell, sn-indent-h-sub-cell-right
 
-````{admonition} Tip: Naming Convention
-:class: toggle, tip, sn-indent-cell, sn-indent-h-sub-cell-right
+````{tabbed} Tip
 The following convention of variable/attribute name to associated object is
 used throughout {ref}`snowmobile`'s documentation and source code, including in 
 method signatures:
@@ -218,77 +231,126 @@ method signatures:
 - **`cfg`**: {class}`snowmobile.Configuration`
 - **`con`**: {xref}`snowflake.connector.SnowflakeConnection`
 - **`cursor`**: {xref}`snowflake.connector.cursor.SnowflakeCursor`
+````
 
----
-
+````{tabbed} +
+```{div} sn-pre-code
 For example, see the below attributes of {class}`~snowmobile.core.Snowmobile`:
+```
 ```{literalinclude} ../snippets/inspect_connector.py
 :language: python
 :lines: 2-14
 ```
-````
 
 <hr class="sn-spacer">
 
-(header_target)=
+````
+`````
+
+<hr class="sn-spacer">
+<hr class="sn-spacer">
+
+(usage/snowmobile/aliasing-credentials)=
 ### Aliasing Credentials
 <hr class="sn-green-thick">
 
-The below line in [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
-denotes the set of credentials to authenticate with if one isn't
-specified in the optional `creds` argument of {class}`snowmobile.Snowmobile`.
+The [default snowmobile.toml](./snowmobile_toml.md#file-contents) contains
+scaffolding for two sets of credentials, aliased `creds1` and `creds2` respectively.
 
-```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
-:language: toml
-:lineno-start: 3
-:lines: 3-3
-```
+By setting line 3, `default-creds = ''` to `default-creds = 'creds2'`, 
+[Snowmobile](/usage/snowmobile) will use the credentials from `creds2` 
+regardless of where it falls relative to all the other credentials stored.
 
-````{tabbed} Setting Default Credentials
-
-Currently `creds1` is used by default since it's the first set of credentials 
-stored and no other alias is specified; by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
-to the below spec, we're telling  {xref}`snowmobile`to use `creds2` for 
-authentication regardless of where it falls relative to all the other credentials stored:
-
-```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
-:language: toml
-:lineno-start: 3
-:lines: 3-3
-```
-
+```{div} sn-pre-code 
 The change can be verified with:
-```{literalinclude} ../snippets/connector_verify_default.py
+```
+```{literalinclude} ../snippets/snowmobile/verify_default_alias_change.py
 :language: python
-:lines: 1-13
+:lines: 1-10
 ```
 
-````
-
-````{tabbed} Issues? First Verify Assumptions
-Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` can be done with:
-
-```{literalinclude} ../snippets/connector_alias_order.py
-:language: python
-:lines: 1-24
-```
-````
 <br>
+<hr class="sn-spacer">
+<hr class="sn-spacer">
 
-+++
-
-(header_target)=
+(usage/snowmobile/parameter-resolution)=
 ### Parameter Resolution
 <hr class="sn-green-thick">
 
-```{admonition} TODO 
-:class: error
-Missing
+```{div} sn-dedent-v-b-h
+When establishing a connection, **`sn` will look in three places (in the
+following order) to compile the connection arguments
+that it passes to {xref}`snowflake.connector.connect()`**:
 ```
+1. {ref}`[connection.default-arguments]<connection.default-arguments>`
+1. {ref}`[connection.credentials.alias_name]<connection.credentials.creds1>`
+1. Keyword arguments passed to {meth}`snowmobile.connect()`
 
+```{div} sn-dedent-v-b-h
+If the same argument is defined in multiple sources, <b>the <u>last</u> 
+value found will take precedent;</b> the purpose of this resolution order is 
+to enable:
+```
+-   Embedding connection arguments (e.g. timezone or transaction mode) 
+    within an aliased credentials block whose **values** differ from defaults
+    specified in {ref}`[connection.default-arguments]<connection.default-arguments>`
+-   Superseding any connection parameters configured in [](./snowmobile_toml.md) 
+    with keyword arguments passed directly to {meth}`snowmobile.connect()`
+    
+
+`````{admonition} Details
+:class: toggle, is-content, sn-indent-cell, sn-dedent-v-t-h-container, sn-indent-h-sub-cell-right
+ 
+```{div} sn-pre-code, sn-pre-code-dedent
+  The {ref}`[connection.default-arguments]<connection.default-arguments>` and 
+  {ref}`[connection.credentials.alias_name]<connection.credentials.creds1>` 
+  are merged as the 
+  {attr}`~snowmobile.core.cfg.connection.Connection.connect_kwargs` 
+  property of {attr}`~snowmobile.core.cfg.connection.Connection` with: 
+```
 +++
+```{code-block} python
+:emphasize-lines: 4,4
 
-(header_target)=
+    @property
+    def connect_kwargs(self) -> Dict:
+        """Arguments from snowmobile.toml for `snowflake.connector.connect()`."""
+        return {**self.defaults, **self.current.credentials}
+```
++++
+```{div} sn-pre-code, sn-post-code, sn-pre-code-dedent
+  {attr}`~snowmobile.core.cfg.connection.Connection.connect_kwargs`
+  is then combined with keyword arguments passed to {meth}`snowmobile.connect()` 
+  within the method itself as the {attr}`~snowmobile.Snowmobile.con` attribute
+  of a given `sn` is being set:
+```
+```{code-block} python
+:emphasize-lines: 8-9
+
+    def connect(self, **kwargs) -> Snowmobile:
+        """Establishes connection to Snowflake.
+        ...
+        """
+        try:
+            self.con = connect(
+                **{
+                    **self.cfg.connection.connect_kwargs,  # snowmobile.toml
+                    **kwargs,  # any kwarg over-rides
+                }
+            )
+            self.sql = sql.SQL(sn=self)
+            print(f"..connected: {str(self)}")
+            return self
+
+        except DatabaseError as e:
+            raise e
+```
+<hr class="sn-spacer">
+`````
+
+<br>
+
+(usage/snowmobile/delaying-connection)=
 ### Delaying Connection
 <hr class="sn-green-thick">
 
@@ -305,11 +367,12 @@ connection to {xref}`snowflake` at which point a call is made to
 :language: python
 :lines: 1-17
 ```
-<br>
-
 +++
 
-(header_target)=
+<br>
+<hr class="sn-spacer">
+
+(usage/snowmobile/specifying-snowmobiletoml)=
 ### Specifying [snowmobile.toml](./snowmobile_toml.md)
 <hr class="sn-green-thick">
 
@@ -319,7 +382,7 @@ Missing
 ```
 <br>
 
-(header_target)=
+(usage/snowmobile/using-ensure-alive)=
 ### Using *ensure_alive*
 <hr class="sn-green-thick">
 
@@ -332,14 +395,18 @@ property evaluates to *False*, **and a method is invoked that requires a
 connection,** it will re-connect to {xref}`snowflake` before continuing execution.
 
 ```{admonition} Warning
-:class: warning
+:class: warning, sn-dedent-v-container, sn-indent-cell, sn-indent-h-sub-cell-right
 A re-established connection will not be on the same session as the original connection.
 ```
 
-This behavior is outlined in the below snippet:
-```{literalinclude} ../snippets/connector_ensure_alive.py
+`````{admonition} Details
+:class: toggle, is-content, sn-indent-cell, sn-dedent-v-t-h-container, sn-indent-h-sub-cell-right
+
+The behavior described is demonstrated in the below snippet:
+
+```{literalinclude} ../snippets/snowmobile/ensure_alive.py
 :language: python
-:lineno-start: 1
 :lines: 1-39
 ```
-
+<hr class="sn-spacer">
+`````

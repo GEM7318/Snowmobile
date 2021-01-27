@@ -108,9 +108,21 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
 }
 
 /* Indent cell horizontally */
-.md-typeset .sn-indent-h-cell-right {
-    margin-right: 2em;
+.md-typeset .sn-indent-h-cell-contents * {
+    padding-left: 0.95rem;
+    padding-right: 2em;
 }
+
+/* Indent cell horizontally */
+.md-typeset .sn-indent-h-cell-right {
+    /*margin-right: 2em;*/
+    padding-right: 2em;
+}
+
+.md-typeset .sn-indent-h-cell-left {
+    padding-left: 0.95rem;
+}
+
 
 /* Indent cell horizontally */
 .md-typeset .sn-indent-h-cell-right-hr {
@@ -131,25 +143,33 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     margin-bottom: 0.5rem;
 }
 
-.md-typeset .sn-dedent-v-b-container {
-    margin-bottom: 0;
-}
+/*.md-typeset .sn-dedent-v-b-container {*/
+/*    margin-bottom: 0;*/
+/*}*/
 
 /* 'remove vertical margins: top' */
 .md-typeset .sn-dedent-v-t * {
     margin-top: 0;
 }
 
+/* ---/ remove vertical margin /--- */
 .md-typeset .sn-dedent-v-t-container {
     margin-top: 0;
 }
 
-.md-typeset .sn-dedent-v-t-h-container {
-    margin-top: 0.5rem;
-}
-
 .md-typeset .sn-dedent-v-b-container {
     margin-bottom: 0;
+}
+
+/* ---/ reduce vertical margin (container) /--- */
+.md-typeset .sn-dedent-v-container {
+    /*padding: inherit;*/
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.md-typeset .sn-dedent-v-t-h-container {
+    margin-top: 0.5rem;
 }
 
 .md-typeset .sn-dedent-v-b-h-container {
@@ -161,10 +181,6 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     margin-bottom: 0;
 }
 
-.md-typeset .sn-dedent-v-container {
-    margin-top: 0;
-    margin-bottom: 0;
-}
 
 /* 'remove half of vertical margins: top' */
 .md-typeset .sn-dedent-v-t-h * {
@@ -192,6 +208,10 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
 
 /* 'increase vertical margins: bottom' */
 .md-typeset .sn-increase-margin-t * {
+    margin-bottom: 1rem;
+}
+
+.md-typeset .sn-increase-margin-v-t-container {
     margin-bottom: 1rem;
 }
 
@@ -252,7 +272,7 @@ div.admonition hr.sn-green {
 
 .md-typeset hr.sn-grey-thick {
     height: 0.16rem;
-    background-color: #11838e59;
+    background-color: #5f656b42;
     margin-top: -0.3em;
     margin-bottom: 0.3rem;
     border: 0;
@@ -282,7 +302,7 @@ div.admonition hr.sn-green {
 }
 
 /* Solid gray line */
-.md-typeset hr.sn-gray {
+.md-typeset hr.sn-grey {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     border-style: solid;
@@ -299,6 +319,10 @@ div.admonition hr.sn-green {
 /* Reduce space between leading paragraph and literalinclude code cell */
 .md-typeset .sn-pre-code * {
     margin-bottom: 0.4rem;
+}
+
+.md-typeset .sn-pre-code-dedent {
+    padding-right: 2em;
 }
 
 .md-typeset .sn-post-code * {
@@ -459,7 +483,7 @@ content: " \f013\ Setup";
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
     color: #1b6983b8;
-    top: 0.35rem;
+    top: 0.32rem;
     font-weight: 500; /* 600+ if not on pro */
     font-size: 0.9rem;
     font-family: 'FontAwesome', serif;
@@ -469,8 +493,8 @@ content: " \f013\ Setup";
 /* -- is-content ----------------------------------------------------------- */
 .md-typeset .admonition.is-content {
     border-left: 0;
-    display: inline-block;
-    margin: -0.8rem 1.5rem .7rem 0.9rem;
+    display: block;
+    /*margin: -0.8rem 1.5rem .7rem 0.9rem;*/
 }
 
 .md-typeset .admonition.is-content>.admonition-title{
@@ -484,7 +508,7 @@ content: " \f013\ Setup";
     color: #0f70d173;
     top: 0.35rem;
     font-weight: 900; /* 600+ if not on pro */
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-family: 'FontAwesome', serif;
     content: "\f15c";
 }
@@ -498,6 +522,22 @@ content: " \f013\ Setup";
     background-color: #fff;
 }
 
+/* Changing tabs color to be green inside of 'Tips' */
+.admonition.tip .tabbed-set>input:checked+label {
+    border-color: #00bfa5;
+    color: #00bfa5;
+}
+
+.admonition.tip .tabbed-content {
+    box-shadow: 0 -.0625rem #00bfa54d;
+    display: none;
+    order: 99;
+    width: 100%;
+}
+
+.admonition.tip .tabbed-content p {
+    margin-top: inherit;
+}
 
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
@@ -522,9 +562,18 @@ div.toggle.admonition {
  }
 
 /* Reducing font-size for lists nested inside of admonition directives */
-.md-typeset .admonition, .md-typeset details .p, ol.simple, ul.simple, dl.simple {
+/*.md-typeset .admonition, .md-typeset details .p, ol.simple, ul.simple, dl.simple {*/
+/*    font-size: 0.7rem;*/
+/*}*/
+
+/*div.admonition p, ol.simple, ul.simple, dl.simple {*/
+/*    font-size: 0.7rem;*/
+/*}*/
+
+div.admonition p {
     font-size: 0.7rem;
 }
+
 
 /* Toggle Button ------------------------------------------------------------*/
 
@@ -620,13 +669,13 @@ span.md-nav__link.caption {
 /*}*/
 
 /* Reduce space between paragraphs and code cells */
-.md-typeset .sn-pre-code ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {
+.md-typeset .sn-pre-code ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate, .md-typeset .highlight-default {
     margin-left: 0.9rem;
     margin-right: 2em;
     margin-bottom: -0.2rem;
 }
 
-.md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {
+.md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate, .md-typeset .highlight-default {
     margin-left: 0.9rem;
     margin-right: 2em;
     margin-bottom: -0.2rem;
@@ -685,7 +734,7 @@ div.output.text_html {
     background-color: #fcfcfc;
     border-style: solid;
     border-width: thin;
-    border-color: #3b4144;
+    border-color: #f7f7f7;
     padding: 0.2rem;
 }
 

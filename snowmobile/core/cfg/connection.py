@@ -94,9 +94,6 @@ class Connection(Base):
     provided_alias: str = Field(
         default_factory=str, alias='provided-creds'
     )
-    # creds: str = Field(
-    #     default_factory=str, alias='creds'
-    # )
     credentials: Dict[str, Credentials] = Field(
         default_factory=dict, alias="stored-credentials"
     )
@@ -131,5 +128,5 @@ class Connection(Base):
 
     @property
     def connect_kwargs(self) -> Dict:
-        """Arguments from snowmobile.toml for :meth:`snowflake.connector.connect()`."""
+        """Arguments from snowmobile.toml for `snowflake.connector.connect()`."""
         return {**self.defaults, **self.current.credentials}

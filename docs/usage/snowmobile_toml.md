@@ -92,10 +92,10 @@ credentials.
 
 ```{tabbed} [connection.credentials.creds2]
 :new-group:
+(connection.default-arguments)=
 *Store as many more credentials as you want following this format*
 ```
 
-(connection.default-arguments)=
 ```{tabbed} [connection.default-arguments]
 :new-group:
 *Staple keyword arguments to pass to {meth}`snowflake.connector.connect()`*

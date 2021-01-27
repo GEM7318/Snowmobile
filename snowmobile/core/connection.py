@@ -117,12 +117,12 @@ class Snowmobile(Generic):
     def connect(self, **kwargs) -> Snowmobile:
         """Establishes connection to Snowflake.
 
-        Re-implements :func:`snowflake.connector.connect()` with connection
+        Re-implements `snowflake.connector.connect()` with connection
         arguments sourced from snowmobile's object model, specifically:
-            *   Credentials from ``snowmobile.toml``.
-            *   Default connection arguments from ``snowmobile.toml``.
+            *   Credentials from `snowmobile.toml`.
+            *   Default connection arguments from `snowmobile.toml`.
             *   Optional keyword arguments either passed to
-                :class:`snowmobile.connect` or directly to this method.
+                :meth:`snowmobile.connect()` or directly to this method.
 
             kwargs:
                 Optional keyword arguments to pass to

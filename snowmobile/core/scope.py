@@ -1,5 +1,6 @@
 """
-Base class for all :class:`Statement` objects.
+Defines the Scope for a given statement
+(used in {meth}`snowmobile.Script.filter()`).
 """
 from __future__ import annotations
 

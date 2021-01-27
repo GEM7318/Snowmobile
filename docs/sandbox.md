@@ -1,5 +1,36 @@
 # Sandbox
 
+## connector
+
+````{tabbed} Setting Default Credentials
+
+Currently `creds1` is used by default since it's the first set of credentials 
+stored and no other alias is specified; by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
+to the below spec, we're telling  {xref}`snowmobile`to use `creds2` for 
+authentication regardless of where it falls relative to all the other credentials stored:
+
+```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
+:language: toml
+:lineno-start: 3
+:lines: 3-3
+```
+
+The change can be verified with:
+```{literalinclude} ../snippets/connector_verify_default.py
+:language: python
+:lines: 1-13
+```
+
+````
+
+````{tabbed} Issues? First Verify Assumptions
+Verifying *1.b*, *1.c*, and *2* in the {ref}`Section Assumptions<assumptions>` can be done with:
+
+```{literalinclude} ../snippets/connector_alias_order.py
+:language: python
+:lines: 1-24
+```
+````
 
 ## Alternate dropdown
 
@@ -88,7 +119,6 @@ Establishing a connection to {xref}`snowflake` can be done with:
 :lineno-start: 1
 :lines: 1-7
 ```
-
 ````
 
 ````{tabbed} Info / Errors

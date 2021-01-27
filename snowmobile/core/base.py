@@ -17,7 +17,10 @@ class Generic(object):
         pass
 
     def __getattr__(self, item):
-        return getattr(self, item)
+        try:
+            return vars(self)[item]
+        except KeyError as e:
+            raise AttributeError from e
 
     def __getitem__(self, item):
         return vars(self)[item]
