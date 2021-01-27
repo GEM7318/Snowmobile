@@ -112,6 +112,11 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     margin-right: 2em;
 }
 
+/* Indent cell horizontally */
+.md-typeset .sn-indent-h-cell-right-hr {
+    margin-right: 1.75em;
+}
+
 /* Indent to right side (containers following code cells) */
 .md-typeset .sn-indent-h-sub-cell-right {
     margin-right: 2rem;
@@ -195,6 +200,22 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     display: inline-flex;
 }
 
+.md-typeset .sn-inline-block-container {
+    display: inline-block;
+}
+
+.md-typeset .sn-inline-table-container {
+    display: inline-table;
+}
+
+.md-typeset .sn-block-container {
+    display: block;
+}
+
+.md-typeset .sn-indent-h-table {
+    padding: 0 0.8rem;
+}
+
 /* Line breaks / <hr> ------------------------------------------------------ */
 
 /* Standard green - thin */
@@ -224,8 +245,11 @@ div.admonition hr.sn-green {
 .md-typeset hr.sn-green-thick {
     height: 0.16rem;
     background-color: #11838e59;
-    margin-top: -0.2em;
+    margin-top: -0.3em;
+    margin-bottom: 0.3rem;
     border: 0;
+    /*margin-right: 0;*/
+    /*margin-left: 0;*/
 }
 
 /* Sub-header green: h3-h4 */
@@ -360,6 +384,7 @@ content: " \f013\ Setup";
     border-left-color: #11838e;
     margin: -0.15rem 1.2rem .7rem 0.25em;
     display: inline-block;
+    overflow: hidden;
 }
 
 .md-typeset .admonition.is-setup>.admonition-title{
@@ -385,6 +410,7 @@ content: " \f013\ Setup";
     border-style: solid;
     border-width: thin;
     border-color: #11838e2e;
+    overflow: hidden;
 }
 
 .md-typeset .admonition.sn-fixture>.admonition-title{
@@ -604,4 +630,130 @@ span.md-nav__link.caption {
     /*color: #1f708975;*/
     color: #afd5e2d9;
     margin-top: 0.3rem;
+}
+
+/* Panels ------------------------------------------------------------------ */
+
+/* Reducing padding and margins of entire container */
+div.admonition div.sphinx-bs.container.pb-4.docutils {
+    padding: 0;
+    margin: 0 0 -1.5rem;
+}
+
+/* Reducing padding on the row container */
+div.row.docutils {
+    margin: 0;
+}
+
+/* Reducing external padding */
+div.card-body {
+    padding: 0.1em;
+    display: inline-block;
+}
+
+/* Unsetting code margins */
+div.card-body.docutils .highlight-python.notranslate, .highlight-sql.notranslate  {
+    margin: unset;
+}
+
+/* Removing margins from contained elements */
+/*div.card-body * {*/
+/*    margin: unset;*/
+/*}*/
+
+/* Removing shadow */
+.card.w-100.shadow.docutils {
+    border: 0;
+    box-shadow: none !important;
+}
+
+/* Enabling flex of sub-containers*/
+div.col-lg-6.col-md-6.col-sm-6.col-xs-12 {
+    flex: 0 0 10%;
+    max-width: 90%;
+}
+
+
+div.output.text_html {
+    display: inline-flex;
+    background-color: #fcfcfc;
+    border-style: solid;
+    border-width: thin;
+    border-color: aliceblue;
+    padding: 0.2rem;
+}
+
+/*div.output.text_html * {*/
+/*    color: #212529;*/
+/*    margin: -0.15rem;*/
+/*    padding-top: 0.1rem;*/
+/*    padding-bottom: 0.1rem;*/
+/*    text-align: center;*/
+/*}*/
+
+div.output.text_html th  {
+    font-size: 90%;
+}
+
+.md-typeset__scrollwrap {
+    margin-bottom: -1em;
+}
+
+
+/* Sphinx Panels ----------------------------------------------------------- */
+
+details.sphinx-bs.dropdown {
+    width: auto;
+    display: inline-block;
+    margin: -0.15rem 1.5rem .7rem 0.9rem;
+    border-style: solid;
+    border-width: thin;
+    border-color: #11838e2e;
+    overflow: hidden;
+}
+
+details.sphinx-bs.dropdown summary.summary-title.card-header {
+    /* line-height: inherit; */
+    line-height: 0.7rem;
+    background-color: #ffff;
+    border-bottom-color: #11838e2e;
+    font-weight: 100;
+    padding: .4rem .6rem .4rem 2rem;
+
+}
+
+details.sphinx-bs.dropdown summary.summary-title.card-header::before {
+    color: #11838e;
+    top: 0.12rem;
+    font-weight: 900; /* 600+ if not on pro */
+    font-size: 1.3rem;
+    font-family: 'FontAwesome', serif; /* TODO: FontAwesome 4.7 -> 5.0 */
+    content: "\f103";  /* double arrows down */
+}
+
+/* details.sphinx-bs.dropdown>.summary-title:before{
+    content: none;
+    top: .25em;
+}
+ */
+
+.summary-title.card-header:after {
+    content: none;
+}
+
+details.sphinx-bs.dropdown summary.summary-title.card-header .summary-down.docutils {
+    top: 0.2rem;
+    right: 0.2em;
+}
+
+details.sphinx-bs.dropdown summary.summary-title.card-header .summary-up.docutils {
+    top: 0.2rem;
+    right: 0.2em;
+}
+
+div.summary-content.card-body.docutils {
+/*     display: -webkit; */
+/*     padding: 0; */
+/*     hover: none; */
+    pointer-events: none;
 }

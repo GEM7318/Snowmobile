@@ -21,12 +21,28 @@ def test_basic_query_via_ex(sn):
 
 
 @pytest.mark.connector
-def test_providing_results_equal_false_returns_cursor_not_a_df(sn):
-    """Verifies passing `as_df=False` to connector.query() returns a cursor."""
+def test_query_into_cursor(sn):
+    """Verifies passing `as_cur=True` to snowmobile.query() returns a cursor."""
     from snowflake.connector.connection import SnowflakeCursor
 
-    cur = sn.query("select 1", as_df=False)
+    cur = sn.query("select 1", as_cur=True)
     assert isinstance(cur, SnowflakeCursor)
+
+
+@pytest.mark.connector
+def test_query_into_dictcursor(sn):
+    """Verifies passing `as_dcur=True` to snowmobile.query() returns a dictcursor."""
+    from snowflake.connector import DictCursor
+
+    dcur = sn.query("select 1", as_dcur=True)
+    assert isinstance(dcur, DictCursor)
+
+
+@pytest.mark.connector
+def test_query_as_scalar(sn):
+    """Verifies passing `as_dcur=True` to snowmobile.query() returns a dictcursor."""
+    scalar = sn.query("select 1", as_scalar=True)
+    assert scalar == 1
 
 
 @pytest.mark.connector
@@ -82,7 +98,7 @@ def test_providing_invalid_credentials_raises_exception(sn):
 # noinspection SqlResolve
 @pytest.mark.connector
 def test_invalid_sql_passed_to_query_raises_exception(sn):
-    """Tests that invalid sql passed to connector.query() raises DatabaseError."""
+    """Tests that invalid sql passed to snowmobile.query() raises DatabaseError."""
     from pandas.io.sql import DatabaseError
 
     with pytest.raises(DatabaseError):
@@ -131,3 +147,10 @@ def test_masked_dunder_str_method_for_sets_of_credentials(sn):
 @pytest.mark.connector
 def test_dunder_repr_is_valid(sn):
     assert sn.__repr__()
+
+
+@pytest.mark.connector
+def test_invalid_arguments_provided_to_query_raises_value_error(sn):
+    """Verifies an error gets thrown if two return types are specified."""
+    with pytest.raises(ValueError):
+        sn.query('select 1', as_df=True, as_dcur=True)

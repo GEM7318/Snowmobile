@@ -316,5 +316,6 @@ def setup(app):
     """Add autoapi-skip-member."""
     # rm_build_dirs()
     app.connect("autoapi-skip-member", autoapi_skip_member)
-    app.add_css_file('css/friendly.css')
     app.add_css_file('css/application_ext.css')
+    app.add_css_file('css/friendly.css')
+    # app.add_css_file('css/emacs.css')

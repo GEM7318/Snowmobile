@@ -227,7 +227,10 @@ class Snowmobile(Generic):
     def query(
         self,
         sql: str,
-        as_df: bool = True,
+        as_df: bool = False,
+        as_cur: bool = False,
+        as_dcur: bool = False,
+        as_scalar: bool = False,
         lower: bool = True,
         on_error: Optional[str] = None,
     ) -> Union[pd.DataFrame, SnowflakeCursor]:
@@ -241,7 +244,13 @@ class Snowmobile(Generic):
             sql (str):
                 Raw SQL to execute.
             as_df (bool):
-                Boolean value indicating whether or not to return results.
+                Return results in DataFrame.
+            as_cur (bool):
+                Return results in Cursor.
+            as_dcur (bool):
+                Return results in a DictCursor.
+            as_scalar (bool):
+                Return results as a single scalar value.
             lower (bool):
                 Boolean value indicating whether or not to return results
                 with columns lower-cased.
@@ -254,15 +263,27 @@ class Snowmobile(Generic):
             :class:`SnowflakeCursor` object if `results=False`.
 
         """
-        if not as_df:
-            return self.ex(sql=sql)
+        if not any((as_df, as_cur, as_dcur, as_scalar)):
+            as_df = True
+        if as_df + as_cur + as_dcur + as_scalar != 1:
+            raise ValueError(
+                "Only one of ('as_df', 'as_cur', 'as_dcur', 'as_scalar')"
+                "can evaluate to `True`"
+            )
+
+        if as_cur:
+            return self.ex(sql=sql, on_error=on_error)
+        if as_dcur:
+            return self.exd(sql=sql, on_error=on_error)
 
         try:
             if not self.alive and self.ensure_alive:
                 self.connect()
-
             df = pd.read_sql(sql, con=self.con)
-            return df.snf.lower() if lower else df
+            if as_df:
+                return df.snf.lower() if lower else df
+            else:
+                return df.snf.to_list(n=1)
 
         except (pdDataBaseError, DatabaseError) as e:
             e.to_raise = on_error != 'c'

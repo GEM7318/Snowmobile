@@ -1,5 +1,57 @@
 # Sandbox
 
+
+## Alternate dropdown
+
+<br>
+
+`````{div} .sn-dedent-v-container
+````{dropdown} Click on me to see my content!
+:open:
+:animate: fade-in-slide-down
+
+*sample_table* contains:
+
+```{div} sn-dedent-v-b-container
+|   COL1 |   COL2 |
+|-------:|-------:|
+|      1 |      0 |
+|      1 |      0 |
+|      1 |      0 |
+```
+
+````
+
+`````
+
+<br>
+
+`````{admonition} Fixture: **sample_table**
+:class: sn-fixture, sn-dedent-v-b-container, toggle, toggle-shown
+
+```{div} hanging
+*sample_table* contains:
+```
+```{div} sn-dedent-v-b-container
+|   COL1 |   COL2 |
+|-------:|-------:|
+|      1 |      0 |
+|      1 |      0 |
+|      1 |      0 |
+```
+
+`````
+
+<br>
+
+```{eval-rst}
+.. dropdown:: My Content
+    :open:
+
+    Is already visible
+```
+
+
 ## Icons
 
 
