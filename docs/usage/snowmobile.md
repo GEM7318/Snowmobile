@@ -402,7 +402,7 @@ A re-established connection will not be on the same session as the original conn
 `````{admonition} Details
 :class: toggle, is-content, sn-indent-cell, sn-dedent-v-t-h-container, sn-indent-h-sub-cell-right
 
-The behavior described is demonstrated in the below snippet:
+The behavior described above is demonstrated in the below snippet:
 
 ```{literalinclude} ../snippets/snowmobile/ensure_alive.py
 :language: python

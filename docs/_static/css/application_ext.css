@@ -514,9 +514,9 @@ content: " \f013\ Setup";
 }
 
 /* Tip --------------------------------------------------------------------- */
-.md-typeset .admonition.tip>.admonition-title{
-    background-color: #fff;
-}
+/*.md-typeset .admonition.tip>.admonition-title{*/
+/*    background-color: #fff;*/
+/*}*/
 
 .md-typeset .admonition.sn-clear-title>.admonition-title{
     background-color: #fff;
