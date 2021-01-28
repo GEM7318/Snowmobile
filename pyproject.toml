@@ -88,9 +88,6 @@ sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'AIRFLOW', 'FIRSTPARTY', 'LOCALFOL
 testpaths = 'tests'
 python_files = 'test_*.py'
 python_functions = 'test_*'
-
-#to run tests for only or excluding a given marker, run statements like
-#'pytest -m script' or 'pytest -m 'not script')
 markers =[
     'script',
     'tags',
@@ -119,7 +116,7 @@ include = ['snowmobile']
 branch = true
 
 [tool.coverage.report]
-fail_under = 85
+fail_under = 80
 show_missing = true
 exclude_lines = ['def __repr__']
 

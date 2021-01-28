@@ -64,7 +64,6 @@
         [script.patterns.core]
             open-tag = '/*-'
             close-tag = '-*/'
-            keyword-delimiter = '-'
             description-delimiter = '~'
 
         [script.patterns.wildcards]

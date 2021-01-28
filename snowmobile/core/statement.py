@@ -130,7 +130,7 @@ class Statement(Tag, Generic):
         self.attrs_raw = attrs_raw or str()
         self.is_multiline = "\n" in self.attrs_raw
         self.is_tagged: bool = bool(self.attrs_raw)
-        self.sql = sn.cfg.script.isolate_sql(s=self.statement)
+        self._sql = sn.cfg.script.isolate_sql(s=self.statement)
         self.attrs_parsed, nm = self.parse()
 
         Tag.__init__(
@@ -138,6 +138,13 @@ class Statement(Tag, Generic):
         )
 
         self.e = e or ExceptionHandler(within=self)
+
+    @property
+    def sql(self):
+        """Raw sql from statement, including result limit if enabled."""
+        if self.sn.cfg.script.result_limit in [-1, 0]:
+            return self._sql
+        return f"{self._sql}\nlimit {self.sn.cfg.script.result_limit}"
 
     def parse(self) -> Tuple[Dict, str]:
         """Parses a statement tag into a valid dictionary.
@@ -433,6 +440,10 @@ class Statement(Tag, Generic):
             self.render()
 
         return self
+
+    def set_sql(self, sql: str) -> None:
+        """Public entry point to manually set the statement's .sql attribute."""
+        self._sql = sql
 
     @staticmethod
     def _validate_parsed(attrs_parsed: Dict):

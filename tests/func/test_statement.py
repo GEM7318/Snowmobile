@@ -66,7 +66,7 @@ def test_calling_run_with_results_on_invalid_sql_raises_database_error(
 
     # given
     an_invalid_sql_statement = "select * from *"
-    sample_statement_object.sql = an_invalid_sql_statement
+    sample_statement_object.set_sql(sql=an_invalid_sql_statement)
 
     # then
     with pytest.raises(DatabaseError):
@@ -77,7 +77,8 @@ def test_calling_run_with_results_on_invalid_sql_raises_database_error(
 def test_statement_dunder_getitem(sample_statement_object):
     """Verifies `s.__getitem__()`."""
     assert (
-        sample_statement_object.__getitem__(item="sql") == sample_statement_object.sql
+        # sample_statement_object.__getitem__(item="start_time") == sample_statement_object.sql
+        sample_statement_object.__getitem__(item="start_time") == sample_statement_object.start_time
     )
 
 
@@ -90,5 +91,5 @@ def test_statement_dunder_str(sample_statement_object):
 @pytest.mark.statement
 def test_statement_dunder_setitem(sample_statement_object):
     """Verifies `s.__str__()`."""
-    sample_statement_object.__setitem__("sql", "")
-    assert sample_statement_object.sql == ""
+    sample_statement_object.__setitem__("start_time", 1)
+    assert sample_statement_object.start_time == 1

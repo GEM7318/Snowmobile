@@ -327,9 +327,6 @@ class Core(Base):
     to_close: str = Field(
         default_factory=str, alias='close-tag'
     )
-    sep_keyword: str = Field(
-        default_factory=str, alias="keyword-delimiter"
-    )
     sep_desc: str = Field(
         default_factory=str, alias="description-delimiter"
     )
@@ -465,6 +462,9 @@ class Script(Base):
     )
     export_dir_nm: str = Field(
         default_factory=str, alias="export-dir-name"
+    )
+    result_limit: int = Field(
+        default_factory=int, alias="result-limit"
     )
     # fmt: on
 
