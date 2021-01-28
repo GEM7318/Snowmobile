@@ -26,7 +26,7 @@ truncated {
 
 <DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/table.html"><span class="std std-doc">Refined data loading implementation</span></a>
     <dd class="truncated">DDL from <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">DataFrame</a>;
-    compatibility checks at run time; <i>if_exists</i> in <i>'truncate'</i>, <i>'append'</i>, <i>'replace'</i>, <i>'fail'</i>
+    compatibility checks at run time; <i>if_exists</i> in <i>'append'</i>, <i>'truncate'</i>, <i>'replace'</i>, <i>'fail'</i>
 
 <DT><span class="fa fa-check text-success mr-1"></span><a class="reference internal" href="usage/script.html#examples"><span class="std std-doc">.sql scripts as Python objects</span></a>
     <dd class="truncated">Work with subsets of scripts; post-process results from specific statements; add markup, export to markdown

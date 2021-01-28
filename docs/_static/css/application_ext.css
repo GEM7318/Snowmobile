@@ -539,6 +539,23 @@ content: " \f013\ Setup";
     margin-top: inherit;
 }
 
+/*--*/
+div.sn-green .tabbed-set>input:checked+label {
+    border-color: #00bfa5;
+    color: #00bfa5;
+}
+
+div.sn-green .tabbed-content {
+    box-shadow: 0 -.0625rem #00bfa54d;
+    display: none;
+    order: 99;
+    width: 100%;
+}
+
+div.sn-green .tabbed-content p {
+    margin-top: inherit;
+}
+
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
     margin-top: 0.2em;
@@ -812,3 +829,19 @@ div.summary-content.card-body.docutils {
 /*     hover: none; */
     pointer-events: none;
 }
+
+
+/*.md-typeset {*/
+/*    font-size: .8rem;*/
+/*    line-height: 1;*/
+/*}*/
+
+/*dl.py.attribute dd.field-odd {*/
+/*    display: block;*/
+/*    margin-top: -1.55rem;*/
+/*    padding-left: 0.8em;*/
+/*}*/
+
+/*dl.py.attribute {*/
+/*    padding-top: 0.7em;*/
+/*}*/

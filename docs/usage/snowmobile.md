@@ -22,8 +22,7 @@ Its purpose is to provide an entry point that will:
 ---
 <br>
 
-(connector-examples)=
-## Content
+## Contents
 
 - [Connecting](usage/snowmobile/connecting)
 - [Executing Raw SQL](usage/snowmobile/executing)
@@ -36,7 +35,7 @@ Its purpose is to provide an entry point that will:
 <br>
 <hr class="sn-spacer">
 
-(connector-setup)=
+(target)=
 ```{admonition} Setup
 :class: toggle, todo, is-setup, toggle-shown
 **This section assumes the following about the contents of** [**snowmobile.toml**](./snowmobile_toml.md#snowmobiletoml):
@@ -77,7 +76,7 @@ Here's some basic information on the composition of `sn`:
 ```
 
 ```{div} sn-pre-code 
-Given [{fa}`cog`](#examples), `sn` is implicitly using the same connection arguments
+Given [{fa}`cog`](#target), `sn` is implicitly using the same connection arguments
 as:  
 ```
 ```{literalinclude} ../snippets/snowmobile/connecting.py
@@ -206,7 +205,7 @@ directly off the {class}`~snowmobile.Snowmobile`.
    :attr:`~snowmobile.Snowmobile` that return a new instance each time they are 
    accessed. Depending on the intended use of :xref:`SnowflakeCursor` or
    :xref:`DictCursor`, it could be better to store an instance for re-referencing
-   as opposed to repeatedly instantiating new instances off :class:`~snowmobile.Snowmobile`.
+   as opposed to repeatedly instantiating new instances off `sn`.
 
 .. tabbed:: +
 
@@ -278,9 +277,9 @@ The change can be verified with:
 <hr class="sn-green-thick">
 
 ```{div} sn-dedent-v-b-h
-When establishing a connection, **`sn` will look in three places (in the
-following order) to compile the connection arguments
-that it passes to {xref}`snowflake.connector.connect()`**:
+**`sn` will look in three places (in the following order)** to compile the 
+connection arguments that it passes to {xref}`snowflake.connector.connect()` 
+when establishing a connection:
 ```
 1. {ref}`[connection.default-arguments]<connection.default-arguments>`
 1. {ref}`[connection.credentials.alias_name]<connection.credentials.creds1>`
@@ -322,7 +321,7 @@ to enable:
   {attr}`~snowmobile.core.cfg.connection.Connection.connect_kwargs`
   is then combined with keyword arguments passed to {meth}`snowmobile.connect()` 
   within the method itself as the {attr}`~snowmobile.Snowmobile.con` attribute
-  of a given `sn` is being set:
+  of `sn` is being set:
 ```
 ```{code-block} python
 :emphasize-lines: 8-9
@@ -361,8 +360,8 @@ when the object is created.
 
 In these instances, the {attr}`~snowmobile.Snowmobile.con` attribute will be `None` 
 until a method is called on the {class}`~snowmobile.Snowmobile` that requires a 
-connection to {xref}`snowflake` at which point a call is made to
-{meth}`snowflake.connector.connect()`, the connection established, and the attribute set.
+connection; at this point a call is made to {meth}`snowflake.connector.connect()`, 
+the connection established, and the attribute set.
 ```{literalinclude} ../snippets/connector_delayed.py
 :language: python
 :lines: 1-17
