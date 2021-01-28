@@ -119,6 +119,11 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     padding-right: 2em;
 }
 
+.md-typeset .sn-indent-h-cell-right-m {
+    margin-right: 2em;
+    /*margin-right: 1.65rem;*/
+}
+
 .md-typeset .sn-indent-h-cell-left {
     padding-left: 0.95rem;
 }
@@ -462,32 +467,66 @@ content: " \f013\ Setup";
 
 /* -- is-explanation ------------------------------------------------------- */
 .md-typeset .admonition.is-explanation {
-    display: inline-block;
+    /*display: inline-block;*/
     /*margin: -0.15rem 1.5rem .7rem 0.85rem;*/
     border-style: solid;
     border-width: thin;
+    border-bottom: 0;
     border-color: #11838e2e;
 }
 
+/*.md-typeset .admonition.is-explanation>.admonition-title{*/
+/*    line-height: .7rem;*/
+/*    font-weight: 100;*/
+/*    border-bottom: 0;*/
+/*    background-color: #ffff;*/
+/*}*/
 .md-typeset .admonition.is-explanation>.admonition-title{
     line-height: .7rem;
     font-weight: 100;
-
-    border-bottom: 0;
-    /*background-color: #448aff0a;*/
-
     background-color: #ffff;
-    /*border-bottom-style: solid;*/
-    /*border-bottom-color: #11838e2e;*/
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-bottom-color: #11838e38;
+    padding: .35rem .6rem .4rem 2rem;
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
-    color: #1b6983b8;
-    top: 0.32rem;
+    /*color: #1b6983b8;*/
+    color: #11838e;
+    top: 0.30rem;
     font-weight: 500; /* 600+ if not on pro */
     font-size: 0.9rem;
     font-family: 'FontAwesome', serif;
     content: "\f0c9";  /* bars */
+}
+
+.admonition.is-explanation .tabbed-set>input:not(.focus-visible)+label {
+    color: #5a93a6;
+}
+
+.admonition.is-explanation .tabbed-set>input:checked+label {
+    border-color: #118392;
+    color: #11838e;
+}
+
+.admonition.is-explanation .tabbed-content {
+    box-shadow: 0 -.0625rem #11838e5c;
+    display: none;
+    order: 99;
+    width: 100%;
+    padding: 0.5em 0.5em 0.5em 0.2em;
+}
+
+.admonition.is-explanation.sn-incl-tabbed-shadow-b .tabbed-content {
+    box-shadow: 0 -.0625rem #11838e5c, 0 .0625rem #11838e5c;
+}
+
+.admonition.is-explanation .tabbed-content p {
+    margin-top: inherit;
 }
 
 /* -- is-content ----------------------------------------------------------- */
@@ -540,21 +579,21 @@ content: " \f013\ Setup";
 }
 
 /*--*/
-div.sn-green .tabbed-set>input:checked+label {
-    border-color: #00bfa5;
-    color: #00bfa5;
-}
+/*div.sn-green .tabbed-set>input:checked+label {*/
+/*    border-color: #00bfa5;*/
+/*    color: #00bfa5;*/
+/*}*/
 
-div.sn-green .tabbed-content {
-    box-shadow: 0 -.0625rem #00bfa54d;
-    display: none;
-    order: 99;
-    width: 100%;
-}
+/*div.sn-green .tabbed-content {*/
+/*    box-shadow: 0 -.0625rem #00bfa54d;*/
+/*    display: none;*/
+/*    order: 99;*/
+/*    width: 100%;*/
+/*}*/
 
-div.sn-green .tabbed-content p {
-    margin-top: inherit;
-}
+/*div.sn-green .tabbed-content p {*/
+/*    margin-top: inherit;*/
+/*}*/
 
 /* Reducing space between cell and output */
 div.output.stream.highlight-myst-ansi.notranslate {
@@ -577,15 +616,6 @@ div.output.text_plain.highlight-myst-ansi.notranslate {
 div.toggle.admonition {
     overflow: hidden;
  }
-
-/* Reducing font-size for lists nested inside of admonition directives */
-/*.md-typeset .admonition, .md-typeset details .p, ol.simple, ul.simple, dl.simple {*/
-/*    font-size: 0.7rem;*/
-/*}*/
-
-/*div.admonition p, ol.simple, ul.simple, dl.simple {*/
-/*    font-size: 0.7rem;*/
-/*}*/
 
 div.admonition p {
     font-size: 0.7rem;
@@ -671,20 +701,6 @@ span.md-nav__link.caption {
     padding-right: 2em;
 }
 
-
-/* Reduce space between code cells and paragraphs */
-/*.md-typeset .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate ~ p {*/
-/*    margin-top: 0.8rem;*/
-/*    margin-bottom: 0.4rem;*/
-/*}*/
-
-/* Reduce space between paragraphs and code cells */
-/*.md-typeset p ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate {*/
-/*    margin-left: 0.9rem;*/
-/*    margin-right: 2em;*/
-/*    margin-bottom: -0.2rem;*/
-/*}*/
-
 /* Reduce space between paragraphs and code cells */
 .md-typeset .sn-pre-code ~ .highlight-python.notranslate, .md-typeset .highlight-sql.notranslate, .md-typeset .highlight-default {
     margin-left: 0.9rem;
@@ -727,6 +743,12 @@ div.card-body {
 div.card-body.docutils .highlight-python.notranslate, .highlight-sql.notranslate  {
     margin: unset;
 }
+
+/* Reducing margins for side-by-side link badges */
+div.sn-link-container p {
+    margin: 0.65em 0.15em 0 0.15em;
+}
+
 
 /* Removing margins from contained elements */
 /*div.card-body * {*/
@@ -831,17 +853,65 @@ div.summary-content.card-body.docutils {
 }
 
 
-/*.md-typeset {*/
-/*    font-size: .8rem;*/
-/*    line-height: 1;*/
-/*}*/
+/* AutoAPI Adjustments ----------------------------------------------------- */
 
-/*dl.py.attribute dd.field-odd {*/
-/*    display: block;*/
-/*    margin-top: -1.55rem;*/
-/*    padding-left: 0.8em;*/
-/*}*/
+/*dl.py.class {*/
+dl.py {
+    padding-top: inherit;
+}
 
-/*dl.py.attribute {*/
-/*    padding-top: 0.7em;*/
-/*}*/
+/*.md-typeset dl.py.class * {*/
+.md-typeset dl.py * {
+    font-size: .7rem;
+    line-height: 1.2rem;
+}
+
+/*dl.py.class ol.simple {*/
+dl.py ol.simple {
+    margin: unset;
+}
+
+/*dl.py.class dl.simple {*/
+dl.py dl.simple {
+    margin: unset;
+}
+
+/*dl.py.class dd {*/
+dl.py.class dd {
+    margin: -0.5em 0 0 1.1rem;
+
+}
+
+/*dl.py.class ul.simple {*/
+dl.py ul.simple {
+    margin: unset;
+}
+
+/*dl.py.attribute dd dl.field-list.simple {*/
+dl.py dd dl.field-list.simple {
+    margin-top: 0.5em;
+}
+
+
+dl.py.attribute dd.field-odd {
+/*dl.py dd.field-odd {*/
+    display: block;
+    margin-top: -1.85rem;
+    padding-left: 1.2rem;
+}
+
+/*dl.py.attribute, dl.py.method {*/
+dl.py, dl.py.method {
+    padding-top: .35em;
+    padding-bottom: .35em;
+}
+
+/*dl.py.attribute dd dl.field-list.simple {*/
+dl.py dd dl.field-list.simple {
+    margin-top: 0.5em;
+}
+
+
+div.sn-left-pad p {
+    padding-left: 0.5rem;
+}
