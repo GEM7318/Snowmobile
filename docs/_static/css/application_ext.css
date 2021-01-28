@@ -473,6 +473,8 @@ content: " \f013\ Setup";
     border-width: thin;
     border-bottom: 0;
     border-color: #11838e2e;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 /*.md-typeset .admonition.is-explanation>.admonition-title{*/
