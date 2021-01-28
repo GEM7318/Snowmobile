@@ -417,7 +417,9 @@ content: " \f013\ Setup";
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
     border-left-color: #11838e;
-    margin: -0.15rem 1.2rem .7rem 0.25em;
+    /*margin: -0.15rem 1.2rem .7rem 0.25em;*/
+    margin: 0.7rem 1.5rem .7rem 0.85rem;
+    /*margin: unset;*/
     display: inline-block;
     overflow: hidden;
 }
