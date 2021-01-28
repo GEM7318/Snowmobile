@@ -626,7 +626,7 @@ div.admonition p {
 
 /* Moving toggle button hint  closer to the symbol */
 button.toggle-button.toggle-button-hidden {
-    margin-top: 0.25rem;
+    /*margin-top: 0.25rem;*/
     right: 0.2em;
 }
 
@@ -684,7 +684,7 @@ span.md-nav__link.caption {
     margin-right: .5em;
     right: 0;
     position: absolute;
-    top: .2rem;
+    top: .25rem;
 }
 
 /* Indent to level of code cells */
