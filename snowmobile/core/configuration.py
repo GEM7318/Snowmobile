@@ -261,9 +261,26 @@ class Configuration(Generic):
             scopes[attr] = attr_value
         return {k: v for k, v in scopes.items() if v} if only_populated else scopes
 
+    # def scopes_from_tag(self, t: Any):
+    #     """Generates list of keyword arguments to instantiate all scopes for a tag."""
+    #     return [{"base": vars(t)[k], "arg": k} for k in self.SCOPE_ATTRIBUTES]
+
     def scopes_from_tag(self, t: Any):
         """Generates list of keyword arguments to instantiate all scopes for a tag."""
-        return [{"base": vars(t)[k], "arg": k} for k in self.SCOPE_ATTRIBUTES]
+        return [
+            {
+                "base": self.attrs_from_obj(obj=t, within=self.SCOPE_ATTRIBUTES)[k],
+                "arg": k
+            }
+            for k in self.SCOPE_ATTRIBUTES
+        ]
+
+    # def scopes_from_tag(self, attrs: Dict):
+    #     """Generates list of keyword arguments to instantiate all scopes for a tag."""
+    #     return [
+    #         {"base": attrs[k], "arg": k}
+    #         for k in self.SCOPE_ATTRIBUTES
+    #     ]
 
     def json(self, by_alias: bool = False, **kwargs):
         """Serialization method for core object model."""

@@ -1,38 +1,37 @@
 -- noinspection SqlResolveForFile
--- ..docs/snippets/example/sample_table.sql
+-- ..docs/snippets/getting_started/sample_table.sql
+
+create or replace table sample_table (
+	col1 number(18,0),
+	col2 number(18,0)
+);
+
+insert into sample_table with
+sample_data as (
+  select
+    uniform(1, 10, random(1)) as rand_int
+  from table(generator(rowcount => 3)) v
+)
+  select
+    row_number() over (order by a.rand_int) as col1
+    ,(col1 * col1) as col2
+  from sample_data a;
 
 select * from sample_table;
 
-create transient table any_table as
+/*-qa-empty~verify 'sample_table' is distinct on 'col1'-*/
 select
-	a.*
+  a.col1
+  ,count(*)
 from sample_table a
-where
-	a.col2 = 0;
-select
-  count(*)
-from any_table;
+group by 1
+having count(*) <> 1;
 
+/*-insert into~any_other_table-*/
 insert into any_other_table (
   select
-		row_number() over (order by a.col1)
-       as index
-    ,a.col1
-    ,a.col2
-    ,a.loaded_tmstmp
-      as staged_tmstmp
-    ,current_timestamp()
-      as insert_tmstmp
+    a.*
+    ,tmstmp.tmstmp as insert_tmstmp
   from sample_table a
+  cross join (select current_timestamp() as tmstmp)tmstmp
 );
-
-/*-qa-empty~ensure 'any_other_table' is distinct on 'col1'-*/
-select
-  a.index
-	,count(*)
-from any_other_table a
-group by 1
-having count(*) > 1;
-
-drop table any_table;
-drop table sample_table;

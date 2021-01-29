@@ -535,14 +535,18 @@ content: " \f013\ Setup";
 
 /* -- is-content ----------------------------------------------------------- */
 .md-typeset .admonition.is-content {
-    border-left: 0;
+    /*border-left: 0;*/
     display: block;
+    border-style: solid;
+    border-width: thin;
+    border-color: #93bfea75;
     /*margin: -0.8rem 1.5rem .7rem 0.9rem;*/
 }
 
 .md-typeset .admonition.is-content>.admonition-title{
     line-height: 0.7rem;
     background-color: #ffffff;
+    border-bottom-color: #93bfea75;
     font-weight: 500;
     font-style: italic;
 }
@@ -773,7 +777,7 @@ div.col-lg-6.col-md-6.col-sm-6.col-xs-12 {
 
 
 div.output.text_html {
-    display: inline-flex;
+    /*display: inline-flex;*/
     background-color: #fcfcfc;
     border-style: solid;
     border-width: thin;

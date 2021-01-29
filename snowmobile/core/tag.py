@@ -52,27 +52,6 @@ class Tag(Generic):
         first_line_remainder (str):
             The remainder of the first line once excluding the
             :attr:`first_keyword` and stripping repeating whitespace.
-        kw (str):
-            The final statement's **keyword** that is used elsewhere; this will
-            be the provided keyword if a statement tag exists and a
-            parsed/generated keyword otherwise.
-        nm (str):
-            The final statement's **name** that is used elsewhere; this will
-            be the full tag name if a statement tag exists and a
-            parsed/generated tag name otherwise.
-        obj (str):
-            The final statement's **object** that is used elsewhere; this will
-            be the object within a tag if a statement tag exists and follows
-            the correct structure and a parsed/generated object otherwise.
-        desc (str):
-            The final statement's **description** that is used elsewhere; this
-            will be the description within a tag if a statement tag exists
-            and follows the correct structure and a parsed/generated
-            description otherwise.
-        anchor (str):
-            The final statement's **anchor** that is used elsewhere; this will
-            be the anchor within a tag if a statement tag exists and follows
-            the correct structure and a parsed/generated tag name otherwise.
         scopes (set[Scope]):
             Combination of all scopes for a given tag; this is essentially the
             all possible combinations of including/excluding any of the `kw`,
@@ -146,18 +125,9 @@ class Tag(Generic):
             if len(self.words_in_first_line) >= 2
             else str()
         )
-
-        # set 'combined` attributes
-        # -------------------------
-        self.kw_ge = self.cfg.sql.kw_exceptions.get(
-            self.words_in_first_line[0], self.words_in_first_line[0]
+        self.matched_terms = self.cfg.sql.objects_within(
+            self.first_line  # finds keywords by full term within first line
         )
-        self.matched_terms = self.cfg.sql.objects_within(self.first_line)
-        self.kw = self.kw_pr or self.kw_ge
-        self.nm = self.nm_pr or self.nm_ge
-        self.obj = self.obj_pr or self.obj_ge
-        self.desc = self.desc_pr or self.desc_ge
-        self.anchor = self.anchor_pr or self.anchor_ge
 
         # then create scope
         # -----------------
@@ -179,6 +149,15 @@ class Tag(Generic):
         """
         self.is_included = all(s.eval(**kwargs) for s in self.scopes)
         return self.is_included
+
+    @property
+    def kw_ge(self):
+        """Generated `keyword` for statement."""
+        return (
+            self.cfg.sql.kw_exceptions.get(
+                self.words_in_first_line[0], self.words_in_first_line[0]
+            )
+        )
 
     @property
     def obj_ge(self):
@@ -204,8 +183,60 @@ class Tag(Generic):
 
     @property
     def nm_ge(self):
-        """Generated `name`; full statement tag for statement."""
+        """Generated `name`; all delimiters included."""
         return f"{self.anchor_ge}{self.patt.core.sep_desc}{self.desc_ge}"
+
+    @property
+    def nm(self):
+        """The final statement's **name** that is used by the API.
+
+        This will be the full tag name if a statement tag exists and a
+        parsed/generated tag name otherwise.
+
+        """
+        return self.nm_pr or self.nm_ge
+
+    @property
+    def kw(self):
+        """The final statement's **keyword** that is used by the API.
+
+        This will be the provided keyword if a statement tag exists and a
+        parsed/generated keyword otherwise.
+
+        """
+        return self.kw_pr or self.kw_ge
+
+    @property
+    def obj(self):
+        """The final statement's **object** that is used by the API.
+
+        This will be the object within a tag if a statement tag exists and
+        follows the correct structure and a parsed/generated object otherwise.
+
+        """
+        return self.obj_pr or self.obj_ge
+
+    @property
+    def desc(self):
+        """The final statement's **description** that is used by the API.
+
+        This will be the description within a tag if a statement tag exists
+        and follows the correct structure and a parsed/generated description
+        otherwise.
+
+        """
+        return self.desc_pr or self.desc_ge
+
+    @property
+    def anchor(self):
+        """The final statement's **anchor** that is used by the API.
+
+        This will be the anchor within a tag if a statement tag exists
+        and follows the correct structure and a parsed/generated tag name
+        otherwise.
+
+        """
+        return self.anchor_pr or self.anchor_ge
 
     def __bool__(self) -> bool:
         return self.is_included
