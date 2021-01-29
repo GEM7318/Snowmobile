@@ -256,7 +256,7 @@ For example, see the below attributes of {class}`~snowmobile.core.Snowmobile`:
 The [default snowmobile.toml](./snowmobile_toml.md#file-contents) contains
 scaffolding for two sets of credentials, aliased `creds1` and `creds2` respectively.
 
-By setting line 3, `default-creds = ''` to `default-creds = 'creds2'`, 
+By changing `default-creds = ''` to `default-creds = 'creds2'`, 
 [Snowmobile](/usage/snowmobile) will use the credentials from `creds2` 
 regardless of where it falls relative to all the other credentials stored.
 

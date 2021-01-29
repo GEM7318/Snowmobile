@@ -348,7 +348,7 @@ div.highlight {
 
 /* Reducing space between cell and output */
 .cell_output.docutils.container {
-    margin-top: 0.4em;
+    margin-top: 0.5em;
 }
 
 .cell_output.docutils.container div.highlight {
