@@ -1,6 +1,6 @@
 (usage/snowmobile)=
 # Snowmobile
----
+------------
 
 An instance of {class}`~snowmobile.Snowmobile` ({class}`sn`) represents a distinct 
 [session](https://docs.snowflake.com/en/sql-reference/sql/alter-session.html)

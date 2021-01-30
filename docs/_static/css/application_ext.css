@@ -247,8 +247,13 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
 hr.sn-green {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
-    border-style: solid;
-    border-bottom-color: #11838e59;
+
+    height: 0.05em;
+    background-color: #11838e59;
+    border: 0;
+
+    /*border-style: solid;*/
+    /*border-bottom-color: #11838e59;*/
 }
 
 /*noinspection CssReplaceWithShorthandSafely*/
@@ -522,7 +527,7 @@ content: " \f013\ Setup";
     display: none;
     order: 99;
     width: 100%;
-    padding: 0.5em 0.5em 0.5em 0.2em;
+    padding: 0.6em .5em .6em .2em;
 }
 
 .admonition.is-explanation.sn-incl-tabbed-shadow-b .tabbed-content {
@@ -640,7 +645,10 @@ button.toggle-button.toggle-button-hidden {
 
 /* Moving toggle button symbol farther to the right */
 button.toggle-button.toggle-button-hidden:before {
-    left: -1.3rem;
+    left: -1.45rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #343a40c2;
 }
 
 /* Shrinking toggle button size */
@@ -650,9 +658,19 @@ button.toggle-button.toggle-button-hidden:before {
 
 /* Re-centering +/- symbol */
 .toggle-button .bar {
-    left: 10%;
-    top: 40%;
+    background-color: #f8f9facf;
+    position: absolute;
+    left: 0%;
+    top: 45%;
+    width: 1.5em;
+    height: .2em;
+    padding: 0.1em;
+    overflow: hidden;
 }
+/*.toggle-button .bar {*/
+/*    left: 10%;*/
+/*    top: 40%;*/
+/*}*/
 
 
 /* Allowing check marks to 'spill' into previous/next lines (not visible in render) */
@@ -777,7 +795,7 @@ div.col-lg-6.col-md-6.col-sm-6.col-xs-12 {
 
 
 div.output.text_html {
-    /*display: inline-flex;*/
+    display: inline-flex;
     background-color: #fcfcfc;
     border-style: solid;
     border-width: thin;

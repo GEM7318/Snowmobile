@@ -4,9 +4,9 @@
 
 ````{tabbed} Setting Default Credentials
 
-Currently `creds1` is used by default since it's the first set of credentials 
-stored and no other alias is specified; by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml) 
-to the below spec, we're telling  {xref}`snowmobile`to use `creds2` for 
+Currently `creds1` is used by default since it's the first set of credentials
+stored and no other alias is specified; by modifying [snowmobile.toml](./snowmobile_toml.md#snowmobiletoml)
+to the below spec, we're telling  {xref}`snowmobile`to use `creds2` for
 authentication regardless of where it falls relative to all the other credentials stored:
 
 ```{literalinclude} ../../snowmobile/core/pkg_data/snowmobile_TEMPLATE.toml
@@ -101,7 +101,7 @@ Setup {fa}`fas cog`
 
 ````{admonition} Tip
 :class: tip, sn-indent-h
-**The rest of the documentation assumes**: 
+**The rest of the documentation assumes**:
 1.  The first credentials block has been populated with a valid set of credentials
     and its alias remains `creds1`
 1.  `default-creds` has been left blank
@@ -113,7 +113,7 @@ Setup {fa}`fas cog`
 
 ````{tabbed} Content
 
-Establishing a connection to {xref}`snowflake` can be done with: 
+Establishing a connection to {xref}`snowflake` can be done with:
 ```{literalinclude} ../snippets/intro_connector.py
 :language: python
 :lineno-start: 1
@@ -183,20 +183,20 @@ configurations below this point during initial setup is not recommended.
 
 ```{admonition}
 :class: note, sn-indent-h
-**The default behavior assumes [](usage/snowmobile_toml) is a unique file name for a given machine**; 
+**The default behavior assumes [](usage/snowmobile_toml) is a unique file name for a given machine**;
 the first thing {xref}`snowmobile` will do is find your [*snowmobile.toml*](./usage/snowmobile_toml)
-file and cache its location; this step isn't repeated unless the file is moved, 
+file and cache its location; this step isn't repeated unless the file is moved,
 the cache is manually cleared, or a different distribution of {xref}`snowmobile` is installed.
 
-<a 
-    class="sphinx-bs badge badge-primary text-white reference external hanging" 
-    href="./usage/snowmobile.html#executing-raw-sql" 
+<a
+    class="sphinx-bs badge badge-primary text-white reference external hanging"
+    href="./usage/snowmobile.html#executing-raw-sql"
     title="Binding a process to a specific snowmobile.toml file">
     <span>Related: Specifying Configuration</span>
 </a>
-<a 
-    class="sphinx-bs badge badge-primary text-white reference external hanging" 
-    href="./usage/snowmobile_toml#clearing-cached-paths" 
+<a
+    class="sphinx-bs badge badge-primary text-white reference external hanging"
+    href="./usage/snowmobile_toml#clearing-cached-paths"
     title="Clearing cached file paths">
     <span>Related: Clearing Cached Paths</span>
 </a>
@@ -393,7 +393,7 @@ shared amongst:**
     <dd><i>Tracked and managed by snowmobile</i>
     <dd><i>No hard-coding credentials or file paths</i>
     <dd><i>Access different configurations by assigned alias</i>
-</DL>    
+</DL>
 <a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/snowmobile.html#executing-raw-sql" title="Usage Documentation on Connecting to Snowflake">
 <span>Related: Executing Raw SQL</span>
 </a>
@@ -404,20 +404,20 @@ shared amongst:**
     <dd><i>Tag and access individual statements from scripts</i>
     <dd><i>Queue scripts across shared or distinct sessions</i>
     <dd><i>Add metadata to statements, generate docs in .md</i>
-    
----    
+
+---
 
 <DT><span class="fa fa-check text-success mr-1"></span><b>Flexible, reliable loading of data</b>
     <dd><i>DDL generation from DataFrame</i>
     <dd><i>DataFrame vs.table compatability checks at run time</i>
     <dd><i><code>if_exists</code> support for 'truncate', append', 'replace', 'fail'</i>
-    
+
 ---
 
 <DT><span class="fa fa-check text-success mr-1"></span><b>Simplified execution of raw SQL</b>
     <dd><i>Access credentials & connection parameters by alias</i>
     <dd><i>Query results in a DataFrame, SnowflakeCursor, or DictCursor from the same object</i>
-    
+
 <a class="sphinx-bs badge badge-primary text-white reference external" href="./usage/snowmobile.html#executing-raw-sql" title="Usage Documentation on Executing Raw SQL">
 <span>See Docs: Executing Raw SQL</span>
 </a>
@@ -431,13 +431,13 @@ shared amongst:**
 
 # {class}`snowmobile.Table`
 
-{class}`snowmobile.Table` is a data loading solution that at minimum can be provided a 
+{class}`snowmobile.Table` is a data loading solution that at minimum can be provided a
 [**Connector**](./usage/snowmobile.md) ({class}`sn`), a {class}`pandas.DataFrame` ({class}`df`),
-and a table name. 
+and a table name.
 
-The rest of its keyword arguments are mirrored in the 
+The rest of its keyword arguments are mirrored in the
 {ref}`[loading.default-table-kwargs]<loading.default-table-kwargs>`
-section of [snowmobile.toml](./usage/snowmobile_toml.md) and documented in 
+section of [snowmobile.toml](./usage/snowmobile_toml.md) and documented in
 [**the API Docs for **Table**](./_build/autoapi/snowmobile/core/table/index.html).
 
 
@@ -449,18 +449,18 @@ section of [snowmobile.toml](./usage/snowmobile_toml.md) and documented in
 
 **Similarly to how** [**Connector**](./usage/snowmobile.md) **handles its `creds` keyword argument,**
 {class}`~snowmobile.Table` **will adhere to any arguments explicitly provided and differ
-to the values configured in [snowmobile.toml](./usage/snowmobile_toml) otherwise.** 
+to the values configured in [snowmobile.toml](./usage/snowmobile_toml) otherwise.**
 
-The exact configuration that a given instance of {class}`~snowmobile.Table` will 
+The exact configuration that a given instance of {class}`~snowmobile.Table` will
 differ to is defined by the state of [**snowmobile.toml**](./usage/snowmobile_toml)
 at the time the [**Connector**](./usage/snowmobile.md) ({class}`sn`) was instantiated,
-not its state at the time that it ({class}`~snowmobile.Table`) was instantiated; 
-*also outlined in [**Connector**](./usage/snowmobile.md) description.*  
+not its state at the time that it ({class}`~snowmobile.Table`) was instantiated;
+*also outlined in [**Connector**](./usage/snowmobile.md) description.*
 
-**The default behavior outlined below reflects those within the 
-{ref}`[loading]<loading.parent>` section of the 
+**The default behavior outlined below reflects those within the
+{ref}`[loading]<loading.parent>` section of the
 [default **snowmobile.toml** file](./usage/snowmobile_toml.md#file-contents).**
- 
+
 ````
 
 
