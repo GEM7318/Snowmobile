@@ -139,7 +139,10 @@ class Script(Generic):
                 yield s
 
     def add_statement(
-        self, s: Optional[sqlparse.sql.Statement, str], index: Optional[int] = None
+        self,
+        s: Union[sqlparse.sql.Statement, str],
+        index: Optional[int] = None,
+        nm: Optional[str] = None,
     ) -> None:
         """Adds a statement object to the script.
 
@@ -161,6 +164,10 @@ class Script(Generic):
 
         """
         index = index or self.depth + 1
+        if nm:
+            _open = self.sn.cfg.script.patterns.core.to_open
+            _close = self.sn.cfg.script.patterns.core.to_open
+            s = f"{_open}{nm}{_close}\n{s}"
         s: sqlparse.sql.Statement = self.sn.cfg.script.ensure_sqlparse(sql=s)
 
         markers, attrs_raw = self.sn.cfg.script.split_sub_blocks(s=s)

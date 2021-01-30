@@ -282,10 +282,15 @@ div.admonition hr.sn-green {
 
 .md-typeset hr.sn-grey-thick {
     height: 0.16rem;
-    background-color: #5f656b42;
+
+    /*background-color: #5f656b42;*/
     margin-top: -0.3em;
-    margin-bottom: 0.3rem;
+    /*margin-bottom: 0.3rem;*/
+
+    background-color: #fff;
     border: 0;
+    /*margin: 0;*/
+    padding: 0;
 }
 
 /* Sub-header green: h3-h4 */
@@ -493,7 +498,6 @@ content: " \f013\ Setup";
 .md-typeset .admonition.is-explanation>.admonition-title{
     line-height: .7rem;
     font-weight: 100;
-    background-color: #ffff;
     border-bottom-style: solid;
     border-bottom-width: thin;
     border-top: 0;
@@ -501,6 +505,9 @@ content: " \f013\ Setup";
     border-left: 0;
     border-bottom-color: #11838e38;
     padding: .35rem .6rem .4rem 2rem;
+    /*background-color: #ffff;*/
+    background: radial-gradient(#4070a00a, #99b7ce57);
+    color: #7690a7;
 }
 
 .md-typeset .admonition.is-explanation>.admonition-title:before{
