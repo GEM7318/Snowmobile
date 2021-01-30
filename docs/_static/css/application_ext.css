@@ -107,6 +107,11 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
     padding-right: 2em;
 }
 
+.md-typeset .sn-indent-h-cell-m {
+    margin-left: 0.95rem;
+    margin-right: 2em;
+}
+
 /* Indent cell horizontally */
 .md-typeset .sn-indent-h-cell-contents * {
     padding-left: 0.95rem;
@@ -115,19 +120,20 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
 
 /* Indent cell horizontally */
 .md-typeset .sn-indent-h-cell-right {
-    /*margin-right: 2em;*/
     padding-right: 2em;
 }
 
 .md-typeset .sn-indent-h-cell-right-m {
     margin-right: 2em;
-    /*margin-right: 1.65rem;*/
 }
 
 .md-typeset .sn-indent-h-cell-left {
     padding-left: 0.95rem;
 }
 
+.md-typeset .sn-indent-h-cell-left-m {
+    margin-left: 0.95rem;
+}
 
 /* Indent cell horizontally */
 .md-typeset .sn-indent-h-cell-right-hr {
@@ -136,7 +142,7 @@ ol > li:last-child > p,  ul > li:last-child > p, dl > dd:last-child > p{
 
 /* Indent to right side (containers following code cells) */
 .md-typeset .sn-indent-h-sub-cell-right {
-    margin-right: 2rem;
+    margin-right: 3rem;
 }
 
 /* 'remove vertical margins: bottom' */
@@ -354,6 +360,7 @@ div.admonition hr.sn-green {
 div.highlight {
     /*margin: 0 0 -0.25rem 0;*/
     margin: -0.25rem 0 -0.25rem 0;
+    /*padding-left: 0.5rem;*/
 }
 
 /* Reducing space between cell and output */
@@ -373,6 +380,17 @@ div.highlight {
     padding-top: 0.4rem;
     padding-bottom: 0.4rem;
 }
+
+/*.md-typeset td.linenos {*/
+/*    padding: 0;*/
+/*    margin-top: 0.7rem;*/
+/*    display: table;*/
+/*}*/
+/*.md-typeset td.linenos div.linenodiv {*/
+/*    display: table;*/
+/*    padding-left: 0.4em;*/
+/*    padding-right: 0.4em;*/
+/*}*/
 
 .md-typeset div.cell div.cell_input {
     background: #f0f0f0;
@@ -427,10 +445,11 @@ content: " \f013\ Setup";
 /* -- is-setup ------------------------------------------------------------- */
 .md-typeset .admonition.is-setup {
     border-left-color: #11838e;
-    /*margin: -0.15rem 1.2rem .7rem 0.25em;*/
-    margin: 0.7rem 1.5rem .7rem 0.85rem;
+
+    /*margin: 0.7rem 1.5rem .7rem 0.85rem;*/
+
     /*margin: unset;*/
-    display: inline-block;
+    /*display: inline-block;*/
     overflow: hidden;
 }
 
@@ -476,6 +495,75 @@ content: " \f013\ Setup";
     font-family: 'FontAwesome', serif; /* TODO: FontAwesome 4.7 -> 5.0 */
     content: "\f103";  /* double arrows down */
 }
+
+/* -- is-explanation ------------------------------------------------------- */
+.md-typeset .admonition.sn-gradient-header {
+    /*display: inline-block;*/
+    /*margin: -0.15rem 1.5rem .7rem 0.85rem;*/
+    border-style: solid;
+    border-width: thin;
+    border-bottom: 0;
+    border-color: #11838e2e;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/*.md-typeset .admonition.sn-gradient-header>.admonition-title{*/
+/*    line-height: 1rem;*/
+/*    font-size: 125%;*/
+/*    font-weight: 500;*/
+/*    border-bottom-style: solid;*/
+/*    border-bottom-width: thin;*/
+/*    border-top: 0;*/
+/*    border-right: 0;*/
+/*    border-left: 0;*/
+/*    border-bottom-color: #11838e38;*/
+/*    padding: .35rem .6rem .4rem 0.4rem;*/
+/*    background: radial-gradient(#4070a00a, #99b7ce57);*/
+/*    color: #212529d9;*/
+/*}*/
+
+.md-typeset .admonition.sn-gradient-header>.admonition-title {
+    line-height: 1rem;
+    font-size: 125%;
+    font-weight: 500;
+    border-style: solid;
+    border-width: thin;
+    border-color: #343a4014;
+    border-bottom-color: #11838e38;
+    padding: .35rem .3rem .4rem 0.4rem;
+    background: radial-gradient(#4070a00a, #99b7ce57);
+    color: #212529d9;
+}
+
+.md-typeset .admonition.sn-gradient-header>.admonition-title:before{
+    content: unset;
+}
+
+.toggle.admonition.sn-gradient-header button.toggle-button {
+    margin-right: .5em;
+    right: 0;
+    position: absolute;
+    top: .45rem;
+/*     background: #11838ed4; */
+}
+
+.sn-toggle-expand button.toggle-button.toggle-button-hidden:before {
+    content: "expand";
+    font-size: .8em;
+    left: -4em;
+    bottom: .4em;
+/*     color: #1c6b85; */
+}
+
+div.sn-phantom + * {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
 
 /* -- is-explanation ------------------------------------------------------- */
 .md-typeset .admonition.is-explanation {
@@ -667,17 +755,13 @@ button.toggle-button.toggle-button-hidden:before {
 .toggle-button .bar {
     background-color: #f8f9facf;
     position: absolute;
-    left: 0%;
+    left: 0;
     top: 45%;
     width: 1.5em;
     height: .2em;
     padding: 0.1em;
     overflow: hidden;
 }
-/*.toggle-button .bar {*/
-/*    left: 10%;*/
-/*    top: 40%;*/
-/*}*/
 
 
 /* Allowing check marks to 'spill' into previous/next lines (not visible in render) */
