@@ -562,6 +562,7 @@ div.sn-phantom + * {
     margin: 0;
     font-size: 0;
     line-height: 0;
+    overflow: hidden;
 }
 
 
